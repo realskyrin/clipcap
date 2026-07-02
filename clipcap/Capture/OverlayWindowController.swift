@@ -99,6 +99,8 @@ final class OverlayWindowController {
             in: host.bounds
         )
         host.updateSelectionRect(selectionRect)
+        host.selectionSizeLabelOverride = suspendedDraft?.selectionSizeLabelOverride
+            ?? Self.sizeLabelText(imageSize: image.size, displayedSize: selectionRect.size)
 
         let captureRect = suspendedDraft?.captureRect ?? Self.captureRect(
             selectionRect: selectionRect,
@@ -218,8 +220,8 @@ final class OverlayWindowController {
 
     private static func fittedRect(imageSize: NSSize, in bounds: NSRect) -> NSRect {
         let maxSize = NSSize(
-            width: max(bounds.width - 160, 320),
-            height: max(bounds.height - 160, 240)
+            width: max(bounds.width - 220, 320),
+            height: max(min(bounds.height * 0.70, bounds.height - 220), 240)
         )
         let scale = min(maxSize.width / max(imageSize.width, 1), maxSize.height / max(imageSize.height, 1), 1)
         let size = NSSize(
@@ -232,6 +234,13 @@ final class OverlayWindowController {
             width: size.width,
             height: size.height
         )
+    }
+
+    private static func sizeLabelText(imageSize: NSSize, displayedSize: NSSize) -> String? {
+        guard imageSize.width > 0, imageSize.height > 0 else { return nil }
+        let zoom = min(displayedSize.width / imageSize.width, displayedSize.height / imageSize.height)
+        let zoomPercent = max(1, Int((zoom * 100).rounded()))
+        return "\(Int(imageSize.width.rounded())) x \(Int(imageSize.height.rounded())) · \(zoomPercent)% zoom"
     }
 
     private static func captureRect(selectionRect: NSRect, screen: NSScreen) -> CGRect {

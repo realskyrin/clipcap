@@ -565,10 +565,11 @@ class SelectionView: NSView {
             .font: NSFont.monospacedDigitSystemFont(ofSize: 12, weight: .medium)
         ]
         let size = text.size(withAttributes: attrs)
-        // Position above the top-left corner of selection
-        let labelX = rect.origin.x
-        let labelY = rect.origin.y + rect.height + 4  // Above top edge (AppKit coords: y increases upward)
-        let labelRect = NSRect(x: labelX, y: labelY, width: size.width + 8, height: size.height + 4)
+        // Position above the top-right corner of the selection.
+        let labelWidth = size.width + 8
+        let labelX = max(rect.minX, rect.maxX - labelWidth)
+        let labelY = rect.origin.y + rect.height + 4
+        let labelRect = NSRect(x: labelX, y: labelY, width: labelWidth, height: size.height + 4)
 
         // Draw background
         context.setFillColor(NSColor.black.withAlphaComponent(0.6).cgColor)

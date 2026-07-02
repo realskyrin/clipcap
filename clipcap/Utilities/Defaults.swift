@@ -163,8 +163,11 @@ enum L10n {
 
     // History navigation shortcuts (editor)
     static var previousHistoryImageShortcutHeader: String { s("previousHistoryImageShortcutHeader") }
+    static var previousHistoryImageShortcutHint: String { s("previousHistoryImageShortcutHint") }
     static var nextHistoryImageShortcutHeader: String { s("nextHistoryImageShortcutHeader") }
+    static var nextHistoryImageShortcutHint: String { s("nextHistoryImageShortcutHint") }
     static var historyPanelShortcutHeader: String { s("historyPanelShortcutHeader") }
+    static var historyPanelShortcutHint: String { s("historyPanelShortcutHint") }
     static var historyPanelShortcutDefaultDisplay: String { s("historyPanelShortcutDefaultDisplay") }
 
     // Save-to-file shortcut (editor save)
@@ -336,6 +339,13 @@ enum L10n {
     static var settingsTabAbout: String { s("settingsTabAbout") }
     static var settingsTabTranslation: String { s("settingsTabTranslation") }
     static var settingsTabToolbar: String { s("settingsTabToolbar") }
+    static var settingsNoPermissionsNeeded: String { s("settingsNoPermissionsNeeded") }
+    static var settingsSubtitleGeneral: String { s("settingsSubtitleGeneral") }
+    static var settingsSubtitleShortcuts: String { s("settingsSubtitleShortcuts") }
+    static var settingsSubtitleToolbar: String { s("settingsSubtitleToolbar") }
+    static var settingsSubtitleUpload: String { s("settingsSubtitleUpload") }
+    static var settingsSubtitleTranslation: String { s("settingsSubtitleTranslation") }
+    static var settingsSubtitleAbout: String { s("settingsSubtitleAbout") }
     static var settingsQuit: String { s("settingsQuit") }
 
     // Toolbar settings

@@ -8,10 +8,10 @@
 "launchAtLogin" = "Lancer à la connexion";
 "pinAcrossSpaces" = "Afficher les épingles sur tous les bureaux";
 "pinAcrossSpacesHint" = "Les nouvelles images épinglées apparaissent sur chaque bureau et espace plein écran";
-"historyCacheToggleLabel" = "Mettre les captures en cache";
-"historyCacheToggleHint" = "Enregistre les captures récentes, les couleurs prélevées et les liens téléversés pour les recopier depuis la barre de menus";
+"historyCacheToggleLabel" = "Mettre les images en cache";
+"historyCacheToggleHint" = "Enregistre les images récentes, les couleurs prélevées et les liens téléversés pour les recopier depuis la barre de menus";
 "historyCacheLabel" = "Taille du cache d'historique";
-"historyCacheHint" = "Conserve les captures récentes pour les recopier rapidement";
+"historyCacheHint" = "Conserve les images récentes pour les recopier rapidement";
 "historyPanelDisplayModeLabel" = "Affichage du panneau d'historique";
 "historyPanelDisplayModeHint" = "Choisir Dialogue ou Encoche pour l'historique des captures";
 "historyPanelDialogMode" = "Dialogue";
@@ -24,9 +24,9 @@
 "windowShadowSizeHint" = "Des valeurs élevées adoucissent et élargissent l'ombre : la fenêtre semble flotter plus haut";
 
 /* Image shortcut */
-"shortcutHeader" = "Capture d'écran";
-"shortcutHint" = "Par défaut : double appui sur ⌘. Définir un raccourci personnalisé désactive le double appui";
-"shortcutDefaultDisplay" = "Double appui sur ⌘";
+"shortcutHeader" = "Image";
+"shortcutHint" = "Aucun raccourci global d'image n'est configuré";
+"shortcutDefaultDisplay" = "Non défini";
 "shortcutSet" = "Définir";
 "shortcutCancel" = "Annuler";
 "shortcutWaiting" = "Appuyez sur des touches";
@@ -69,15 +69,18 @@
 
 /* Copy-to-clipboard shortcut (editor confirm) */
 "clipboardShortcutHeader" = "Copier dans le presse-papiers";
-"clipboardShortcutHint" = "Appuyez dessus dans l'éditeur pour valider l'édition et copier la capture dans le presse-papiers. Double-appui sur ⌘ par défaut si non défini";
-"clipboardShortcutDefaultDisplay" = "Double-appui ⌘";
+"clipboardShortcutHint" = "Appuyez dessus dans l'éditeur pour valider l'édition et copier l'image dans le presse-papiers. ⌘Return par défaut";
+"clipboardShortcutDefaultDisplay" = "⌘Return";
 
 /* Save-to-file shortcut (editor save) */
 "fileSaveShortcutHeader" = "Enregistrer dans un fichier";
-"fileSaveShortcutHint" = "Appuyez dessus dans l'éditeur pour enregistrer la capture en PNG dans le dossier de captures configuré. ⌘S par défaut";
-"previousHistoryImageShortcutHeader" = "Capture précédente de l'historique";
-"nextHistoryImageShortcutHeader" = "Capture suivante de l'historique";
+"fileSaveShortcutHint" = "Appuyez dessus dans l'éditeur pour enregistrer l'image en PNG dans le dossier d'images configuré. ⌘S par défaut";
+"previousHistoryImageShortcutHeader" = "Image précédente de l'historique";
+"previousHistoryImageShortcutHint" = "Passe à l'image précédente quand l'aperçu de l'historique est ouvert";
+"nextHistoryImageShortcutHeader" = "Image suivante de l'historique";
+"nextHistoryImageShortcutHint" = "Passe à l'image suivante quand l'aperçu de l'historique est ouvert";
 "historyPanelShortcutHeader" = "Panneau d'historique";
+"historyPanelShortcutHint" = "Ouvre le panneau d'historique depuis les menus clipcap";
 "historyPanelShortcutDefaultDisplay" = "Non défini";
 
 /* Shortcut conflict */
@@ -221,6 +224,13 @@
 "settingsTabAbout" = "À propos";
 "settingsTabTranslation" = "Traduction";
 "settingsTabToolbar" = "Barre d'outils";
+"settingsNoPermissionsNeeded" = "Aucune autorisation requise";
+"settingsSubtitleGeneral" = "Presse-papiers, fichiers, historique et enregistrement";
+"settingsSubtitleShortcuts" = "Raccourcis d'éditeur sans surveillance globale";
+"settingsSubtitleToolbar" = "Organiser les outils d'annotation de l'éditeur";
+"settingsSubtitleUpload" = "Configurer les services d'hébergement d'images";
+"settingsSubtitleTranslation" = "Configurer les services OCR et traduction";
+"settingsSubtitleAbout" = "Identité produit et liens du projet";
 "settingsQuit" = "Quitter l'application";
 
 "toolbarSettingsPrimaryTitle" = "Barre principale";
@@ -482,10 +492,10 @@
 "savePathSubtitle" = "Les images sont sauvegardées ici sans demander de destination";
 "autoRevealSavedFilesLabel" = "Afficher dans le Finder";
 "autoRevealSavedFilesHint" = "Sélectionner l image sauvegardée dans Finder après une sauvegarde réussie";
-"screenshotSavePathLabel" = "Chemin des captures";
+"screenshotSavePathLabel" = "Chemin des images";
 "savePathChoose" = "Choisir";
 "savePathReveal" = "Afficher";
-"chooseScreenshotSavePathTitle" = "Choisir le chemin des captures";
+"chooseScreenshotSavePathTitle" = "Choisir le chemin des images";
 
 "editClipboardImage" = "Edit Clipboard Image";
 "openImage" = "Open Image";

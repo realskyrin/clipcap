@@ -8,10 +8,10 @@
 "launchAtLogin" = "ログイン時に起動";
 "pinAcrossSpaces" = "ピン画像をすべてのデスクトップに表示";
 "pinAcrossSpacesHint" = "オンにすると新しいピン画像がすべてのデスクトップとフルスクリーン操作スペースに表示されます";
-"historyCacheToggleLabel" = "スクリーンショットをキャッシュ";
-"historyCacheToggleHint" = "最近のスクリーンショット、取得した色、アップロード結果を保存し、メニューバーからすばやく再コピーできます";
+"historyCacheToggleLabel" = "画像をキャッシュ";
+"historyCacheToggleHint" = "最近の画像、取得した色、アップロード結果を保存し、メニューバーからすばやく再コピーできます";
 "historyCacheLabel" = "履歴キャッシュ数";
-"historyCacheHint" = "最近のスクリーンショットを保持し、すばやく再コピーできます";
+"historyCacheHint" = "最近の画像を保持し、すばやく再コピーできます";
 "historyPanelDisplayModeLabel" = "履歴パネルの表示方式";
 "historyPanelDisplayModeHint" = "ダイアログまたはノッチでスクリーンショット履歴を表示";
 "historyPanelDialogMode" = "ダイアログ";
@@ -24,9 +24,9 @@
 "windowShadowSizeHint" = "値を大きくするほど影が柔らかく広がり、ウインドウが高く浮いて見えます";
 
 /* Image shortcut */
-"shortcutHeader" = "スクリーンショット";
-"shortcutHint" = "デフォルトは ⌘ のダブルタップ。カスタムショートカットを設定するとダブルタップは無効になります";
-"shortcutDefaultDisplay" = "⌘ をダブルタップ";
+"shortcutHeader" = "画像";
+"shortcutHint" = "グローバル画像ショートカットは設定されていません";
+"shortcutDefaultDisplay" = "未設定";
 "shortcutSet" = "設定";
 "shortcutCancel" = "キャンセル";
 "shortcutWaiting" = "キー入力待ち";
@@ -69,15 +69,18 @@
 
 /* Copy-to-clipboard shortcut (editor confirm) */
 "clipboardShortcutHeader" = "クリップボードへコピー";
-"clipboardShortcutHint" = "エディター内で押すと編集を確定し、スクリーンショットをクリップボードへコピーします。未設定の場合は ⌘ をダブルタップします";
-"clipboardShortcutDefaultDisplay" = "⌘ をダブルタップ";
+"clipboardShortcutHint" = "エディター内で押すと編集を確定し、画像をクリップボードへコピーします。既定は ⌘Return";
+"clipboardShortcutDefaultDisplay" = "⌘Return";
 
 /* Save-to-file shortcut (editor save) */
 "fileSaveShortcutHeader" = "ファイルへ保存";
-"fileSaveShortcutHint" = "エディター内で押すと、設定したスクリーンショット保存先へ PNG として保存します。既定は ⌘S";
-"previousHistoryImageShortcutHeader" = "前の履歴スクリーンショット";
-"nextHistoryImageShortcutHeader" = "次の履歴スクリーンショット";
+"fileSaveShortcutHint" = "エディター内で押すと、設定した画像保存先へ PNG として保存します。既定は ⌘S";
+"previousHistoryImageShortcutHeader" = "前の履歴画像";
+"previousHistoryImageShortcutHint" = "履歴プレビューが開いている間に前の画像へ切り替えます";
+"nextHistoryImageShortcutHeader" = "次の履歴画像";
+"nextHistoryImageShortcutHint" = "履歴プレビューが開いている間に次の画像へ切り替えます";
 "historyPanelShortcutHeader" = "履歴パネル";
+"historyPanelShortcutHint" = "clipcap メニューから履歴パネルを開きます";
 "historyPanelShortcutDefaultDisplay" = "未設定";
 
 /* Shortcut conflict */
@@ -221,6 +224,13 @@
 "settingsTabAbout" = "情報";
 "settingsTabTranslation" = "翻訳";
 "settingsTabToolbar" = "ツールバー";
+"settingsNoPermissionsNeeded" = "権限は不要";
+"settingsSubtitleGeneral" = "クリップボード、ファイル、履歴、保存動作";
+"settingsSubtitleShortcuts" = "グローバル監視を使わないエディターショートカット";
+"settingsSubtitleToolbar" = "エディターに表示する注釈ツールを並べ替え";
+"settingsSubtitleUpload" = "画像ホスティングサービスを設定";
+"settingsSubtitleTranslation" = "OCR と翻訳サービスを設定";
+"settingsSubtitleAbout" = "製品情報とプロジェクトリンク";
 "settingsQuit" = "アプリを終了";
 
 "toolbarSettingsPrimaryTitle" = "メインツールバー";
@@ -482,10 +492,10 @@
 "savePathSubtitle" = "画像は保存先を確認せず、ここへ保存されます";
 "autoRevealSavedFilesLabel" = "Finder に表示";
 "autoRevealSavedFilesHint" = "保存に成功した画像を Finder で選択します";
-"screenshotSavePathLabel" = "スクリーンショットの保存先";
+"screenshotSavePathLabel" = "画像の保存先";
 "savePathChoose" = "選択";
 "savePathReveal" = "表示";
-"chooseScreenshotSavePathTitle" = "スクリーンショットの保存先を選択";
+"chooseScreenshotSavePathTitle" = "画像の保存先を選択";
 
 "editClipboardImage" = "Edit Clipboard Image";
 "openImage" = "Open Image";

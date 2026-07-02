@@ -8,10 +8,10 @@
 "launchAtLogin" = "Mở khi đăng nhập";
 "pinAcrossSpaces" = "Hiển thị ghim trên mọi màn hình nền";
 "pinAcrossSpacesHint" = "Ảnh ghim mới xuất hiện trên mọi màn hình nền và Space toàn màn hình";
-"historyCacheToggleLabel" = "Lưu ảnh chụp vào bộ nhớ";
-"historyCacheToggleHint" = "Lưu ảnh chụp gần đây, màu đã chọn và liên kết tải lên để sao chép lại nhanh từ thanh menu";
+"historyCacheToggleLabel" = "Lưu ảnh vào bộ nhớ";
+"historyCacheToggleHint" = "Lưu ảnh gần đây, màu đã chọn và liên kết tải lên để sao chép lại nhanh từ thanh menu";
 "historyCacheLabel" = "Kích thước bộ nhớ lịch sử";
-"historyCacheHint" = "Giữ các ảnh chụp gần đây nhất để sao chép lại nhanh";
+"historyCacheHint" = "Giữ các ảnh gần đây nhất để sao chép lại nhanh";
 "historyPanelDisplayModeLabel" = "Cách hiển thị bảng lịch sử";
 "historyPanelDisplayModeHint" = "Chọn Hộp thoại hoặc tai thỏ để xem lịch sử ảnh chụp";
 "historyPanelDialogMode" = "Hộp thoại";
@@ -24,9 +24,9 @@
 "windowShadowSizeHint" = "Giá trị lớn hơn làm bóng mờ mềm hơn và lan rộng hơn, khiến cửa sổ trông nổi cao hơn";
 
 /* Image shortcut */
-"shortcutHeader" = "Chụp màn hình";
-"shortcutHint" = "Mặc định: nhấn đúp ⌘. Đặt phím tắt tùy chỉnh sẽ tắt nhấn đúp";
-"shortcutDefaultDisplay" = "Nhấn đúp ⌘";
+"shortcutHeader" = "Ảnh";
+"shortcutHint" = "Chưa cấu hình phím tắt ảnh toàn cục";
+"shortcutDefaultDisplay" = "Chưa đặt";
 "shortcutSet" = "Đặt";
 "shortcutCancel" = "Hủy";
 "shortcutWaiting" = "Nhấn phím";
@@ -69,15 +69,18 @@
 
 /* Copy-to-clipboard shortcut (editor confirm) */
 "clipboardShortcutHeader" = "Sao chép vào clipboard";
-"clipboardShortcutHint" = "Nhấn trong trình chỉnh sửa để xác nhận chỉnh sửa và sao chép ảnh chụp vào clipboard. Mặc định là nhấn đúp ⌘ khi chưa đặt";
-"clipboardShortcutDefaultDisplay" = "Nhấn đúp ⌘";
+"clipboardShortcutHint" = "Nhấn trong trình chỉnh sửa để xác nhận chỉnh sửa và sao chép ảnh vào clipboard. Mặc định là ⌘Return";
+"clipboardShortcutDefaultDisplay" = "⌘Return";
 
 /* Save-to-file shortcut (editor save) */
 "fileSaveShortcutHeader" = "Lưu vào tệp";
-"fileSaveShortcutHint" = "Nhấn trong trình chỉnh sửa để lưu ảnh chụp dạng PNG vào thư mục ảnh chụp đã đặt. Mặc định là ⌘S";
-"previousHistoryImageShortcutHeader" = "Ảnh chụp lịch sử trước";
-"nextHistoryImageShortcutHeader" = "Ảnh chụp lịch sử tiếp theo";
+"fileSaveShortcutHint" = "Nhấn trong trình chỉnh sửa để lưu ảnh dạng PNG vào thư mục ảnh đã đặt. Mặc định là ⌘S";
+"previousHistoryImageShortcutHeader" = "Ảnh lịch sử trước";
+"previousHistoryImageShortcutHint" = "Chuyển sang ảnh trước khi bản xem trước lịch sử đang mở";
+"nextHistoryImageShortcutHeader" = "Ảnh lịch sử tiếp theo";
+"nextHistoryImageShortcutHint" = "Chuyển sang ảnh tiếp theo khi bản xem trước lịch sử đang mở";
 "historyPanelShortcutHeader" = "Bảng lịch sử";
+"historyPanelShortcutHint" = "Mở bảng lịch sử từ menu clipcap";
 "historyPanelShortcutDefaultDisplay" = "Chưa đặt";
 
 /* Shortcut conflict */
@@ -221,6 +224,13 @@
 "settingsTabAbout" = "Giới thiệu";
 "settingsTabTranslation" = "Dịch";
 "settingsTabToolbar" = "Thanh công cụ";
+"settingsNoPermissionsNeeded" = "Không cần quyền";
+"settingsSubtitleGeneral" = "Clipboard, tệp, lịch sử và lưu ảnh";
+"settingsSubtitleShortcuts" = "Phím tắt trình chỉnh sửa không cần theo dõi toàn cục";
+"settingsSubtitleToolbar" = "Sắp xếp công cụ chú thích trong trình chỉnh sửa";
+"settingsSubtitleUpload" = "Cấu hình dịch vụ lưu trữ ảnh";
+"settingsSubtitleTranslation" = "Cấu hình OCR và dịch";
+"settingsSubtitleAbout" = "Danh tính sản phẩm và liên kết dự án";
 "settingsQuit" = "Thoát ứng dụng";
 
 "toolbarSettingsPrimaryTitle" = "Thanh công cụ chính";
@@ -482,10 +492,10 @@
 "savePathSubtitle" = "Ảnh được lưu tại đây mà không hỏi vị trí đích";
 "autoRevealSavedFilesLabel" = "Hiển thị trong Finder";
 "autoRevealSavedFilesHint" = "Chọn ảnh đã lưu trong Finder sau khi lưu thành công";
-"screenshotSavePathLabel" = "Đường dẫn lưu ảnh chụp";
+"screenshotSavePathLabel" = "Đường dẫn lưu ảnh";
 "savePathChoose" = "Chọn";
 "savePathReveal" = "Hiện";
-"chooseScreenshotSavePathTitle" = "Chọn đường dẫn lưu ảnh chụp";
+"chooseScreenshotSavePathTitle" = "Chọn đường dẫn lưu ảnh";
 
 "editClipboardImage" = "Edit Clipboard Image";
 "openImage" = "Open Image";

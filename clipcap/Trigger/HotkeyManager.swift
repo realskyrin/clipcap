@@ -35,19 +35,25 @@ final class HotkeyManager {
     func unregisterHistoryPanel() {}
 
     static func currentClipboardDisplayString() -> String? {
-        "⌘+Return"
+        displayString(keyCode: effectiveClipboardHotkey.keyCode, modifiers: effectiveClipboardHotkey.modifiers)
     }
 
     static func currentFileSaveDisplayString() -> String {
-        "⌘+S"
+        displayString(keyCode: effectiveFileSaveHotkey.keyCode, modifiers: effectiveFileSaveHotkey.modifiers)
     }
 
     static func currentPreviousHistoryImageDisplayString() -> String {
-        ","
+        displayString(
+            keyCode: effectivePreviousHistoryImageHotkey.keyCode,
+            modifiers: effectivePreviousHistoryImageHotkey.modifiers
+        )
     }
 
     static func currentNextHistoryImageDisplayString() -> String {
-        "."
+        displayString(
+            keyCode: effectiveNextHistoryImageHotkey.keyCode,
+            modifiers: effectiveNextHistoryImageHotkey.modifiers
+        )
     }
 
     static func currentDisplayString() -> String? { nil }
@@ -63,25 +69,33 @@ final class HotkeyManager {
     static func currentImageMergeDisplayString() -> String? { nil }
     static func currentFullScreenScreenshotDisplayString() -> String? { nil }
     static func currentColorPickerDisplayString() -> String? { nil }
-    static func currentHistoryPanelDisplayString() -> String? { nil }
+    static func currentHistoryPanelDisplayString() -> String? {
+        guard Defaults.hasCustomHistoryPanelHotkey else { return nil }
+        return displayString(keyCode: Defaults.historyPanelHotkeyKeyCode, modifiers: Defaults.historyPanelHotkeyModifiers)
+    }
 
     static func eventMatchesClipboardHotkey(_ event: NSEvent) -> Bool {
-        event.keyCode == 36 && event.modifierFlags.intersection(.deviceIndependentFlagsMask) == .command
+        eventMatches(event, hotkey: effectiveClipboardHotkey)
     }
 
     static func eventMatchesFileSaveHotkey(_ event: NSEvent) -> Bool {
-        event.charactersIgnoringModifiers?.lowercased() == "s"
-            && event.modifierFlags.intersection(.deviceIndependentFlagsMask) == .command
+        eventMatches(event, hotkey: effectiveFileSaveHotkey)
     }
 
     static func eventMatchesPreviousHistoryImageHotkey(_ event: NSEvent) -> Bool {
-        event.charactersIgnoringModifiers == ","
-            && event.modifierFlags.intersection(.deviceIndependentFlagsMask).isEmpty
+        eventMatches(event, hotkey: effectivePreviousHistoryImageHotkey)
     }
 
     static func eventMatchesNextHistoryImageHotkey(_ event: NSEvent) -> Bool {
-        event.charactersIgnoringModifiers == "."
-            && event.modifierFlags.intersection(.deviceIndependentFlagsMask).isEmpty
+        eventMatches(event, hotkey: effectiveNextHistoryImageHotkey)
+    }
+
+    static func eventMatchesHistoryPanelHotkey(_ event: NSEvent) -> Bool {
+        guard Defaults.hasCustomHistoryPanelHotkey else { return false }
+        return eventMatches(
+            event,
+            hotkey: (Defaults.historyPanelHotkeyKeyCode, Defaults.historyPanelHotkeyModifiers)
+        )
     }
 
     static func displayString(keyCode: Int, modifiers: Int) -> String {
@@ -94,12 +108,51 @@ final class HotkeyManager {
         return pieces.joined()
     }
 
+    static func legacyModifiers(from flags: NSEvent.ModifierFlags) -> Int {
+        let normalized = flags.intersection(.deviceIndependentFlagsMask)
+        var modifiers = 0
+        if normalized.contains(.control) { modifiers |= 4096 }
+        if normalized.contains(.option) { modifiers |= 2048 }
+        if normalized.contains(.shift) { modifiers |= 512 }
+        if normalized.contains(.command) { modifiers |= 256 }
+        return modifiers
+    }
+
     static func isFunctionKey(_ keyCode: UInt16) -> Bool {
         (122...127).contains(Int(keyCode)) || (96...111).contains(Int(keyCode))
     }
 
     func hotkeyConflictMessage(keyCode: UInt32, modifiers: UInt32, slot: Any? = nil) -> String? {
         nil
+    }
+
+    private static var effectiveClipboardHotkey: (keyCode: Int, modifiers: Int) {
+        Defaults.hasCustomClipboardHotkey
+            ? (Defaults.clipboardHotkeyKeyCode, Defaults.clipboardHotkeyModifiers)
+            : (36, 256)
+    }
+
+    private static var effectiveFileSaveHotkey: (keyCode: Int, modifiers: Int) {
+        Defaults.hasCustomFileSaveHotkey
+            ? (Defaults.fileSaveHotkeyKeyCode, Defaults.fileSaveHotkeyModifiers)
+            : (1, 256)
+    }
+
+    private static var effectivePreviousHistoryImageHotkey: (keyCode: Int, modifiers: Int) {
+        Defaults.hasCustomPreviousHistoryImageHotkey
+            ? (Defaults.previousHistoryImageHotkeyKeyCode, Defaults.previousHistoryImageHotkeyModifiers)
+            : (43, 0)
+    }
+
+    private static var effectiveNextHistoryImageHotkey: (keyCode: Int, modifiers: Int) {
+        Defaults.hasCustomNextHistoryImageHotkey
+            ? (Defaults.nextHistoryImageHotkeyKeyCode, Defaults.nextHistoryImageHotkeyModifiers)
+            : (47, 0)
+    }
+
+    private static func eventMatches(_ event: NSEvent, hotkey: (keyCode: Int, modifiers: Int)) -> Bool {
+        Int(event.keyCode) == hotkey.keyCode
+            && legacyModifiers(from: event.modifierFlags) == hotkey.modifiers
     }
 
     private static func keyName(_ keyCode: UInt16) -> String {
@@ -128,8 +181,10 @@ final class HotkeyManager {
         case 37: return "L"
         case 38: return "J"
         case 40: return "K"
+        case 43: return "Comma"
         case 45: return "N"
         case 46: return "M"
+        case 47: return "Period"
         case 36: return "Return"
         case 49: return "Space"
         case 53: return "Esc"

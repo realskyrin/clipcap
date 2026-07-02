@@ -8,10 +8,10 @@
 "launchAtLogin" = "Запускать при входе";
 "pinAcrossSpaces" = "Показывать закрепления на всех рабочих столах";
 "pinAcrossSpacesHint" = "Новые закрепленные изображения появляются на каждом рабочем столе и полноэкранном Space";
-"historyCacheToggleLabel" = "Кэшировать снимки";
-"historyCacheToggleHint" = "Сохраняет недавние снимки, выбранные цвета и ссылки загрузок для быстрого повторного копирования из строки меню";
+"historyCacheToggleLabel" = "Кэшировать изображения";
+"historyCacheToggleHint" = "Сохраняет недавние изображения, выбранные цвета и ссылки загрузок для быстрого повторного копирования из строки меню";
 "historyCacheLabel" = "Размер кэша истории";
-"historyCacheHint" = "Хранит недавние снимки для быстрого повторного копирования";
+"historyCacheHint" = "Хранит недавние изображения для быстрого повторного копирования";
 "historyPanelDisplayModeLabel" = "Отображение панели истории";
 "historyPanelDisplayModeHint" = "Выберите диалог или вырез для истории снимков";
 "historyPanelDialogMode" = "Диалог";
@@ -24,9 +24,9 @@
 "windowShadowSizeHint" = "Чем больше значение, тем мягче и шире тень — окно словно приподнято выше";
 
 /* Image shortcut */
-"shortcutHeader" = "Снимок экрана";
-"shortcutHint" = "По умолчанию: двойное нажатие ⌘. Назначение своего сочетания отключает двойное нажатие";
-"shortcutDefaultDisplay" = "Двойное нажатие ⌘";
+"shortcutHeader" = "Изображение";
+"shortcutHint" = "Глобальное сочетание для изображения не настроено";
+"shortcutDefaultDisplay" = "Не задано";
 "shortcutSet" = "Задать";
 "shortcutCancel" = "Отмена";
 "shortcutWaiting" = "Нажмите клавиши";
@@ -69,15 +69,18 @@
 
 /* Copy-to-clipboard shortcut (editor confirm) */
 "clipboardShortcutHeader" = "Копировать в буфер обмена";
-"clipboardShortcutHint" = "Нажмите в редакторе, чтобы подтвердить правку и скопировать снимок в буфер обмена. По умолчанию — двойное нажатие ⌘";
-"clipboardShortcutDefaultDisplay" = "Двойное нажатие ⌘";
+"clipboardShortcutHint" = "Нажмите в редакторе, чтобы подтвердить правку и скопировать изображение в буфер обмена. По умолчанию — ⌘Return";
+"clipboardShortcutDefaultDisplay" = "⌘Return";
 
 /* Save-to-file shortcut (editor save) */
 "fileSaveShortcutHeader" = "Сохранить в файл";
-"fileSaveShortcutHint" = "Нажмите в редакторе, чтобы сохранить снимок PNG в заданную папку снимков. По умолчанию — ⌘S";
-"previousHistoryImageShortcutHeader" = "Предыдущий снимок из истории";
-"nextHistoryImageShortcutHeader" = "Следующий снимок из истории";
+"fileSaveShortcutHint" = "Нажмите в редакторе, чтобы сохранить изображение PNG в заданную папку изображений. По умолчанию — ⌘S";
+"previousHistoryImageShortcutHeader" = "Предыдущее изображение из истории";
+"previousHistoryImageShortcutHint" = "Переключает на предыдущее изображение, пока открыт просмотр истории";
+"nextHistoryImageShortcutHeader" = "Следующее изображение из истории";
+"nextHistoryImageShortcutHint" = "Переключает на следующее изображение, пока открыт просмотр истории";
 "historyPanelShortcutHeader" = "Панель истории";
+"historyPanelShortcutHint" = "Открывает панель истории из меню clipcap";
 "historyPanelShortcutDefaultDisplay" = "Не задано";
 
 /* Shortcut conflict */
@@ -221,6 +224,13 @@
 "settingsTabAbout" = "О программе";
 "settingsTabTranslation" = "Перевод";
 "settingsTabToolbar" = "Панель инструментов";
+"settingsNoPermissionsNeeded" = "Разрешения не нужны";
+"settingsSubtitleGeneral" = "Буфер обмена, файлы, история и сохранение";
+"settingsSubtitleShortcuts" = "Локальные сочетания редактора без глобального мониторинга";
+"settingsSubtitleToolbar" = "Настройка инструментов разметки в редакторе";
+"settingsSubtitleUpload" = "Настройка сервисов хостинга изображений";
+"settingsSubtitleTranslation" = "Настройка OCR и сервисов перевода";
+"settingsSubtitleAbout" = "Идентичность продукта и ссылки проекта";
 "settingsQuit" = "Завершить приложение";
 
 "toolbarSettingsPrimaryTitle" = "Основная панель";
@@ -482,10 +492,10 @@
 "savePathSubtitle" = "Изображения сохраняются сюда без запроса папки назначения";
 "autoRevealSavedFilesLabel" = "Показать в Finder";
 "autoRevealSavedFilesHint" = "Выбирать сохранённое изображение в Finder после успешного сохранения";
-"screenshotSavePathLabel" = "Путь для снимков";
+"screenshotSavePathLabel" = "Путь для изображений";
 "savePathChoose" = "Выбрать";
 "savePathReveal" = "Показать";
-"chooseScreenshotSavePathTitle" = "Выберите путь для снимков";
+"chooseScreenshotSavePathTitle" = "Выберите путь для изображений";
 
 "editClipboardImage" = "Edit Clipboard Image";
 "openImage" = "Open Image";

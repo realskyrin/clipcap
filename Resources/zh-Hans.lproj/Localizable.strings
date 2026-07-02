@@ -8,10 +8,10 @@
 "launchAtLogin" = "开机自动启动";
 "pinAcrossSpaces" = "贴图跨桌面显示";
 "pinAcrossSpacesHint" = "开启后新贴图会出现在所有桌面与全屏空间";
-"historyCacheToggleLabel" = "缓存截图";
-"historyCacheToggleHint" = "保存最近截图、取色和上传结果，便于从菜单栏快速再次复制";
+"historyCacheToggleLabel" = "缓存图片";
+"historyCacheToggleHint" = "保存最近图片、取色和上传结果，便于从菜单栏快速再次复制";
 "historyCacheLabel" = "历史缓存数量";
-"historyCacheHint" = "保留最近的截图数量，便于快速再次复制";
+"historyCacheHint" = "保留最近的图片数量，便于快速再次复制";
 "historyPanelDisplayModeLabel" = "历史面板显示方式";
 "historyPanelDisplayModeHint" = "选择通过弹窗或刘海查看历史截图";
 "historyPanelDialogMode" = "弹窗";
@@ -24,9 +24,9 @@
 "windowShadowSizeHint" = "数值越大投影越柔和、扩散越远，窗口看起来悬浮得越高";
 
 /* Image shortcut */
-"shortcutHeader" = "截图";
-"shortcutHint" = "默认双击 ⌘ 触发；自定义后双击 ⌘ 失效，可点恢复回到默认";
-"shortcutDefaultDisplay" = "双击 ⌘";
+"shortcutHeader" = "图片";
+"shortcutHint" = "未配置全局图片快捷键";
+"shortcutDefaultDisplay" = "未设置";
 "shortcutSet" = "设置";
 "shortcutCancel" = "取消";
 "shortcutWaiting" = "等待按键";
@@ -69,15 +69,18 @@
 
 /* Copy-to-clipboard shortcut (editor confirm) */
 "clipboardShortcutHeader" = "复制到剪贴板";
-"clipboardShortcutHint" = "在编辑器内按下以确认编辑并把截图复制到剪贴板。未设置时默认双击 ⌘";
-"clipboardShortcutDefaultDisplay" = "双击 ⌘";
+"clipboardShortcutHint" = "在编辑器内按下以确认编辑并把图片复制到剪贴板。未设置时默认 ⌘Return";
+"clipboardShortcutDefaultDisplay" = "⌘Return";
 
 /* Save-to-file shortcut (editor save) */
 "fileSaveShortcutHeader" = "保存到文件";
-"fileSaveShortcutHint" = "在编辑器内按下后，把截图保存为 PNG 到设置的截图保存路径。默认 ⌘S";
-"previousHistoryImageShortcutHeader" = "上一张历史截图";
-"nextHistoryImageShortcutHeader" = "下一张历史截图";
+"fileSaveShortcutHint" = "在编辑器内按下后，把图片保存为 PNG 到设置的图片保存路径。默认 ⌘S";
+"previousHistoryImageShortcutHeader" = "上一张历史图片";
+"previousHistoryImageShortcutHint" = "历史预览打开时切换到上一张图片";
+"nextHistoryImageShortcutHeader" = "下一张历史图片";
+"nextHistoryImageShortcutHint" = "历史预览打开时切换到下一张图片";
 "historyPanelShortcutHeader" = "历史面板";
+"historyPanelShortcutHint" = "从 clipcap 菜单打开历史面板";
 "historyPanelShortcutDefaultDisplay" = "未设置";
 
 /* Shortcut conflict */
@@ -221,6 +224,13 @@
 "settingsTabAbout" = "关于";
 "settingsTabTranslation" = "翻译";
 "settingsTabToolbar" = "工具栏";
+"settingsNoPermissionsNeeded" = "无需权限";
+"settingsSubtitleGeneral" = "剪贴板、文件、历史和保存行为";
+"settingsSubtitleShortcuts" = "无需全局监听的编辑器快捷键";
+"settingsSubtitleToolbar" = "排列编辑器中显示的标注工具";
+"settingsSubtitleUpload" = "配置图片托管服务";
+"settingsSubtitleTranslation" = "配置 OCR 和翻译服务";
+"settingsSubtitleAbout" = "产品身份和项目链接";
 "settingsQuit" = "退出应用";
 
 "toolbarSettingsPrimaryTitle" = "主工具栏";
@@ -482,10 +492,10 @@
 "savePathSubtitle" = "图片会直接保存到这个路径，不再询问保存位置";
 "autoRevealSavedFilesLabel" = "在 Finder 中显示";
 "autoRevealSavedFilesHint" = "保存成功后，在 Finder 中选中刚保存的图片";
-"screenshotSavePathLabel" = "截图保存路径";
+"screenshotSavePathLabel" = "图片保存路径";
 "savePathChoose" = "选择";
 "savePathReveal" = "显示";
-"chooseScreenshotSavePathTitle" = "选择截图保存路径";
+"chooseScreenshotSavePathTitle" = "选择图片保存路径";
 
 "editClipboardImage" = "Edit Clipboard Image";
 "openImage" = "Open Image";

@@ -25,8 +25,8 @@
 
 /* Image shortcut */
 "shortcutHeader" = "Image";
-"shortcutHint" = "Default: double-tap ⌘. Setting a custom shortcut disables double-tap";
-"shortcutDefaultDisplay" = "Double-tap ⌘";
+"shortcutHint" = "No global image shortcut is configured";
+"shortcutDefaultDisplay" = "Not Set";
 "shortcutSet" = "Set";
 "shortcutCancel" = "Cancel";
 "shortcutWaiting" = "Press keys";
@@ -69,15 +69,18 @@
 
 /* Copy-to-clipboard shortcut (editor confirm) */
 "clipboardShortcutHeader" = "Copy to Clipboard";
-"clipboardShortcutHint" = "Pressed inside the editor to commit the edit and copy the image to the clipboard. Defaults to double-tap ⌘ when not set";
-"clipboardShortcutDefaultDisplay" = "Double-tap ⌘";
+"clipboardShortcutHint" = "Pressed inside the editor to commit the edit and copy the image to the clipboard. Defaults to ⌘Return";
+"clipboardShortcutDefaultDisplay" = "⌘Return";
 
 /* Save-to-file shortcut (editor save) */
 "fileSaveShortcutHeader" = "Save to File";
 "fileSaveShortcutHint" = "Pressed inside the editor to save the image as a PNG in the configured image folder. Defaults to ⌘S";
 "previousHistoryImageShortcutHeader" = "Previous History Image";
+"previousHistoryImageShortcutHint" = "Switch to the previous image while the history preview is open";
 "nextHistoryImageShortcutHeader" = "Next History Image";
+"nextHistoryImageShortcutHint" = "Switch to the next image while the history preview is open";
 "historyPanelShortcutHeader" = "History Panel";
+"historyPanelShortcutHint" = "Open the history panel from clipcap menus";
 "historyPanelShortcutDefaultDisplay" = "Not Set";
 
 /* Shortcut conflict */
@@ -221,6 +224,13 @@
 "settingsTabAbout" = "About";
 "settingsTabTranslation" = "Translation";
 "settingsTabToolbar" = "Toolbar";
+"settingsNoPermissionsNeeded" = "No permissions needed";
+"settingsSubtitleGeneral" = "Clipboard, files, history, and save behavior";
+"settingsSubtitleShortcuts" = "Local editor shortcuts without global monitoring";
+"settingsSubtitleToolbar" = "Arrange the annotation tools shown in the editor";
+"settingsSubtitleUpload" = "Configure image hosting providers";
+"settingsSubtitleTranslation" = "Configure OCR and translation providers";
+"settingsSubtitleAbout" = "Product identity and project links";
 "settingsQuit" = "Quit App";
 
 "toolbarSettingsPrimaryTitle" = "Main toolbar";
