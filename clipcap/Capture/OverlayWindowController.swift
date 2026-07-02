@@ -133,7 +133,7 @@ final class OverlayWindowController {
     }
 
     private func makePanel(on screen: NSScreen) -> NSPanel {
-        let panel = NSPanel(
+        let panel = OverlayPanel(
             contentRect: screen.frame,
             styleMask: [.borderless, .nonactivatingPanel],
             backing: .buffered,
@@ -240,7 +240,7 @@ final class OverlayWindowController {
         guard imageSize.width > 0, imageSize.height > 0 else { return nil }
         let zoom = min(displayedSize.width / imageSize.width, displayedSize.height / imageSize.height)
         let zoomPercent = max(1, Int((zoom * 100).rounded()))
-        return "\(Int(imageSize.width.rounded())) x \(Int(imageSize.height.rounded())) · \(zoomPercent)% zoom"
+        return "\(Int(imageSize.width.rounded())) x \(Int(imageSize.height.rounded())) · \(zoomPercent)%"
     }
 
     private static func captureRect(selectionRect: NSRect, screen: NSScreen) -> CGRect {
@@ -256,4 +256,10 @@ final class OverlayWindowController {
             height: selectionRect.height
         )
     }
+}
+
+// MARK: - Non-activating Overlay Panel
+
+private final class OverlayPanel: NSPanel {
+    override var canBecomeKey: Bool { true }
 }

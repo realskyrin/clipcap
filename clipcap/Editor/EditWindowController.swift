@@ -920,19 +920,57 @@ class EditWindowController {
 
     private func handleMoveSelectionStart() {
         canvasView?.commitActiveTextEditing()
-        moveSelectionStartRect = hostSelectionView?.currentSelectionRect ?? .zero
+        dismissQRCodeOverlay()
+        moveSelectionStartRect = hostSelectionView?.currentSelectionRect ?? selectionViewRect
     }
 
     private func handleMoveSelectionDrag(delta: CGSize) {
-        hostSelectionView?.moveByExternalDrag(
+        guard let hostSelectionView else { return }
+        hostSelectionView.moveByExternalDrag(
             deltaFromOriginal: delta,
             originalRect: moveSelectionStartRect
         )
+        if let rect = hostSelectionView.currentSelectionRect {
+            syncSelectionGeometryAfterMove(to: rect)
+        }
     }
 
     private func handleMoveSelectionEnd() {
+        if let rect = hostSelectionView?.currentSelectionRect {
+            syncSelectionGeometryAfterMove(to: rect)
+        }
         hostSelectionView?.finalizeExternalDrag()
         moveSelectionStartRect = .zero
+    }
+
+    private func syncSelectionGeometryAfterMove(to rect: NSRect) {
+        selectionRect = rect
+        selectionViewRect = rect
+        captureRect = screenCaptureRect(for: rect)
+        canvasView?.captureRect = captureRect
+        updateCanvasFrameForSelectionMove()
+        repositionFloatingChrome()
+    }
+
+    private func updateCanvasFrameForSelectionMove() {
+        guard let canvasScrollView, let hostSelectionView else { return }
+        canvasScrollView.frame = isBeautifyActive
+            ? outerVisualRect(in: hostSelectionView.bounds)
+            : selectionViewRect
+    }
+
+    private func screenCaptureRect(for selectionRect: NSRect) -> CGRect {
+        let primaryHeight = NSScreen.screens.first?.frame.height ?? screen.frame.height
+        let screenPoint = NSPoint(
+            x: screen.frame.minX + selectionRect.minX,
+            y: screen.frame.minY + selectionRect.minY
+        )
+        return CGRect(
+            x: screenPoint.x,
+            y: primaryHeight - (screenPoint.y + selectionRect.height),
+            width: selectionRect.width,
+            height: selectionRect.height
+        )
     }
 
     // MARK: - Beautify

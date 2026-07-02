@@ -565,9 +565,9 @@ class SelectionView: NSView {
             .font: NSFont.monospacedDigitSystemFont(ofSize: 12, weight: .medium)
         ]
         let size = text.size(withAttributes: attrs)
-        // Position above the top-right corner of the selection.
+        // Position above the top-left corner of the selection.
         let labelWidth = size.width + 8
-        let labelX = max(rect.minX, rect.maxX - labelWidth)
+        let labelX = rect.minX
         let labelY = rect.origin.y + rect.height + 4
         let labelRect = NSRect(x: labelX, y: labelY, width: labelWidth, height: size.height + 4)
 
