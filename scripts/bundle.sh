@@ -16,7 +16,8 @@ for arg in "$@"; do
 done
 
 # Paths
-APP_NAME="capcap.app"
+PRODUCT_NAME="clipcap"
+APP_NAME="$PRODUCT_NAME.app"
 APP_DIR="build/$APP_NAME"
 CONTENTS="$APP_DIR/Contents"
 MACOS="$CONTENTS/MacOS"
@@ -24,17 +25,17 @@ RESOURCES="$CONTENTS/Resources"
 
 # Build binary
 if [ "$UNIVERSAL" = "1" ]; then
-    echo "Building capcap ($CONFIG, universal: arm64 + x86_64)..."
+    echo "Building $PRODUCT_NAME ($CONFIG, universal: arm64 + x86_64)..."
     swift build -c "$CONFIG" --arch arm64 --arch x86_64
     # SwiftPM emits the merged universal binary under .build/apple/Products/<Config>/
     CONFIG_CAP="$(tr '[:lower:]' '[:upper:]' <<< "${CONFIG:0:1}")${CONFIG:1}"
-    BUILD_BIN=".build/apple/Products/$CONFIG_CAP/capcap"
+    BUILD_BIN=".build/apple/Products/$CONFIG_CAP/$PRODUCT_NAME"
     if [ ! -f "$BUILD_BIN" ]; then
         # Fallback: merge per-arch binaries with lipo
-        ARM_BIN=".build/arm64-apple-macosx/$CONFIG/capcap"
-        X86_BIN=".build/x86_64-apple-macosx/$CONFIG/capcap"
+        ARM_BIN=".build/arm64-apple-macosx/$CONFIG/$PRODUCT_NAME"
+        X86_BIN=".build/x86_64-apple-macosx/$CONFIG/$PRODUCT_NAME"
         if [ -f "$ARM_BIN" ] && [ -f "$X86_BIN" ]; then
-            BUILD_BIN=".build/$CONFIG/capcap-universal"
+            BUILD_BIN=".build/$CONFIG/$PRODUCT_NAME-universal"
             lipo -create -output "$BUILD_BIN" "$ARM_BIN" "$X86_BIN"
         else
             echo "error: universal binary not found at $BUILD_BIN and per-arch fallbacks missing" >&2
@@ -42,9 +43,9 @@ if [ "$UNIVERSAL" = "1" ]; then
         fi
     fi
 else
-    echo "Building capcap ($CONFIG, host arch only)..."
+    echo "Building $PRODUCT_NAME ($CONFIG, host arch only)..."
     swift build -c "$CONFIG"
-    BUILD_BIN=".build/$CONFIG/capcap"
+    BUILD_BIN=".build/$CONFIG/$PRODUCT_NAME"
 fi
 
 # Clean previous bundle
@@ -55,10 +56,10 @@ mkdir -p "$MACOS"
 mkdir -p "$RESOURCES"
 
 # Copy binary
-cp "$BUILD_BIN" "$MACOS/capcap"
+cp "$BUILD_BIN" "$MACOS/$PRODUCT_NAME"
 
 # Copy Info.plist
-cp "capcap/App/Info.plist" "$CONTENTS/Info.plist"
+cp "clipcap/App/Info.plist" "$CONTENTS/Info.plist"
 
 # Copy app icon
 cp "Resources/AppIcon.icns" "$RESOURCES/AppIcon.icns"
@@ -74,46 +75,31 @@ for lproj in Resources/*.lproj; do
     cp -R "$lproj" "$RESOURCES/"
 done
 
-# Copy SwiftPM resource bundles. PermissionFlow uses Bundle.module for its
-# floating authorization panel strings; if this bundle is absent, Intel builds
-# crash with a Swift assertion the first time the panel is shown.
-BUILD_DIR="$(dirname "$BUILD_BIN")"
-PERMISSION_FLOW_BUNDLE="$BUILD_DIR/capcap_PermissionFlow.bundle"
-if [ ! -d "$PERMISSION_FLOW_BUNDLE" ]; then
-    echo "error: missing SwiftPM resource bundle: $PERMISSION_FLOW_BUNDLE" >&2
-    exit 1
-fi
-cp -R "$PERMISSION_FLOW_BUNDLE" "$RESOURCES/"
-
 # Code signing
 # -----------------------------------------------------------------------------
-# Sign with the SAME self-signed certificate CI uses ("capcap Self-Signed") so
-# the app's code-signing identity — and therefore its macOS TCC permission
-# grants (Screen Recording / Accessibility) — stay stable between local test
-# builds and released builds. Without this, every local rebuild looks like a
-# different app to TCC and you must re-authorize.
+# Sign with clipcap's independent identity. This app intentionally does not
+# request screen or input-monitoring privacy grants, so it must not reuse the
+# original app's signing identity.
 #
-# Import the cert once (it lives in capcap-signing.p12, default password "capcap"):
-#   security import ~/Desktop/capcap-signing.p12 \
-#     -k ~/Library/Keychains/login.keychain-db -P capcap -T /usr/bin/codesign
+# Import the cert once if you create one:
+#   security import ~/Desktop/clipcap-signing.p12 \
+#     -k ~/Library/Keychains/login.keychain-db -P clipcap -T /usr/bin/codesign
 #
 # Override the identity with the SIGN_IDENTITY env var. If the cert isn't in the
-# keychain, fall back to ad-hoc signing (still launchable, but TCC grants won't
-# match released builds).
+# keychain, fall back to ad-hoc signing.
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-SIGN_IDENTITY="${SIGN_IDENTITY:-capcap Self-Signed}"
+SIGN_IDENTITY="${SIGN_IDENTITY:-clipcap Self-Signed}"
 if security find-identity -p codesigning 2>/dev/null | grep -qF "$SIGN_IDENTITY"; then
     echo "Signing with: $SIGN_IDENTITY"
-    codesign --force --deep --entitlements "$SCRIPT_DIR/capcap.entitlements" \
+    codesign --force --deep --entitlements "$SCRIPT_DIR/clipcap.entitlements" \
         --sign "$SIGN_IDENTITY" "$APP_DIR"
 else
     echo "warning: '$SIGN_IDENTITY' not found in keychain — falling back to ad-hoc signing." >&2
-    echo "warning: TCC permissions won't match released builds until you import capcap-signing.p12." >&2
-    codesign --force --deep --entitlements "$SCRIPT_DIR/capcap.entitlements" --sign - "$APP_DIR"
+    codesign --force --deep --entitlements "$SCRIPT_DIR/clipcap.entitlements" --sign - "$APP_DIR"
 fi
 
 echo "✅ Built and signed $APP_DIR"
-ARCHS=$(lipo -archs "$MACOS/capcap" 2>/dev/null || echo "unknown")
+ARCHS=$(lipo -archs "$MACOS/$PRODUCT_NAME" 2>/dev/null || echo "unknown")
 echo "   Architectures: $ARCHS"
 echo ""
 echo "To run:"

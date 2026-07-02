@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Quick compile-check for capcap.
+# Quick compile-check for clipcap.
 #
 # Looks at Swift files changed since HEAD (including untracked new files),
 # runs `swift build -c debug`, and surfaces only compilation errors.

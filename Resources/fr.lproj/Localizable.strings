@@ -1,17 +1,11 @@
-/* capcap — Français */
+/* clipcap — Français */
 
 /* Settings */
-"settingsTitle" = "Réglages capcap";
+"settingsTitle" = "Réglages clipcap";
 "showMenuBarIcon" = "Afficher l'icône dans la barre des menus";
 "permissionsHeader" = "Autorisations requises";
-"accessibilityPermission" = "Accessibilité";
-"accessibilityDescription" = "Nécessaire pour détecter le double appui sur la touche ⌘ Command et déclencher les captures d'écran";
-"screenRecordingPermission" = "Enregistrement de l'écran";
-"screenRecordingDescription" = "Nécessaire pour capturer le contenu de l'écran lors des captures";
 "launchApp" = "Lancer l'application";
 "launchAtLogin" = "Lancer à la connexion";
-"demoMode" = "Mode démo";
-"demoModeHint" = "Permet aux logiciels d'enregistrement de capturer la sélection et l'éditeur";
 "pinAcrossSpaces" = "Afficher les épingles sur tous les bureaux";
 "pinAcrossSpacesHint" = "Les nouvelles images épinglées apparaissent sur chaque bureau et espace plein écran";
 "historyCacheToggleLabel" = "Mettre les captures en cache";
@@ -24,15 +18,12 @@
 "historyPanelDialogModeHint" = "Ouvre un panneau d'aperçus horizontaux depuis le menu ou le raccourci";
 "historyPanelNotchMode" = "Encoche";
 "historyPanelNotchModeHint" = "Survolez l'encoche en haut pour développer, quittez pour masquer";
-"countdownLabel" = "Secondes du compte à rebours";
-"countdownHint" = "Maintenez ⌥ Option puis double-appuyez sur ⌘ ou utilisez le raccourci de capture pour lancer un compte à rebours avant la capture, Échap pour annuler";
-"countdownSecondsSuffix" = "s";
 "windowShadowToggleLabel" = "Ombre des captures de fenêtre";
 "windowShadowToggleHint" = "Arrondit les coins des captures de fenêtre et ajoute une ombre portée façon macOS";
 "windowShadowSizeLabel" = "Taille de l'ombre";
 "windowShadowSizeHint" = "Des valeurs élevées adoucissent et élargissent l'ombre : la fenêtre semble flotter plus haut";
 
-/* Screenshot shortcut */
+/* Image shortcut */
 "shortcutHeader" = "Capture d'écran";
 "shortcutHint" = "Par défaut : double appui sur ⌘. Définir un raccourci personnalisé désactive le double appui";
 "shortcutDefaultDisplay" = "Double appui sur ⌘";
@@ -71,8 +62,6 @@
 "copyImageTextShortcutDefaultDisplay" = "Non défini";
 "screenshotTranslationShortcutHeader" = "Traduction de capture";
 "screenshotTranslationShortcutDefaultDisplay" = "Non défini";
-"recordShortcutHeader" = "Enregistrer";
-"recordShortcutDefaultDisplay" = "Non défini";
 "fullScreenScreenshotShortcutHeader" = "Capture plein écran";
 "fullScreenScreenshotShortcutDefaultDisplay" = "Non défini";
 "colorPickerShortcutHeader" = "Pipette";
@@ -94,7 +83,6 @@
 /* Shortcut conflict */
 "shortcutConflictTitle" = "Raccourci déjà utilisé";
 "shortcutConflictScreenshot" = "Cette combinaison de touches est déjà utilisée par le raccourci de capture d'écran. Veuillez en choisir une autre";
-"shortcutConflictCountdown" = "Cette combinaison de touches est déjà utilisée par le raccourci de capture avec compte à rebours (raccourci de capture + ⌥). Veuillez en choisir une autre";
 "shortcutConflictSelectedImagePin" = "Cette combinaison de touches est déjà utilisée par le raccourci d'épinglage de l'image sélectionnée. Veuillez en choisir une autre";
 "shortcutConflictClipboardImagePin" = "Cette combinaison de touches est déjà utilisée par le raccourci d'épinglage de l'image du presse-papiers. Veuillez en choisir une autre";
 "shortcutConflictClipboardTextPin" = "Cette combinaison de touches est déjà utilisée par le raccourci d'épinglage du texte du presse-papiers. Veuillez en choisir une autre";
@@ -108,17 +96,15 @@
 "shortcutConflictTextRecognition" = "Cette combinaison de touches est déjà utilisée par le raccourci Reconnaissance de texte. Veuillez en choisir une autre";
 "shortcutConflictCopyImageText" = "Cette combinaison de touches est déjà utilisée par le raccourci Copier le texte de l'image. Veuillez en choisir une autre";
 "shortcutConflictScreenshotTranslation" = "Cette combinaison de touches est déjà utilisée par le raccourci Traduction de capture. Veuillez en choisir une autre";
-"shortcutConflictRecord" = "Cette combinaison de touches est déjà utilisée par le raccourci Enregistrer. Veuillez en choisir une autre";
 "shortcutConflictFullScreenScreenshot" = "Cette combinaison de touches est déjà utilisée par le raccourci Capture plein écran. Veuillez en choisir une autre";
 "shortcutConflictColorPicker" = "Cette combinaison de touches est déjà utilisée par le raccourci Pipette. Veuillez en choisir une autre";
 
 /* Menu bar */
 "takeScreenshot" = "Capturer l'écran";
 "takeFullScreenScreenshot" = "Capturer le plein écran";
-"record" = "Enregistrer";
 "colorPicker" = "Pipette";
 "settings" = "Réglages";
-"quitApp" = "Quitter capcap";
+"quitApp" = "Quitter clipcap";
 "historyMenu" = "Historique";
 "historyEmpty" = "Aucun historique";
 "historyClear" = "Effacer l'historique";
@@ -129,7 +115,6 @@
 "historyPanelFilterAll" = "Tout";
 "historyPanelFilterScreenshots" = "Captures";
 "historyPanelFilterGIF" = "GIF";
-"historyPanelFilterMP4" = "MP4";
 "historyPanelFilterColors" = "Couleurs";
 "historyPanelCopyHint" = "Cliquez pour copier";
 "historyPanelCopyDragHint" = "Cliquez pour copier · faites glisser vers une app";
@@ -142,14 +127,10 @@
 "dragToTextRecognition" = "Cliquez sur une fenêtre ou sélectionnez une zone pour reconnaître le texte";
 "dragToCopyImageText" = "Cliquez sur une fenêtre ou sélectionnez une zone pour copier le texte";
 "dragToScreenshotTranslation" = "Cliquez sur une fenêtre ou sélectionnez une zone pour traduire le contenu";
-"dragToRecord" = "Cliquez sur une fenêtre ou faites glisser pour enregistrer";
-"dragToRecordAspectFree" = "Cliquez sur une fenêtre ou faites glisser pour enregistrer · Sélection libre (R)";
-"dragToRecordAspect" = "Cliquez sur une fenêtre ou faites glisser pour enregistrer · Sélection %@ (R)";
 
 /* Toast */
 "copiedToClipboard" = "Copié dans le presse-papiers";
 "mergedLongScreenshot" = "Capture longue fusionnée";
-"autoScrollPermissionNeeded" = "La capture défilante nécessite l'autorisation Accessibilité — autorisez capcap dans Réglages Système → Confidentialité et sécurité → Accessibilité";
 "cropLongScreenshotHint" = "Faites glisser les bords haut/bas pour rogner — appuyez sur Entrée ou touchez ✓";
 "scrollCaptureHint" = "Appuyez sur n'importe quelle touche pour arrêter le défilement";
 "scrollCaptureManualHint" = "Faites défiler manuellement, puis appuyez sur une touche ou cliquez sur le bouton vert pour terminer";
@@ -162,23 +143,8 @@
 "fullScreenScreenshotFailed" = "Échec de la capture plein écran";
 "selectedImageEditNoImage" = "Aucune image unique sélectionnée dans le Finder";
 "clipboardImageEditNoImage" = "Aucune image modifiable dans le presse-papiers";
-"recordingSaved" = "Enregistrement sauvegardé dans %@";
-"recordingCancelled" = "Enregistrement annulé";
-"recordingExportingGIF" = "Création du GIF";
-"recordingFailed" = "Échec de l'enregistrement : %@";
-"saveRecording" = "Sauvegarder l'enregistrement";
-"saveRecordingPrompt" = "Sauvegarder";
-"recordingFormatLabel" = "Format";
-"recordingFormatManual" = "Choisir à chaque fois";
-"recordingFormatMP4" = "MP4";
-"recordingFormatGIF" = "GIF";
-"recordingFormatChoiceTitle" = "Choisir le format d'enregistrement";
-"recordingFormatChoiceMessage" = "L'enregistrement sera sauvegardé dans le dossier d'enregistrement configuré";
 "screenshotSaved" = "Capture enregistrée dans %@";
 "screenshotSaveFailed" = "Échec de l'enregistrement de la capture : %@";
-"recordingStop" = "Arrêter l'enregistrement";
-"recordingPause" = "Pause";
-"recordingResume" = "Reprendre";
 "colorCopied" = "Couleur %@ copiée";
 "qrCodeCopied" = "Contenu du QR code copié";
 "qrCodeNotFound" = "Aucun QR code détecté";
@@ -211,7 +177,6 @@
 "tipScreenshotTranslate" = "Traduction de capture";
 "tipSave" = "Enregistrer dans un fichier";
 "tipPin" = "Épingler à l'écran";
-"tipRecord" = "Enregistrer";
 "tipCancel" = "Annuler";
 "tipConfirm" = "Copier dans le presse-papiers";
 "tipScrollCropConfirm" = "Enregistrer et modifier";
@@ -285,7 +250,7 @@
 "aboutErrorLogReveal" = "Afficher dans le Finder";
 "aboutErrorLogRefresh" = "Actualiser le journal";
 "aboutErrorLogClear" = "Effacer le journal";
-"aboutErrorLogEmptyBody" = "capcap n'a enregistré aucun journal d'erreur. Si l'app se fige ou plante, revenez ici pour copier le journal et le joindre à un rapport de bug";
+"aboutErrorLogEmptyBody" = "clipcap n'a enregistré aucun journal d'erreur. Si l'app se fige ou plante, revenez ici pour copier le journal et le joindre à un rapport de bug";
 
 /* Updates — About pane */
 "checkForUpdates" = "Rechercher des mises à jour";
@@ -317,9 +282,9 @@
 
 /* Updates — manual check result alert */
 "updateAvailableTitle" = "La version v%@ est disponible";
-"updateAvailableBody" = "capcap va télécharger et installer la dernière version, puis redémarrer automatiquement";
+"updateAvailableBody" = "clipcap va télécharger et installer la dernière version, puis redémarrer automatiquement";
 "updateUpToDateTitle" = "Vous êtes à jour";
-"updateUpToDateBody" = "capcap v%@ est la dernière version";
+"updateUpToDateBody" = "clipcap v%@ est la dernière version";
 "updateFailedTitle" = "Échec de la recherche de mise à jour";
 "updateFailedBody" = "Impossible de joindre GitHub. Vérifiez votre connexion et réessayez";
 "updateInstallFailedTitle" = "Échec de la mise à jour";
@@ -330,8 +295,8 @@
 "updateOKButton" = "OK";
 
 /* Quit confirmation dialog */
-"quitConfirmTitle" = "Quitter capcap";
-"quitConfirmMessage" = "Quitter supprime l'icône de la barre des menus et désactive le raccourci de capture jusqu'au prochain lancement de capcap";
+"quitConfirmTitle" = "Quitter clipcap";
+"quitConfirmMessage" = "Quitter supprime l'icône de la barre des menus et désactive le raccourci de capture jusqu'au prochain lancement de clipcap";
 "quitConfirmAction" = "Quitter";
 "quitConfirmCancel" = "Annuler";
 
@@ -354,7 +319,6 @@
 "uploadMarkdownToggleTitle" = "Copier en lien Markdown";
 "uploadMarkdownToggleSubtitle" = "Si activé, copie une balise d'image Markdown (![](url)) après l'envoi ; sinon, copie une URL simple. Dans l'historique, ⌘-cliquez sur une image envoyée pour copier un lien Markdown, ou cliquez simplement dessus pour une URL simple";
 "filenameRuleTitle" = "Règles de nom de fichier";
-"filenameRuleSubtitle" = "Contrôle les téléversements d'image, les noms par défaut des images enregistrées et ceux des enregistrements. Les extensions sont ajoutées automatiquement";
 "filenameRulePresetLabel" = "Préréglage";
 "filenameRulePresetCustom" = "Personnalisé";
 "filenameRulePresetShort" = "Court";
@@ -363,7 +327,6 @@
 "filenameRulePresetCounter" = "Compteur quotidien";
 "filenameRulePresetRestore" = "Restaurer";
 "filenameRuleImageLabel" = "Image";
-"filenameRuleRecordingLabel" = "Enregistrement";
 "filenameRuleVariablesLabel" = "Variables";
 "filenameRuleVariableDate" = "Date";
 "filenameRuleVariableTime" = "Heure";
@@ -516,13 +479,14 @@
 
 /* Save paths */
 "savePathTitle" = "Emplacements d'enregistrement";
-"savePathSubtitle" = "Les captures et enregistrements sont sauvegardés ici sans demander de destination";
+"savePathSubtitle" = "Les images sont sauvegardées ici sans demander de destination";
 "autoRevealSavedFilesLabel" = "Afficher dans le Finder";
-"autoRevealSavedFilesHint" = "Sélectionner la capture ou l'enregistrement sauvegardé dans Finder après un enregistrement réussi";
-"recordingSavePathLabel" = "Chemin d'enregistrement";
-"recordingSaveFormatSettingLabel" = "Format d'enregistrement";
+"autoRevealSavedFilesHint" = "Sélectionner l image sauvegardée dans Finder après une sauvegarde réussie";
 "screenshotSavePathLabel" = "Chemin des captures";
 "savePathChoose" = "Choisir";
 "savePathReveal" = "Afficher";
-"chooseRecordingSavePathTitle" = "Choisir le chemin d'enregistrement";
 "chooseScreenshotSavePathTitle" = "Choisir le chemin des captures";
+
+"editClipboardImage" = "Edit Clipboard Image";
+"openImage" = "Open Image";
+"openImageNoImage" = "Copy an image to the clipboard or choose an image file";

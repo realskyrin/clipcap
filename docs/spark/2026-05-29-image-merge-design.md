@@ -2,19 +2,18 @@
 
 Date: 2026-05-29
 Status: Draft for user review
-Project: capcap
+Project: clipcap
 
 ## Summary
 
 Add an Image Merge feature for combining multiple images into one PNG through a dedicated AppKit workbench. The workbench supports template-based layout, light manual adjustment, direct copy/save output, and a path into the existing annotation editor for further editing.
 
-The first version uses a separate `capcap/ImageMerge/` module instead of embedding this behavior inside the existing screenshot editor. The merge workbench owns multi-image layout and rendering; the editor continues to own annotation, beautify, upload, pin, and final screenshot-style editing workflows.
+The first version uses a separate `clipcap/ImageMerge/` module instead of embedding this behavior inside the existing image editor. The merge workbench owns multi-image layout and rendering; the editor continues to own annotation, beautify, upload, pin, and final image-editing workflows.
 
 ## Goals
 
-- Start Image Merge from the menu bar and from a customizable global shortcut.
-- When triggered by shortcut, import the current Finder image selection if at least two image files are selected.
-- Let the menu entry open an empty merge workbench that can import images from file selection, clipboard, and drag-and-drop.
+- Start Image Merge from the menu bar.
+- Let the menu entry open an empty merge workbench that can import images from file selection, clipboard, drag-and-drop, and Open With flows.
 - Provide four first-version templates: horizontal row, vertical column, equal-width grid, and long-image stitch.
 - Support manual adjustment after template layout: drag to reorder, select one image, move it within its template slot, and resize it proportionally.
 - Support merge parameters for spacing, outer margin, transparent or solid background, background color, and image corner radius.
@@ -33,9 +32,7 @@ The first version uses a separate `capcap/ImageMerge/` module instead of embeddi
 
 ## User Flow
 
-The menu bar gains a new `Merge Images` item near the existing screenshot and record actions. It displays the configured shortcut when one is set. Clicking it opens an Image Merge workbench. If no images are loaded, the workbench shows an empty state that accepts drag-and-drop and offers file and clipboard import.
-
-The global shortcut is added as a dedicated shortcut slot in Settings. When fired, capcap reads the current Finder selection. If two or more image files are selected, it opens the workbench with those images loaded in Finder order. If fewer than two image files are available, it shows a localized toast asking the user to select at least two images.
+The menu bar gains a `Merge Images` item near the other image-input actions. Clicking it opens an Image Merge workbench. If no images are loaded, the workbench shows an empty state that accepts drag-and-drop and offers file and clipboard import.
 
 The workbench has three output actions:
 
@@ -63,9 +60,9 @@ Output actions are disabled until at least two valid images are loaded.
 
 ## Architecture
 
-Add a focused `capcap/ImageMerge/` module with these units:
+Add a focused `clipcap/ImageMerge/` module with these units:
 
-- `ImageMergeLauncher`: coordinates menu, shortcut, Finder selection, file selection, clipboard import, and workbench presentation.
+- `ImageMergeLauncher`: coordinates menu, file selection, clipboard import, drag input, Open With handoff, and workbench presentation.
 - `ImageMergeWindowController`: owns the workbench window lifecycle, control wiring, import actions, output actions, and localized UI state.
 - `ImageMergeCanvasView`: draws the preview, handles selection, drag-to-adjust, proportional scaling, and drag-and-drop import feedback.
 - `ImageMergeDocument`: stores merge state, including images, template, spacing, margin, background, corner radius, selected item, and per-item adjustments.
@@ -104,21 +101,14 @@ The preview may scale the rendered layout down to fit the workbench window, but 
 
 ## Integration Points
 
-`StatusBarController` gets a new menu item for Image Merge. It should rebuild when language or hotkey state changes, matching the existing shortcut-display pattern.
+`StatusBarController` gets a new menu item for Image Merge. It should rebuild when language changes.
 
-`AppDelegate` gets a merge trigger path alongside screenshot, record, selected-image edit, and clipboard-image edit. It must avoid opening the workbench while a capture overlay, recording, countdown, or another merge workbench is already active.
-
-`FinderSelection` already has multi-image selection support through `currentImageFileURLs()`. The shortcut path should require at least two images before launching.
-
-`HotkeyManager` and `Defaults` get a new merge shortcut slot, display string helper, registration/unregistration, conflict detection, and reset behavior. The shortcut is not set by default.
-
-`SettingsView` adds a `Merge Images` shortcut card in the Shortcuts tab. It should follow the existing shortcut-card behavior: set, cancel, restore, conflict alert, and display refresh.
+`AppDelegate` gets a merge trigger path alongside open-image and clipboard-image edit. It must avoid opening the workbench while another editor or merge workbench is already active.
 
 `Resources/*.lproj/Localizable.strings` get strings for menu title, settings labels, empty state, import actions, output actions, and error toasts.
 
 ## Error Handling
 
-- If Finder shortcut launch finds fewer than two images, show a toast asking the user to select at least two images.
 - If one or more imported files cannot be decoded, skip those files and show a toast indicating that some images could not be loaded.
 - Dragged non-image files are ignored.
 - Clipboard import shows a toast when the clipboard has no image.
@@ -142,9 +132,6 @@ bash scripts/rebuild-and-open.sh
 Manual verification should cover:
 
 - Menu item opens an empty workbench.
-- Menu item displays the configured shortcut.
-- Merge shortcut opens Finder-selected multi-image input.
-- Merge shortcut shows the expected toast with fewer than two images.
 - File picker imports multiple images.
 - Clipboard import works and shows the empty-clipboard toast when needed.
 - Drag-and-drop imports images and ignores non-images.
@@ -155,5 +142,4 @@ Manual verification should cover:
 - Copy writes PNG data to the clipboard and adds a History entry.
 - Save writes a PNG and does not add a History entry.
 - Continue Editing opens the existing editor with the merged image.
-- Existing screenshot, record, image edit, clipboard edit, upload, pin, and History flows still behave normally.
-
+- Existing image open, clipboard edit, drag input, Open With, upload, pin, and History flows still behave normally.

@@ -1,17 +1,11 @@
-/* capcap — 简体中文 */
+/* clipcap — 简体中文 */
 
 /* Settings */
-"settingsTitle" = "capcap 设置";
+"settingsTitle" = "clipcap 设置";
 "showMenuBarIcon" = "显示菜单栏图标";
 "permissionsHeader" = "所需权限";
-"accessibilityPermission" = "辅助功能";
-"accessibilityDescription" = "用于检测双击 ⌘ Command 键来触发截图";
-"screenRecordingPermission" = "屏幕录制";
-"screenRecordingDescription" = "用于捕获屏幕内容进行截图";
 "launchApp" = "启动应用";
 "launchAtLogin" = "开机自动启动";
-"demoMode" = "演示模式";
-"demoModeHint" = "录屏软件可以录到选区遮罩与编辑器，仅影响外部录制";
 "pinAcrossSpaces" = "贴图跨桌面显示";
 "pinAcrossSpacesHint" = "开启后新贴图会出现在所有桌面与全屏空间";
 "historyCacheToggleLabel" = "缓存截图";
@@ -24,19 +18,16 @@
 "historyPanelDialogModeHint" = "通过菜单或快捷键打开横向预览面板";
 "historyPanelNotchMode" = "刘海";
 "historyPanelNotchModeHint" = "鼠标进入屏幕顶部刘海自动展开，移出后自动收起";
-"countdownLabel" = "倒计时秒数";
-"countdownHint" = "按住 ⌥ Option 后双击 ⌘ 或按截图快捷键，先弹出倒计时再截图，按 Esc 取消";
-"countdownSecondsSuffix" = "秒";
 "windowShadowToggleLabel" = "窗口截图阴影";
 "windowShadowToggleHint" = "点选窗口截图时自动裁出圆角，并加上 macOS 风格的投影";
 "windowShadowSizeLabel" = "阴影大小";
 "windowShadowSizeHint" = "数值越大投影越柔和、扩散越远，窗口看起来悬浮得越高";
 
-/* Screenshot shortcut */
+/* Image shortcut */
 "shortcutHeader" = "截图";
 "shortcutHint" = "默认双击 ⌘ 触发；自定义后双击 ⌘ 失效，可点恢复回到默认";
 "shortcutDefaultDisplay" = "双击 ⌘";
-"shortcutSet" = "录制";
+"shortcutSet" = "设置";
 "shortcutCancel" = "取消";
 "shortcutWaiting" = "等待按键";
 "shortcutRestore" = "恢复默认";
@@ -71,8 +62,6 @@
 "copyImageTextShortcutDefaultDisplay" = "未设置";
 "screenshotTranslationShortcutHeader" = "截图翻译";
 "screenshotTranslationShortcutDefaultDisplay" = "未设置";
-"recordShortcutHeader" = "录制";
-"recordShortcutDefaultDisplay" = "未设置";
 "fullScreenScreenshotShortcutHeader" = "截全屏";
 "fullScreenScreenshotShortcutDefaultDisplay" = "未设置";
 "colorPickerShortcutHeader" = "取色器";
@@ -94,7 +83,6 @@
 /* Shortcut conflict */
 "shortcutConflictTitle" = "快捷键已被占用";
 "shortcutConflictScreenshot" = "该按键组合已被截图快捷键占用，请换一个";
-"shortcutConflictCountdown" = "该按键组合已被倒计时截图快捷键（截图快捷键 + ⌥）占用，请换一个";
 "shortcutConflictSelectedImagePin" = "该按键组合已被钉起选中图片快捷键占用，请换一个";
 "shortcutConflictClipboardImagePin" = "该按键组合已被钉起剪贴板图片快捷键占用，请换一个";
 "shortcutConflictClipboardTextPin" = "该按键组合已被钉起剪贴板文本快捷键占用，请换一个";
@@ -108,17 +96,15 @@
 "shortcutConflictTextRecognition" = "该按键组合已被文字识别快捷键占用，请换一个";
 "shortcutConflictCopyImageText" = "该按键组合已被复制图中文字快捷键占用，请换一个";
 "shortcutConflictScreenshotTranslation" = "该按键组合已被截图翻译快捷键占用，请换一个";
-"shortcutConflictRecord" = "该按键组合已被录制快捷键占用，请换一个";
 "shortcutConflictFullScreenScreenshot" = "该按键组合已被截全屏快捷键占用，请换一个";
 "shortcutConflictColorPicker" = "该按键组合已被取色器快捷键占用，请换一个";
 
 /* Menu bar */
 "takeScreenshot" = "截图";
 "takeFullScreenScreenshot" = "截全屏";
-"record" = "录制";
 "colorPicker" = "取色器";
 "settings" = "设置";
-"quitApp" = "退出 capcap";
+"quitApp" = "退出 clipcap";
 "historyMenu" = "历史";
 "historyEmpty" = "暂无历史";
 "historyClear" = "清除历史";
@@ -129,7 +115,6 @@
 "historyPanelFilterAll" = "全部";
 "historyPanelFilterScreenshots" = "截图";
 "historyPanelFilterGIF" = "GIF";
-"historyPanelFilterMP4" = "MP4";
 "historyPanelFilterColors" = "颜色";
 "historyPanelCopyHint" = "点击复制";
 "historyPanelCopyDragHint" = "点击复制 · 拖拽到应用";
@@ -142,14 +127,10 @@
 "dragToTextRecognition" = "点击窗口或框选区域识别文字";
 "dragToCopyImageText" = "点击窗口或框选区域复制文字";
 "dragToScreenshotTranslation" = "点击窗口或框选区域翻译内容";
-"dragToRecord" = "点击窗口或拖动以录制";
-"dragToRecordAspectFree" = "点击窗口或拖动以录制 · 框选自由比例（R）";
-"dragToRecordAspect" = "点击窗口或拖动以录制 · 框选 %@（R）";
 
 /* Toast */
 "copiedToClipboard" = "已添加到剪贴板";
 "mergedLongScreenshot" = "已合并长截图";
-"autoScrollPermissionNeeded" = "长截图需要辅助功能权限，请在系统设置 → 隐私与安全性 → 辅助功能中授权 capcap";
 "cropLongScreenshotHint" = "拖动上下边裁剪长图，回车或点对勾确认";
 "scrollCaptureHint" = "按任意键结束滚动";
 "scrollCaptureManualHint" = "手动滚动页面，按任意键或点击绿色按钮结束";
@@ -162,23 +143,8 @@
 "fullScreenScreenshotFailed" = "截全屏失败";
 "selectedImageEditNoImage" = "未找到 Finder 中选中的单张图片";
 "clipboardImageEditNoImage" = "剪贴板里没有可编辑的图片";
-"recordingSaved" = "录制已保存到 %@";
-"recordingCancelled" = "录制已取消";
-"recordingExportingGIF" = "正在生成 GIF";
-"recordingFailed" = "录制失败: %@";
-"saveRecording" = "保存录制";
-"saveRecordingPrompt" = "保存";
-"recordingFormatLabel" = "格式";
-"recordingFormatManual" = "手动选择";
-"recordingFormatMP4" = "MP4";
-"recordingFormatGIF" = "GIF";
-"recordingFormatChoiceTitle" = "选择录制格式";
-"recordingFormatChoiceMessage" = "录制会保存到设置里的录制保存路径";
 "screenshotSaved" = "截图已保存到 %@";
 "screenshotSaveFailed" = "截图保存失败: %@";
-"recordingStop" = "停止录制";
-"recordingPause" = "暂停";
-"recordingResume" = "继续";
 "colorCopied" = "已复制颜色 %@";
 "qrCodeCopied" = "已复制二维码内容";
 "qrCodeNotFound" = "未识别到二维码";
@@ -211,7 +177,6 @@
 "tipScreenshotTranslate" = "截图翻译";
 "tipSave" = "保存到文件";
 "tipPin" = "钉在屏幕";
-"tipRecord" = "录制";
 "tipCancel" = "取消";
 "tipConfirm" = "复制到剪贴板";
 "tipScrollCropConfirm" = "保存并编辑";
@@ -273,7 +238,7 @@
 "aboutTagline" = "菜单栏截图工具";
 "aboutLicense" = "开源协议";
 "aboutSourceCode" = "源代码";
-"aboutStarOnGitHub" = "给 capcap 点个 Star 🌟";
+"aboutStarOnGitHub" = "给 clipcap 点个 Star 🌟";
 "aboutFeatureRequest" = "提需求";
 "aboutBugReport" = "提 Bug";
 "aboutUpdateTitle" = "软件更新";
@@ -285,7 +250,7 @@
 "aboutErrorLogReveal" = "在访达中显示";
 "aboutErrorLogRefresh" = "刷新日志";
 "aboutErrorLogClear" = "清除日志";
-"aboutErrorLogEmptyBody" = "capcap 暂未记录到错误日志。如果遇到卡死、强制退出或闪退，请回到这里复制日志反馈给开发者";
+"aboutErrorLogEmptyBody" = "clipcap 暂未记录到错误日志。如果遇到卡死、强制退出或闪退，请回到这里复制日志反馈给开发者";
 
 /* Updates — About pane */
 "checkForUpdates" = "检查更新";
@@ -309,7 +274,7 @@
 "updateInstallFailedMenu" = "更新安装失败";
 
 /* Updates — progress HUD */
-"updateCheckingHUD" = "capcap 正在检查更新";
+"updateCheckingHUD" = "clipcap 正在检查更新";
 "updateDownloadingHUD" = "正在下载更新 %d%%";
 "updateVerifyingHUD" = "正在校验更新";
 "updateUnzippingHUD" = "正在解压";
@@ -317,7 +282,7 @@
 
 /* Updates — manual check result alert */
 "updateAvailableTitle" = "发现新版本 v%@";
-"updateAvailableBody" = "capcap 将自动下载并安装最新版本，完成后会自动重启";
+"updateAvailableBody" = "clipcap 将自动下载并安装最新版本，完成后会自动重启";
 "updateUpToDateTitle" = "已是最新版本";
 "updateUpToDateBody" = "当前版本 v%@ 已是最新";
 "updateFailedTitle" = "检查更新失败";
@@ -330,8 +295,8 @@
 "updateOKButton" = "好";
 
 /* Quit confirmation dialog */
-"quitConfirmTitle" = "退出 capcap";
-"quitConfirmMessage" = "退出后菜单栏图标和截图快捷键将不再可用，需要重新启动 capcap";
+"quitConfirmTitle" = "退出 clipcap";
+"quitConfirmMessage" = "退出后菜单栏图标和截图快捷键将不再可用，需要重新启动 clipcap";
 "quitConfirmAction" = "退出";
 "quitConfirmCancel" = "取消";
 
@@ -354,7 +319,6 @@
 "uploadMarkdownToggleTitle" = "复制为 Markdown 链接";
 "uploadMarkdownToggleSubtitle" = "开启后上传完成自动复制 Markdown 图片格式（![](链接)），关闭则复制普通 URL。在历史记录中，按住 ⌘ 点击已上传到图床的图片复制 Markdown 链接，直接点击则复制普通链接";
 "filenameRuleTitle" = "文件名规则";
-"filenameRuleSubtitle" = "控制图片上传、图片保存默认名和录制保存默认名。扩展名会自动添加";
 "filenameRulePresetLabel" = "预设";
 "filenameRulePresetCustom" = "自定义";
 "filenameRulePresetShort" = "简短";
@@ -363,7 +327,6 @@
 "filenameRulePresetCounter" = "每日计数";
 "filenameRulePresetRestore" = "恢复默认";
 "filenameRuleImageLabel" = "图片";
-"filenameRuleRecordingLabel" = "录制";
 "filenameRuleVariablesLabel" = "变量";
 "filenameRuleVariableDate" = "日期";
 "filenameRuleVariableTime" = "时间";
@@ -516,13 +479,14 @@
 
 /* Save paths */
 "savePathTitle" = "保存路径";
-"savePathSubtitle" = "截图和录制会直接保存到这些路径，不再询问保存位置";
+"savePathSubtitle" = "图片会直接保存到这个路径，不再询问保存位置";
 "autoRevealSavedFilesLabel" = "在 Finder 中显示";
-"autoRevealSavedFilesHint" = "保存成功后，在 Finder 中选中刚保存的截图或录制";
-"recordingSavePathLabel" = "录制保存路径";
-"recordingSaveFormatSettingLabel" = "录制格式";
+"autoRevealSavedFilesHint" = "保存成功后，在 Finder 中选中刚保存的图片";
 "screenshotSavePathLabel" = "截图保存路径";
 "savePathChoose" = "选择";
 "savePathReveal" = "显示";
-"chooseRecordingSavePathTitle" = "选择录制保存路径";
 "chooseScreenshotSavePathTitle" = "选择截图保存路径";
+
+"editClipboardImage" = "Edit Clipboard Image";
+"openImage" = "Open Image";
+"openImageNoImage" = "Copy an image to the clipboard or choose an image file";

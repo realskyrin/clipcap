@@ -1,17 +1,11 @@
-/* capcap — Vietnamese */
+/* clipcap — Vietnamese */
 
 /* Settings */
-"settingsTitle" = "Cài đặt capcap";
+"settingsTitle" = "Cài đặt clipcap";
 "showMenuBarIcon" = "Hiển thị biểu tượng trên thanh menu";
 "permissionsHeader" = "Quyền bắt buộc";
-"accessibilityPermission" = "Trợ năng";
-"accessibilityDescription" = "Cần để phát hiện thao tác nhấn đúp phím ⌘ Command trên toàn hệ thống để chụp màn hình";
-"screenRecordingPermission" = "Ghi màn hình";
-"screenRecordingDescription" = "Cần để chụp nội dung màn hình";
 "launchApp" = "Mở ứng dụng";
 "launchAtLogin" = "Mở khi đăng nhập";
-"demoMode" = "Chế độ demo";
-"demoModeHint" = "Cho phép trình ghi màn hình ghi lại lớp phủ chọn vùng và trình chỉnh sửa";
 "pinAcrossSpaces" = "Hiển thị ghim trên mọi màn hình nền";
 "pinAcrossSpacesHint" = "Ảnh ghim mới xuất hiện trên mọi màn hình nền và Space toàn màn hình";
 "historyCacheToggleLabel" = "Lưu ảnh chụp vào bộ nhớ";
@@ -24,15 +18,12 @@
 "historyPanelDialogModeHint" = "Mở bảng xem trước ngang từ menu hoặc phím tắt";
 "historyPanelNotchMode" = "Tai thỏ";
 "historyPanelNotchModeHint" = "Di chuột vào tai thỏ trên cùng để mở rộng, rời khỏi để ẩn";
-"countdownLabel" = "Số giây đếm ngược";
-"countdownHint" = "Giữ ⌥ Option rồi nhấn đúp ⌘ hoặc nhấn phím tắt chụp màn hình để bắt đầu đếm ngược trước khi chụp, Esc để hủy";
-"countdownSecondsSuffix" = "giây";
 "windowShadowToggleLabel" = "Đổ bóng khi chụp cửa sổ";
 "windowShadowToggleHint" = "Bo góc ảnh chụp cửa sổ và thêm bóng đổ kiểu macOS";
 "windowShadowSizeLabel" = "Kích thước bóng";
 "windowShadowSizeHint" = "Giá trị lớn hơn làm bóng mờ mềm hơn và lan rộng hơn, khiến cửa sổ trông nổi cao hơn";
 
-/* Screenshot shortcut */
+/* Image shortcut */
 "shortcutHeader" = "Chụp màn hình";
 "shortcutHint" = "Mặc định: nhấn đúp ⌘. Đặt phím tắt tùy chỉnh sẽ tắt nhấn đúp";
 "shortcutDefaultDisplay" = "Nhấn đúp ⌘";
@@ -71,8 +62,6 @@
 "copyImageTextShortcutDefaultDisplay" = "Chưa đặt";
 "screenshotTranslationShortcutHeader" = "Dịch ảnh chụp màn hình";
 "screenshotTranslationShortcutDefaultDisplay" = "Chưa đặt";
-"recordShortcutHeader" = "Ghi màn hình";
-"recordShortcutDefaultDisplay" = "Chưa đặt";
 "fullScreenScreenshotShortcutHeader" = "Chụp toàn màn hình";
 "fullScreenScreenshotShortcutDefaultDisplay" = "Chưa đặt";
 "colorPickerShortcutHeader" = "Chọn màu";
@@ -94,7 +83,6 @@
 /* Shortcut conflict */
 "shortcutConflictTitle" = "Phím tắt đã được dùng";
 "shortcutConflictScreenshot" = "Tổ hợp phím này đã được dùng cho phím tắt chụp màn hình. Vui lòng chọn tổ hợp khác";
-"shortcutConflictCountdown" = "Tổ hợp phím này đã được dùng cho phím tắt chụp màn hình đếm ngược (phím tắt chụp màn hình + ⌥). Vui lòng chọn tổ hợp khác";
 "shortcutConflictSelectedImagePin" = "Tổ hợp phím này đã được dùng cho phím tắt ghim ảnh đã chọn. Vui lòng chọn tổ hợp khác";
 "shortcutConflictClipboardImagePin" = "Tổ hợp phím này đã được dùng cho phím tắt ghim ảnh từ clipboard. Vui lòng chọn tổ hợp khác";
 "shortcutConflictClipboardTextPin" = "Tổ hợp phím này đã được dùng cho phím tắt ghim văn bản từ clipboard. Vui lòng chọn tổ hợp khác";
@@ -108,17 +96,15 @@
 "shortcutConflictTextRecognition" = "Tổ hợp phím này đã được dùng cho phím tắt nhận dạng văn bản. Vui lòng chọn tổ hợp khác";
 "shortcutConflictCopyImageText" = "Tổ hợp phím này đã được dùng cho phím tắt sao chép chữ trong ảnh. Vui lòng chọn tổ hợp khác";
 "shortcutConflictScreenshotTranslation" = "Tổ hợp phím này đã được dùng cho phím tắt dịch ảnh chụp màn hình. Vui lòng chọn tổ hợp khác";
-"shortcutConflictRecord" = "Tổ hợp phím này đã được dùng cho phím tắt ghi màn hình. Vui lòng chọn tổ hợp khác";
 "shortcutConflictFullScreenScreenshot" = "Tổ hợp phím này đã được dùng cho phím tắt chụp toàn màn hình. Vui lòng chọn tổ hợp khác";
 "shortcutConflictColorPicker" = "Tổ hợp phím này đã được dùng cho phím tắt Chọn màu. Vui lòng chọn tổ hợp khác";
 
 /* Menu bar */
 "takeScreenshot" = "Chụp màn hình";
 "takeFullScreenScreenshot" = "Chụp toàn màn hình";
-"record" = "Ghi màn hình";
 "colorPicker" = "Chọn màu";
 "settings" = "Cài đặt";
-"quitApp" = "Thoát capcap";
+"quitApp" = "Thoát clipcap";
 "historyMenu" = "Lịch sử";
 "historyEmpty" = "Chưa có lịch sử";
 "historyClear" = "Xóa lịch sử";
@@ -129,7 +115,6 @@
 "historyPanelFilterAll" = "Tất cả";
 "historyPanelFilterScreenshots" = "Ảnh chụp";
 "historyPanelFilterGIF" = "GIF";
-"historyPanelFilterMP4" = "MP4";
 "historyPanelFilterColors" = "Màu";
 "historyPanelCopyHint" = "Nhấp để sao chép";
 "historyPanelCopyDragHint" = "Nhấp để sao chép · kéo vào ứng dụng";
@@ -142,14 +127,10 @@
 "dragToTextRecognition" = "Nhấp vào cửa sổ hoặc chọn vùng để nhận dạng văn bản";
 "dragToCopyImageText" = "Nhấp vào cửa sổ hoặc chọn vùng để sao chép văn bản";
 "dragToScreenshotTranslation" = "Nhấp vào cửa sổ hoặc chọn vùng để dịch nội dung";
-"dragToRecord" = "Nhấp vào cửa sổ hoặc kéo để ghi";
-"dragToRecordAspectFree" = "Nhấp vào cửa sổ hoặc kéo để ghi · Tỷ lệ kéo tự do (R)";
-"dragToRecordAspect" = "Nhấp vào cửa sổ hoặc kéo để ghi · Kéo %@ (R)";
 
 /* Toast */
 "copiedToClipboard" = "Đã sao chép vào clipboard";
 "mergedLongScreenshot" = "Đã ghép ảnh chụp dài";
-"autoScrollPermissionNeeded" = "Chụp cuộn cần quyền Trợ năng — hãy cấp quyền cho capcap trong Cài đặt hệ thống → Quyền riêng tư & Bảo mật → Trợ năng";
 "cropLongScreenshotHint" = "Kéo cạnh trên/dưới để cắt — nhấn Enter hoặc bấm ✓";
 "scrollCaptureHint" = "Nhấn phím bất kỳ để kết thúc cuộn";
 "scrollCaptureManualHint" = "Cuộn thủ công, rồi nhấn phím bất kỳ hoặc bấm nút xanh để kết thúc";
@@ -162,23 +143,8 @@
 "fullScreenScreenshotFailed" = "Chụp toàn màn hình thất bại";
 "selectedImageEditNoImage" = "Chưa chọn đúng một ảnh trong Finder";
 "clipboardImageEditNoImage" = "Không có ảnh có thể chỉnh sửa trong clipboard";
-"recordingSaved" = "Đã lưu bản ghi vào %@";
-"recordingCancelled" = "Đã hủy ghi";
-"recordingExportingGIF" = "Đang tạo GIF";
-"recordingFailed" = "Ghi thất bại: %@";
-"saveRecording" = "Lưu bản ghi";
-"saveRecordingPrompt" = "Lưu";
-"recordingFormatLabel" = "Định dạng";
-"recordingFormatManual" = "Chọn mỗi lần";
-"recordingFormatMP4" = "MP4";
-"recordingFormatGIF" = "GIF";
-"recordingFormatChoiceTitle" = "Chọn định dạng bản ghi";
-"recordingFormatChoiceMessage" = "Bản ghi sẽ được lưu vào thư mục ghi đã đặt";
 "screenshotSaved" = "Đã lưu ảnh chụp vào %@";
 "screenshotSaveFailed" = "Lưu ảnh chụp thất bại: %@";
-"recordingStop" = "Dừng ghi";
-"recordingPause" = "Tạm dừng";
-"recordingResume" = "Tiếp tục";
 "colorCopied" = "Đã sao chép màu %@";
 "qrCodeCopied" = "Đã sao chép nội dung mã QR";
 "qrCodeNotFound" = "Không tìm thấy mã QR";
@@ -211,7 +177,6 @@
 "tipScreenshotTranslate" = "Dịch ảnh chụp màn hình";
 "tipSave" = "Lưu vào tệp";
 "tipPin" = "Ghim lên màn hình";
-"tipRecord" = "Ghi màn hình";
 "tipCancel" = "Hủy";
 "tipConfirm" = "Sao chép vào clipboard";
 "tipScrollCropConfirm" = "Lưu và chỉnh sửa";
@@ -273,7 +238,7 @@
 "aboutTagline" = "Công cụ chụp màn hình trên thanh menu";
 "aboutLicense" = "Giấy phép";
 "aboutSourceCode" = "Mã nguồn";
-"aboutStarOnGitHub" = "Đánh dấu sao capcap trên GitHub 🌟";
+"aboutStarOnGitHub" = "Đánh dấu sao clipcap trên GitHub 🌟";
 "aboutFeatureRequest" = "Yêu cầu tính năng";
 "aboutBugReport" = "Báo lỗi";
 "aboutUpdateTitle" = "Cập nhật";
@@ -285,7 +250,7 @@
 "aboutErrorLogReveal" = "Hiển thị trong Finder";
 "aboutErrorLogRefresh" = "Làm mới nhật ký";
 "aboutErrorLogClear" = "Xóa nhật ký";
-"aboutErrorLogEmptyBody" = "capcap chưa ghi nhận nhật ký lỗi nào. Nếu ứng dụng bị treo hoặc thoát bất ngờ, hãy quay lại đây để sao chép nhật ký cho báo cáo lỗi";
+"aboutErrorLogEmptyBody" = "clipcap chưa ghi nhận nhật ký lỗi nào. Nếu ứng dụng bị treo hoặc thoát bất ngờ, hãy quay lại đây để sao chép nhật ký cho báo cáo lỗi";
 
 /* Updates — About pane */
 "checkForUpdates" = "Kiểm tra cập nhật";
@@ -317,9 +282,9 @@
 
 /* Updates — manual check result alert */
 "updateAvailableTitle" = "Đã có phiên bản v%@";
-"updateAvailableBody" = "capcap sẽ tải xuống và cài đặt phiên bản mới nhất, rồi tự động mở lại";
+"updateAvailableBody" = "clipcap sẽ tải xuống và cài đặt phiên bản mới nhất, rồi tự động mở lại";
 "updateUpToDateTitle" = "Bạn đang dùng bản mới nhất";
-"updateUpToDateBody" = "capcap v%@ là phiên bản mới nhất";
+"updateUpToDateBody" = "clipcap v%@ là phiên bản mới nhất";
 "updateFailedTitle" = "Kiểm tra cập nhật thất bại";
 "updateFailedBody" = "Không thể kết nối GitHub. Hãy kiểm tra kết nối rồi thử lại";
 "updateInstallFailedTitle" = "Cập nhật thất bại";
@@ -330,8 +295,8 @@
 "updateOKButton" = "OK";
 
 /* Quit confirmation dialog */
-"quitConfirmTitle" = "Thoát capcap";
-"quitConfirmMessage" = "Thoát sẽ gỡ biểu tượng khỏi thanh menu và tắt phím tắt chụp màn hình cho đến khi bạn mở lại capcap";
+"quitConfirmTitle" = "Thoát clipcap";
+"quitConfirmMessage" = "Thoát sẽ gỡ biểu tượng khỏi thanh menu và tắt phím tắt chụp màn hình cho đến khi bạn mở lại clipcap";
 "quitConfirmAction" = "Thoát";
 "quitConfirmCancel" = "Hủy";
 
@@ -354,7 +319,6 @@
 "uploadMarkdownToggleTitle" = "Sao chép dưới dạng liên kết Markdown";
 "uploadMarkdownToggleSubtitle" = "Khi bật, sau khi tải lên sẽ sao chép thẻ ảnh Markdown (![](url)); khi tắt, sao chép URL thuần. Trong Lịch sử, ⌘-nhấp ảnh đã tải lên để sao chép liên kết Markdown, hoặc nhấp trực tiếp để sao chép URL thuần";
 "filenameRuleTitle" = "Quy tắc tên tệp";
-"filenameRuleSubtitle" = "Điều khiển tên khi tải ảnh lên, tên mặc định khi lưu ảnh và khi lưu bản ghi. Phần mở rộng được tự động thêm";
 "filenameRulePresetLabel" = "Mẫu";
 "filenameRulePresetCustom" = "Tùy chỉnh";
 "filenameRulePresetShort" = "Ngắn";
@@ -363,7 +327,6 @@
 "filenameRulePresetCounter" = "Đếm theo ngày";
 "filenameRulePresetRestore" = "Khôi phục";
 "filenameRuleImageLabel" = "Ảnh";
-"filenameRuleRecordingLabel" = "Bản ghi";
 "filenameRuleVariablesLabel" = "Biến";
 "filenameRuleVariableDate" = "Ngày";
 "filenameRuleVariableTime" = "Giờ";
@@ -516,13 +479,14 @@
 
 /* Save paths */
 "savePathTitle" = "Đường dẫn lưu";
-"savePathSubtitle" = "Ảnh chụp và bản ghi được lưu tại đây mà không hỏi vị trí đích";
+"savePathSubtitle" = "Ảnh được lưu tại đây mà không hỏi vị trí đích";
 "autoRevealSavedFilesLabel" = "Hiển thị trong Finder";
-"autoRevealSavedFilesHint" = "Chọn ảnh chụp hoặc bản ghi đã lưu trong Finder sau khi lưu thành công";
-"recordingSavePathLabel" = "Đường dẫn lưu bản ghi";
-"recordingSaveFormatSettingLabel" = "Định dạng bản ghi";
+"autoRevealSavedFilesHint" = "Chọn ảnh đã lưu trong Finder sau khi lưu thành công";
 "screenshotSavePathLabel" = "Đường dẫn lưu ảnh chụp";
 "savePathChoose" = "Chọn";
 "savePathReveal" = "Hiện";
-"chooseRecordingSavePathTitle" = "Chọn đường dẫn lưu bản ghi";
 "chooseScreenshotSavePathTitle" = "Chọn đường dẫn lưu ảnh chụp";
+
+"editClipboardImage" = "Edit Clipboard Image";
+"openImage" = "Open Image";
+"openImageNoImage" = "Copy an image to the clipboard or choose an image file";

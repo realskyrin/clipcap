@@ -9,7 +9,7 @@ fi
 
 APP_PATH="$1"
 OUTPUT_DMG="$2"
-VOLNAME="${3:-capcap}"
+VOLNAME="${3:-clipcap}"
 
 if [ ! -d "$APP_PATH" ]; then
     echo "error: app bundle not found: $APP_PATH" >&2
@@ -23,7 +23,7 @@ if [[ "$APP_BUNDLE" != *.app ]]; then
 fi
 
 OUTPUT_DIR="$(dirname "$OUTPUT_DMG")"
-STAGE="$(mktemp -d "${TMPDIR:-/tmp}/capcap-dmg.XXXXXX")"
+STAGE="$(mktemp -d "${TMPDIR:-/tmp}/clipcap-dmg.XXXXXX")"
 cleanup() {
     rm -rf "$STAGE"
 }

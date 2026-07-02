@@ -1,17 +1,11 @@
-/* capcap — 繁體中文 */
+/* clipcap — 繁體中文 */
 
 /* Settings */
-"settingsTitle" = "capcap 設定";
+"settingsTitle" = "clipcap 設定";
 "showMenuBarIcon" = "顯示選單列圖示";
 "permissionsHeader" = "必要權限";
-"accessibilityPermission" = "輔助使用";
-"accessibilityDescription" = "用來在全域偵測連按兩下 ⌘ Command 鍵，以觸發截圖";
-"screenRecordingPermission" = "螢幕錄製";
-"screenRecordingDescription" = "用來擷取螢幕內容並產生截圖";
 "launchApp" = "啟動 App";
 "launchAtLogin" = "登入時啟動";
-"demoMode" = "示範模式";
-"demoModeHint" = "允許螢幕錄影工具錄下選取遮罩與編輯器";
 "pinAcrossSpaces" = "貼圖跨桌面顯示";
 "pinAcrossSpacesHint" = "開啟後新貼圖會出現在所有桌面與全螢幕空間";
 "historyCacheToggleLabel" = "快取截圖";
@@ -24,15 +18,12 @@
 "historyPanelDialogModeHint" = "透過選單或快捷鍵開啟橫向預覽面板";
 "historyPanelNotchMode" = "瀏海";
 "historyPanelNotchModeHint" = "滑鼠進入螢幕頂部瀏海自動展開，移出後自動收起";
-"countdownLabel" = "倒數秒數";
-"countdownHint" = "按住 ⌥ Option 後連按兩下 ⌘，或按下截圖快捷鍵，即可先倒數再截圖，按 Esc 取消";
-"countdownSecondsSuffix" = "秒";
 "windowShadowToggleLabel" = "視窗截圖陰影";
 "windowShadowToggleHint" = "擷取視窗時裁出圓角，並加上 macOS 風格的陰影";
 "windowShadowSizeLabel" = "陰影大小";
 "windowShadowSizeHint" = "數值越大，陰影越柔和、擴散越遠，視窗看起來越有懸浮感";
 
-/* Screenshot shortcut */
+/* Image shortcut */
 "shortcutHeader" = "截圖";
 "shortcutHint" = "預設：連按兩下 ⌘。設定自訂快捷鍵後，連按兩下 ⌘ 將停用";
 "shortcutDefaultDisplay" = "連按兩下 ⌘";
@@ -71,8 +62,6 @@
 "copyImageTextShortcutDefaultDisplay" = "未設定";
 "screenshotTranslationShortcutHeader" = "截圖翻譯";
 "screenshotTranslationShortcutDefaultDisplay" = "未設定";
-"recordShortcutHeader" = "錄製";
-"recordShortcutDefaultDisplay" = "未設定";
 "fullScreenScreenshotShortcutHeader" = "截全螢幕";
 "fullScreenScreenshotShortcutDefaultDisplay" = "未設定";
 "colorPickerShortcutHeader" = "取色器";
@@ -94,7 +83,6 @@
 /* Shortcut conflict */
 "shortcutConflictTitle" = "快捷鍵已被使用";
 "shortcutConflictScreenshot" = "這組按鍵已用於截圖快捷鍵。請選擇其他組合";
-"shortcutConflictCountdown" = "這組按鍵已用於倒數截圖快捷鍵（截圖快捷鍵 + ⌥）。請選擇其他組合";
 "shortcutConflictSelectedImagePin" = "這組按鍵已用於釘選所選圖片快捷鍵。請選擇其他組合";
 "shortcutConflictClipboardImagePin" = "這組按鍵已用於釘選剪貼簿圖片快捷鍵。請選擇其他組合";
 "shortcutConflictClipboardTextPin" = "這組按鍵已用於釘選剪貼簿文字快捷鍵，請選擇其他組合";
@@ -108,17 +96,15 @@
 "shortcutConflictTextRecognition" = "這組按鍵已用於文字辨識快捷鍵。請選擇其他組合";
 "shortcutConflictCopyImageText" = "這組按鍵已用於複製圖中文字快捷鍵。請選擇其他組合";
 "shortcutConflictScreenshotTranslation" = "這組按鍵已用於截圖翻譯快捷鍵。請選擇其他組合";
-"shortcutConflictRecord" = "這組按鍵已用於錄製快捷鍵。請選擇其他組合";
 "shortcutConflictFullScreenScreenshot" = "這組按鍵已用於截全螢幕快捷鍵。請選擇其他組合";
 "shortcutConflictColorPicker" = "這組按鍵已用於取色器快捷鍵。請選擇其他組合";
 
 /* Menu bar */
 "takeScreenshot" = "截圖";
 "takeFullScreenScreenshot" = "截全螢幕";
-"record" = "錄製";
 "colorPicker" = "取色器";
 "settings" = "設定";
-"quitApp" = "結束 capcap";
+"quitApp" = "結束 clipcap";
 "historyMenu" = "歷史記錄";
 "historyEmpty" = "尚無歷史記錄";
 "historyClear" = "清除歷史記錄";
@@ -129,7 +115,6 @@
 "historyPanelFilterAll" = "全部";
 "historyPanelFilterScreenshots" = "截圖";
 "historyPanelFilterGIF" = "GIF";
-"historyPanelFilterMP4" = "MP4";
 "historyPanelFilterColors" = "顏色";
 "historyPanelCopyHint" = "點選複製";
 "historyPanelCopyDragHint" = "點選複製 · 拖曳到應用";
@@ -142,14 +127,10 @@
 "dragToTextRecognition" = "點選視窗或框選區域辨識文字";
 "dragToCopyImageText" = "點選視窗或框選區域複製文字";
 "dragToScreenshotTranslation" = "點選視窗或框選區域翻譯內容";
-"dragToRecord" = "點選視窗或拖曳以錄製";
-"dragToRecordAspectFree" = "點選視窗或拖曳以錄製 · 框選自由比例（R）";
-"dragToRecordAspect" = "點選視窗或拖曳以錄製 · 框選 %@（R）";
 
 /* Toast */
 "copiedToClipboard" = "已複製到剪貼簿";
 "mergedLongScreenshot" = "已合併長截圖";
-"autoScrollPermissionNeeded" = "長截圖需要「輔助使用」權限，請在「系統設定 → 隱私權與安全性 → 輔助使用」中允許 capcap";
 "cropLongScreenshotHint" = "拖曳上下邊緣裁切長截圖，按 Enter 或點一下 ✓ 確認";
 "scrollCaptureHint" = "按任意鍵結束捲動";
 "scrollCaptureManualHint" = "手動捲動頁面，按任意鍵或點一下綠色按鈕結束";
@@ -162,23 +143,8 @@
 "fullScreenScreenshotFailed" = "截全螢幕失敗";
 "selectedImageEditNoImage" = "Finder 中沒有選取單張圖片";
 "clipboardImageEditNoImage" = "剪貼簿中沒有可編輯的圖片";
-"recordingSaved" = "錄製已儲存到 %@";
-"recordingCancelled" = "錄製已取消";
-"recordingExportingGIF" = "正在建立 GIF";
-"recordingFailed" = "錄製失敗：%@";
-"saveRecording" = "儲存錄製";
-"saveRecordingPrompt" = "儲存";
-"recordingFormatLabel" = "格式";
-"recordingFormatManual" = "手動選擇";
-"recordingFormatMP4" = "MP4";
-"recordingFormatGIF" = "GIF";
-"recordingFormatChoiceTitle" = "選擇錄製格式";
-"recordingFormatChoiceMessage" = "錄製會儲存到設定的錄製儲存路徑";
 "screenshotSaved" = "截圖已儲存到 %@";
 "screenshotSaveFailed" = "截圖儲存失敗：%@";
-"recordingStop" = "停止錄製";
-"recordingPause" = "暫停";
-"recordingResume" = "繼續";
 "colorCopied" = "已複製色彩 %@";
 "qrCodeCopied" = "已複製二維碼內容";
 "qrCodeNotFound" = "未識別到二維碼";
@@ -211,7 +177,6 @@
 "tipScreenshotTranslate" = "截圖翻譯";
 "tipSave" = "儲存為檔案";
 "tipPin" = "釘選到螢幕";
-"tipRecord" = "錄製";
 "tipCancel" = "取消";
 "tipConfirm" = "複製到剪貼簿";
 "tipScrollCropConfirm" = "儲存並編輯";
@@ -273,7 +238,7 @@
 "aboutTagline" = "選單列截圖工具";
 "aboutLicense" = "授權條款";
 "aboutSourceCode" = "原始碼";
-"aboutStarOnGitHub" = "在 GitHub 給 capcap 一顆星 🌟";
+"aboutStarOnGitHub" = "在 GitHub 給 clipcap 一顆星 🌟";
 "aboutFeatureRequest" = "提出功能建議";
 "aboutBugReport" = "回報問題";
 "aboutUpdateTitle" = "更新";
@@ -285,7 +250,7 @@
 "aboutErrorLogReveal" = "在 Finder 中顯示";
 "aboutErrorLogRefresh" = "重新整理記錄";
 "aboutErrorLogClear" = "清除記錄";
-"aboutErrorLogEmptyBody" = "capcap 尚未記錄任何錯誤。如果 App 當機、卡住或閃退，請回到這裡複製記錄，方便回報問題";
+"aboutErrorLogEmptyBody" = "clipcap 尚未記錄任何錯誤。如果 App 當機、卡住或閃退，請回到這裡複製記錄，方便回報問題";
 
 /* Updates — About pane */
 "checkForUpdates" = "檢查更新";
@@ -317,9 +282,9 @@
 
 /* Updates — manual check result alert */
 "updateAvailableTitle" = "版本 v%@ 已可使用";
-"updateAvailableBody" = "capcap 會下載並安裝最新版本，完成後自動重新啟動";
+"updateAvailableBody" = "clipcap 會下載並安裝最新版本，完成後自動重新啟動";
 "updateUpToDateTitle" = "已是最新版本";
-"updateUpToDateBody" = "capcap v%@ 已是最新版本";
+"updateUpToDateBody" = "clipcap v%@ 已是最新版本";
 "updateFailedTitle" = "檢查更新失敗";
 "updateFailedBody" = "無法連線到 GitHub。請檢查網路後再試一次";
 "updateInstallFailedTitle" = "更新失敗";
@@ -330,8 +295,8 @@
 "updateOKButton" = "好";
 
 /* Quit confirmation dialog */
-"quitConfirmTitle" = "結束 capcap";
-"quitConfirmMessage" = "結束後，選單列圖示會消失，截圖快捷鍵也會停用，直到你再次啟動 capcap";
+"quitConfirmTitle" = "結束 clipcap";
+"quitConfirmMessage" = "結束後，選單列圖示會消失，截圖快捷鍵也會停用，直到你再次啟動 clipcap";
 "quitConfirmAction" = "結束";
 "quitConfirmCancel" = "取消";
 
@@ -354,7 +319,6 @@
 "uploadMarkdownToggleTitle" = "複製為 Markdown 連結";
 "uploadMarkdownToggleSubtitle" = "開啟後，上傳完成會複製 Markdown 圖片標籤（![](url)）；關閉則複製純網址。在歷史記錄中，按住 ⌘ 點選已上傳的圖片可複製 Markdown 連結，直接點選則複製純網址";
 "filenameRuleTitle" = "檔名規則";
-"filenameRuleSubtitle" = "控制圖片上傳、圖片儲存預設檔名和錄製儲存預設檔名。副檔名會自動加入";
 "filenameRulePresetLabel" = "預設";
 "filenameRulePresetCustom" = "自訂";
 "filenameRulePresetShort" = "簡短";
@@ -363,7 +327,6 @@
 "filenameRulePresetCounter" = "每日計數";
 "filenameRulePresetRestore" = "還原預設";
 "filenameRuleImageLabel" = "圖片";
-"filenameRuleRecordingLabel" = "錄製";
 "filenameRuleVariablesLabel" = "變數";
 "filenameRuleVariableDate" = "日期";
 "filenameRuleVariableTime" = "時間";
@@ -516,13 +479,14 @@
 
 /* Save paths */
 "savePathTitle" = "儲存路徑";
-"savePathSubtitle" = "截圖和錄製會直接儲存到這些路徑，不再詢問儲存位置";
+"savePathSubtitle" = "圖片會直接儲存到這個路徑，不再詢問儲存位置";
 "autoRevealSavedFilesLabel" = "在 Finder 中顯示";
-"autoRevealSavedFilesHint" = "儲存成功後，在 Finder 中選取剛儲存的截圖或錄製";
-"recordingSavePathLabel" = "錄製儲存路徑";
-"recordingSaveFormatSettingLabel" = "錄製格式";
+"autoRevealSavedFilesHint" = "儲存成功後，在 Finder 中選取剛儲存的圖片";
 "screenshotSavePathLabel" = "截圖儲存路徑";
 "savePathChoose" = "選擇";
 "savePathReveal" = "顯示";
-"chooseRecordingSavePathTitle" = "選擇錄製儲存路徑";
 "chooseScreenshotSavePathTitle" = "選擇截圖儲存路徑";
+
+"editClipboardImage" = "Edit Clipboard Image";
+"openImage" = "Open Image";
+"openImageNoImage" = "Copy an image to the clipboard or choose an image file";

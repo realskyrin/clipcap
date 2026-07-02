@@ -1,17 +1,11 @@
-/* capcap — Русский */
+/* clipcap — Русский */
 
 /* Settings */
-"settingsTitle" = "Настройки capcap";
+"settingsTitle" = "Настройки clipcap";
 "showMenuBarIcon" = "Показывать значок в строке меню";
 "permissionsHeader" = "Необходимые разрешения";
-"accessibilityPermission" = "Универсальный доступ";
-"accessibilityDescription" = "Необходимо для обнаружения двойного нажатия клавиши ⌘ Command для создания снимков экрана";
-"screenRecordingPermission" = "Запись экрана";
-"screenRecordingDescription" = "Необходимо для захвата содержимого экрана при создании снимков";
 "launchApp" = "Запустить приложение";
 "launchAtLogin" = "Запускать при входе";
-"demoMode" = "Демонстрационный режим";
-"demoModeHint" = "Разрешает программам записи экрана захватывать область выделения и редактор";
 "pinAcrossSpaces" = "Показывать закрепления на всех рабочих столах";
 "pinAcrossSpacesHint" = "Новые закрепленные изображения появляются на каждом рабочем столе и полноэкранном Space";
 "historyCacheToggleLabel" = "Кэшировать снимки";
@@ -24,15 +18,12 @@
 "historyPanelDialogModeHint" = "Открывает горизонтальную панель предпросмотра из меню или по сочетанию";
 "historyPanelNotchMode" = "Вырез";
 "historyPanelNotchModeHint" = "Наведение на верхний вырез раскрывает панель, выход скрывает";
-"countdownLabel" = "Секунды обратного отсчёта";
-"countdownHint" = "Удерживайте ⌥ Option, затем дважды нажмите ⌘ или сочетание для снимка, чтобы запустить обратный отсчёт перед захватом, Esc — отмена";
-"countdownSecondsSuffix" = "с";
 "windowShadowToggleLabel" = "Тень при снимке окна";
 "windowShadowToggleHint" = "Скругляет углы снимков окон и добавляет тень в стиле macOS";
 "windowShadowSizeLabel" = "Размер тени";
 "windowShadowSizeHint" = "Чем больше значение, тем мягче и шире тень — окно словно приподнято выше";
 
-/* Screenshot shortcut */
+/* Image shortcut */
 "shortcutHeader" = "Снимок экрана";
 "shortcutHint" = "По умолчанию: двойное нажатие ⌘. Назначение своего сочетания отключает двойное нажатие";
 "shortcutDefaultDisplay" = "Двойное нажатие ⌘";
@@ -71,8 +62,6 @@
 "copyImageTextShortcutDefaultDisplay" = "Не задано";
 "screenshotTranslationShortcutHeader" = "Перевод снимка";
 "screenshotTranslationShortcutDefaultDisplay" = "Не задано";
-"recordShortcutHeader" = "Запись";
-"recordShortcutDefaultDisplay" = "Не задано";
 "fullScreenScreenshotShortcutHeader" = "Снимок всего экрана";
 "fullScreenScreenshotShortcutDefaultDisplay" = "Не задано";
 "colorPickerShortcutHeader" = "Пипетка";
@@ -94,7 +83,6 @@
 /* Shortcut conflict */
 "shortcutConflictTitle" = "Сочетание уже используется";
 "shortcutConflictScreenshot" = "Это сочетание клавиш уже назначено для снимка экрана. Выберите другое";
-"shortcutConflictCountdown" = "Это сочетание клавиш уже назначено для снимка экрана с обратным отсчётом (сочетание для снимка + ⌥). Выберите другое";
 "shortcutConflictSelectedImagePin" = "Это сочетание клавиш уже назначено для закрепления выбранного изображения. Выберите другое";
 "shortcutConflictClipboardImagePin" = "Это сочетание клавиш уже назначено для закрепления изображения из буфера. Выберите другое";
 "shortcutConflictClipboardTextPin" = "Это сочетание клавиш уже назначено для закрепления текста из буфера. Выберите другое";
@@ -108,17 +96,15 @@
 "shortcutConflictTextRecognition" = "Это сочетание клавиш уже назначено для распознавания текста. Выберите другое";
 "shortcutConflictCopyImageText" = "Это сочетание клавиш уже назначено для копирования текста с изображения. Выберите другое";
 "shortcutConflictScreenshotTranslation" = "Это сочетание клавиш уже назначено для перевода снимка. Выберите другое";
-"shortcutConflictRecord" = "Это сочетание клавиш уже назначено для записи. Выберите другое";
 "shortcutConflictFullScreenScreenshot" = "Это сочетание клавиш уже назначено для снимка всего экрана. Выберите другое";
 "shortcutConflictColorPicker" = "Это сочетание клавиш уже назначено для пипетки. Выберите другое";
 
 /* Menu bar */
 "takeScreenshot" = "Сделать снимок";
 "takeFullScreenScreenshot" = "Снимок всего экрана";
-"record" = "Запись";
 "colorPicker" = "Пипетка";
 "settings" = "Настройки";
-"quitApp" = "Завершить capcap";
+"quitApp" = "Завершить clipcap";
 "historyMenu" = "История";
 "historyEmpty" = "История пуста";
 "historyClear" = "Очистить историю";
@@ -129,7 +115,6 @@
 "historyPanelFilterAll" = "Все";
 "historyPanelFilterScreenshots" = "Снимки";
 "historyPanelFilterGIF" = "GIF";
-"historyPanelFilterMP4" = "MP4";
 "historyPanelFilterColors" = "Цвета";
 "historyPanelCopyHint" = "Нажмите для копирования";
 "historyPanelCopyDragHint" = "Нажмите для копирования · перетащите в приложение";
@@ -142,14 +127,10 @@
 "dragToTextRecognition" = "Нажмите на окно или выделите область для распознавания текста";
 "dragToCopyImageText" = "Нажмите на окно или выделите область, чтобы скопировать текст";
 "dragToScreenshotTranslation" = "Нажмите на окно или выделите область для перевода содержимого";
-"dragToRecord" = "Нажмите на окно или перетащите для записи";
-"dragToRecordAspectFree" = "Нажмите на окно или перетащите для записи · Свободное выделение (R)";
-"dragToRecordAspect" = "Нажмите на окно или перетащите для записи · Выделение %@ (R)";
 
 /* Toast */
 "copiedToClipboard" = "Скопировано в буфер обмена";
 "mergedLongScreenshot" = "Длинный снимок объединён";
-"autoScrollPermissionNeeded" = "Для захвата с прокруткой нужен Универсальный доступ — разрешите capcap в Системных настройках → Конфиденциальность и безопасность → Универсальный доступ";
 "cropLongScreenshotHint" = "Перетащите верхний/нижний край для обрезки — нажмите Enter или ✓";
 "scrollCaptureHint" = "Нажмите любую клавишу, чтобы остановить прокрутку";
 "scrollCaptureManualHint" = "Прокрутите вручную, затем нажмите любую клавишу или зелёную кнопку для завершения";
@@ -162,23 +143,8 @@
 "fullScreenScreenshotFailed" = "Не удалось сделать снимок всего экрана";
 "selectedImageEditNoImage" = "В Finder не выбрано одно изображение";
 "clipboardImageEditNoImage" = "В буфере обмена нет изображения для редактирования";
-"recordingSaved" = "Запись сохранена в %@";
-"recordingCancelled" = "Запись отменена";
-"recordingExportingGIF" = "Создание GIF";
-"recordingFailed" = "Не удалось записать: %@";
-"saveRecording" = "Сохранить запись";
-"saveRecordingPrompt" = "Сохранить";
-"recordingFormatLabel" = "Формат";
-"recordingFormatManual" = "Выбирать каждый раз";
-"recordingFormatMP4" = "MP4";
-"recordingFormatGIF" = "GIF";
-"recordingFormatChoiceTitle" = "Выберите формат записи";
-"recordingFormatChoiceMessage" = "Запись будет сохранена в заданную папку записей";
 "screenshotSaved" = "Снимок сохранён в %@";
 "screenshotSaveFailed" = "Не удалось сохранить снимок: %@";
-"recordingStop" = "Остановить запись";
-"recordingPause" = "Пауза";
-"recordingResume" = "Продолжить";
 "colorCopied" = "Цвет %@ скопирован";
 "qrCodeCopied" = "Содержимое QR-кода скопировано";
 "qrCodeNotFound" = "QR-код не найден";
@@ -211,7 +177,6 @@
 "tipScreenshotTranslate" = "Перевод снимка";
 "tipSave" = "Сохранить в файл";
 "tipPin" = "Закрепить на экране";
-"tipRecord" = "Запись";
 "tipCancel" = "Отмена";
 "tipConfirm" = "Копировать в буфер";
 "tipScrollCropConfirm" = "Сохранить и редактировать";
@@ -285,7 +250,7 @@
 "aboutErrorLogReveal" = "Показать в Finder";
 "aboutErrorLogRefresh" = "Обновить журнал";
 "aboutErrorLogClear" = "Очистить журнал";
-"aboutErrorLogEmptyBody" = "capcap пока не зафиксировал журналов ошибок. Если приложение зависнет или завершится аварийно, вернитесь сюда, чтобы скопировать журнал для отчёта об ошибке";
+"aboutErrorLogEmptyBody" = "clipcap пока не зафиксировал журналов ошибок. Если приложение зависнет или завершится аварийно, вернитесь сюда, чтобы скопировать журнал для отчёта об ошибке";
 
 /* Updates — About pane */
 "checkForUpdates" = "Проверить обновления";
@@ -317,9 +282,9 @@
 
 /* Updates — manual check result alert */
 "updateAvailableTitle" = "Доступна версия v%@";
-"updateAvailableBody" = "capcap загрузит и установит последнюю версию, затем автоматически перезапустится";
+"updateAvailableBody" = "clipcap загрузит и установит последнюю версию, затем автоматически перезапустится";
 "updateUpToDateTitle" = "У вас последняя версия";
-"updateUpToDateBody" = "capcap v%@ — это последняя версия";
+"updateUpToDateBody" = "clipcap v%@ — это последняя версия";
 "updateFailedTitle" = "Не удалось проверить обновления";
 "updateFailedBody" = "Не удалось связаться с GitHub. Проверьте подключение и повторите попытку";
 "updateInstallFailedTitle" = "Не удалось обновить";
@@ -330,8 +295,8 @@
 "updateOKButton" = "ОК";
 
 /* Quit confirmation dialog */
-"quitConfirmTitle" = "Завершить capcap";
-"quitConfirmMessage" = "После выхода значок в строке меню исчезнет, а сочетание для снимка будет отключено до следующего запуска capcap";
+"quitConfirmTitle" = "Завершить clipcap";
+"quitConfirmMessage" = "После выхода значок в строке меню исчезнет, а сочетание для снимка будет отключено до следующего запуска clipcap";
 "quitConfirmAction" = "Завершить";
 "quitConfirmCancel" = "Отмена";
 
@@ -354,7 +319,6 @@
 "uploadMarkdownToggleTitle" = "Копировать как ссылку Markdown";
 "uploadMarkdownToggleSubtitle" = "Если включено, после загрузки копируется тег изображения Markdown (![](url)); если выключено — обычный URL. В истории нажмите ⌘ и щёлкните по загруженному изображению, чтобы скопировать ссылку Markdown, или просто щёлкните для обычного URL";
 "filenameRuleTitle" = "Правила имени файла";
-"filenameRuleSubtitle" = "Управляет именами для загрузки изображений, сохранения изображений и сохранения записей. Расширения добавляются автоматически";
 "filenameRulePresetLabel" = "Шаблон";
 "filenameRulePresetCustom" = "Свой";
 "filenameRulePresetShort" = "Короткий";
@@ -363,7 +327,6 @@
 "filenameRulePresetCounter" = "Счётчик дня";
 "filenameRulePresetRestore" = "Сбросить";
 "filenameRuleImageLabel" = "Изображение";
-"filenameRuleRecordingLabel" = "Запись";
 "filenameRuleVariablesLabel" = "Переменные";
 "filenameRuleVariableDate" = "Дата";
 "filenameRuleVariableTime" = "Время";
@@ -516,13 +479,14 @@
 
 /* Save paths */
 "savePathTitle" = "Пути сохранения";
-"savePathSubtitle" = "Снимки и записи сохраняются сюда без запроса папки назначения";
+"savePathSubtitle" = "Изображения сохраняются сюда без запроса папки назначения";
 "autoRevealSavedFilesLabel" = "Показать в Finder";
-"autoRevealSavedFilesHint" = "Выбирать сохранённый снимок или запись в Finder после успешного сохранения";
-"recordingSavePathLabel" = "Путь для записей";
-"recordingSaveFormatSettingLabel" = "Формат записи";
+"autoRevealSavedFilesHint" = "Выбирать сохранённое изображение в Finder после успешного сохранения";
 "screenshotSavePathLabel" = "Путь для снимков";
 "savePathChoose" = "Выбрать";
 "savePathReveal" = "Показать";
-"chooseRecordingSavePathTitle" = "Выберите путь для записей";
 "chooseScreenshotSavePathTitle" = "Выберите путь для снимков";
+
+"editClipboardImage" = "Edit Clipboard Image";
+"openImage" = "Open Image";
+"openImageNoImage" = "Copy an image to the clipboard or choose an image file";

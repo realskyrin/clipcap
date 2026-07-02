@@ -1,17 +1,11 @@
-/* capcap — 한국어 */
+/* clipcap — 한국어 */
 
 /* Settings */
-"settingsTitle" = "capcap 설정";
+"settingsTitle" = "clipcap 설정";
 "showMenuBarIcon" = "메뉴 막대 아이콘 표시";
 "permissionsHeader" = "필요한 권한";
-"accessibilityPermission" = "손쉬운 사용";
-"accessibilityDescription" = "⌘ Command 키 두 번 누르기를 감지해 스크린샷을 실행하는 데 필요합니다";
-"screenRecordingPermission" = "화면 기록";
-"screenRecordingDescription" = "스크린샷을 위해 화면 내용을 캡처하는 데 필요합니다";
 "launchApp" = "앱 실행";
 "launchAtLogin" = "로그인 시 실행";
-"demoMode" = "데모 모드";
-"demoModeHint" = "화면 녹화 프로그램이 선택 영역 오버레이와 편집기를 녹화할 수 있도록 허용합니다";
 "pinAcrossSpaces" = "고정 이미지를 모든 데스크톱에 표시";
 "pinAcrossSpacesHint" = "켜면 새 고정 이미지가 모든 데스크톱과 전체 화면 Space에 표시됩니다";
 "historyCacheToggleLabel" = "스크린샷 캐시";
@@ -24,19 +18,16 @@
 "historyPanelDialogModeHint" = "메뉴 또는 단축키로 가로 미리보기 패널 열기";
 "historyPanelNotchMode" = "노치";
 "historyPanelNotchModeHint" = "상단 노치에 마우스를 올리면 펼쳐지고 벗어나면 자동으로 숨김";
-"countdownLabel" = "카운트다운 초";
-"countdownHint" = "⌥ Option 을 누른 채 ⌘ 를 두 번 누르거나 스크린샷 단축키를 누르면 캡처 전에 카운트다운이 시작되며 Esc 로 취소";
-"countdownSecondsSuffix" = "초";
 "windowShadowToggleLabel" = "창 캡처 그림자";
 "windowShadowToggleHint" = "창을 선택해 캡처할 때 모서리를 둥글게 하고 macOS 스타일 그림자를 추가합니다";
 "windowShadowSizeLabel" = "그림자 크기";
 "windowShadowSizeHint" = "값이 클수록 그림자가 부드럽고 넓게 퍼져 창이 더 높이 떠 보입니다";
 
-/* Screenshot shortcut */
+/* Image shortcut */
 "shortcutHeader" = "스크린샷";
 "shortcutHint" = "기본값은 ⌘ 두 번 누르기입니다. 사용자 단축키를 설정하면 두 번 누르기는 비활성화됩니다";
 "shortcutDefaultDisplay" = "⌘ 두 번 누르기";
-"shortcutSet" = "기록";
+"shortcutSet" = "설정";
 "shortcutCancel" = "취소";
 "shortcutWaiting" = "키 입력 대기 중";
 "shortcutRestore" = "기본값 복원";
@@ -71,8 +62,6 @@
 "copyImageTextShortcutDefaultDisplay" = "설정 안 됨";
 "screenshotTranslationShortcutHeader" = "스크린샷 번역";
 "screenshotTranslationShortcutDefaultDisplay" = "설정 안 됨";
-"recordShortcutHeader" = "녹화";
-"recordShortcutDefaultDisplay" = "설정 안 됨";
 "fullScreenScreenshotShortcutHeader" = "전체 화면 스크린샷";
 "fullScreenScreenshotShortcutDefaultDisplay" = "설정 안 됨";
 "colorPickerShortcutHeader" = "색상 추출기";
@@ -94,7 +83,6 @@
 /* Shortcut conflict */
 "shortcutConflictTitle" = "단축키가 이미 사용 중입니다";
 "shortcutConflictScreenshot" = "이 키 조합은 이미 스크린샷 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
-"shortcutConflictCountdown" = "이 키 조합은 이미 카운트다운 스크린샷 단축키(스크린샷 단축키 + ⌥)에 사용되고 있습니다. 다른 조합을 선택하세요";
 "shortcutConflictSelectedImagePin" = "이 키 조합은 이미 선택 이미지 고정 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
 "shortcutConflictClipboardImagePin" = "이 키 조합은 이미 클립보드 이미지 고정 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
 "shortcutConflictClipboardTextPin" = "이 키 조합은 이미 클립보드 텍스트 고정 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
@@ -108,17 +96,15 @@
 "shortcutConflictTextRecognition" = "이 키 조합은 이미 문자 인식 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
 "shortcutConflictCopyImageText" = "이 키 조합은 이미 이미지 텍스트 복사 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
 "shortcutConflictScreenshotTranslation" = "이 키 조합은 이미 스크린샷 번역 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
-"shortcutConflictRecord" = "이 키 조합은 이미 녹화 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
 "shortcutConflictFullScreenScreenshot" = "이 키 조합은 이미 전체 화면 스크린샷 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
 "shortcutConflictColorPicker" = "이 키 조합은 이미 색상 추출기 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
 
 /* Menu bar */
 "takeScreenshot" = "스크린샷";
 "takeFullScreenScreenshot" = "전체 화면 스크린샷";
-"record" = "녹화";
 "colorPicker" = "색상 추출기";
 "settings" = "설정";
-"quitApp" = "capcap 종료";
+"quitApp" = "clipcap 종료";
 "historyMenu" = "기록";
 "historyEmpty" = "기록 없음";
 "historyClear" = "기록 지우기";
@@ -129,7 +115,6 @@
 "historyPanelFilterAll" = "전체";
 "historyPanelFilterScreenshots" = "스크린샷";
 "historyPanelFilterGIF" = "GIF";
-"historyPanelFilterMP4" = "MP4";
 "historyPanelFilterColors" = "색상";
 "historyPanelCopyHint" = "클릭해 복사";
 "historyPanelCopyDragHint" = "클릭해 복사 · 앱으로 드래그";
@@ -142,14 +127,10 @@
 "dragToTextRecognition" = "창을 클릭하거나 영역을 선택하여 문자 인식";
 "dragToCopyImageText" = "창을 클릭하거나 영역을 선택하여 텍스트 복사";
 "dragToScreenshotTranslation" = "창을 클릭하거나 영역을 선택하여 내용 번역";
-"dragToRecord" = "창을 클릭하거나 드래그하여 녹화";
-"dragToRecordAspectFree" = "창을 클릭하거나 드래그하여 녹화 · 드래그 자유 비율(R)";
-"dragToRecordAspect" = "창을 클릭하거나 드래그하여 녹화 · 드래그 %@ (R)";
 
 /* Toast */
 "copiedToClipboard" = "클립보드에 복사됨";
 "mergedLongScreenshot" = "긴 스크린샷이 병합됨";
-"autoScrollPermissionNeeded" = "스크롤 캡처에는 손쉬운 사용 권한이 필요합니다. 시스템 설정 → 개인정보 보호 및 보안 → 손쉬운 사용 에서 capcap 을 허용하세요";
 "cropLongScreenshotHint" = "위/아래 가장자리를 드래그해 자르기 — Enter 키 또는 ✓ 탭";
 "scrollCaptureHint" = "아무 키나 눌러 스크롤 종료";
 "scrollCaptureManualHint" = "직접 스크롤한 뒤 아무 키나 누르거나 초록색 버튼을 클릭해 종료";
@@ -162,23 +143,8 @@
 "fullScreenScreenshotFailed" = "전체 화면 스크린샷 실패";
 "selectedImageEditNoImage" = "Finder에서 단일 이미지가 선택되지 않았습니다";
 "clipboardImageEditNoImage" = "클립보드에 편집할 이미지가 없습니다";
-"recordingSaved" = "녹화가 %@에 저장되었습니다";
-"recordingCancelled" = "녹화가 취소되었습니다";
-"recordingExportingGIF" = "GIF 생성 중";
-"recordingFailed" = "녹화 실패: %@";
-"saveRecording" = "녹화 저장";
-"saveRecordingPrompt" = "저장";
-"recordingFormatLabel" = "형식";
-"recordingFormatManual" = "매번 선택";
-"recordingFormatMP4" = "MP4";
-"recordingFormatGIF" = "GIF";
-"recordingFormatChoiceTitle" = "녹화 형식 선택";
-"recordingFormatChoiceMessage" = "녹화는 설정된 녹화 폴더에 저장됩니다";
 "screenshotSaved" = "스크린샷이 %@에 저장되었습니다";
 "screenshotSaveFailed" = "스크린샷 저장 실패: %@";
-"recordingStop" = "녹화 중지";
-"recordingPause" = "일시 정지";
-"recordingResume" = "재개";
 "colorCopied" = "색상 %@ 복사됨";
 "qrCodeCopied" = "QR 코드 내용을 복사함";
 "qrCodeNotFound" = "QR 코드를 찾을 수 없음";
@@ -211,7 +177,6 @@
 "tipScreenshotTranslate" = "스크린샷 번역";
 "tipSave" = "파일로 저장";
 "tipPin" = "화면에 고정";
-"tipRecord" = "녹화";
 "tipCancel" = "취소";
 "tipConfirm" = "클립보드에 복사";
 "tipScrollCropConfirm" = "저장 후 편집";
@@ -285,7 +250,7 @@
 "aboutErrorLogReveal" = "Finder에 표시";
 "aboutErrorLogRefresh" = "로그 새로고침";
 "aboutErrorLogClear" = "로그 지우기";
-"aboutErrorLogEmptyBody" = "capcap에 기록된 오류 로그가 아직 없습니다. 앱이 멈추거나 충돌하면 여기로 돌아와 로그를 복사해 버그 신고에 사용하세요";
+"aboutErrorLogEmptyBody" = "clipcap에 기록된 오류 로그가 아직 없습니다. 앱이 멈추거나 충돌하면 여기로 돌아와 로그를 복사해 버그 신고에 사용하세요";
 
 /* Updates — About pane */
 "checkForUpdates" = "업데이트 확인";
@@ -317,9 +282,9 @@
 
 /* Updates — manual check result alert */
 "updateAvailableTitle" = "버전 v%@ 사용 가능";
-"updateAvailableBody" = "capcap이 최신 버전을 다운로드하고 설치한 후 자동으로 다시 시작합니다";
+"updateAvailableBody" = "clipcap이 최신 버전을 다운로드하고 설치한 후 자동으로 다시 시작합니다";
 "updateUpToDateTitle" = "최신 상태입니다";
-"updateUpToDateBody" = "capcap v%@ 가 최신 버전입니다";
+"updateUpToDateBody" = "clipcap v%@ 가 최신 버전입니다";
 "updateFailedTitle" = "업데이트 확인 실패";
 "updateFailedBody" = "GitHub에 연결할 수 없습니다. 네트워크를 확인하고 다시 시도하세요";
 "updateInstallFailedTitle" = "업데이트 실패";
@@ -330,8 +295,8 @@
 "updateOKButton" = "확인";
 
 /* Quit confirmation dialog */
-"quitConfirmTitle" = "capcap을 종료할까요";
-"quitConfirmMessage" = "종료하면 메뉴 막대 아이콘이 사라지고 capcap을 다시 실행할 때까지 스크린샷 단축키가 비활성화됩니다";
+"quitConfirmTitle" = "clipcap을 종료할까요";
+"quitConfirmMessage" = "종료하면 메뉴 막대 아이콘이 사라지고 clipcap을 다시 실행할 때까지 스크린샷 단축키가 비활성화됩니다";
 "quitConfirmAction" = "종료";
 "quitConfirmCancel" = "취소";
 
@@ -354,7 +319,6 @@
 "uploadMarkdownToggleTitle" = "Markdown 링크로 복사";
 "uploadMarkdownToggleSubtitle" = "켜면 업로드 후 Markdown 이미지 태그(![](url))를 복사하고, 끄면 일반 URL을 복사합니다. 기록에서 ⌘ 를 누른 채 업로드된 이미지를 클릭하면 Markdown 링크를, 그냥 클릭하면 일반 URL을 복사합니다";
 "filenameRuleTitle" = "파일 이름 규칙";
-"filenameRuleSubtitle" = "이미지 업로드, 이미지 저장 기본 이름, 녹화 저장 기본 이름을 제어합니다. 확장자는 자동으로 추가됩니다";
 "filenameRulePresetLabel" = "프리셋";
 "filenameRulePresetCustom" = "사용자 지정";
 "filenameRulePresetShort" = "짧게";
@@ -363,7 +327,6 @@
 "filenameRulePresetCounter" = "일일 카운터";
 "filenameRulePresetRestore" = "기본값 복원";
 "filenameRuleImageLabel" = "이미지";
-"filenameRuleRecordingLabel" = "녹화";
 "filenameRuleVariablesLabel" = "변수";
 "filenameRuleVariableDate" = "날짜";
 "filenameRuleVariableTime" = "시간";
@@ -516,13 +479,14 @@
 
 /* Save paths */
 "savePathTitle" = "저장 경로";
-"savePathSubtitle" = "스크린샷과 녹화는 저장 위치를 묻지 않고 여기에 저장됩니다";
+"savePathSubtitle" = "이미지는 저장 위치를 묻지 않고 여기에 저장됩니다";
 "autoRevealSavedFilesLabel" = "Finder에 표시";
-"autoRevealSavedFilesHint" = "저장 성공 후 Finder에서 저장된 스크린샷 또는 녹화를 선택합니다";
-"recordingSavePathLabel" = "녹화 저장 경로";
-"recordingSaveFormatSettingLabel" = "녹화 형식";
+"autoRevealSavedFilesHint" = "저장 성공 후 Finder에서 저장된 이미지를 선택합니다";
 "screenshotSavePathLabel" = "스크린샷 저장 경로";
 "savePathChoose" = "선택";
 "savePathReveal" = "보기";
-"chooseRecordingSavePathTitle" = "녹화 저장 경로 선택";
 "chooseScreenshotSavePathTitle" = "스크린샷 저장 경로 선택";
+
+"editClipboardImage" = "Edit Clipboard Image";
+"openImage" = "Open Image";
+"openImageNoImage" = "Copy an image to the clipboard or choose an image file";

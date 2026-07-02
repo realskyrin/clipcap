@@ -1,6 +1,8 @@
-# capcap
+# clipcap
 
-macOS menu bar screenshot tool. Pure AppKit, Swift Package Manager, no third-party dependencies.
+macOS menu bar image annotation tool. Pure AppKit, Swift Package Manager, no third-party dependencies.
+
+clipcap does not directly capture or record the screen, does not listen to global keyboard events, and must not request Screen Recording or Accessibility permissions. Users provide images through macOS system screenshots copied to the clipboard, file open, drag and drop, Open With, or other explicit file input.
 
 ## Build & Verification
 
@@ -16,99 +18,54 @@ For runtime-sensitive UI changes, run the rebuild script too:
 bash scripts/rebuild-and-open.sh
 ```
 
-This script builds the app bundle, kills any running instance, launches the new build, and confirms it started.
+This script builds `build/clipcap.app`, kills any running instance, installs `/Applications/clipcap.app`, launches it, and confirms it started.
 
 ## Project Structure
 
-- `capcap/App/` — Entry point (`main.swift`, `AppDelegate.swift`, `Info.plist`)
-- `capcap/Capture/` — Screen capture logic (ScreenCaptureKit, selection overlay)
-- `capcap/Editor/` — Post-capture annotation editor
-- `capcap/Trigger/` — Double-tap ⌘ key detection
-- `capcap/UI/` — Status bar, toast, cursor chip
-- `capcap/Settings/` — Settings dialog (startup + preferences)
-- `capcap/Utilities/` — UserDefaults wrapper
+- `clipcap/App/` — Entry point, AppDelegate, and Info.plist
+- `clipcap/Capture/` — Clipboard, history, pinning, and image-edit launch paths
+- `clipcap/Editor/` — Post-input annotation editor
+- `clipcap/Settings/` — Settings dialog and preferences
+- `clipcap/Translation/` — OCR and translation result presentation
+- `clipcap/UI/` — Status bar, toast, cursor chip, and auxiliary windows
+- `clipcap/Upload/` — Image host providers
+- `clipcap/Utilities/` — UserDefaults, localization, updates, logs, and save paths
 - `scripts/` — Build and bundle scripts
 
 ## Key Rules
 
-- **Always run `bash scripts/compile-check.sh` after modifying code** to verify the compile.
-- No SwiftUI — this project uses AppKit exclusively with programmatic UI.
-- No storyboards or XIBs.
-- Minimum deployment target: macOS 14.0.
-- All newly added user-facing copy must not end with punctuation. Punctuation
-  inside the sentence is fine, but the final character of every visible string,
-  tooltip, alert, toast, menu item, placeholder, and localized value must not be
-  punctuation.
+- Always run `bash scripts/compile-check.sh` after modifying code
+- No SwiftUI — this project uses AppKit exclusively with programmatic UI
+- No storyboards or XIBs
+- Minimum deployment target: macOS 14.0
+- Do not add screen capture, screen recording, global keyboard monitoring, Finder Automation, or permission-onboarding flows
+- All newly added user-facing copy must not end with punctuation. Punctuation inside the sentence is fine, but the final character of every visible string, tooltip, alert, toast, menu item, placeholder, and localized value must not be punctuation
 
-## Packaging Lessons
+## Packaging
 
-- SwiftPM target resources are not automatically present in the hand-assembled
-  `.app` bundle. If any package target declares `resources:` in `Package.swift`
-  or code uses `Bundle.module`, update both `scripts/bundle.sh` and the release
-  workflow to copy the generated `<package>_<target>.bundle` into
-  `capcap.app/Contents/Resources/`.
-- Treat a missing SwiftPM resource bundle as a release-blocking error, not a
-  runtime fallback. The failure may only surface when a UI path first touches
-  `Bundle.module`, such as the PermissionFlow authorization panel.
-- After packaging changes, verify the final `.app` contents directly with
-  `find build/capcap.app/Contents/Resources -maxdepth 2 -name '*.bundle'` and,
-  for release builds, confirm the universal app still contains both `arm64` and
-  `x86_64` slices.
+- Bundle ID is `cn.skyrin.clipcap`
+- App bundle is `clipcap.app`
+- Release artifact is `clipcap-<version>-macos.dmg`
+- Homebrew cask token is `clipcap`
+- Do not install or overwrite `the original app bundle`
+- If SwiftPM target resources are added later, update `scripts/bundle.sh` and the release workflow to copy the generated resource bundle into `clipcap.app/Contents/Resources/`
 
 ## Hotspot Ownership
 
-- `capcap/Editor/EditWindowController.swift` owns editor session wiring,
-  toolbar callbacks, scroll capture, crop mode, and output actions. Keep tool
-  state changes paired with toolbar/sub-toolbar updates. Verify with
-  `bash scripts/compile-check.sh`; use `bash scripts/rebuild-and-open.sh` for
-  UI interaction changes.
-- `capcap/Editor/EditCanvasView.swift` owns annotation state, mouse handling,
-  selection chrome, undo/redo, and export compositing. Preserve value-typed
-  annotation mutation and snapshot-based undo. Verify with
-  `bash scripts/compile-check.sh`; use `bash scripts/rebuild-and-open.sh` when
-  hit testing or visible editing behavior changes.
-- `capcap/Editor/Annotations.swift` owns annotation model structs and drawing
-  behavior. Keep drawing and hit-testing logic together for each annotation
-  type. Verify with `bash scripts/compile-check.sh`.
-- `capcap/Settings/SettingsView.swift` owns the settings window and preference
-  controls. Keep persisted defaults in `Defaults.swift` aligned with visible
-  controls and localized strings. Verify with `bash scripts/compile-check.sh`;
-  use `bash scripts/rebuild-and-open.sh` for settings UI behavior.
-- `capcap/Translation/OCRTranslatePanel.swift` owns OCR/translation result
-  presentation and provider interaction. Keep translation latency work off the
-  main actor except for UI updates. Verify with `bash scripts/compile-check.sh`.
-- `capcap/Capture/PinLauncher.swift` owns pinned-image window behavior,
-  toolbar visibility, drag/resize behavior, and zoom interaction. Keep hover
-  affordances and the above/below-100% drag model stable. Verify with
-  `bash scripts/compile-check.sh`; use `bash scripts/rebuild-and-open.sh` for
-  pin-window interaction changes.
-- `capcap/Utilities/Defaults.swift` owns persisted preferences and localized
-  string accessors. Keep new settings normalized at the persistence boundary and
-  add matching keys to every `Resources/*.lproj/Localizable.strings` file.
-  Verify with `bash scripts/compile-check.sh`.
-- `capcap/Settings/UploadSettingsPane.swift` owns image-host provider settings.
-  Keep provider-specific validation, default-provider selection, and stored
-  credentials isolated to this settings surface and `Defaults.swift`. Verify
-  with `bash scripts/compile-check.sh`; use `bash scripts/rebuild-and-open.sh`
-  when settings UI behavior changes.
-- `capcap/Trigger/HotkeyManager.swift` owns global shortcut registration and
-  keyboard trigger dispatch. Keep shortcut recording, defaults, and active
-  registration behavior aligned with Settings. Verify with
-  `bash scripts/compile-check.sh`; use `bash scripts/rebuild-and-open.sh` for
-  end-to-end hotkey behavior.
+- `clipcap/Editor/EditWindowController.swift` owns editor session wiring, toolbar callbacks, crop mode, and output actions
+- `clipcap/Editor/EditCanvasView.swift` owns annotation state, mouse handling, selection chrome, undo/redo, and export compositing
+- `clipcap/Editor/ToolbarLayout.swift` owns which editor tools are visible
+- `clipcap/Settings/SettingsView.swift` owns the settings window and preference controls
+- `clipcap/Translation/OCRTranslatePanel.swift` owns OCR and translation result presentation
+- `clipcap/Capture/PinLauncher.swift` owns pinned-image window behavior
+- `clipcap/Utilities/Defaults.swift` owns persisted preferences and localized string accessors
+- `clipcap/Settings/UploadSettingsPane.swift` owns image-host provider settings
 
 ## Adding an Editor Tool
 
-Whenever a new annotation/editor tool is added, it MUST also be wired into the
-toolbar — a tool that isn't in `ToolbarLayout` never appears for the user.
-Checklist:
+Whenever a new annotation/editor tool is added, it must also be wired into the toolbar.
 
-- Add the `ToolbarItemID` case and update `editTool`, `symbolName`, `tooltip`,
-  and the `kind` switch in `ToolbarLayout.swift`.
-- Add the case to **both** `ToolbarLayout.canonicalOrder` and the `default`
-  layout's `primary`/`side`/`hidden` buckets. A tool missing from
-  `canonicalOrder` is invisible even though the enum case exists.
-- Add the `tipXxx` localization key to `Defaults.swift` and to every
-  `Resources/*.lproj/Localizable.strings` file.
-- If the user has not told you where the tool should sit in the toolbar by
-  default, **ask before placing it** — don't guess the position.
+- Add the `ToolbarItemID` case and update `editTool`, `symbolName`, `tooltip`, and the `kind` switch in `ToolbarLayout.swift`
+- Add the case to `ToolbarLayout.canonicalOrder` and the default layout buckets
+- Add the `tipXxx` localization key to `Defaults.swift` and every `Resources/*.lproj/Localizable.strings` file
+- If the user has not told you where the tool should sit in the toolbar by default, ask before placing it

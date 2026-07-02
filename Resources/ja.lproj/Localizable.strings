@@ -1,17 +1,11 @@
-/* capcap — 日本語 */
+/* clipcap — 日本語 */
 
 /* Settings */
-"settingsTitle" = "capcap 設定";
+"settingsTitle" = "clipcap 設定";
 "showMenuBarIcon" = "メニューバーアイコンを表示";
 "permissionsHeader" = "必要な権限";
-"accessibilityPermission" = "アクセシビリティ";
-"accessibilityDescription" = "⌘ Command キーのダブルタップを検出してスクリーンショットを起動するために必要です";
-"screenRecordingPermission" = "画面収録";
-"screenRecordingDescription" = "スクリーンショットのために画面の内容をキャプチャするのに必要です";
 "launchApp" = "アプリを起動";
 "launchAtLogin" = "ログイン時に起動";
-"demoMode" = "デモモード";
-"demoModeHint" = "画面収録ソフトが選択範囲のオーバーレイとエディタを録画できるようにします";
 "pinAcrossSpaces" = "ピン画像をすべてのデスクトップに表示";
 "pinAcrossSpacesHint" = "オンにすると新しいピン画像がすべてのデスクトップとフルスクリーン操作スペースに表示されます";
 "historyCacheToggleLabel" = "スクリーンショットをキャッシュ";
@@ -24,19 +18,16 @@
 "historyPanelDialogModeHint" = "メニューまたはショートカットから横スクロールのプレビューパネルを開きます";
 "historyPanelNotchMode" = "ノッチ";
 "historyPanelNotchModeHint" = "上部ノッチにマウスを入れると展開し、離れると自動で隠れます";
-"countdownLabel" = "カウントダウン秒数";
-"countdownHint" = "⌥ Option を押しながら ⌘ をダブルタップするか、スクリーンショットのショートカットを押すと、撮影前にカウントダウンが始まります。Esc でキャンセル";
-"countdownSecondsSuffix" = "秒";
 "windowShadowToggleLabel" = "ウインドウ撮影の影";
 "windowShadowToggleHint" = "ウインドウを選んで撮影すると角を丸め、macOS 風のドロップシャドウを追加します";
 "windowShadowSizeLabel" = "影のサイズ";
 "windowShadowSizeHint" = "値を大きくするほど影が柔らかく広がり、ウインドウが高く浮いて見えます";
 
-/* Screenshot shortcut */
+/* Image shortcut */
 "shortcutHeader" = "スクリーンショット";
 "shortcutHint" = "デフォルトは ⌘ のダブルタップ。カスタムショートカットを設定するとダブルタップは無効になります";
 "shortcutDefaultDisplay" = "⌘ をダブルタップ";
-"shortcutSet" = "記録";
+"shortcutSet" = "設定";
 "shortcutCancel" = "キャンセル";
 "shortcutWaiting" = "キー入力待ち";
 "shortcutRestore" = "デフォルトに戻す";
@@ -71,8 +62,6 @@
 "copyImageTextShortcutDefaultDisplay" = "未設定";
 "screenshotTranslationShortcutHeader" = "スクリーンショット翻訳";
 "screenshotTranslationShortcutDefaultDisplay" = "未設定";
-"recordShortcutHeader" = "録画";
-"recordShortcutDefaultDisplay" = "未設定";
 "fullScreenScreenshotShortcutHeader" = "フルスクリーンショット";
 "fullScreenScreenshotShortcutDefaultDisplay" = "未設定";
 "colorPickerShortcutHeader" = "カラーピッカー";
@@ -94,7 +83,6 @@
 /* Shortcut conflict */
 "shortcutConflictTitle" = "ショートカットは既に使用中です";
 "shortcutConflictScreenshot" = "このキーの組み合わせはスクリーンショットのショートカットで既に使用されています。別の組み合わせを選んでください";
-"shortcutConflictCountdown" = "このキーの組み合わせはカウントダウン撮影のショートカット（スクリーンショットのショートカット + ⌥）で既に使用されています。別の組み合わせを選んでください";
 "shortcutConflictSelectedImagePin" = "このキーの組み合わせは選択画像をピン留めのショートカットで既に使用されています。別の組み合わせを選んでください";
 "shortcutConflictClipboardImagePin" = "このキーの組み合わせはクリップボード画像をピン留めのショートカットで既に使用されています。別の組み合わせを選んでください";
 "shortcutConflictClipboardTextPin" = "このキーの組み合わせはクリップボードテキストをピン留めのショートカットで既に使用されています。別の組み合わせを選んでください";
@@ -108,17 +96,15 @@
 "shortcutConflictTextRecognition" = "このキーの組み合わせは文字認識ショートカットで既に使用されています。別の組み合わせを選んでください";
 "shortcutConflictCopyImageText" = "このキーの組み合わせは画像内テキストをコピーのショートカットで既に使用されています。別の組み合わせを選んでください";
 "shortcutConflictScreenshotTranslation" = "このキーの組み合わせはスクリーンショット翻訳ショートカットで既に使用されています。別の組み合わせを選んでください";
-"shortcutConflictRecord" = "このキーの組み合わせは録画ショートカットで既に使用されています。別の組み合わせを選んでください";
 "shortcutConflictFullScreenScreenshot" = "このキーの組み合わせはフルスクリーンショットのショートカットで既に使用されています。別の組み合わせを選んでください";
 "shortcutConflictColorPicker" = "このキーの組み合わせはカラーピッカーのショートカットで既に使用されています。別の組み合わせを選んでください";
 
 /* Menu bar */
 "takeScreenshot" = "スクリーンショット";
 "takeFullScreenScreenshot" = "フルスクリーンショット";
-"record" = "録画";
 "colorPicker" = "カラーピッカー";
 "settings" = "設定";
-"quitApp" = "capcap を終了";
+"quitApp" = "clipcap を終了";
 "historyMenu" = "履歴";
 "historyEmpty" = "履歴がありません";
 "historyClear" = "履歴を消去";
@@ -129,7 +115,6 @@
 "historyPanelFilterAll" = "すべて";
 "historyPanelFilterScreenshots" = "スクリーンショット";
 "historyPanelFilterGIF" = "GIF";
-"historyPanelFilterMP4" = "MP4";
 "historyPanelFilterColors" = "カラー";
 "historyPanelCopyHint" = "クリックでコピー";
 "historyPanelCopyDragHint" = "クリックでコピー · アプリへドラッグ";
@@ -142,14 +127,10 @@
 "dragToTextRecognition" = "ウィンドウをクリックまたは範囲選択して文字認識";
 "dragToCopyImageText" = "ウィンドウをクリックまたは範囲選択してテキストをコピー";
 "dragToScreenshotTranslation" = "ウィンドウをクリックまたは範囲選択して内容を翻訳";
-"dragToRecord" = "ウィンドウをクリックまたはドラッグして録画";
-"dragToRecordAspectFree" = "ウィンドウをクリックまたはドラッグして録画 · ドラッグ自由比率（R）";
-"dragToRecordAspect" = "ウィンドウをクリックまたはドラッグして録画 · ドラッグ %@（R）";
 
 /* Toast */
 "copiedToClipboard" = "クリップボードにコピーしました";
 "mergedLongScreenshot" = "長いスクリーンショットを結合しました";
-"autoScrollPermissionNeeded" = "スクロールキャプチャにはアクセシビリティ権限が必要です。システム設定 → プライバシーとセキュリティ → アクセシビリティ で capcap を許可してください";
 "cropLongScreenshotHint" = "上下の端をドラッグしてトリミング — Enter キーまたは ✓ をタップ";
 "scrollCaptureHint" = "任意のキーでスクロールを終了";
 "scrollCaptureManualHint" = "手動でスクロールし、任意のキーまたは緑のボタンで終了";
@@ -162,23 +143,8 @@
 "fullScreenScreenshotFailed" = "フルスクリーンショットに失敗しました";
 "selectedImageEditNoImage" = "Finder で画像が 1 枚選択されていません";
 "clipboardImageEditNoImage" = "クリップボードに編集できる画像がありません";
-"recordingSaved" = "録画を %@ に保存しました";
-"recordingCancelled" = "録画をキャンセルしました";
-"recordingExportingGIF" = "GIF を作成中";
-"recordingFailed" = "録画に失敗しました: %@";
-"saveRecording" = "録画を保存";
-"saveRecordingPrompt" = "保存";
-"recordingFormatLabel" = "形式";
-"recordingFormatManual" = "毎回選択";
-"recordingFormatMP4" = "MP4";
-"recordingFormatGIF" = "GIF";
-"recordingFormatChoiceTitle" = "録画形式を選択";
-"recordingFormatChoiceMessage" = "録画は設定した録画保存先に保存されます";
 "screenshotSaved" = "スクリーンショットを %@ に保存しました";
 "screenshotSaveFailed" = "スクリーンショットの保存に失敗しました: %@";
-"recordingStop" = "録画を停止";
-"recordingPause" = "一時停止";
-"recordingResume" = "再開";
 "colorCopied" = "カラー %@ をコピーしました";
 "qrCodeCopied" = "QRコードの内容をコピーしました";
 "qrCodeNotFound" = "QRコードが見つかりません";
@@ -211,7 +177,6 @@
 "tipScreenshotTranslate" = "スクリーンショット翻訳";
 "tipSave" = "ファイルへ保存";
 "tipPin" = "画面に固定";
-"tipRecord" = "録画";
 "tipCancel" = "キャンセル";
 "tipConfirm" = "クリップボードへコピー";
 "tipScrollCropConfirm" = "保存して編集";
@@ -285,7 +250,7 @@
 "aboutErrorLogReveal" = "Finder に表示";
 "aboutErrorLogRefresh" = "ログを更新";
 "aboutErrorLogClear" = "ログを消去";
-"aboutErrorLogEmptyBody" = "capcap はまだエラーログを記録していません。フリーズやクラッシュが発生した場合は、ここに戻ってログをコピーし、バグ報告にご利用ください";
+"aboutErrorLogEmptyBody" = "clipcap はまだエラーログを記録していません。フリーズやクラッシュが発生した場合は、ここに戻ってログをコピーし、バグ報告にご利用ください";
 
 /* Updates — About pane */
 "checkForUpdates" = "アップデートを確認";
@@ -317,9 +282,9 @@
 
 /* Updates — manual check result alert */
 "updateAvailableTitle" = "バージョン v%@ が利用可能です";
-"updateAvailableBody" = "capcap は最新バージョンをダウンロードしてインストールし、自動的に再起動します";
+"updateAvailableBody" = "clipcap は最新バージョンをダウンロードしてインストールし、自動的に再起動します";
 "updateUpToDateTitle" = "最新の状態です";
-"updateUpToDateBody" = "capcap v%@ が最新バージョンです";
+"updateUpToDateBody" = "clipcap v%@ が最新バージョンです";
 "updateFailedTitle" = "アップデートの確認に失敗";
 "updateFailedBody" = "GitHub に接続できませんでした。ネットワークを確認して再試行してください";
 "updateInstallFailedTitle" = "アップデートに失敗";
@@ -330,8 +295,8 @@
 "updateOKButton" = "OK";
 
 /* Quit confirmation dialog */
-"quitConfirmTitle" = "capcap を終了しますか";
-"quitConfirmMessage" = "終了するとメニューバーアイコンが消え、capcap を再起動するまでスクリーンショットのショートカットが無効になります";
+"quitConfirmTitle" = "clipcap を終了しますか";
+"quitConfirmMessage" = "終了するとメニューバーアイコンが消え、clipcap を再起動するまでスクリーンショットのショートカットが無効になります";
 "quitConfirmAction" = "終了";
 "quitConfirmCancel" = "キャンセル";
 
@@ -354,7 +319,6 @@
 "uploadMarkdownToggleTitle" = "Markdown リンクとしてコピー";
 "uploadMarkdownToggleSubtitle" = "オンにすると、アップロード後に Markdown 画像タグ（![](url)）をコピーします。オフの場合は通常の URL をコピーします。履歴では、⌘ を押しながらアップロード済み画像をクリックすると Markdown リンクを、そのままクリックすると通常の URL をコピーします";
 "filenameRuleTitle" = "ファイル名ルール";
-"filenameRuleSubtitle" = "画像アップロード、画像保存の既定名、録画保存の既定名を制御します。拡張子は自動で追加されます";
 "filenameRulePresetLabel" = "プリセット";
 "filenameRulePresetCustom" = "カスタム";
 "filenameRulePresetShort" = "短め";
@@ -363,7 +327,6 @@
 "filenameRulePresetCounter" = "日次カウンター";
 "filenameRulePresetRestore" = "既定に戻す";
 "filenameRuleImageLabel" = "画像";
-"filenameRuleRecordingLabel" = "録画";
 "filenameRuleVariablesLabel" = "変数";
 "filenameRuleVariableDate" = "日付";
 "filenameRuleVariableTime" = "時刻";
@@ -516,13 +479,14 @@
 
 /* Save paths */
 "savePathTitle" = "保存先";
-"savePathSubtitle" = "スクリーンショットと録画は保存先を確認せず、ここへ保存されます";
+"savePathSubtitle" = "画像は保存先を確認せず、ここへ保存されます";
 "autoRevealSavedFilesLabel" = "Finder に表示";
-"autoRevealSavedFilesHint" = "保存に成功したスクリーンショットまたは録画を Finder で選択します";
-"recordingSavePathLabel" = "録画の保存先";
-"recordingSaveFormatSettingLabel" = "録画形式";
+"autoRevealSavedFilesHint" = "保存に成功した画像を Finder で選択します";
 "screenshotSavePathLabel" = "スクリーンショットの保存先";
 "savePathChoose" = "選択";
 "savePathReveal" = "表示";
-"chooseRecordingSavePathTitle" = "録画の保存先を選択";
 "chooseScreenshotSavePathTitle" = "スクリーンショットの保存先を選択";
+
+"editClipboardImage" = "Edit Clipboard Image";
+"openImage" = "Open Image";
+"openImageNoImage" = "Copy an image to the clipboard or choose an image file";

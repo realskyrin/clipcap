@@ -4,7 +4,7 @@ set -e
 cd "$(dirname "$0")/.."
 PROJECT_ROOT="$(pwd)"
 
-APP_NAME="capcap"
+APP_NAME="clipcap"
 APP_BUNDLE="build/$APP_NAME.app"
 
 echo "==> [1/4] Building $APP_NAME..."
@@ -33,7 +33,7 @@ else
 fi
 
 # Install into /Applications and launch from there, so local testing exercises
-# the exact same install location (and code-signing identity) a real user gets.
+# the exact same install location a real user gets.
 INSTALLED_APP="/Applications/$APP_NAME.app"
 echo "==> [3/4] Installing to $INSTALLED_APP..."
 rm -rf "$INSTALLED_APP"

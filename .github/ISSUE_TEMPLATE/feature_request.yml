@@ -1,22 +1,22 @@
 name: ✨ Feature Request / 功能请求
-description: Suggest a new feature or improvement for capcap / 为 capcap 提出新功能或改进建议
+description: Suggest a new feature or improvement for clipcap / 为 clipcap 提出新功能或改进建议
 title: "[Feature] "
 labels: ["enhancement"]
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for helping make capcap better! / 感谢你帮助 capcap 变得更好！
+        Thanks for helping make clipcap better! / 感谢你帮助 clipcap 变得更好！
 
-        Please search [existing issues](https://github.com/realskyrin/capcap/issues) first to avoid duplicates.
-        提交前请先搜索[已有 issue](https://github.com/realskyrin/capcap/issues)，避免重复。
+        Please search [existing issues](https://github.com/realskyrin/clipcap/issues) first to avoid duplicates.
+        提交前请先搜索[已有 issue](https://github.com/realskyrin/clipcap/issues)，避免重复。
 
   - type: textarea
     id: problem
     attributes:
       label: What problem does this solve? / 想解决什么问题？
       description: Describe the pain point or limitation you are running into. / 描述你遇到的痛点或限制。
-      placeholder: When I capture multiple monitors, I can't choose which display...
+      placeholder: When I open several image files, I want to edit them as a batch...
     validations:
       required: true
 
