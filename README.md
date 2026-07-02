@@ -25,8 +25,43 @@ clipcap 的输入来自系统剪贴板、打开面板、文件拖拽、Open With
 
 ## 安装
 
+Homebrew 安装
+
 ```bash
 brew install --cask realskyrin/tap/clipcap
+```
+
+更新
+
+```bash
+brew update
+brew upgrade --cask realskyrin/tap/clipcap
+```
+
+卸载
+
+```bash
+brew uninstall --cask realskyrin/tap/clipcap
+```
+
+也可以从 [GitHub Releases](https://github.com/realskyrin/clipcap/releases/latest) 下载 DMG，打开后把 `clipcap.app` 拖到 Applications
+
+```bash
+open ~/Downloads/clipcap-<version>-macos.dmg
+```
+
+如果手动下载安装后 macOS 提示无法打开，可以移除下载隔离属性后再启动
+
+```bash
+xattr -dr com.apple.quarantine /Applications/clipcap.app
+open /Applications/clipcap.app
+```
+
+如果应用已经在运行，重启应用
+
+```bash
+pkill -x clipcap || true
+open /Applications/clipcap.app
 ```
 
 手动构建会输出到 `build/clipcap.app`
