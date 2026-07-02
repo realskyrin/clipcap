@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## [1.7.0] - 2026-07-02
+
 ### Changed
 
 - Repositioned the app as clipcap, a permission-light Mac image annotation tool
