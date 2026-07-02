@@ -9,7 +9,7 @@
 "pinAcrossSpaces" = "Afficher les épingles sur tous les bureaux";
 "pinAcrossSpacesHint" = "Les nouvelles images épinglées apparaissent sur chaque bureau et espace plein écran";
 "historyCacheToggleLabel" = "Mettre les images en cache";
-"historyCacheToggleHint" = "Enregistre les images récentes, les couleurs prélevées et les liens téléversés pour les recopier depuis la barre de menus";
+"historyCacheToggleHint" = "Enregistre les images récentes et les couleurs prélevées pour les recopier depuis la barre de menus";
 "historyCacheLabel" = "Taille du cache d'historique";
 "historyCacheHint" = "Conserve les images récentes pour les recopier rapidement";
 "historyPanelDisplayModeLabel" = "Affichage du panneau d'historique";
@@ -60,8 +60,6 @@
 "textRecognitionShortcutDefaultDisplay" = "Non défini";
 "copyImageTextShortcutHeader" = "Copier le texte de l'image";
 "copyImageTextShortcutDefaultDisplay" = "Non défini";
-"screenshotTranslationShortcutHeader" = "Traduction de capture";
-"screenshotTranslationShortcutDefaultDisplay" = "Non défini";
 "fullScreenScreenshotShortcutHeader" = "Capture plein écran";
 "fullScreenScreenshotShortcutDefaultDisplay" = "Non défini";
 "colorPickerShortcutHeader" = "Pipette";
@@ -98,7 +96,6 @@
 "shortcutConflictClipboardImageEdit" = "Cette combinaison de touches est déjà utilisée par le raccourci Modifier l'image du presse-papiers. Veuillez en choisir une autre";
 "shortcutConflictTextRecognition" = "Cette combinaison de touches est déjà utilisée par le raccourci Reconnaissance de texte. Veuillez en choisir une autre";
 "shortcutConflictCopyImageText" = "Cette combinaison de touches est déjà utilisée par le raccourci Copier le texte de l'image. Veuillez en choisir une autre";
-"shortcutConflictScreenshotTranslation" = "Cette combinaison de touches est déjà utilisée par le raccourci Traduction de capture. Veuillez en choisir une autre";
 "shortcutConflictFullScreenScreenshot" = "Cette combinaison de touches est déjà utilisée par le raccourci Capture plein écran. Veuillez en choisir une autre";
 "shortcutConflictColorPicker" = "Cette combinaison de touches est déjà utilisée par le raccourci Pipette. Veuillez en choisir une autre";
 
@@ -113,7 +110,6 @@
 "historyClear" = "Effacer l'historique";
 "historyCleared" = "Historique effacé";
 "historyShowInFinder" = "Afficher dans le Finder";
-"historyCloudMarkdownTip" = "Maintenez ⌘ et cliquez sur l'aperçu pour copier un lien d'image Markdown";
 "historyPanelMenu" = "Panneau d'historique";
 "historyPanelFilterAll" = "Tout";
 "historyPanelFilterScreenshots" = "Captures";
@@ -129,7 +125,6 @@
 "dragToScreenshotAspect" = "Cliquez sur une fenêtre ou faites glisser pour capturer · Sélection %@ (R)";
 "dragToTextRecognition" = "Cliquez sur une fenêtre ou sélectionnez une zone pour reconnaître le texte";
 "dragToCopyImageText" = "Cliquez sur une fenêtre ou sélectionnez une zone pour copier le texte";
-"dragToScreenshotTranslation" = "Cliquez sur une fenêtre ou sélectionnez une zone pour traduire le contenu";
 
 /* Toast */
 "copiedToClipboard" = "Copié dans le presse-papiers";
@@ -177,7 +172,6 @@
 "tipScrollCapture" = "Capture longue";
 "tipBeautify" = "Embellir";
 "tipOCR" = "Reconnaissance de texte";
-"tipScreenshotTranslate" = "Traduction de capture";
 "tipSave" = "Enregistrer dans un fichier";
 "tipPin" = "Épingler à l'écran";
 "tipCancel" = "Annuler";
@@ -220,16 +214,12 @@
 "settingsTabGeneral" = "Général";
 "settingsTabShortcuts" = "Raccourcis";
 "settingsTabPermissions" = "Autorisations";
-"settingsTabUpload" = "Hébergement";
 "settingsTabAbout" = "À propos";
-"settingsTabTranslation" = "Traduction";
 "settingsTabToolbar" = "Barre d'outils";
 "settingsNoPermissionsNeeded" = "Aucune autorisation requise";
 "settingsSubtitleGeneral" = "Presse-papiers, fichiers, historique et enregistrement";
 "settingsSubtitleShortcuts" = "Raccourcis d'éditeur sans surveillance globale";
 "settingsSubtitleToolbar" = "Organiser les outils d'annotation de l'éditeur";
-"settingsSubtitleUpload" = "Configurer les services d'hébergement d'images";
-"settingsSubtitleTranslation" = "Configurer les services OCR et traduction";
 "settingsSubtitleAbout" = "Identité produit et liens du projet";
 "settingsQuit" = "Quitter l'application";
 
@@ -310,145 +300,20 @@
 "quitConfirmAction" = "Quitter";
 "quitConfirmCancel" = "Annuler";
 
-/* Upload — toolbar / toast / progress */
-"tipUpload" = "Envoyer vers l'hébergeur d'images";
-"uploadingTitle" = "Envoi en cours";
-"uploadCopied" = "URL de l'image copiée";
-"uploadCopiedMarkdown" = "Lien Markdown copié";
-"uploadNoProvider" = "Configurez d'abord un hébergeur dans les réglages";
-"uploadFailedPrefix" = "Échec de l'envoi";
-
-/* Upload — settings tab */
-"uploadDefaultProvider" = "Hébergeur par défaut";
-"uploadDefaultNone" = "Désactivé";
-"uploadSetDefaultButton" = "Définir par défaut";
-"uploadSaveButton" = "Enregistrer";
-"uploadClearButton" = "Effacer";
-"uploadSavedToast" = "Configuration enregistrée";
-"uploadCurrentDefault" = "Défaut actuel";
-"uploadMarkdownToggleTitle" = "Copier en lien Markdown";
-"uploadMarkdownToggleSubtitle" = "Si activé, copie une balise d'image Markdown (![](url)) après l'envoi ; sinon, copie une URL simple. Dans l'historique, ⌘-cliquez sur une image envoyée pour copier un lien Markdown, ou cliquez simplement dessus pour une URL simple";
-"filenameRuleTitle" = "Règles de nom de fichier";
-"filenameRulePresetLabel" = "Préréglage";
-"filenameRulePresetCustom" = "Personnalisé";
-"filenameRulePresetShort" = "Court";
-"filenameRulePresetCompact" = "Lien très court";
-"filenameRulePresetUnique" = "Éviter les doublons";
-"filenameRulePresetCounter" = "Compteur quotidien";
-"filenameRulePresetRestore" = "Restaurer";
-"filenameRuleImageLabel" = "Image";
-"filenameRuleVariablesLabel" = "Variables";
-"filenameRuleVariableDate" = "Date";
-"filenameRuleVariableTime" = "Heure";
-"filenameRuleVariableDaily" = "No quotidien";
-"filenameRuleVariableRandom" = "Aléatoire";
-"filenameRuleVariableSize" = "Taille";
-"filenameRulePreview" = "%@";
-
-/* Upload — provider field labels */
-"uploadFieldBucket" = "Bucket";
-"uploadFieldBucketSpace" = "Bucket";
-"uploadFieldRegion" = "Région";
-"uploadFieldRegionOptional" = "Région facultative";
-"uploadFieldPathOptional" = "Chemin facultatif";
-"uploadFieldCustomUrlOptional" = "Domaine personnalisé facultatif";
-"uploadFieldPublicDomain" = "Domaine public";
-"uploadFieldEndpointArea" = "Point de terminaison";
-"uploadFieldEndpointOptional" = "Point de terminaison facultatif";
-"uploadFieldAccountId" = "ID de compte";
-"uploadTestImageFailed" = "Impossible de générer l'image de test";
-
-/* Upload — provider names */
-"providerTencentCOS" = "Tencent COS";
-"providerQiniuKodo" = "Qiniu Kodo";
-"providerAliyunOSS" = "Aliyun OSS";
-
-/* Upload — errors */
-"uploadErrMissingConfig" = "Aucun hébergeur configuré";
-"uploadErrInvalidConfigPrefix" = "Configuration invalide";
-"uploadErrNetworkPrefix" = "Erreur réseau";
-"uploadErrServerPrefix" = "Échec de l'envoi code %d";
-"uploadErrUnexpectedResponsePrefix" = "Réponse inattendue";
-"missingField" = "%@ manquant";
-
-/* Upload — test/validation pill */
-"uploadStatusUntested" = "Non testé";
-"uploadStatusTesting" = "Test";
-"uploadStatusValid" = "Actif";
-"uploadStatusInvalid" = "Configuration invalide";
-
-/* Upload — log lines */
-"uploadLogStartingTest" = "Démarrage de l'envoi de test";
-"uploadLogConfigSaved" = "Configuration enregistrée";
-"uploadLogMissingFields" = "Champs obligatoires manquants : %@";
-"uploadLogTestSucceeded" = "Envoi de test réussi : %@";
-"uploadLogTestFailed" = "Échec de l'envoi de test : %@";
-"uploadLogProviderDisabled" = "Hébergeur désactivé";
-"uploadLogConfigCleared" = "Configuration effacée";
-
 /* Permissions — status label */
 "permissionGranted" = "Accordée";
 "permissionNotGranted" = "Non accordée";
 
-/* OCR & Translation — result panel */
+/* OCR result panel */
 "ocrTextHeader" = "Texte reconnu";
 "ocrRecognizing" = "Reconnaissance";
 "ocrNoText" = "Aucun texte trouvé";
 "ocrCopy" = "Copier";
 "ocrCopied" = "Copié";
-"ocrRetry" = "Réessayer";
-"ocrTranslating" = "Traduction";
-"ocrTranslateFailedPrefix" = "Échec";
-"ocrNoProviderTitle" = "Aucun service de traduction configuré";
-"ocrNoProviderHint" = "Ajoutez un service IA dans Réglages → Traduction";
-"ocrOpenSettings" = "Ouvrir les réglages";
 "ocrLineCopied" = "Ligne copiée";
 "copyImageTextCopying" = "Copie";
 "copyImageTextCopied" = "Texte de l'image copié";
 "copyImageTextNoText" = "Aucun texte trouvé";
-"screenshotTranslationHeader" = "Traduction";
-"screenshotTranslationLanguageButton" = "Vers %@";
-"dictionaryEntryLabel" = "Entrée";
-"dictionaryPhoneticLabel" = "Prononciation";
-"dictionaryPartOfSpeechLabel" = "Nature";
-"dictionaryDefinitionLabel" = "Sens";
-"dictionaryExampleLabel" = "Exemple";
-"dictionaryDifficultyLabel" = "Difficulté";
-"dictionaryNoProviderTitle" = "Aucun service IA compatible avec le mode dictionnaire";
-"dictionaryNoProviderHint" = "Activez OpenAI, DeepSeek, Claude ou un service personnalisé compatible OpenAI dans Réglages → Traduction";
-
-/* Translation — settings tab */
-"translationDictionaryModeTitle" = "Mode dictionnaire";
-"translationDictionaryModeSubtitle" = "Quand la traduction de capture reconnaît un seul mot anglais, affiche la prononciation, le sens, un exemple, sa traduction et le niveau CECR";
-"translationTargetLanguage" = "Langue cible";
-"translationTargetHint" = "Le texte reconnu est traduit dans cette langue ; s'il est déjà dans cette langue, il est traduit en anglais";
-"translationProvidersHeader" = "Services de traduction IA";
-"translationApiKey" = "Clé API";
-"translationApiKeyOptional" = "Clé API facultative";
-"translationModel" = "Modèle";
-"translationEndpoint" = "Point de terminaison";
-"translationEndpointOptional" = "Point de terminaison facultatif";
-"translationSave" = "Enregistrer";
-"translationClear" = "Effacer";
-"translationConfigSaved" = "Configuration enregistrée";
-"translationTesting" = "Test";
-"translationTestPassed" = "Test réussi";
-"translationTestFailed" = "Échec du test";
-"translationTestFailedTitle" = "Enregistré, mais le test de connexion a échoué";
-"translationProviderCustom" = "Personnalisé compatible OpenAI";
-"translationMoveUp" = "Déplacer vers le haut";
-"translationMoveDown" = "Déplacer vers le bas";
-
-/* Translation — target language names */
-"transLangChinese" = "Chinois";
-"transLangEnglish" = "Anglais";
-"transLangJapanese" = "Japonais";
-"transLangKorean" = "Coréen";
-
-/* Translation — errors */
-"translationErrMissingAPIKey" = "Clé API non configurée";
-"translationErrBadEndpoint" = "Point de terminaison invalide";
-"translationErrBadResponse" = "Réponse inattendue";
 
 /* Image Merge */
 "imageMergeShortcutHeader" = "Fusionner des images";

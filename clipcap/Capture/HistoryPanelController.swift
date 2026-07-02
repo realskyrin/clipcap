@@ -1955,18 +1955,6 @@ private enum HistoryPanelEntryActions {
     static func copy(_ entry: HistoryEntry) -> Bool {
         switch entry.kind {
         case .image:
-            if let cloudURL = entry.cloudURL {
-                let asMarkdown = NSEvent.modifierFlags.contains(.command)
-                let copyText = asMarkdown
-                    ? "![](\(cloudURL.absoluteString))"
-                    : cloudURL.absoluteString
-                let pasteboard = NSPasteboard.general
-                pasteboard.clearContents()
-                pasteboard.setString(copyText, forType: .string)
-                ToastWindow.show(message: asMarkdown ? L10n.uploadCopiedMarkdown : L10n.uploadCopied)
-                return true
-            }
-
             guard let image = NSImage(contentsOf: entry.fileURL) else { return false }
             ClipboardManager.copyToClipboard(image: image)
             ToastWindow.show()

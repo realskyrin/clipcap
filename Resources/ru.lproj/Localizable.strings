@@ -9,7 +9,7 @@
 "pinAcrossSpaces" = "Показывать закрепления на всех рабочих столах";
 "pinAcrossSpacesHint" = "Новые закрепленные изображения появляются на каждом рабочем столе и полноэкранном Space";
 "historyCacheToggleLabel" = "Кэшировать изображения";
-"historyCacheToggleHint" = "Сохраняет недавние изображения, выбранные цвета и ссылки загрузок для быстрого повторного копирования из строки меню";
+"historyCacheToggleHint" = "Сохраняет недавние изображения и выбранные цвета для быстрого повторного копирования из строки меню";
 "historyCacheLabel" = "Размер кэша истории";
 "historyCacheHint" = "Хранит недавние изображения для быстрого повторного копирования";
 "historyPanelDisplayModeLabel" = "Отображение панели истории";
@@ -60,8 +60,6 @@
 "textRecognitionShortcutDefaultDisplay" = "Не задано";
 "copyImageTextShortcutHeader" = "Копировать текст с изображения";
 "copyImageTextShortcutDefaultDisplay" = "Не задано";
-"screenshotTranslationShortcutHeader" = "Перевод снимка";
-"screenshotTranslationShortcutDefaultDisplay" = "Не задано";
 "fullScreenScreenshotShortcutHeader" = "Снимок всего экрана";
 "fullScreenScreenshotShortcutDefaultDisplay" = "Не задано";
 "colorPickerShortcutHeader" = "Пипетка";
@@ -98,7 +96,6 @@
 "shortcutConflictClipboardImageEdit" = "Это сочетание клавиш уже назначено для редактирования изображения из буфера. Выберите другое";
 "shortcutConflictTextRecognition" = "Это сочетание клавиш уже назначено для распознавания текста. Выберите другое";
 "shortcutConflictCopyImageText" = "Это сочетание клавиш уже назначено для копирования текста с изображения. Выберите другое";
-"shortcutConflictScreenshotTranslation" = "Это сочетание клавиш уже назначено для перевода снимка. Выберите другое";
 "shortcutConflictFullScreenScreenshot" = "Это сочетание клавиш уже назначено для снимка всего экрана. Выберите другое";
 "shortcutConflictColorPicker" = "Это сочетание клавиш уже назначено для пипетки. Выберите другое";
 
@@ -113,7 +110,6 @@
 "historyClear" = "Очистить историю";
 "historyCleared" = "История очищена";
 "historyShowInFinder" = "Показать в Finder";
-"historyCloudMarkdownTip" = "Удерживайте ⌘ и щёлкните миниатюру, чтобы скопировать ссылку на изображение в формате Markdown";
 "historyPanelMenu" = "Панель истории";
 "historyPanelFilterAll" = "Все";
 "historyPanelFilterScreenshots" = "Снимки";
@@ -129,7 +125,6 @@
 "dragToScreenshotAspect" = "Нажмите на окно или перетащите для снимка · Выделение %@ (R)";
 "dragToTextRecognition" = "Нажмите на окно или выделите область для распознавания текста";
 "dragToCopyImageText" = "Нажмите на окно или выделите область, чтобы скопировать текст";
-"dragToScreenshotTranslation" = "Нажмите на окно или выделите область для перевода содержимого";
 
 /* Toast */
 "copiedToClipboard" = "Скопировано в буфер обмена";
@@ -177,7 +172,6 @@
 "tipScrollCapture" = "Длинный снимок";
 "tipBeautify" = "Оформление";
 "tipOCR" = "Распознавание текста";
-"tipScreenshotTranslate" = "Перевод снимка";
 "tipSave" = "Сохранить в файл";
 "tipPin" = "Закрепить на экране";
 "tipCancel" = "Отмена";
@@ -220,16 +214,12 @@
 "settingsTabGeneral" = "Основные";
 "settingsTabShortcuts" = "Сочетания";
 "settingsTabPermissions" = "Разрешения";
-"settingsTabUpload" = "Хостинг";
 "settingsTabAbout" = "О программе";
-"settingsTabTranslation" = "Перевод";
 "settingsTabToolbar" = "Панель инструментов";
 "settingsNoPermissionsNeeded" = "Разрешения не нужны";
 "settingsSubtitleGeneral" = "Буфер обмена, файлы, история и сохранение";
 "settingsSubtitleShortcuts" = "Локальные сочетания редактора без глобального мониторинга";
 "settingsSubtitleToolbar" = "Настройка инструментов разметки в редакторе";
-"settingsSubtitleUpload" = "Настройка сервисов хостинга изображений";
-"settingsSubtitleTranslation" = "Настройка OCR и сервисов перевода";
 "settingsSubtitleAbout" = "Идентичность продукта и ссылки проекта";
 "settingsQuit" = "Завершить приложение";
 
@@ -310,145 +300,20 @@
 "quitConfirmAction" = "Завершить";
 "quitConfirmCancel" = "Отмена";
 
-/* Upload — toolbar / toast / progress */
-"tipUpload" = "Загрузить на хостинг изображений";
-"uploadingTitle" = "Загрузка";
-"uploadCopied" = "URL изображения скопирован";
-"uploadCopiedMarkdown" = "Ссылка Markdown скопирована";
-"uploadNoProvider" = "Сначала настройте хостинг в настройках";
-"uploadFailedPrefix" = "Не удалось загрузить";
-
-/* Upload — settings tab */
-"uploadDefaultProvider" = "Хостинг по умолчанию";
-"uploadDefaultNone" = "Отключено";
-"uploadSetDefaultButton" = "Сделать основным";
-"uploadSaveButton" = "Сохранить";
-"uploadClearButton" = "Очистить";
-"uploadSavedToast" = "Конфигурация сохранена";
-"uploadCurrentDefault" = "Текущий по умолчанию";
-"uploadMarkdownToggleTitle" = "Копировать как ссылку Markdown";
-"uploadMarkdownToggleSubtitle" = "Если включено, после загрузки копируется тег изображения Markdown (![](url)); если выключено — обычный URL. В истории нажмите ⌘ и щёлкните по загруженному изображению, чтобы скопировать ссылку Markdown, или просто щёлкните для обычного URL";
-"filenameRuleTitle" = "Правила имени файла";
-"filenameRulePresetLabel" = "Шаблон";
-"filenameRulePresetCustom" = "Свой";
-"filenameRulePresetShort" = "Короткий";
-"filenameRulePresetCompact" = "Короткая ссылка";
-"filenameRulePresetUnique" = "Без дублей";
-"filenameRulePresetCounter" = "Счётчик дня";
-"filenameRulePresetRestore" = "Сбросить";
-"filenameRuleImageLabel" = "Изображение";
-"filenameRuleVariablesLabel" = "Переменные";
-"filenameRuleVariableDate" = "Дата";
-"filenameRuleVariableTime" = "Время";
-"filenameRuleVariableDaily" = "Номер дня";
-"filenameRuleVariableRandom" = "Случайно";
-"filenameRuleVariableSize" = "Размер";
-"filenameRulePreview" = "%@";
-
-/* Upload — provider field labels */
-"uploadFieldBucket" = "Бакет";
-"uploadFieldBucketSpace" = "Бакет";
-"uploadFieldRegion" = "Регион";
-"uploadFieldRegionOptional" = "Необязательный регион";
-"uploadFieldPathOptional" = "Необязательный путь";
-"uploadFieldCustomUrlOptional" = "Необязательный домен";
-"uploadFieldPublicDomain" = "Публичный домен";
-"uploadFieldEndpointArea" = "Эндпоинт";
-"uploadFieldEndpointOptional" = "Необязательный эндпоинт";
-"uploadFieldAccountId" = "ID аккаунта";
-"uploadTestImageFailed" = "Не удалось создать тестовое изображение";
-
-/* Upload — provider names */
-"providerTencentCOS" = "Tencent COS";
-"providerQiniuKodo" = "Qiniu Kodo";
-"providerAliyunOSS" = "Aliyun OSS";
-
-/* Upload — errors */
-"uploadErrMissingConfig" = "Хостинг не настроен";
-"uploadErrInvalidConfigPrefix" = "Неверная конфигурация";
-"uploadErrNetworkPrefix" = "Ошибка сети";
-"uploadErrServerPrefix" = "Не удалось загрузить код %d";
-"uploadErrUnexpectedResponsePrefix" = "Неожиданный ответ";
-"missingField" = "Отсутствует %@";
-
-/* Upload — test/validation pill */
-"uploadStatusUntested" = "Не проверено";
-"uploadStatusTesting" = "Проверка";
-"uploadStatusValid" = "Активно";
-"uploadStatusInvalid" = "Неверная конфигурация";
-
-/* Upload — log lines */
-"uploadLogStartingTest" = "Запуск тестовой загрузки";
-"uploadLogConfigSaved" = "Конфигурация сохранена";
-"uploadLogMissingFields" = "Отсутствуют обязательные поля: %@";
-"uploadLogTestSucceeded" = "Тестовая загрузка успешна: %@";
-"uploadLogTestFailed" = "Тестовая загрузка не удалась: %@";
-"uploadLogProviderDisabled" = "Хостинг отключён";
-"uploadLogConfigCleared" = "Конфигурация очищена";
-
 /* Permissions — status label */
 "permissionGranted" = "Предоставлено";
 "permissionNotGranted" = "Не предоставлено";
 
-/* OCR & Translation — result panel */
+/* OCR result panel */
 "ocrTextHeader" = "Распознанный текст";
 "ocrRecognizing" = "Распознавание";
 "ocrNoText" = "Текст не найден";
 "ocrCopy" = "Копировать";
 "ocrCopied" = "Скопировано";
-"ocrRetry" = "Повторить";
-"ocrTranslating" = "Перевод";
-"ocrTranslateFailedPrefix" = "Ошибка";
-"ocrNoProviderTitle" = "Служба перевода не настроена";
-"ocrNoProviderHint" = "Добавьте ИИ-службу в Настройки → Перевод";
-"ocrOpenSettings" = "Открыть настройки";
 "ocrLineCopied" = "Строка скопирована";
 "copyImageTextCopying" = "Копирование";
 "copyImageTextCopied" = "Текст с изображения скопирован";
 "copyImageTextNoText" = "Текст не найден";
-"screenshotTranslationHeader" = "Перевод";
-"screenshotTranslationLanguageButton" = "На %@";
-"dictionaryEntryLabel" = "Слово";
-"dictionaryPhoneticLabel" = "Транскрипция";
-"dictionaryPartOfSpeechLabel" = "Часть речи";
-"dictionaryDefinitionLabel" = "Значение";
-"dictionaryExampleLabel" = "Пример";
-"dictionaryDifficultyLabel" = "Сложность";
-"dictionaryNoProviderTitle" = "Не настроена ИИ-служба для режима словаря";
-"dictionaryNoProviderHint" = "Включите OpenAI, DeepSeek, Claude или свой OpenAI-совместимый сервис в Настройки → Перевод";
-
-/* Translation — settings tab */
-"translationDictionaryModeTitle" = "Режим словаря";
-"translationDictionaryModeSubtitle" = "Если перевод снимка распознал одно английское слово, показывает произношение, значение, пример, перевод и уровень CEFR";
-"translationTargetLanguage" = "Язык перевода";
-"translationTargetHint" = "Распознанный текст переводится на этот язык; если он уже на этом языке, он переводится на английский";
-"translationProvidersHeader" = "ИИ-службы перевода";
-"translationApiKey" = "Ключ API";
-"translationApiKeyOptional" = "Необязательный ключ API";
-"translationModel" = "Модель";
-"translationEndpoint" = "Эндпоинт";
-"translationEndpointOptional" = "Необязательный эндпоинт";
-"translationSave" = "Сохранить";
-"translationClear" = "Очистить";
-"translationConfigSaved" = "Конфигурация сохранена";
-"translationTesting" = "Проверка";
-"translationTestPassed" = "Проверка пройдена";
-"translationTestFailed" = "Проверка не пройдена";
-"translationTestFailedTitle" = "Сохранено, но проверка соединения не удалась";
-"translationProviderCustom" = "Свой совместимый с OpenAI";
-"translationMoveUp" = "Переместить вверх";
-"translationMoveDown" = "Переместить вниз";
-
-/* Translation — target language names */
-"transLangChinese" = "Китайский";
-"transLangEnglish" = "Английский";
-"transLangJapanese" = "Японский";
-"transLangKorean" = "Корейский";
-
-/* Translation — errors */
-"translationErrMissingAPIKey" = "Ключ API не настроен";
-"translationErrBadEndpoint" = "Неверный эндпоинт";
-"translationErrBadResponse" = "Неожиданный ответ";
 
 /* Image Merge */
 "imageMergeShortcutHeader" = "Объединить изображения";

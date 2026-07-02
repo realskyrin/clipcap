@@ -325,19 +325,6 @@ class StatusBarController: NSObject {
         guard let entry = entry else { return }
         switch entry.kind {
         case .image:
-            // Cloud-hosted images copy a URL; holding ⌘ copies a Markdown image
-            // tag instead. Plain (non-uploaded) images always copy the image.
-            if let cloudURL = entry.cloudURL {
-                let asMarkdown = NSEvent.modifierFlags.contains(.command)
-                let copyText = asMarkdown
-                    ? "![](\(cloudURL.absoluteString))"
-                    : cloudURL.absoluteString
-                let pasteboard = NSPasteboard.general
-                pasteboard.clearContents()
-                pasteboard.setString(copyText, forType: .string)
-                ToastWindow.show(message: asMarkdown ? L10n.uploadCopiedMarkdown : L10n.uploadCopied)
-                return
-            }
             guard let image = NSImage(contentsOf: entry.fileURL) else { return }
             ClipboardManager.copyToClipboard(image: image)
             ToastWindow.show()
@@ -391,7 +378,6 @@ extension StatusBarController: NSMenuDelegate {
             let row = HistoryMenuRow(
                 entry: entry,
                 timestamp: timestamp,
-                cloudTip: entry.cloudURL == nil ? nil : L10n.historyCloudMarkdownTip,
                 target: self,
                 action: #selector(historyItemClicked(_:))
             )
@@ -433,7 +419,7 @@ private final class HistoryMenuRow: NSView {
     private let action: Selector
     private let timeLabel: NSTextField
 
-    init(entry: HistoryEntry, timestamp: String, cloudTip: String?, target: AnyObject, action: Selector) {
+    init(entry: HistoryEntry, timestamp: String, target: AnyObject, action: Selector) {
         self.entry = entry
         self.target = target
         self.action = action
@@ -470,19 +456,6 @@ private final class HistoryMenuRow: NSView {
         super.init(frame: NSRect(x: 0, y: 0, width: Self.itemWidth, height: totalHeight))
         autoresizingMask = [.width]
         addSubview(timeLabel)
-        if let cloudTip {
-            let cloudLabel = InstantTooltipLabel(text: "☁️", tipMessage: cloudTip)
-            cloudLabel.font = NSFont.systemFont(ofSize: 11, weight: .regular)
-            cloudLabel.textColor = .secondaryLabelColor
-            cloudLabel.frame = NSRect(
-                x: timeLabel.frame.minX + min(timeLabel.intrinsicContentSize.width, contentWidth - 18) + 4,
-                y: timeLabel.frame.minY,
-                width: 18,
-                height: Self.labelHeight
-            )
-            cloudLabel.autoresizingMask = [.minYMargin]
-            addSubview(cloudLabel)
-        }
         addSubview(preview)
     }
 

@@ -23,8 +23,6 @@ final class HotkeyManager {
     func unregisterTextRecognition() {}
     func registerCopyImageText(callback: @escaping () -> Void) {}
     func unregisterCopyImageText() {}
-    func registerScreenshotTranslation(callback: @escaping () -> Void) {}
-    func unregisterScreenshotTranslation() {}
     func registerImageMerge(callback: @escaping () -> Void) {}
     func unregisterImageMerge() {}
     func registerFullScreenScreenshot(callback: @escaping () -> Void) {}
@@ -65,7 +63,6 @@ final class HotkeyManager {
     static func currentClipboardImageEditDisplayString() -> String? { nil }
     static func currentTextRecognitionDisplayString() -> String? { nil }
     static func currentCopyImageTextDisplayString() -> String? { nil }
-    static func currentScreenshotTranslationDisplayString() -> String? { nil }
     static func currentImageMergeDisplayString() -> String? { nil }
     static func currentFullScreenScreenshotDisplayString() -> String? { nil }
     static func currentColorPickerDisplayString() -> String? { nil }

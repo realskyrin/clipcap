@@ -4,8 +4,6 @@ enum SettingsTab: CaseIterable {
     case general
     case shortcuts
     case toolbar
-    case upload
-    case translation
     case about
 
     var title: String {
@@ -13,8 +11,6 @@ enum SettingsTab: CaseIterable {
         case .general: return L10n.settingsTabGeneral
         case .shortcuts: return L10n.settingsTabShortcuts
         case .toolbar: return L10n.settingsTabToolbar
-        case .upload: return L10n.settingsTabUpload
-        case .translation: return L10n.settingsTabTranslation
         case .about: return L10n.settingsTabAbout
         }
     }
@@ -24,8 +20,6 @@ enum SettingsTab: CaseIterable {
         case .general: return "gearshape.fill"
         case .shortcuts: return "keyboard.fill"
         case .toolbar: return "slider.horizontal.3"
-        case .upload: return "icloud.and.arrow.up.fill"
-        case .translation: return "character.bubble.fill"
         case .about: return "info.circle.fill"
         }
     }
@@ -35,8 +29,6 @@ enum SettingsTab: CaseIterable {
         case .general: return .systemGreen
         case .shortcuts: return .systemOrange
         case .toolbar: return .systemPurple
-        case .upload: return .systemBlue
-        case .translation: return .systemTeal
         case .about: return .systemIndigo
         }
     }
@@ -292,10 +284,6 @@ final class SettingsView: NSView {
             pane = makeShortcutsPane()
         case .toolbar:
             pane = wrapPane(ToolbarSettingsPane(), horizontalInset: 20)
-        case .upload:
-            pane = wrapPane(UploadSettingsPane(), horizontalInset: 22)
-        case .translation:
-            pane = wrapPane(TranslationSettingsPane(), horizontalInset: 22)
         case .about:
             pane = makeAboutPane()
         }
@@ -319,8 +307,6 @@ final class SettingsView: NSView {
         case .general: return L10n.settingsSubtitleGeneral
         case .shortcuts: return L10n.settingsSubtitleShortcuts
         case .toolbar: return L10n.settingsSubtitleToolbar
-        case .upload: return L10n.settingsSubtitleUpload
-        case .translation: return L10n.settingsSubtitleTranslation
         case .about: return L10n.settingsSubtitleAbout
         }
     }

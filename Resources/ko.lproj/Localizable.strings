@@ -9,7 +9,7 @@
 "pinAcrossSpaces" = "고정 이미지를 모든 데스크톱에 표시";
 "pinAcrossSpacesHint" = "켜면 새 고정 이미지가 모든 데스크톱과 전체 화면 Space에 표시됩니다";
 "historyCacheToggleLabel" = "이미지 캐시";
-"historyCacheToggleHint" = "최근 이미지, 선택한 색상, 업로드 결과를 저장해 메뉴 막대에서 빠르게 다시 복사할 수 있습니다";
+"historyCacheToggleHint" = "최근 이미지와 선택한 색상을 저장해 메뉴 막대에서 빠르게 다시 복사할 수 있습니다";
 "historyCacheLabel" = "기록 캐시 개수";
 "historyCacheHint" = "최근 이미지를 보관해 빠르게 다시 복사할 수 있습니다";
 "historyPanelDisplayModeLabel" = "기록 패널 표시 방식";
@@ -60,8 +60,6 @@
 "textRecognitionShortcutDefaultDisplay" = "설정 안 됨";
 "copyImageTextShortcutHeader" = "이미지 텍스트 복사";
 "copyImageTextShortcutDefaultDisplay" = "설정 안 됨";
-"screenshotTranslationShortcutHeader" = "스크린샷 번역";
-"screenshotTranslationShortcutDefaultDisplay" = "설정 안 됨";
 "fullScreenScreenshotShortcutHeader" = "전체 화면 스크린샷";
 "fullScreenScreenshotShortcutDefaultDisplay" = "설정 안 됨";
 "colorPickerShortcutHeader" = "색상 추출기";
@@ -98,7 +96,6 @@
 "shortcutConflictClipboardImageEdit" = "이 키 조합은 이미 클립보드 이미지 편집 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
 "shortcutConflictTextRecognition" = "이 키 조합은 이미 문자 인식 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
 "shortcutConflictCopyImageText" = "이 키 조합은 이미 이미지 텍스트 복사 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
-"shortcutConflictScreenshotTranslation" = "이 키 조합은 이미 스크린샷 번역 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
 "shortcutConflictFullScreenScreenshot" = "이 키 조합은 이미 전체 화면 스크린샷 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
 "shortcutConflictColorPicker" = "이 키 조합은 이미 색상 추출기 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
 
@@ -113,7 +110,6 @@
 "historyClear" = "기록 지우기";
 "historyCleared" = "기록 지움";
 "historyShowInFinder" = "Finder에 표시";
-"historyCloudMarkdownTip" = "⌘ 키를 누른 채 미리보기 이미지를 클릭하면 Markdown 형식 이미지 링크를 복사합니다";
 "historyPanelMenu" = "기록 패널";
 "historyPanelFilterAll" = "전체";
 "historyPanelFilterScreenshots" = "스크린샷";
@@ -129,7 +125,6 @@
 "dragToScreenshotAspect" = "창을 클릭하거나 드래그하여 스크린샷 · 드래그 %@ (R)";
 "dragToTextRecognition" = "창을 클릭하거나 영역을 선택하여 문자 인식";
 "dragToCopyImageText" = "창을 클릭하거나 영역을 선택하여 텍스트 복사";
-"dragToScreenshotTranslation" = "창을 클릭하거나 영역을 선택하여 내용 번역";
 
 /* Toast */
 "copiedToClipboard" = "클립보드에 복사됨";
@@ -177,7 +172,6 @@
 "tipScrollCapture" = "긴 스크린샷";
 "tipBeautify" = "꾸미기";
 "tipOCR" = "문자 인식";
-"tipScreenshotTranslate" = "스크린샷 번역";
 "tipSave" = "파일로 저장";
 "tipPin" = "화면에 고정";
 "tipCancel" = "취소";
@@ -220,16 +214,12 @@
 "settingsTabGeneral" = "일반";
 "settingsTabShortcuts" = "단축키";
 "settingsTabPermissions" = "권한";
-"settingsTabUpload" = "이미지 호스트";
 "settingsTabAbout" = "정보";
-"settingsTabTranslation" = "번역";
 "settingsTabToolbar" = "도구 모음";
 "settingsNoPermissionsNeeded" = "권한 필요 없음";
 "settingsSubtitleGeneral" = "클립보드, 파일, 기록, 저장 동작";
 "settingsSubtitleShortcuts" = "전역 감시 없는 편집기 단축키";
 "settingsSubtitleToolbar" = "편집기에 표시할 주석 도구 정렬";
-"settingsSubtitleUpload" = "이미지 호스팅 서비스 설정";
-"settingsSubtitleTranslation" = "OCR 및 번역 서비스 설정";
 "settingsSubtitleAbout" = "제품 정보와 프로젝트 링크";
 "settingsQuit" = "앱 종료";
 
@@ -310,145 +300,20 @@
 "quitConfirmAction" = "종료";
 "quitConfirmCancel" = "취소";
 
-/* Upload — toolbar / toast / progress */
-"tipUpload" = "이미지 호스트에 업로드";
-"uploadingTitle" = "업로드 중";
-"uploadCopied" = "이미지 URL이 복사됨";
-"uploadCopiedMarkdown" = "Markdown 링크가 복사됨";
-"uploadNoProvider" = "먼저 설정에서 이미지 호스트를 구성하세요";
-"uploadFailedPrefix" = "업로드 실패";
-
-/* Upload — settings tab */
-"uploadDefaultProvider" = "기본 이미지 호스트";
-"uploadDefaultNone" = "비활성화됨";
-"uploadSetDefaultButton" = "기본값으로 설정";
-"uploadSaveButton" = "저장";
-"uploadClearButton" = "지우기";
-"uploadSavedToast" = "설정이 저장됨";
-"uploadCurrentDefault" = "현재 기본값";
-"uploadMarkdownToggleTitle" = "Markdown 링크로 복사";
-"uploadMarkdownToggleSubtitle" = "켜면 업로드 후 Markdown 이미지 태그(![](url))를 복사하고, 끄면 일반 URL을 복사합니다. 기록에서 ⌘ 를 누른 채 업로드된 이미지를 클릭하면 Markdown 링크를, 그냥 클릭하면 일반 URL을 복사합니다";
-"filenameRuleTitle" = "파일 이름 규칙";
-"filenameRulePresetLabel" = "프리셋";
-"filenameRulePresetCustom" = "사용자 지정";
-"filenameRulePresetShort" = "짧게";
-"filenameRulePresetCompact" = "짧은 링크";
-"filenameRulePresetUnique" = "중복 방지";
-"filenameRulePresetCounter" = "일일 카운터";
-"filenameRulePresetRestore" = "기본값 복원";
-"filenameRuleImageLabel" = "이미지";
-"filenameRuleVariablesLabel" = "변수";
-"filenameRuleVariableDate" = "날짜";
-"filenameRuleVariableTime" = "시간";
-"filenameRuleVariableDaily" = "일일 번호";
-"filenameRuleVariableRandom" = "랜덤";
-"filenameRuleVariableSize" = "크기";
-"filenameRulePreview" = "%@";
-
-/* Upload — provider field labels */
-"uploadFieldBucket" = "버킷";
-"uploadFieldBucketSpace" = "버킷";
-"uploadFieldRegion" = "리전";
-"uploadFieldRegionOptional" = "선택 리전";
-"uploadFieldPathOptional" = "선택 경로";
-"uploadFieldCustomUrlOptional" = "선택 사용자 도메인";
-"uploadFieldPublicDomain" = "공개 도메인";
-"uploadFieldEndpointArea" = "엔드포인트";
-"uploadFieldEndpointOptional" = "선택 엔드포인트";
-"uploadFieldAccountId" = "계정 ID";
-"uploadTestImageFailed" = "테스트 이미지를 생성할 수 없습니다";
-
-/* Upload — provider names */
-"providerTencentCOS" = "Tencent COS";
-"providerQiniuKodo" = "Qiniu Kodo";
-"providerAliyunOSS" = "Aliyun OSS";
-
-/* Upload — errors */
-"uploadErrMissingConfig" = "업로드 호스트가 설정되지 않음";
-"uploadErrInvalidConfigPrefix" = "잘못된 설정";
-"uploadErrNetworkPrefix" = "네트워크 오류";
-"uploadErrServerPrefix" = "업로드 실패 코드 %d";
-"uploadErrUnexpectedResponsePrefix" = "예기치 않은 응답";
-"missingField" = "%@ 누락됨";
-
-/* Upload — test/validation pill */
-"uploadStatusUntested" = "테스트 안 됨";
-"uploadStatusTesting" = "테스트 중";
-"uploadStatusValid" = "활성";
-"uploadStatusInvalid" = "잘못된 설정";
-
-/* Upload — log lines */
-"uploadLogStartingTest" = "테스트 업로드 시작";
-"uploadLogConfigSaved" = "설정이 저장됨";
-"uploadLogMissingFields" = "필수 항목 누락: %@";
-"uploadLogTestSucceeded" = "테스트 업로드 성공: %@";
-"uploadLogTestFailed" = "테스트 업로드 실패: %@";
-"uploadLogProviderDisabled" = "이 이미지 호스트가 비활성화됨";
-"uploadLogConfigCleared" = "설정이 지워짐";
-
 /* Permissions — status label */
 "permissionGranted" = "허용됨";
 "permissionNotGranted" = "허용 안 됨";
 
-/* OCR & Translation — result panel */
+/* OCR result panel */
 "ocrTextHeader" = "인식된 텍스트";
 "ocrRecognizing" = "인식 중";
 "ocrNoText" = "텍스트를 찾을 수 없음";
 "ocrCopy" = "복사";
 "ocrCopied" = "복사됨";
-"ocrRetry" = "다시 시도";
-"ocrTranslating" = "번역 중";
-"ocrTranslateFailedPrefix" = "실패";
-"ocrNoProviderTitle" = "번역 서비스가 설정되지 않음";
-"ocrNoProviderHint" = "설정 → 번역 에서 AI 서비스를 추가하세요";
-"ocrOpenSettings" = "설정 열기";
 "ocrLineCopied" = "줄 복사됨";
 "copyImageTextCopying" = "복사 중";
 "copyImageTextCopied" = "이미지 텍스트 복사됨";
 "copyImageTextNoText" = "텍스트를 찾을 수 없음";
-"screenshotTranslationHeader" = "번역";
-"screenshotTranslationLanguageButton" = "%@(으)로";
-"dictionaryEntryLabel" = "표제어";
-"dictionaryPhoneticLabel" = "발음 기호";
-"dictionaryPartOfSpeechLabel" = "품사";
-"dictionaryDefinitionLabel" = "뜻";
-"dictionaryExampleLabel" = "예문";
-"dictionaryDifficultyLabel" = "난이도";
-"dictionaryNoProviderTitle" = "사전 모드를 지원하는 AI 서비스가 설정되지 않음";
-"dictionaryNoProviderHint" = "설정 → 번역에서 OpenAI, DeepSeek, Claude 또는 OpenAI 호환 사용자 정의 서비스를 활성화하세요";
-
-/* Translation — settings tab */
-"translationDictionaryModeTitle" = "사전 모드";
-"translationDictionaryModeSubtitle" = "스크린샷 번역에서 영어 단어 하나만 인식되면 발음, 뜻, 예문, 번역, CEFR 수준을 표시합니다";
-"translationTargetLanguage" = "대상 언어";
-"translationTargetHint" = "인식된 텍스트는 이 언어로 번역됩니다. 이미 해당 언어인 경우 영어로 번역됩니다";
-"translationProvidersHeader" = "AI 번역 서비스";
-"translationApiKey" = "API 키";
-"translationApiKeyOptional" = "선택 API 키";
-"translationModel" = "모델";
-"translationEndpoint" = "엔드포인트";
-"translationEndpointOptional" = "선택 엔드포인트";
-"translationSave" = "저장";
-"translationClear" = "지우기";
-"translationConfigSaved" = "설정이 저장됨";
-"translationTesting" = "테스트 중";
-"translationTestPassed" = "테스트 통과";
-"translationTestFailed" = "테스트 실패";
-"translationTestFailedTitle" = "저장했지만 연결 테스트에 실패했습니다";
-"translationProviderCustom" = "사용자 정의 OpenAI 호환";
-"translationMoveUp" = "위로 이동";
-"translationMoveDown" = "아래로 이동";
-
-/* Translation — target language names */
-"transLangChinese" = "중국어";
-"transLangEnglish" = "영어";
-"transLangJapanese" = "일본어";
-"transLangKorean" = "한국어";
-
-/* Translation — errors */
-"translationErrMissingAPIKey" = "API 키가 설정되지 않음";
-"translationErrBadEndpoint" = "잘못된 엔드포인트";
-"translationErrBadResponse" = "예기치 않은 응답";
 
 /* Image Merge */
 "imageMergeShortcutHeader" = "이미지 병합";

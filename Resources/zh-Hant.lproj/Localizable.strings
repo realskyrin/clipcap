@@ -9,7 +9,7 @@
 "pinAcrossSpaces" = "貼圖跨桌面顯示";
 "pinAcrossSpacesHint" = "開啟後新貼圖會出現在所有桌面與全螢幕空間";
 "historyCacheToggleLabel" = "快取圖片";
-"historyCacheToggleHint" = "保存最近圖片、取色和上傳結果，方便從選單列快速再次複製";
+"historyCacheToggleHint" = "保存最近圖片和取色結果，方便從選單列快速再次複製";
 "historyCacheLabel" = "歷史快取數量";
 "historyCacheHint" = "保留最近的圖片，方便快速再次複製";
 "historyPanelDisplayModeLabel" = "歷史面板顯示方式";
@@ -60,8 +60,6 @@
 "textRecognitionShortcutDefaultDisplay" = "未設定";
 "copyImageTextShortcutHeader" = "複製圖中文字";
 "copyImageTextShortcutDefaultDisplay" = "未設定";
-"screenshotTranslationShortcutHeader" = "截圖翻譯";
-"screenshotTranslationShortcutDefaultDisplay" = "未設定";
 "fullScreenScreenshotShortcutHeader" = "截全螢幕";
 "fullScreenScreenshotShortcutDefaultDisplay" = "未設定";
 "colorPickerShortcutHeader" = "取色器";
@@ -98,7 +96,6 @@
 "shortcutConflictClipboardImageEdit" = "這組按鍵已用於編輯剪貼簿圖片快捷鍵。請選擇其他組合";
 "shortcutConflictTextRecognition" = "這組按鍵已用於文字辨識快捷鍵。請選擇其他組合";
 "shortcutConflictCopyImageText" = "這組按鍵已用於複製圖中文字快捷鍵。請選擇其他組合";
-"shortcutConflictScreenshotTranslation" = "這組按鍵已用於截圖翻譯快捷鍵。請選擇其他組合";
 "shortcutConflictFullScreenScreenshot" = "這組按鍵已用於截全螢幕快捷鍵。請選擇其他組合";
 "shortcutConflictColorPicker" = "這組按鍵已用於取色器快捷鍵。請選擇其他組合";
 
@@ -113,7 +110,6 @@
 "historyClear" = "清除歷史記錄";
 "historyCleared" = "歷史記錄已清除";
 "historyShowInFinder" = "在 Finder 中顯示";
-"historyCloudMarkdownTip" = "按住 ⌘ 並點選預覽圖，可直接複製 Markdown 格式圖片連結";
 "historyPanelMenu" = "歷史面板";
 "historyPanelFilterAll" = "全部";
 "historyPanelFilterScreenshots" = "截圖";
@@ -129,7 +125,6 @@
 "dragToScreenshotAspect" = "點選視窗或拖曳以截圖 · 框選 %@（R）";
 "dragToTextRecognition" = "點選視窗或框選區域辨識文字";
 "dragToCopyImageText" = "點選視窗或框選區域複製文字";
-"dragToScreenshotTranslation" = "點選視窗或框選區域翻譯內容";
 
 /* Toast */
 "copiedToClipboard" = "已複製到剪貼簿";
@@ -177,7 +172,6 @@
 "tipScrollCapture" = "長截圖";
 "tipBeautify" = "美化";
 "tipOCR" = "文字辨識";
-"tipScreenshotTranslate" = "截圖翻譯";
 "tipSave" = "儲存為檔案";
 "tipPin" = "釘選到螢幕";
 "tipCancel" = "取消";
@@ -220,16 +214,12 @@
 "settingsTabGeneral" = "一般";
 "settingsTabShortcuts" = "快捷鍵";
 "settingsTabPermissions" = "權限";
-"settingsTabUpload" = "上傳";
 "settingsTabAbout" = "關於";
-"settingsTabTranslation" = "翻譯";
 "settingsTabToolbar" = "工具列";
 "settingsNoPermissionsNeeded" = "無需權限";
 "settingsSubtitleGeneral" = "剪貼簿、檔案、歷史和儲存行為";
 "settingsSubtitleShortcuts" = "無需全域監聽的編輯器快捷鍵";
 "settingsSubtitleToolbar" = "排列編輯器中顯示的標註工具";
-"settingsSubtitleUpload" = "設定圖片託管服務";
-"settingsSubtitleTranslation" = "設定 OCR 和翻譯服務";
 "settingsSubtitleAbout" = "產品身份和專案連結";
 "settingsQuit" = "結束 App";
 
@@ -310,145 +300,20 @@
 "quitConfirmAction" = "結束";
 "quitConfirmCancel" = "取消";
 
-/* Upload — toolbar / toast / progress */
-"tipUpload" = "上傳到圖床";
-"uploadingTitle" = "上傳中";
-"uploadCopied" = "已複製圖片網址";
-"uploadCopiedMarkdown" = "已複製 Markdown 連結";
-"uploadNoProvider" = "請先在設定中設定上傳服務";
-"uploadFailedPrefix" = "上傳失敗";
-
-/* Upload — settings tab */
-"uploadDefaultProvider" = "預設上傳服務";
-"uploadDefaultNone" = "停用";
-"uploadSetDefaultButton" = "設為預設";
-"uploadSaveButton" = "儲存";
-"uploadClearButton" = "清除";
-"uploadSavedToast" = "設定已儲存";
-"uploadCurrentDefault" = "目前預設";
-"uploadMarkdownToggleTitle" = "複製為 Markdown 連結";
-"uploadMarkdownToggleSubtitle" = "開啟後，上傳完成會複製 Markdown 圖片標籤（![](url)）；關閉則複製純網址。在歷史記錄中，按住 ⌘ 點選已上傳的圖片可複製 Markdown 連結，直接點選則複製純網址";
-"filenameRuleTitle" = "檔名規則";
-"filenameRulePresetLabel" = "預設";
-"filenameRulePresetCustom" = "自訂";
-"filenameRulePresetShort" = "簡短";
-"filenameRulePresetCompact" = "超短連結";
-"filenameRulePresetUnique" = "避免重名";
-"filenameRulePresetCounter" = "每日計數";
-"filenameRulePresetRestore" = "還原預設";
-"filenameRuleImageLabel" = "圖片";
-"filenameRuleVariablesLabel" = "變數";
-"filenameRuleVariableDate" = "日期";
-"filenameRuleVariableTime" = "時間";
-"filenameRuleVariableDaily" = "每日編號";
-"filenameRuleVariableRandom" = "隨機碼";
-"filenameRuleVariableSize" = "尺寸";
-"filenameRulePreview" = "%@";
-
-/* Upload — provider field labels */
-"uploadFieldBucket" = "Bucket";
-"uploadFieldBucketSpace" = "儲存空間";
-"uploadFieldRegion" = "區域";
-"uploadFieldRegionOptional" = "選填區域";
-"uploadFieldPathOptional" = "選填路徑";
-"uploadFieldCustomUrlOptional" = "選填自訂網址";
-"uploadFieldPublicDomain" = "公開網域";
-"uploadFieldEndpointArea" = "Endpoint 區域";
-"uploadFieldEndpointOptional" = "選填 Endpoint";
-"uploadFieldAccountId" = "帳號 ID";
-"uploadTestImageFailed" = "無法建立測試圖片";
-
-/* Upload — provider names */
-"providerTencentCOS" = "騰訊雲 COS";
-"providerQiniuKodo" = "七牛雲 Kodo";
-"providerAliyunOSS" = "阿里雲 OSS";
-
-/* Upload — errors */
-"uploadErrMissingConfig" = "尚未設定上傳服務";
-"uploadErrInvalidConfigPrefix" = "設定無效";
-"uploadErrNetworkPrefix" = "網路錯誤";
-"uploadErrServerPrefix" = "上傳失敗 代碼 %d";
-"uploadErrUnexpectedResponsePrefix" = "非預期的回應";
-"missingField" = "缺少 %@";
-
-/* Upload — test/validation pill */
-"uploadStatusUntested" = "尚未測試";
-"uploadStatusTesting" = "測試中";
-"uploadStatusValid" = "可用";
-"uploadStatusInvalid" = "設定無效";
-
-/* Upload — log lines */
-"uploadLogStartingTest" = "開始測試上傳";
-"uploadLogConfigSaved" = "設定已儲存";
-"uploadLogMissingFields" = "缺少必要欄位：%@";
-"uploadLogTestSucceeded" = "測試上傳成功：%@";
-"uploadLogTestFailed" = "測試上傳失敗：%@";
-"uploadLogProviderDisabled" = "上傳服務已停用";
-"uploadLogConfigCleared" = "設定已清除";
-
 /* Permissions — status label */
 "permissionGranted" = "已允許";
 "permissionNotGranted" = "未允許";
 
-/* OCR & Translation — result panel */
+/* OCR result panel */
 "ocrTextHeader" = "辨識文字";
 "ocrRecognizing" = "辨識中";
 "ocrNoText" = "找不到文字";
 "ocrCopy" = "複製";
 "ocrCopied" = "已複製";
-"ocrRetry" = "重試";
-"ocrTranslating" = "翻譯中";
-"ocrTranslateFailedPrefix" = "失敗";
-"ocrNoProviderTitle" = "尚未設定翻譯服務";
-"ocrNoProviderHint" = "請到「設定 → 翻譯」加入 AI 服務";
-"ocrOpenSettings" = "開啟設定";
 "ocrLineCopied" = "已複製此行";
 "copyImageTextCopying" = "正在複製";
 "copyImageTextCopied" = "已複製圖中文字";
 "copyImageTextNoText" = "找不到文字";
-"screenshotTranslationHeader" = "翻譯";
-"screenshotTranslationLanguageButton" = "翻譯為 %@";
-"dictionaryEntryLabel" = "詞條";
-"dictionaryPhoneticLabel" = "發音";
-"dictionaryPartOfSpeechLabel" = "詞性";
-"dictionaryDefinitionLabel" = "釋義";
-"dictionaryExampleLabel" = "例句";
-"dictionaryDifficultyLabel" = "難度";
-"dictionaryNoProviderTitle" = "尚未設定支援字典模式的 AI 服務";
-"dictionaryNoProviderHint" = "請啟用 OpenAI、DeepSeek、Claude，或自訂 OpenAI 相容服務";
-
-/* Translation — settings tab */
-"translationDictionaryModeTitle" = "字典模式";
-"translationDictionaryModeSubtitle" = "截圖翻譯辨識到單一英文單字時，顯示發音、釋義、例句、翻譯與 CEFR 程度";
-"translationTargetLanguage" = "目標語言";
-"translationTargetHint" = "辨識出的文字會翻譯成此語言；若原文已是此語言，則改譯為英文";
-"translationProvidersHeader" = "AI 翻譯服務";
-"translationApiKey" = "API Key";
-"translationApiKeyOptional" = "選填 API Key";
-"translationModel" = "模型";
-"translationEndpoint" = "Endpoint";
-"translationEndpointOptional" = "選填 Endpoint";
-"translationSave" = "儲存";
-"translationClear" = "清除";
-"translationConfigSaved" = "設定已儲存";
-"translationTesting" = "測試中";
-"translationTestPassed" = "測試通過";
-"translationTestFailed" = "測試失敗";
-"translationTestFailedTitle" = "已儲存，但連線測試失敗";
-"translationProviderCustom" = "自訂 OpenAI 相容";
-"translationMoveUp" = "上移";
-"translationMoveDown" = "下移";
-
-/* Translation — target language names */
-"transLangChinese" = "中文";
-"transLangEnglish" = "英文";
-"transLangJapanese" = "日文";
-"transLangKorean" = "韓文";
-
-/* Translation — errors */
-"translationErrMissingAPIKey" = "尚未設定 API Key";
-"translationErrBadEndpoint" = "Endpoint 無效";
-"translationErrBadResponse" = "回應格式不正確";
 
 /* Image Merge */
 "imageMergeShortcutHeader" = "合併圖片";

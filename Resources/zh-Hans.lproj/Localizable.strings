@@ -9,7 +9,7 @@
 "pinAcrossSpaces" = "贴图跨桌面显示";
 "pinAcrossSpacesHint" = "开启后新贴图会出现在所有桌面与全屏空间";
 "historyCacheToggleLabel" = "缓存图片";
-"historyCacheToggleHint" = "保存最近图片、取色和上传结果，便于从菜单栏快速再次复制";
+"historyCacheToggleHint" = "保存最近图片和取色结果，便于从菜单栏快速再次复制";
 "historyCacheLabel" = "历史缓存数量";
 "historyCacheHint" = "保留最近的图片数量，便于快速再次复制";
 "historyPanelDisplayModeLabel" = "历史面板显示方式";
@@ -60,8 +60,6 @@
 "textRecognitionShortcutDefaultDisplay" = "未设置";
 "copyImageTextShortcutHeader" = "复制图中文字";
 "copyImageTextShortcutDefaultDisplay" = "未设置";
-"screenshotTranslationShortcutHeader" = "截图翻译";
-"screenshotTranslationShortcutDefaultDisplay" = "未设置";
 "fullScreenScreenshotShortcutHeader" = "截全屏";
 "fullScreenScreenshotShortcutDefaultDisplay" = "未设置";
 "colorPickerShortcutHeader" = "取色器";
@@ -98,7 +96,6 @@
 "shortcutConflictClipboardImageEdit" = "该按键组合已被编辑剪贴板图片快捷键占用，请换一个";
 "shortcutConflictTextRecognition" = "该按键组合已被文字识别快捷键占用，请换一个";
 "shortcutConflictCopyImageText" = "该按键组合已被复制图中文字快捷键占用，请换一个";
-"shortcutConflictScreenshotTranslation" = "该按键组合已被截图翻译快捷键占用，请换一个";
 "shortcutConflictFullScreenScreenshot" = "该按键组合已被截全屏快捷键占用，请换一个";
 "shortcutConflictColorPicker" = "该按键组合已被取色器快捷键占用，请换一个";
 
@@ -113,7 +110,6 @@
 "historyClear" = "清除历史";
 "historyCleared" = "历史已清除";
 "historyShowInFinder" = "在 Finder 中显示";
-"historyCloudMarkdownTip" = "按住 ⌘ 并点击预览图，可直接复制 Markdown 格式图片链接";
 "historyPanelMenu" = "历史面板";
 "historyPanelFilterAll" = "全部";
 "historyPanelFilterScreenshots" = "截图";
@@ -129,7 +125,6 @@
 "dragToScreenshotAspect" = "点击窗口或拖动以截图 · 框选 %@（R）";
 "dragToTextRecognition" = "点击窗口或框选区域识别文字";
 "dragToCopyImageText" = "点击窗口或框选区域复制文字";
-"dragToScreenshotTranslation" = "点击窗口或框选区域翻译内容";
 
 /* Toast */
 "copiedToClipboard" = "已添加到剪贴板";
@@ -177,7 +172,6 @@
 "tipScrollCapture" = "长截图";
 "tipBeautify" = "美化";
 "tipOCR" = "文字识别";
-"tipScreenshotTranslate" = "截图翻译";
 "tipSave" = "保存到文件";
 "tipPin" = "钉在屏幕";
 "tipCancel" = "取消";
@@ -220,16 +214,12 @@
 "settingsTabGeneral" = "通用";
 "settingsTabShortcuts" = "快捷键";
 "settingsTabPermissions" = "权限";
-"settingsTabUpload" = "图床";
 "settingsTabAbout" = "关于";
-"settingsTabTranslation" = "翻译";
 "settingsTabToolbar" = "工具栏";
 "settingsNoPermissionsNeeded" = "无需权限";
 "settingsSubtitleGeneral" = "剪贴板、文件、历史和保存行为";
 "settingsSubtitleShortcuts" = "无需全局监听的编辑器快捷键";
 "settingsSubtitleToolbar" = "排列编辑器中显示的标注工具";
-"settingsSubtitleUpload" = "配置图片托管服务";
-"settingsSubtitleTranslation" = "配置 OCR 和翻译服务";
 "settingsSubtitleAbout" = "产品身份和项目链接";
 "settingsQuit" = "退出应用";
 
@@ -310,145 +300,20 @@
 "quitConfirmAction" = "退出";
 "quitConfirmCancel" = "取消";
 
-/* Upload — toolbar / toast / progress */
-"tipUpload" = "上传到图床";
-"uploadingTitle" = "上传中";
-"uploadCopied" = "已复制图床链接";
-"uploadCopiedMarkdown" = "已复制 Markdown 链接";
-"uploadNoProvider" = "请先在设置中配置图床";
-"uploadFailedPrefix" = "上传失败";
-
-/* Upload — settings tab */
-"uploadDefaultProvider" = "默认图床";
-"uploadDefaultNone" = "未启用";
-"uploadSetDefaultButton" = "设为默认";
-"uploadSaveButton" = "保存";
-"uploadClearButton" = "清空";
-"uploadSavedToast" = "已保存配置";
-"uploadCurrentDefault" = "当前默认";
-"uploadMarkdownToggleTitle" = "复制为 Markdown 链接";
-"uploadMarkdownToggleSubtitle" = "开启后上传完成自动复制 Markdown 图片格式（![](链接)），关闭则复制普通 URL。在历史记录中，按住 ⌘ 点击已上传到图床的图片复制 Markdown 链接，直接点击则复制普通链接";
-"filenameRuleTitle" = "文件名规则";
-"filenameRulePresetLabel" = "预设";
-"filenameRulePresetCustom" = "自定义";
-"filenameRulePresetShort" = "简短";
-"filenameRulePresetCompact" = "超短链接";
-"filenameRulePresetUnique" = "防重名";
-"filenameRulePresetCounter" = "每日计数";
-"filenameRulePresetRestore" = "恢复默认";
-"filenameRuleImageLabel" = "图片";
-"filenameRuleVariablesLabel" = "变量";
-"filenameRuleVariableDate" = "日期";
-"filenameRuleVariableTime" = "时间";
-"filenameRuleVariableDaily" = "每日编号";
-"filenameRuleVariableRandom" = "随机码";
-"filenameRuleVariableSize" = "尺寸";
-"filenameRulePreview" = "%@";
-
-/* Upload — provider field labels */
-"uploadFieldBucket" = "存储桶";
-"uploadFieldBucketSpace" = "存储空间";
-"uploadFieldRegion" = "地域";
-"uploadFieldRegionOptional" = "可选区域";
-"uploadFieldPathOptional" = "可选路径";
-"uploadFieldCustomUrlOptional" = "可选自定义域名";
-"uploadFieldPublicDomain" = "外链域名";
-"uploadFieldEndpointArea" = "Endpoint 地域";
-"uploadFieldEndpointOptional" = "可选 Endpoint";
-"uploadFieldAccountId" = "账户 ID";
-"uploadTestImageFailed" = "无法生成测试图片";
-
-/* Upload — provider names */
-"providerTencentCOS" = "腾讯云 COS";
-"providerQiniuKodo" = "七牛云 Kodo";
-"providerAliyunOSS" = "阿里云 OSS";
-
-/* Upload — errors */
-"uploadErrMissingConfig" = "未配置上传图床";
-"uploadErrInvalidConfigPrefix" = "配置无效";
-"uploadErrNetworkPrefix" = "网络错误";
-"uploadErrServerPrefix" = "上传失败 代码 %d";
-"uploadErrUnexpectedResponsePrefix" = "响应异常";
-"missingField" = "缺少 %@";
-
-/* Upload — test/validation pill */
-"uploadStatusUntested" = "未测试";
-"uploadStatusTesting" = "测试中";
-"uploadStatusValid" = "已生效";
-"uploadStatusInvalid" = "无效的配置";
-
-/* Upload — log lines */
-"uploadLogStartingTest" = "开始测试上传";
-"uploadLogConfigSaved" = "已保存配置";
-"uploadLogMissingFields" = "缺少必填字段: %@";
-"uploadLogTestSucceeded" = "测试上传成功: %@";
-"uploadLogTestFailed" = "测试上传失败: %@";
-"uploadLogProviderDisabled" = "已停用该图床";
-"uploadLogConfigCleared" = "已清空配置";
-
 /* Permissions — status label */
 "permissionGranted" = "已授权";
 "permissionNotGranted" = "未授权";
 
-/* OCR & Translation — result panel */
+/* OCR result panel */
 "ocrTextHeader" = "识别文本";
 "ocrRecognizing" = "正在识别";
 "ocrNoText" = "未识别到文字";
 "ocrCopy" = "复制";
 "ocrCopied" = "已复制";
-"ocrRetry" = "重试";
-"ocrTranslating" = "翻译中";
-"ocrTranslateFailedPrefix" = "翻译失败";
-"ocrNoProviderTitle" = "未配置翻译服务";
-"ocrNoProviderHint" = "前往「设置 → 翻译」添加 AI 服务";
-"ocrOpenSettings" = "打开设置";
 "ocrLineCopied" = "已复制该行";
 "copyImageTextCopying" = "正在复制";
 "copyImageTextCopied" = "已复制图中文字";
 "copyImageTextNoText" = "未识别到文字";
-"screenshotTranslationHeader" = "翻译结果";
-"screenshotTranslationLanguageButton" = "翻译为 %@";
-"dictionaryEntryLabel" = "词条";
-"dictionaryPhoneticLabel" = "音标";
-"dictionaryPartOfSpeechLabel" = "词性";
-"dictionaryDefinitionLabel" = "释义";
-"dictionaryExampleLabel" = "例句";
-"dictionaryDifficultyLabel" = "难度";
-"dictionaryNoProviderTitle" = "未配置支持词典模式的 AI 服务";
-"dictionaryNoProviderHint" = "请启用 OpenAI、DeepSeek、Claude 或自定义 OpenAI 兼容服务";
-
-/* Translation — settings tab */
-"translationDictionaryModeTitle" = "词典模式";
-"translationDictionaryModeSubtitle" = "开启后，截图翻译识别出单个英文单词时，显示词条、音标、释义、例句和难度";
-"translationTargetLanguage" = "目标语言";
-"translationTargetHint" = "识别文本将翻译成该语言；若原文已是该语言则译为英文";
-"translationProvidersHeader" = "AI 翻译服务";
-"translationApiKey" = "API Key";
-"translationApiKeyOptional" = "可选 API Key";
-"translationModel" = "模型";
-"translationEndpoint" = "接口地址";
-"translationEndpointOptional" = "可选接口地址";
-"translationSave" = "保存";
-"translationClear" = "清空";
-"translationConfigSaved" = "已保存配置";
-"translationTesting" = "测试中";
-"translationTestPassed" = "测试通过";
-"translationTestFailed" = "测试失败";
-"translationTestFailedTitle" = "已保存，但连接测试失败";
-"translationProviderCustom" = "自定义 OpenAI 兼容";
-"translationMoveUp" = "上移";
-"translationMoveDown" = "下移";
-
-/* Translation — target language names */
-"transLangChinese" = "中文";
-"transLangEnglish" = "英文";
-"transLangJapanese" = "日文";
-"transLangKorean" = "韩文";
-
-/* Translation — errors */
-"translationErrMissingAPIKey" = "未配置 API Key";
-"translationErrBadEndpoint" = "接口地址无效";
-"translationErrBadResponse" = "响应格式异常";
 
 /* Image Merge */
 "imageMergeShortcutHeader" = "合并图片";

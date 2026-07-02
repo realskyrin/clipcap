@@ -261,9 +261,7 @@ class EditWindowController {
         tv.onInsertImage = { [weak self] in self?.showInsertImageMenu() }
         tv.onQRCode = { [weak self] in self?.performQRCodeRecognition() }
         tv.onOCR = { [weak self] in self?.performOCR() }
-        tv.onScreenshotTranslate = { [weak self] in self?.performScreenshotTranslation() }
         tv.onSave = { [weak self] in self?.save() }
-        tv.onUpload = { [weak self] in self?.upload() }
         tv.onPin = { [weak self] in self?.pin() }
         tv.onClose = { [weak self] in self?.close() }
         tv.onConfirm = { [weak self] in self?.confirm() }
@@ -1390,15 +1388,6 @@ class EditWindowController {
         }
     }
 
-    private func upload() {
-        canvasView?.commitActiveTextEditing()
-        guard let finalImage = currentCompositeImage() else { return }
-        let targetScreen = screen
-        tearDown()
-        onComplete(nil)
-        UploadManager.shared.upload(image: finalImage, on: targetScreen)
-    }
-
     /// Text-recognition action: exits the selection/editor, then opens the OCR
     /// panel anchored to the original selection. Uses the raw capture (no
     /// annotations) so recognition is not polluted by drawn marks.
@@ -1529,19 +1518,6 @@ class EditWindowController {
             width: max(0, maxX - minX) * bounds.width,
             height: max(0, maxY - minY) * bounds.height
         )
-    }
-
-    /// Screenshot-translation action: uses OCR internally, but only shows the
-    /// translated result to the user.
-    private func performScreenshotTranslation() {
-        canvasView?.commitActiveTextEditing()
-        let baseImage = canvasView?.resolveBaseImageForEditing() ?? currentCompositeImage()
-        let anchorRect = selectionRect
-        let targetScreen = screen
-        tearDown()
-        onComplete(nil)
-        guard let baseImage else { return }
-        OCRTranslatePanel.presentScreenshotTranslation(image: baseImage, anchorRect: anchorRect, screen: targetScreen)
     }
 
     private func pin() {
@@ -2325,9 +2301,7 @@ class ToolbarView: NSView {
     var onInsertImage: (() -> Void)?
     var onQRCode: (() -> Void)?
     var onOCR: (() -> Void)?
-    var onScreenshotTranslate: (() -> Void)?
     var onSave: (() -> Void)?
-    var onUpload: (() -> Void)?
     var onPin: (() -> Void)?
     var onClose: (() -> Void)?
     var onConfirm: (() -> Void)?
@@ -2436,12 +2410,6 @@ class ToolbarView: NSView {
         btn.target = self
         btn.action = #selector(buttonTapped(_:))
         btn.tag = index
-        // Upload is unavailable until an upload provider is configured.
-        if id == .upload {
-            let hasProvider = Defaults.hasUsableUploadProvider
-            btn.isEnabled = hasProvider
-            btn.alphaValue = hasProvider ? 1.0 : 0.35
-        }
         return btn
     }
 
@@ -2468,9 +2436,7 @@ class ToolbarView: NSView {
         case .beautify:      onBeautify?()
         case .qrCode:        onQRCode?()
         case .ocr:           onOCR?()
-        case .screenshotTranslate: onScreenshotTranslate?()
         case .save:          onSave?()
-        case .upload:        onUpload?()
         case .pin:           onPin?()
         case .close:         onClose?()
         case .confirm:       onConfirm?()

@@ -1,6 +1,4 @@
 import AppKit
-import CoreText
-import NaturalLanguage
 import VisionKit
 
 // MARK: - Shared helpers
@@ -739,492 +737,17 @@ private final class PanelPinButton: NSButton {
     }
 }
 
-private final class TranslationHeaderView: NSView {
-    var onToggle: (() -> Void)?
+// MARK: - OCR panel
 
-    override init(frame frameRect: NSRect) {
-        super.init(frame: frameRect)
-        translatesAutoresizingMaskIntoConstraints = false
-    }
-
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-
-    override func mouseDown(with event: NSEvent) {
-        onToggle?()
-    }
-}
-
-private final class AnimatedGradientTextLabel: NSView {
-    private static let animationKey = "gradientTextSweep"
-    private static let restingLocations = [0.0, 0.24, 0.48, 0.72, 1.0].map { NSNumber(value: $0) }
-    private static let sweepStartLocations = [-0.42, -0.18, 0.04, 0.24, 0.46].map { NSNumber(value: $0) }
-    private static let sweepEndLocations = [0.54, 0.76, 0.96, 1.18, 1.42].map { NSNumber(value: $0) }
-
-    private let gradientLayer = CAGradientLayer()
-    private let textMaskLayer = CATextLayer()
-
-    var stringValue = "" {
-        didSet { updateTextLayer() }
-    }
-
-    var font = NSFont.systemFont(ofSize: 12, weight: .semibold) {
-        didSet { updateTextLayer() }
-    }
-
-    override init(frame frameRect: NSRect) {
-        super.init(frame: frameRect)
-        translatesAutoresizingMaskIntoConstraints = false
-        setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-
-        wantsLayer = true
-        let hostLayer = CALayer()
-        hostLayer.masksToBounds = false
-        layer = hostLayer
-
-        gradientLayer.startPoint = CGPoint(x: 0, y: 0.5)
-        gradientLayer.endPoint = CGPoint(x: 1, y: 0.5)
-        gradientLayer.colors = [
-            NSColor.white.withAlphaComponent(0.82).cgColor,
-            NSColor.systemCyan.withAlphaComponent(0.98).cgColor,
-            NSColor.systemPink.withAlphaComponent(0.98).cgColor,
-            NSColor.systemYellow.withAlphaComponent(0.96).cgColor,
-            NSColor.white.withAlphaComponent(0.86).cgColor,
-        ]
-        gradientLayer.locations = Self.restingLocations
-        gradientLayer.mask = textMaskLayer
-        hostLayer.addSublayer(gradientLayer)
-
-        textMaskLayer.alignmentMode = .left
-        textMaskLayer.truncationMode = .end
-        textMaskLayer.isWrapped = false
-        textMaskLayer.foregroundColor = NSColor.white.cgColor
-        updateTextLayer()
-    }
-
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-
-    override var intrinsicContentSize: NSSize {
-        let size = (stringValue as NSString).size(withAttributes: [.font: font])
-        let textHeight = ceil(font.ascender - font.descender + font.leading)
-        return NSSize(width: max(1, ceil(size.width)), height: max(16, textHeight + 2))
-    }
-
-    override func layout() {
-        super.layout()
-        gradientLayer.frame = bounds
-        textMaskLayer.frame = bounds
-        updateLayerScale()
-    }
-
-    override func viewDidMoveToWindow() {
-        super.viewDidMoveToWindow()
-        updateLayerScale()
-        if window == nil {
-            stopAnimating()
-        }
-    }
-
-    func startAnimating() {
-        guard gradientLayer.animation(forKey: Self.animationKey) == nil else { return }
-
-        gradientLayer.locations = Self.sweepStartLocations
-
-        let animation = CABasicAnimation(keyPath: "locations")
-        animation.fromValue = Self.sweepStartLocations
-        animation.toValue = Self.sweepEndLocations
-        animation.duration = 1.8
-        animation.repeatCount = .infinity
-        animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-        gradientLayer.add(animation, forKey: Self.animationKey)
-    }
-
-    func stopAnimating() {
-        gradientLayer.removeAnimation(forKey: Self.animationKey)
-        gradientLayer.locations = Self.restingLocations
-    }
-
-    private func updateTextLayer() {
-        textMaskLayer.string = stringValue
-        textMaskLayer.font = CTFontCreateWithName(font.fontName as CFString, font.pointSize, nil)
-        textMaskLayer.fontSize = font.pointSize
-        invalidateIntrinsicContentSize()
-        needsLayout = true
-    }
-
-    private func updateLayerScale() {
-        let scale = window?.backingScaleFactor ?? NSScreen.main?.backingScaleFactor ?? 2
-        gradientLayer.contentsScale = scale
-        textMaskLayer.contentsScale = scale
-    }
-}
-
-private final class TranslationResultView: NSView {
-    let kind: TranslationProviderKind
-
-    private let loadingStatusLabel = AnimatedGradientTextLabel()
-    private let errorStatusLabel = NSTextField(labelWithString: "")
-    private let contentStack = NSStackView()
-    private let textContainer = NSView()
-    private let textView: PanelTextView
-    private let textHeightConstraint: NSLayoutConstraint
-    private let retryButton: NSButton
-    private let copyButton: NSButton
-    private let chevronView = NSImageView()
-    private var retrySleeve: ClosureSleeve?
-    private var isCollapsed = false
-    private let onLayoutChange: () -> Void
-
-    init(
-        kind: TranslationProviderKind,
-        onRetry: @escaping () -> Void,
-        onLayoutChange: @escaping () -> Void
-    ) {
-        self.kind = kind
-        self.onLayoutChange = onLayoutChange
-
-        let retryButton = makeSmallButton(L10n.ocrRetry, action: #selector(ClosureSleeve.invoke))
-        let copyButton = NSButton(title: "", target: nil, action: #selector(copyTapped))
-        let textView = PanelTextView()
-        self.retryButton = retryButton
-        self.copyButton = copyButton
-        self.textView = textView
-        self.textHeightConstraint = textContainer.heightAnchor.constraint(equalToConstant: 34)
-
-        super.init(frame: .zero)
-
-        translatesAutoresizingMaskIntoConstraints = false
-
-        let stack = NSStackView()
-        stack.orientation = .vertical
-        stack.alignment = .leading
-        stack.spacing = 8
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(stack)
-        pin(stack, to: self, inset: 0)
-
-        let title = makeLabel(kind.displayName, size: 12, weight: .semibold, alpha: 0.9)
-        retryButton.isHidden = true
-        retrySleeve = ClosureSleeve(onRetry)
-        retryButton.target = retrySleeve
-
-        copyButton.target = self
-        copyButton.isEnabled = false
-        configureIconButton(copyButton, symbolName: "doc.on.doc", label: L10n.ocrCopy)
-
-        chevronView.translatesAutoresizingMaskIntoConstraints = false
-        chevronView.symbolConfiguration = NSImage.SymbolConfiguration(pointSize: 12, weight: .semibold)
-        chevronView.contentTintColor = NSColor.white.withAlphaComponent(0.72)
-        updateChevron()
-
-        let header = TranslationHeaderView()
-        header.onToggle = { [weak self] in self?.toggleCollapsed() }
-        let headerStack = NSStackView(views: [title, flexSpacer(), retryButton, chevronView])
-        headerStack.orientation = .horizontal
-        headerStack.alignment = .centerY
-        headerStack.spacing = 8
-        headerStack.translatesAutoresizingMaskIntoConstraints = false
-        header.addSubview(headerStack)
-        pin(headerStack, to: header, inset: 0)
-        stack.addArrangedSubview(header)
-        header.widthAnchor.constraint(equalTo: stack.widthAnchor).isActive = true
-        header.heightAnchor.constraint(greaterThanOrEqualToConstant: 24).isActive = true
-        chevronView.widthAnchor.constraint(equalToConstant: 14).isActive = true
-        chevronView.heightAnchor.constraint(equalToConstant: 14).isActive = true
-
-        contentStack.orientation = .vertical
-        contentStack.alignment = .leading
-        contentStack.spacing = 7
-        contentStack.translatesAutoresizingMaskIntoConstraints = false
-        stack.addArrangedSubview(contentStack)
-        contentStack.widthAnchor.constraint(equalTo: stack.widthAnchor).isActive = true
-
-        loadingStatusLabel.font = NSFont.systemFont(ofSize: 11, weight: .medium)
-        loadingStatusLabel.stringValue = L10n.ocrTranslating
-        contentStack.addArrangedSubview(loadingStatusLabel)
-        loadingStatusLabel.widthAnchor.constraint(equalTo: contentStack.widthAnchor).isActive = true
-
-        errorStatusLabel.font = NSFont.systemFont(ofSize: 11, weight: .medium)
-        errorStatusLabel.textColor = NSColor.systemOrange
-        errorStatusLabel.lineBreakMode = .byWordWrapping
-        errorStatusLabel.usesSingleLineMode = false
-        errorStatusLabel.translatesAutoresizingMaskIntoConstraints = false
-        contentStack.addArrangedSubview(errorStatusLabel)
-        errorStatusLabel.widthAnchor.constraint(equalTo: contentStack.widthAnchor).isActive = true
-
-        textContainer.translatesAutoresizingMaskIntoConstraints = false
-        contentStack.addArrangedSubview(textContainer)
-        textContainer.widthAnchor.constraint(equalTo: contentStack.widthAnchor).isActive = true
-        let minimumTextWidth = textContainer.widthAnchor.constraint(greaterThanOrEqualToConstant: 220)
-        minimumTextWidth.priority = .defaultHigh
-        minimumTextWidth.isActive = true
-        textHeightConstraint.isActive = true
-
-        configureExpandingTextView(textView)
-        textContainer.addSubview(textView)
-        NSLayoutConstraint.activate([
-            textView.topAnchor.constraint(equalTo: textContainer.topAnchor),
-            textView.leadingAnchor.constraint(equalTo: textContainer.leadingAnchor),
-            textView.trailingAnchor.constraint(equalTo: textContainer.trailingAnchor),
-            textView.bottomAnchor.constraint(equalTo: textContainer.bottomAnchor),
-        ])
-
-        let footer = NSStackView(views: [copyButton, flexSpacer()])
-        footer.orientation = .horizontal
-        footer.alignment = .centerY
-        footer.spacing = 8
-        footer.translatesAutoresizingMaskIntoConstraints = false
-        contentStack.addArrangedSubview(footer)
-        footer.widthAnchor.constraint(equalTo: contentStack.widthAnchor).isActive = true
-
-        reset()
-    }
-
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-
-    func reset() {
-        textView.string = ""
-        loadingStatusLabel.stringValue = L10n.ocrTranslating
-        loadingStatusLabel.isHidden = false
-        loadingStatusLabel.startAnimating()
-        errorStatusLabel.stringValue = ""
-        errorStatusLabel.isHidden = true
-        retryButton.isHidden = true
-        copyButton.isEnabled = false
-        updateTextHeight()
-    }
-
-    func append(_ delta: String) {
-        textView.string += delta
-        updateTextHeight()
-        onLayoutChange()
-    }
-
-    func markSuccess() {
-        loadingStatusLabel.stopAnimating()
-        loadingStatusLabel.isHidden = true
-        errorStatusLabel.stringValue = ""
-        errorStatusLabel.isHidden = true
-        copyButton.isEnabled = !textView.string.isEmpty
-        onLayoutChange()
-    }
-
-    func markFailure(_ error: Error) {
-        loadingStatusLabel.stopAnimating()
-        loadingStatusLabel.isHidden = true
-        errorStatusLabel.stringValue = "\(L10n.ocrTranslateFailedPrefix) \(error.localizedDescription)"
-        errorStatusLabel.isHidden = false
-        retryButton.isHidden = false
-        copyButton.isEnabled = !textView.string.isEmpty
-        onLayoutChange()
-    }
-
-    @objc private func copyTapped() {
-        guard !textView.string.isEmpty else { return }
-        NSPasteboard.general.clearContents()
-        NSPasteboard.general.setString(textView.string, forType: .string)
-        flashIconButton(copyButton, symbolName: "checkmark", restoreSymbolName: "doc.on.doc")
-    }
-
-    private func toggleCollapsed() {
-        isCollapsed.toggle()
-        contentStack.isHidden = isCollapsed
-        updateChevron()
-        onLayoutChange()
-    }
-
-    private func updateChevron() {
-        let symbolName = isCollapsed ? "chevron.right" : "chevron.down"
-        chevronView.image = NSImage(systemSymbolName: symbolName, accessibilityDescription: nil)
-    }
-
-    private func updateTextHeight() {
-        guard !textContainer.isHidden,
-              let layoutContainer = textView.textContainer,
-              let layoutManager = textView.layoutManager else { return }
-        textContainer.layoutSubtreeIfNeeded()
-        let width = max(self.textContainer.bounds.width, 220)
-        layoutContainer.containerSize = NSSize(
-            width: max(width - textView.textContainerInset.width * 2, 1),
-            height: CGFloat.greatestFiniteMagnitude
-        )
-        layoutManager.ensureLayout(for: layoutContainer)
-        let used = layoutManager.usedRect(for: layoutContainer).height
-        textHeightConstraint.constant = max(34, ceil(used + textView.textContainerInset.height * 2))
-    }
-}
-
-private final class DictionaryResultView: NSView {
-    private let fieldsStack = NSStackView()
-    private let errorRow = NSStackView()
-    private let errorLabel = NSTextField(labelWithString: "")
-    private let retryButton: NSButton
-    private var retrySleeve: ClosureSleeve?
-    private var speechSleeves: [ClosureSleeve] = []
-    private let onLayoutChange: () -> Void
-
-    init(
-        onRetry: @escaping () -> Void,
-        onLayoutChange: @escaping () -> Void
-    ) {
-        self.retryButton = makeSmallButton(L10n.ocrRetry, action: #selector(ClosureSleeve.invoke))
-        self.onLayoutChange = onLayoutChange
-        super.init(frame: .zero)
-
-        translatesAutoresizingMaskIntoConstraints = false
-
-        let stack = NSStackView()
-        stack.orientation = .vertical
-        stack.alignment = .leading
-        stack.spacing = 14
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(stack)
-        pin(stack, to: self, inset: 0)
-
-        retrySleeve = ClosureSleeve(onRetry)
-        retryButton.target = retrySleeve
-
-        errorLabel.font = NSFont.systemFont(ofSize: 11, weight: .medium)
-        errorLabel.textColor = NSColor.systemOrange
-        errorLabel.lineBreakMode = .byWordWrapping
-        errorLabel.usesSingleLineMode = false
-        errorLabel.translatesAutoresizingMaskIntoConstraints = false
-
-        errorRow.orientation = .horizontal
-        errorRow.alignment = .centerY
-        errorRow.spacing = 8
-        errorRow.translatesAutoresizingMaskIntoConstraints = false
-        errorRow.addArrangedSubview(errorLabel)
-        errorRow.addArrangedSubview(flexSpacer())
-        errorRow.addArrangedSubview(retryButton)
-        errorRow.isHidden = true
-        stack.addArrangedSubview(errorRow)
-        errorRow.widthAnchor.constraint(equalTo: stack.widthAnchor).isActive = true
-        errorLabel.widthAnchor.constraint(lessThanOrEqualTo: errorRow.widthAnchor, constant: -86).isActive = true
-
-        fieldsStack.orientation = .vertical
-        fieldsStack.alignment = .leading
-        fieldsStack.spacing = 15
-        fieldsStack.translatesAutoresizingMaskIntoConstraints = false
-        stack.addArrangedSubview(fieldsStack)
-        fieldsStack.widthAnchor.constraint(equalTo: stack.widthAnchor).isActive = true
-        fieldsStack.isHidden = true
-    }
-
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-
-    func reset() {
-        errorRow.isHidden = true
-        fieldsStack.isHidden = true
-        clearFields()
-        onLayoutChange()
-    }
-
-    func show(_ entry: DictionaryEntry) {
-        errorRow.isHidden = true
-        rebuildFields(entry)
-        fieldsStack.isHidden = false
-        onLayoutChange()
-    }
-
-    func markFailure(_ error: Error) {
-        errorLabel.stringValue = "\(L10n.ocrTranslateFailedPrefix) \(error.localizedDescription)"
-        errorRow.isHidden = false
-        fieldsStack.isHidden = true
-        onLayoutChange()
-    }
-
-    private func rebuildFields(_ entry: DictionaryEntry) {
-        clearFields()
-        addSection(title: L10n.dictionaryEntryLabel, value: entry.word, speakText: entry.word)
-        addSection(title: L10n.dictionaryPhoneticLabel, value: entry.phonetic)
-        addSection(title: L10n.dictionaryPartOfSpeechLabel, value: entry.partOfSpeech)
-        addSection(title: L10n.dictionaryDefinitionLabel, value: entry.definition)
-        addSection(
-            title: L10n.dictionaryExampleLabel,
-            value: [entry.example, entry.exampleTranslation]
-                .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-                .filter { !$0.isEmpty }
-                .joined(separator: "\n"),
-            speakText: entry.example
-        )
-        addSection(title: L10n.dictionaryDifficultyLabel, value: entry.difficulty)
-    }
-
-    private func clearFields() {
-        speechSleeves.removeAll()
-        for view in fieldsStack.arrangedSubviews {
-            fieldsStack.removeArrangedSubview(view)
-            view.removeFromSuperview()
-        }
-    }
-
-    private func addSection(title: String, value: String, speakText: String? = nil) {
-        let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmed.isEmpty else { return }
-
-        let section = NSStackView()
-        section.orientation = .vertical
-        section.alignment = .leading
-        section.spacing = 6
-        section.translatesAutoresizingMaskIntoConstraints = false
-
-        let titleLabel = makeLabel(title, size: 12, weight: .semibold, alpha: 0.58)
-        let headerViews: [NSView]
-        _ = speakText
-        headerViews = [titleLabel]
-
-        let header = NSStackView(views: headerViews)
-        header.orientation = .horizontal
-        header.alignment = .centerY
-        header.spacing = 6
-        header.translatesAutoresizingMaskIntoConstraints = false
-        section.addArrangedSubview(header)
-
-        let valueLabel = NSTextField(wrappingLabelWithString: trimmed)
-        valueLabel.font = NSFont.systemFont(ofSize: 15)
-        valueLabel.textColor = NSColor.white.withAlphaComponent(0.93)
-        valueLabel.maximumNumberOfLines = 0
-        valueLabel.isSelectable = true
-        valueLabel.translatesAutoresizingMaskIntoConstraints = false
-        valueLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        section.addArrangedSubview(valueLabel)
-        valueLabel.widthAnchor.constraint(equalTo: section.widthAnchor).isActive = true
-
-        fieldsStack.addArrangedSubview(section)
-        section.widthAnchor.constraint(equalTo: fieldsStack.widthAnchor).isActive = true
-    }
-
-    private func speak(_ text: String) {
-        _ = text
-    }
-}
-
-// MARK: - OCR / screenshot translation panel
-
-/// Floating dialog shown after text recognition or screenshot translation.
+/// Floating dialog shown after text recognition.
 /// It stays centered near the top of the target screen.
 final class OCRTranslatePanel: NSPanel {
-
-    private enum Mode {
-        case textRecognition
-        case screenshotTranslation
-
-        var diagnosticName: String {
-            switch self {
-            case .textRecognition: return "text-recognition"
-            case .screenshotTranslation: return "screenshot-translation"
-            }
-        }
-    }
-
     private static var current: OCRTranslatePanel?
     private static let topMargin: CGFloat = 24
 
     private let screenshot: NSImage
     private let anchorScreen: NSScreen
     private let panelWidth: CGFloat
-    private let mode: Mode
     private let diagnosticID = String(UUID().uuidString.prefix(8))
 
     private let padding: CGFloat = 14
@@ -1237,31 +760,15 @@ final class OCRTranslatePanel: NSPanel {
 
     private var ocrTextView: PanelTextView?
     private var ocrCopyButton: NSButton?
-    private var translationTitleLabel: NSTextField?
-    private var dictionaryTitleLabel: AnimatedGradientTextLabel?
-    private var translationPlaceholderLabel: NSTextField?
-    private var translationResultsStack: NSStackView?
-    private var translationResultViews: [TranslationProviderKind: TranslationResultView] = [:]
-    private var dictionaryResultView: DictionaryResultView?
-    private var translationLanguageButton: NSButton?
     private var pinButton: PanelPinButton?
 
     private var keyMonitor: Any?
     private var outsideClickLocalMonitor: Any?
     private var outsideClickGlobalMonitor: Any?
-    private var languagePopover: NSPopover?
     private var isLiveTextMenuOpen = false
-    private var translationTasks: [TranslationProviderKind: Task<Void, Never>] = [:]
-    private var dictionaryTask: Task<Void, Never>?
-    private var translationRunID = UUID()
-    private var translationAttemptIDs: [TranslationProviderKind: UUID] = [:]
-    private var dictionaryRunID = UUID()
-    private var currentDictionaryWord: String?
-    private var currentDictionaryProvider: TranslationProviderKind?
     private var recognizedLines: [RecognizedTextLine] = []
     private var recognizedText = ""
     private var ocrReady = false
-    private var selectedTarget = TranslationLanguage.appDefault
     private var isPinned = false {
         didSet { pinButton?.setPinned(isPinned) }
     }
@@ -1273,28 +780,23 @@ final class OCRTranslatePanel: NSPanel {
     }
 
     static func presentTextRecognition(image: NSImage, anchorRect: NSRect, screen: NSScreen) {
-        present(image: image, anchorRect: anchorRect, screen: screen, mode: .textRecognition)
+        show(image: image, anchorRect: anchorRect, screen: screen)
     }
 
-    static func presentScreenshotTranslation(image: NSImage, anchorRect: NSRect, screen: NSScreen) {
-        present(image: image, anchorRect: anchorRect, screen: screen, mode: .screenshotTranslation)
-    }
-
-    private static func present(image: NSImage, anchorRect: NSRect, screen: NSScreen, mode: Mode) {
+    private static func show(image: NSImage, anchorRect: NSRect, screen: NSScreen) {
         current?.dismiss()
-        let panel = OCRTranslatePanel(image: image, anchorRect: anchorRect, screen: screen, mode: mode)
+        let panel = OCRTranslatePanel(image: image, anchorRect: anchorRect, screen: screen)
         current = panel
         panel.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
         panel.runOCR()
     }
 
-    private init(image: NSImage, anchorRect: NSRect, screen: NSScreen, mode: Mode) {
+    private init(image: NSImage, anchorRect: NSRect, screen: NSScreen) {
         let panelWidth = min(max(anchorRect.width, 360), 500)
         self.screenshot = image
         self.anchorScreen = screen
         self.panelWidth = panelWidth
-        self.mode = mode
         let initialHeight: CGFloat = 320
         let initialFrame = Self.topCenteredFrame(
             width: panelWidth,
@@ -1399,12 +901,7 @@ final class OCRTranslatePanel: NSPanel {
         ])
 
         buildScreenshotCard()
-        switch mode {
-        case .textRecognition:
-            buildOCRCard()
-        case .screenshotTranslation:
-            buildTranslationCard()
-        }
+        buildOCRCard()
     }
 
     private func addStackRow(_ view: NSView) {
@@ -1414,7 +911,7 @@ final class OCRTranslatePanel: NSPanel {
 
     private func buildScreenshotCard() {
         previewView = OCRPreviewView(image: screenshot)
-        previewView.showsLineBoxes = mode == .textRecognition
+        previewView.showsLineBoxes = true
         previewView.onSelectText = { [weak self] text, lineIndices, isFinal in
             self?.selectOCRText(text, lineIndices: lineIndices, copyWhenFinal: isFinal)
         }
@@ -1460,74 +957,7 @@ final class OCRTranslatePanel: NSPanel {
         addStackRow(card)
     }
 
-    private func buildTranslationCard() {
-        let card = makeCard()
-        let inner = makeCardStack()
-        card.addSubview(inner)
-        pin(inner, to: card, inset: 12)
-
-        let title = makeLabel(L10n.screenshotTranslationHeader, size: 12, weight: .semibold, alpha: 0.92)
-        title.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        translationTitleLabel = title
-
-        let dictionaryTitle = AnimatedGradientTextLabel()
-        dictionaryTitle.font = NSFont.systemFont(ofSize: 12, weight: .semibold)
-        dictionaryTitle.isHidden = true
-        dictionaryTitleLabel = dictionaryTitle
-
-        let languageButton = makeSmallButton(languageButtonTitle(), action: #selector(languageTapped))
-        languageButton.target = self
-        translationLanguageButton = languageButton
-
-        let header = NSStackView(views: [title, dictionaryTitle, flexSpacer(), languageButton])
-        header.orientation = .horizontal
-        header.alignment = .centerY
-        header.spacing = 8
-        header.detachesHiddenViews = true
-        header.translatesAutoresizingMaskIntoConstraints = false
-        inner.addArrangedSubview(header)
-        header.widthAnchor.constraint(equalTo: inner.widthAnchor).isActive = true
-
-        let status = makeLabel(L10n.ocrRecognizing, size: 11, weight: .medium, alpha: 0.52)
-        status.lineBreakMode = .byWordWrapping
-        status.usesSingleLineMode = false
-        translationPlaceholderLabel = status
-        inner.addArrangedSubview(status)
-        status.widthAnchor.constraint(equalTo: inner.widthAnchor).isActive = true
-
-        let resultsStack = NSStackView()
-        resultsStack.orientation = .vertical
-        resultsStack.alignment = .leading
-        resultsStack.spacing = 12
-        resultsStack.translatesAutoresizingMaskIntoConstraints = false
-        translationResultsStack = resultsStack
-        inner.addArrangedSubview(resultsStack)
-        resultsStack.widthAnchor.constraint(equalTo: inner.widthAnchor).isActive = true
-
-        addStackRow(card)
-    }
-
-    private func makeNoProviderCard() -> NSView {
-        let card = makeCard()
-        let inner = makeCardStack()
-        card.addSubview(inner)
-        pin(inner, to: card, inset: 12)
-
-        let title = makeLabel(L10n.ocrNoProviderTitle, size: 12, weight: .semibold, alpha: 0.9)
-        let hint = makeLabel(L10n.ocrNoProviderHint, size: 11, weight: .regular, alpha: 0.55)
-        hint.lineBreakMode = .byWordWrapping
-        hint.usesSingleLineMode = false
-        hint.preferredMaxLayoutWidth = panelWidth - padding * 2 - 24
-        let button = makeSmallButton(L10n.ocrOpenSettings, action: #selector(openSettingsTapped))
-        button.target = self
-
-        inner.addArrangedSubview(title)
-        inner.addArrangedSubview(hint)
-        inner.addArrangedSubview(button)
-        return card
-    }
-
-    // MARK: OCR / Translation
+    // MARK: OCR
 
     private func runOCR() {
         logOCR("panel-run-task-created")
@@ -1535,41 +965,31 @@ final class OCRTranslatePanel: NSPanel {
             let started = CFAbsoluteTimeGetCurrent()
             var usedLiveText = false
             self.logOCR("panel-run-begin")
-            switch self.mode {
-            case .textRecognition:
-                async let liveTextAnalysis = OCRService.analyzeText(
-                    image: self.screenshot,
-                    diagnosticID: self.diagnosticID,
-                    source: "panel.text-recognition.live-text"
-                )
-                async let recognizedLines = OCRService.recognizeLines(
-                    image: self.screenshot,
-                    diagnosticID: self.diagnosticID,
-                    source: "panel.text-recognition.vision-lines"
-                )
-                let lines = await recognizedLines
-                self.logOCR(
-                    "panel-vision-lines-awaited",
-                    metadata: Self.lineMetadata(lines)
-                )
-                if let analysis = await liveTextAnalysis {
-                    let transcript = analysis.transcript.trimmingCharacters(in: .whitespacesAndNewlines)
-                    if !transcript.isEmpty {
-                        usedLiveText = true
-                        self.applyOCRResult(text: transcript, lines: lines, liveTextAnalysis: analysis)
-                    } else {
-                        self.applyOCRResult(text: Self.text(from: lines), lines: lines, liveTextAnalysis: nil)
-                    }
+            async let liveTextAnalysis = OCRService.analyzeText(
+                image: self.screenshot,
+                diagnosticID: self.diagnosticID,
+                source: "panel.text-recognition.live-text"
+            )
+            async let recognizedLines = OCRService.recognizeLines(
+                image: self.screenshot,
+                diagnosticID: self.diagnosticID,
+                source: "panel.text-recognition.vision-lines"
+            )
+            let lines = await recognizedLines
+            self.logOCR(
+                "panel-vision-lines-awaited",
+                metadata: Self.lineMetadata(lines)
+            )
+            if let analysis = await liveTextAnalysis {
+                let transcript = analysis.transcript.trimmingCharacters(in: .whitespacesAndNewlines)
+                if !transcript.isEmpty {
+                    usedLiveText = true
+                    self.applyOCRResult(text: transcript, lines: lines, liveTextAnalysis: analysis)
                 } else {
                     self.applyOCRResult(text: Self.text(from: lines), lines: lines, liveTextAnalysis: nil)
                 }
-            case .screenshotTranslation:
-                let text = await OCRService.recognize(
-                    image: self.screenshot,
-                    diagnosticID: self.diagnosticID,
-                    source: "panel.screenshot-translation"
-                )
-                self.applyOCRResult(text: text, lines: [], liveTextAnalysis: nil)
+            } else {
+                self.applyOCRResult(text: Self.text(from: lines), lines: lines, liveTextAnalysis: nil)
             }
 
             self.ocrReady = true
@@ -1582,12 +1002,7 @@ final class OCRTranslatePanel: NSPanel {
                 ].merging(Self.lineMetadata(self.recognizedLines)) { _, new in new }
             )
 
-            switch self.mode {
-            case .textRecognition:
-                self.finishTextRecognition()
-            case .screenshotTranslation:
-                self.finishOCRAndStartTranslation()
-            }
+            self.finishTextRecognition()
             self.refreshHeight()
         }
     }
@@ -1648,7 +1063,6 @@ final class OCRTranslatePanel: NSPanel {
     }
 
     private func selectOCRText(_ text: String, lineIndices: [Int], copyWhenFinal: Bool) {
-        guard mode == .textRecognition else { return }
         let selectedIndices = contiguousOCRLineIndices(covering: lineIndices)
         guard let textView = ocrTextView, !selectedIndices.isEmpty else {
             ocrTextView?.selectedRange = NSRange(location: 0, length: 0)
@@ -1706,289 +1120,6 @@ final class OCRTranslatePanel: NSPanel {
         return NSRange(location: location, length: length)
     }
 
-    private func finishOCRAndStartTranslation() {
-        updateLanguageButtonTitle()
-        guard !recognizedText.isEmpty else {
-            logOCR("panel-finish-translation-empty-ocr")
-            cancelTranslationTasks()
-            clearTranslationResults()
-            showStandardTranslationHeader()
-            setTranslationPlaceholder(L10n.ocrNoText)
-            return
-        }
-        if Defaults.translationDictionaryMode, let word = Self.singleDictionaryWord(in: recognizedText) {
-            logOCR(
-                "panel-finish-translation-dictionary-branch",
-                metadata: ["wordLength": word.count]
-            )
-            runDictionary(word: word)
-            return
-        }
-        logOCR(
-            "panel-finish-translation-normal-branch",
-            metadata: [
-                "recognizedCharacters": recognizedText.count,
-                "target": selectedTarget.rawValue,
-            ]
-        )
-        runTranslation(target: selectedTarget)
-    }
-
-    private func runTranslation(target: TranslationLanguage) {
-        logOCR(
-            "panel-run-translation",
-            metadata: [
-                "recognizedCharacters": recognizedText.count,
-                "target": target.rawValue,
-            ]
-        )
-        cancelTranslationTasks()
-        clearTranslationResults()
-        translationRunID = UUID()
-        showStandardTranslationHeader()
-        currentDictionaryWord = nil
-        currentDictionaryProvider = nil
-
-        let kinds = TranslationConfigStore.usableKinds()
-        guard !kinds.isEmpty else {
-            logOCR("panel-run-translation-no-provider")
-            setTranslationPlaceholder("\(L10n.ocrNoProviderTitle)\n\(L10n.ocrNoProviderHint)")
-            refreshHeight()
-            return
-        }
-        logOCR(
-            "panel-run-translation-providers",
-            metadata: ["providers": kinds.map(\.rawValue).joined(separator: ",")]
-        )
-
-        translationPlaceholderLabel?.isHidden = true
-        let text = recognizedText
-
-        for kind in kinds {
-            let resultView = TranslationResultView(
-                kind: kind,
-                onRetry: { [weak self] in self?.retryTranslation(kind: kind) },
-                onLayoutChange: { [weak self] in self?.refreshHeight() }
-            )
-            translationResultViews[kind] = resultView
-            translationResultsStack?.addArrangedSubview(resultView)
-            if let stack = translationResultsStack {
-                resultView.widthAnchor.constraint(equalTo: stack.widthAnchor).isActive = true
-            }
-            startTranslation(kind: kind, target: target, text: text)
-        }
-        refreshHeight()
-    }
-
-    private func runDictionary(word: String) {
-        logOCR(
-            "panel-run-dictionary",
-            metadata: ["wordLength": word.count]
-        )
-        cancelTranslationTasks()
-        clearTranslationResults()
-        translationRunID = UUID()
-        dictionaryRunID = UUID()
-        currentDictionaryWord = word
-        currentDictionaryProvider = nil
-        showDictionaryHeader(word: word)
-
-        guard let kind = TranslationConfigStore.usableKinds().first(where: { !$0.isDirectTranslationAPI }) else {
-            logOCR("panel-run-dictionary-no-provider")
-            resetDictionaryTitle()
-            setTranslationPlaceholder("\(L10n.dictionaryNoProviderTitle)\n\(L10n.dictionaryNoProviderHint)")
-            refreshHeight()
-            return
-        }
-
-        currentDictionaryProvider = kind
-        translationPlaceholderLabel?.isHidden = true
-        logOCR("panel-run-dictionary-provider", metadata: ["provider": kind.rawValue])
-
-        let resultView = DictionaryResultView(
-            onRetry: { [weak self] in self?.retryDictionary() },
-            onLayoutChange: { [weak self] in self?.refreshHeight() }
-        )
-        dictionaryResultView = resultView
-        translationResultsStack?.addArrangedSubview(resultView)
-        if let stack = translationResultsStack {
-            resultView.widthAnchor.constraint(equalTo: stack.widthAnchor).isActive = true
-        }
-        startDictionary(kind: kind, word: word, target: selectedTarget)
-        refreshHeight()
-    }
-
-    private func startTranslation(kind: TranslationProviderKind, target: TranslationLanguage, text: String) {
-        translationTasks[kind]?.cancel()
-        translationResultViews[kind]?.reset()
-
-        let config = TranslationConfigStore.load(kind)
-        let runID = translationRunID
-        let attemptID = UUID()
-        translationAttemptIDs[kind] = attemptID
-        translationTasks[kind] = Task { @MainActor [weak self] in
-            do {
-                let stream = TranslationService.stream(
-                    text: text, target: target, kind: kind, config: config
-                )
-                for try await delta in stream {
-                    guard let self, self.isCurrentTranslation(kind: kind, runID: runID, attemptID: attemptID) else {
-                        return
-                    }
-                    self.translationResultViews[kind]?.append(delta)
-                }
-                guard let self, self.isCurrentTranslation(kind: kind, runID: runID, attemptID: attemptID) else {
-                    return
-                }
-                self.translationResultViews[kind]?.markSuccess()
-                self.refreshHeight()
-            } catch is CancellationError {
-                // Panel closed, retried, or target language changed.
-            } catch {
-                guard let self, self.isCurrentTranslation(kind: kind, runID: runID, attemptID: attemptID) else {
-                    return
-                }
-                self.translationResultViews[kind]?.markFailure(error)
-                self.refreshHeight()
-            }
-        }
-    }
-
-    private func startDictionary(kind: TranslationProviderKind, word: String, target: TranslationLanguage) {
-        dictionaryTask?.cancel()
-        dictionaryResultView?.reset()
-        setDictionaryLoadingTitle(word: word)
-
-        let config = TranslationConfigStore.load(kind)
-        let runID = UUID()
-        dictionaryRunID = runID
-        dictionaryTask = Task { @MainActor [weak self] in
-            do {
-                let entry = try await TranslationService.fetchDictionaryEntry(
-                    word: word,
-                    target: target,
-                    kind: kind,
-                    config: config
-                )
-                guard let self, self.dictionaryRunID == runID else { return }
-                self.resetDictionaryTitle()
-                self.dictionaryResultView?.show(entry)
-                self.refreshHeight()
-            } catch is CancellationError {
-                // Panel closed or lookup retried.
-            } catch {
-                guard let self, self.dictionaryRunID == runID else { return }
-                self.resetDictionaryTitle()
-                self.dictionaryResultView?.markFailure(error)
-                self.refreshHeight()
-            }
-        }
-    }
-
-    private func isCurrentTranslation(
-        kind: TranslationProviderKind,
-        runID: UUID,
-        attemptID: UUID
-    ) -> Bool {
-        translationRunID == runID && translationAttemptIDs[kind] == attemptID
-    }
-
-    private func retryTranslation(kind: TranslationProviderKind) {
-        guard !recognizedText.isEmpty else { return }
-        startTranslation(kind: kind, target: selectedTarget, text: recognizedText)
-    }
-
-    private func retryDictionary() {
-        guard let word = currentDictionaryWord, let kind = currentDictionaryProvider else { return }
-        startDictionary(kind: kind, word: word, target: selectedTarget)
-    }
-
-    private func cancelTranslationTasks() {
-        for task in translationTasks.values { task.cancel() }
-        translationTasks.removeAll()
-        translationAttemptIDs.removeAll()
-        dictionaryTask?.cancel()
-        dictionaryTask = nil
-        dictionaryRunID = UUID()
-        resetDictionaryTitle()
-    }
-
-    private func clearTranslationResults() {
-        translationResultViews.removeAll()
-        dictionaryResultView = nil
-        guard let stack = translationResultsStack else { return }
-        for view in stack.arrangedSubviews {
-            stack.removeArrangedSubview(view)
-            view.removeFromSuperview()
-        }
-    }
-
-    private func setTranslationPlaceholder(_ text: String) {
-        translationPlaceholderLabel?.stringValue = text
-        translationPlaceholderLabel?.textColor = NSColor.white.withAlphaComponent(0.52)
-        translationPlaceholderLabel?.isHidden = false
-    }
-
-    private func showStandardTranslationHeader() {
-        dictionaryTitleLabel?.stopAnimating()
-        dictionaryTitleLabel?.isHidden = true
-        translationTitleLabel?.isHidden = false
-        translationTitleLabel?.stringValue = L10n.screenshotTranslationHeader
-        translationLanguageButton?.isHidden = false
-        updateLanguageButtonTitle()
-    }
-
-    private func showDictionaryHeader(word: String) {
-        setDictionaryTitle(word, isAnimating: true)
-        translationLanguageButton?.isHidden = true
-    }
-
-    private func setDictionaryLoadingTitle(word: String) {
-        currentDictionaryWord = word
-        setDictionaryTitle(word, isAnimating: true)
-    }
-
-    private func resetDictionaryTitle() {
-        if let word = currentDictionaryWord {
-            setDictionaryTitle(word, isAnimating: false)
-        }
-    }
-
-    private func setDictionaryTitle(_ word: String, isAnimating: Bool) {
-        translationTitleLabel?.isHidden = true
-        dictionaryTitleLabel?.isHidden = false
-        dictionaryTitleLabel?.stringValue = word
-        if isAnimating {
-            dictionaryTitleLabel?.startAnimating()
-        } else {
-            dictionaryTitleLabel?.stopAnimating()
-        }
-    }
-
-    private static func singleDictionaryWord(in text: String) -> String? {
-        var trimSet = CharacterSet.whitespacesAndNewlines
-        trimSet.formUnion(.punctuationCharacters)
-        trimSet.formUnion(.symbols)
-        let word = text.trimmingCharacters(in: trimSet)
-        guard !word.isEmpty,
-              word.rangeOfCharacter(from: .whitespacesAndNewlines) == nil else {
-            return nil
-        }
-
-        var containsLetter = false
-        for scalar in word.unicodeScalars {
-            switch scalar.value {
-            case 65...90, 97...122:
-                containsLetter = true
-            case 39, 45, 8217:
-                continue
-            default:
-                return nil
-            }
-        }
-        return containsLetter ? word : nil
-    }
-
     // MARK: Sizing
 
     /// Resizes the panel to fit its content while keeping it centered near the
@@ -2024,7 +1155,7 @@ final class OCRTranslatePanel: NSPanel {
     private func logOCR(_ event: String, metadata: [String: Any] = [:]) {
         var fields = metadata
         fields["session"] = diagnosticID
-        fields["mode"] = mode.diagnosticName
+        fields["mode"] = "text-recognition"
         fields["imageSize"] = Self.diagnosticSize(screenshot.size)
         fields["screenName"] = anchorScreen.localizedName
         DiagnosticLog.log("ocr", event, metadata: fields)
@@ -2056,11 +1187,6 @@ final class OCRTranslatePanel: NSPanel {
         isPinned.toggle()
     }
 
-    @objc private func openSettingsTapped() {
-        SettingsWindowController.shared.showAsSettings()
-        dismiss()
-    }
-
     @objc private func copyOCRTapped() {
         guard ocrReady else { return }
         if previewView.copySelectedOverlayTextToClipboard() {
@@ -2081,127 +1207,6 @@ final class OCRTranslatePanel: NSPanel {
         if let button = ocrCopyButton {
             flashButton(button, to: L10n.ocrCopied, restore: L10n.ocrCopy)
         }
-    }
-
-    @objc private func languageTapped() {
-        languagePopover?.performClose(nil)
-
-        let popover = NSPopover()
-        popover.behavior = .transient
-        popover.animates = true
-        let controller = NSViewController()
-        controller.view = LanguagePickerView(selected: selectedTarget) { [weak self, weak popover] language in
-            popover?.performClose(nil)
-            self?.selectTargetLanguage(language)
-        }
-        popover.contentViewController = controller
-        languagePopover = popover
-
-        if let button = translationLanguageButton {
-            popover.show(relativeTo: button.bounds, of: button, preferredEdge: .maxY)
-        }
-    }
-
-    private func selectTargetLanguage(_ language: TranslationLanguage) {
-        guard selectedTarget != language else { return }
-        selectedTarget = language
-        updateLanguageButtonTitle()
-        if !recognizedText.isEmpty {
-            runTranslation(target: language)
-        }
-    }
-
-    private func updateLanguageButtonTitle() {
-        translationLanguageButton?.title = languageButtonTitle()
-    }
-
-    private func languageButtonTitle() -> String {
-        L10n.screenshotTranslationLanguageButton(displayTargetLanguage.localizedDisplayName)
-    }
-
-    private var displayTargetLanguage: TranslationLanguage {
-        guard selectedTarget != .english,
-              Self.detectedLanguage(in: recognizedText) == selectedTarget else {
-            return selectedTarget
-        }
-        return .english
-    }
-
-    private static func detectedLanguage(in text: String) -> TranslationLanguage? {
-        let sample = text
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-            .prefix(1_000)
-        guard sample.count >= 2 else { return nil }
-
-        if let scriptLanguage = scriptDominantLanguage(in: String(sample)) {
-            return scriptLanguage
-        }
-
-        let recognizer = NLLanguageRecognizer()
-        recognizer.processString(String(sample))
-        if let hypothesis = recognizer.languageHypotheses(withMaximum: 1)
-            .max(by: { $0.value < $1.value }),
-           hypothesis.value >= 0.45,
-           let language = translationLanguage(for: hypothesis.key.rawValue) {
-            return language
-        }
-
-        return nil
-    }
-
-    private static func translationLanguage(for identifier: String) -> TranslationLanguage? {
-        let normalized = identifier.lowercased()
-        if normalized.hasPrefix("zh") { return .chinese }
-        switch normalized {
-        case "en": return .english
-        case "vi": return .vietnamese
-        case "hi": return .hindi
-        case "es": return .spanish
-        case "fr": return .french
-        case "ar": return .arabic
-        case "bn": return .bengali
-        case "pt": return .portuguese
-        case "ru": return .russian
-        case "ur": return .urdu
-        case "id": return .indonesian
-        case "de": return .german
-        case "ja": return .japanese
-        case "ko": return .korean
-        case "tr": return .turkish
-        default: return nil
-        }
-    }
-
-    private static func scriptDominantLanguage(in text: String) -> TranslationLanguage? {
-        var counts: [TranslationLanguage: Int] = [:]
-        var letterCount = 0
-
-        for scalar in text.unicodeScalars where CharacterSet.letters.contains(scalar) {
-            letterCount += 1
-            if scalar.isInRange(0x3040...0x30FF) {
-                counts[.japanese, default: 0] += 1
-            } else if scalar.isInRange(0xAC00...0xD7AF) || scalar.isInRange(0x1100...0x11FF) {
-                counts[.korean, default: 0] += 1
-            } else if scalar.isInRange(0x4E00...0x9FFF) || scalar.isInRange(0x3400...0x4DBF) {
-                counts[.chinese, default: 0] += 1
-            } else if scalar.isInRange(0x0400...0x04FF) {
-                counts[.russian, default: 0] += 1
-            } else if scalar.isInRange(0x0600...0x06FF) {
-                counts[.arabic, default: 0] += 1
-            } else if scalar.isInRange(0x0900...0x097F) {
-                counts[.hindi, default: 0] += 1
-            } else if scalar.isInRange(0x0980...0x09FF) {
-                counts[.bengali, default: 0] += 1
-            }
-        }
-
-        guard let dominant = counts.max(by: { $0.value < $1.value }),
-              dominant.value >= 2,
-              letterCount > 0,
-              Double(dominant.value) / Double(letterCount) >= 0.30 else {
-            return nil
-        }
-        return dominant.key
     }
 
     private func installEventMonitors() {
@@ -2252,8 +1257,7 @@ final class OCRTranslatePanel: NSPanel {
     }
 
     private func handleOCRImageKeyEquivalent(_ event: NSEvent) -> Bool {
-        guard mode == .textRecognition,
-              !(firstResponder is NSTextView),
+        guard !(firstResponder is NSTextView),
               event.modifierFlags.intersection(.deviceIndependentFlagsMask) == .command else {
             return false
         }
@@ -2279,10 +1283,6 @@ final class OCRTranslatePanel: NSPanel {
         if event.window === self || event.windowNumber == windowNumber {
             return true
         }
-        if let popoverWindow = languagePopover?.contentViewController?.view.window,
-           (event.window === popoverWindow || event.windowNumber == popoverWindow.windowNumber) {
-            return true
-        }
         return false
     }
 
@@ -2297,8 +1297,6 @@ final class OCRTranslatePanel: NSPanel {
             NSEvent.removeMonitor(outsideClickGlobalMonitor)
             self.outsideClickGlobalMonitor = nil
         }
-        cancelTranslationTasks()
-        languagePopover?.performClose(nil)
         isLiveTextMenuOpen = false
         orderOut(nil)
         if OCRTranslatePanel.current === self { OCRTranslatePanel.current = nil }
@@ -2332,12 +1330,6 @@ final class OCRTranslatePanel: NSPanel {
     }
 }
 
-private extension UnicodeScalar {
-    func isInRange(_ range: ClosedRange<UInt32>) -> Bool {
-        range.contains(value)
-    }
-}
-
 private extension Character {
     var isCJKLike: Bool {
         unicodeScalars.contains { scalar in
@@ -2353,62 +1345,6 @@ private extension Character {
             }
         }
     }
-}
-
-private final class LanguagePickerView: NSView {
-    private var sleeves: [ClosureSleeve] = []
-
-    init(selected: TranslationLanguage, onSelect: @escaping (TranslationLanguage) -> Void) {
-        super.init(frame: NSRect(x: 0, y: 0, width: 220, height: 1))
-        wantsLayer = true
-        layer?.backgroundColor = NSColor(calibratedRed: 0.12, green: 0.13, blue: 0.15, alpha: 1.0).cgColor
-
-        let stack = NSStackView()
-        stack.orientation = .vertical
-        stack.alignment = .leading
-        stack.spacing = 2
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(stack)
-
-        for language in TranslationLanguage.allCases {
-            let title = language == selected ? "✓ \(language.displayName)" : language.displayName
-            let button = NSButton(title: title, target: nil, action: nil)
-            button.bezelStyle = .inline
-            button.isBordered = false
-            button.alignment = .left
-            button.font = NSFont.systemFont(ofSize: 12, weight: language == selected ? .semibold : .regular)
-            button.contentTintColor = NSColor.white.withAlphaComponent(language == selected ? 0.95 : 0.78)
-            button.translatesAutoresizingMaskIntoConstraints = false
-            let sleeve = ClosureSleeve { onSelect(language) }
-            sleeves.append(sleeve)
-            button.target = sleeve
-            button.action = #selector(ClosureSleeve.invoke)
-            stack.addArrangedSubview(button)
-            button.widthAnchor.constraint(equalTo: stack.widthAnchor).isActive = true
-            button.heightAnchor.constraint(equalToConstant: 24).isActive = true
-        }
-
-        NSLayoutConstraint.activate([
-            stack.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            stack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            stack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-            stack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
-            widthAnchor.constraint(equalToConstant: 220),
-        ])
-
-        let height = CGFloat(TranslationLanguage.allCases.count) * 26 + 16
-        frame.size = NSSize(width: 220, height: height)
-    }
-
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-}
-
-private final class ClosureSleeve: NSObject {
-    private let closure: () -> Void
-    init(_ closure: @escaping () -> Void) {
-        self.closure = closure
-    }
-    @objc func invoke() { closure() }
 }
 
 // MARK: - Free-standing builders
@@ -2438,22 +1374,6 @@ func makeSmallButton(_ title: String, action: Selector) -> NSButton {
     return b
 }
 
-func configureIconButton(_ button: NSButton, symbolName: String, label: String) {
-    button.title = ""
-    button.image = NSImage(systemSymbolName: symbolName, accessibilityDescription: label)
-    button.imagePosition = .imageOnly
-    button.imageScaling = .scaleProportionallyDown
-    button.isBordered = false
-    button.bezelStyle = .regularSquare
-    button.controlSize = .small
-    button.contentTintColor = NSColor.white.withAlphaComponent(0.78)
-    button.toolTip = label
-    button.setAccessibilityLabel(label)
-    button.translatesAutoresizingMaskIntoConstraints = false
-    button.widthAnchor.constraint(equalToConstant: 24).isActive = true
-    button.heightAnchor.constraint(equalToConstant: 24).isActive = true
-}
-
 func pin(_ child: NSView, to parent: NSView, inset: CGFloat) {
     NSLayoutConstraint.activate([
         child.topAnchor.constraint(equalTo: parent.topAnchor, constant: inset),
@@ -2461,22 +1381,6 @@ func pin(_ child: NSView, to parent: NSView, inset: CGFloat) {
         child.trailingAnchor.constraint(equalTo: parent.trailingAnchor, constant: -inset),
         child.bottomAnchor.constraint(equalTo: parent.bottomAnchor, constant: -inset),
     ])
-}
-
-func configureExpandingTextView(_ textView: PanelTextView) {
-    textView.translatesAutoresizingMaskIntoConstraints = false
-    textView.isEditable = false
-    textView.isSelectable = true
-    textView.isRichText = false
-    textView.drawsBackground = false
-    textView.font = NSFont.systemFont(ofSize: 12)
-    textView.textColor = NSColor.white.withAlphaComponent(0.9)
-    textView.textContainerInset = NSSize(width: 6, height: 6)
-    textView.isVerticallyResizable = false
-    textView.isHorizontallyResizable = false
-    textView.textContainer?.widthTracksTextView = true
-    textView.textContainer?.heightTracksTextView = false
-    textView.textContainer?.containerSize = NSSize(width: 0, height: CGFloat.greatestFiniteMagnitude)
 }
 
 /// A bordered scroll view wrapping a `PanelTextView` of fixed height.
@@ -2517,14 +1421,5 @@ func flashButton(_ button: NSButton, to confirm: String, restore: String) {
     button.title = confirm
     DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) { [weak button] in
         button?.title = restore
-    }
-}
-
-func flashIconButton(_ button: NSButton, symbolName: String, restoreSymbolName: String) {
-    button.image = NSImage(systemSymbolName: symbolName, accessibilityDescription: L10n.ocrCopied)
-    button.contentTintColor = NSColor.systemGreen
-    DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) { [weak button] in
-        button?.image = NSImage(systemSymbolName: restoreSymbolName, accessibilityDescription: L10n.ocrCopy)
-        button?.contentTintColor = NSColor.white.withAlphaComponent(0.78)
     }
 }

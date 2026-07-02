@@ -9,7 +9,7 @@
 "pinAcrossSpaces" = "ピン画像をすべてのデスクトップに表示";
 "pinAcrossSpacesHint" = "オンにすると新しいピン画像がすべてのデスクトップとフルスクリーン操作スペースに表示されます";
 "historyCacheToggleLabel" = "画像をキャッシュ";
-"historyCacheToggleHint" = "最近の画像、取得した色、アップロード結果を保存し、メニューバーからすばやく再コピーできます";
+"historyCacheToggleHint" = "最近の画像と取得した色を保存し、メニューバーからすばやく再コピーできます";
 "historyCacheLabel" = "履歴キャッシュ数";
 "historyCacheHint" = "最近の画像を保持し、すばやく再コピーできます";
 "historyPanelDisplayModeLabel" = "履歴パネルの表示方式";
@@ -60,8 +60,6 @@
 "textRecognitionShortcutDefaultDisplay" = "未設定";
 "copyImageTextShortcutHeader" = "画像内テキストをコピー";
 "copyImageTextShortcutDefaultDisplay" = "未設定";
-"screenshotTranslationShortcutHeader" = "スクリーンショット翻訳";
-"screenshotTranslationShortcutDefaultDisplay" = "未設定";
 "fullScreenScreenshotShortcutHeader" = "フルスクリーンショット";
 "fullScreenScreenshotShortcutDefaultDisplay" = "未設定";
 "colorPickerShortcutHeader" = "カラーピッカー";
@@ -98,7 +96,6 @@
 "shortcutConflictClipboardImageEdit" = "このキーの組み合わせはクリップボード画像を編集のショートカットで既に使用されています。別の組み合わせを選んでください";
 "shortcutConflictTextRecognition" = "このキーの組み合わせは文字認識ショートカットで既に使用されています。別の組み合わせを選んでください";
 "shortcutConflictCopyImageText" = "このキーの組み合わせは画像内テキストをコピーのショートカットで既に使用されています。別の組み合わせを選んでください";
-"shortcutConflictScreenshotTranslation" = "このキーの組み合わせはスクリーンショット翻訳ショートカットで既に使用されています。別の組み合わせを選んでください";
 "shortcutConflictFullScreenScreenshot" = "このキーの組み合わせはフルスクリーンショットのショートカットで既に使用されています。別の組み合わせを選んでください";
 "shortcutConflictColorPicker" = "このキーの組み合わせはカラーピッカーのショートカットで既に使用されています。別の組み合わせを選んでください";
 
@@ -113,7 +110,6 @@
 "historyClear" = "履歴を消去";
 "historyCleared" = "履歴を消去しました";
 "historyShowInFinder" = "Finder に表示";
-"historyCloudMarkdownTip" = "⌘ を押しながらプレビュー画像をクリックすると、Markdown 形式の画像リンクをコピーできます";
 "historyPanelMenu" = "履歴パネル";
 "historyPanelFilterAll" = "すべて";
 "historyPanelFilterScreenshots" = "スクリーンショット";
@@ -129,7 +125,6 @@
 "dragToScreenshotAspect" = "ウィンドウをクリックまたはドラッグして撮影 · ドラッグ %@（R）";
 "dragToTextRecognition" = "ウィンドウをクリックまたは範囲選択して文字認識";
 "dragToCopyImageText" = "ウィンドウをクリックまたは範囲選択してテキストをコピー";
-"dragToScreenshotTranslation" = "ウィンドウをクリックまたは範囲選択して内容を翻訳";
 
 /* Toast */
 "copiedToClipboard" = "クリップボードにコピーしました";
@@ -177,7 +172,6 @@
 "tipScrollCapture" = "長いスクリーンショット";
 "tipBeautify" = "装飾";
 "tipOCR" = "文字認識";
-"tipScreenshotTranslate" = "スクリーンショット翻訳";
 "tipSave" = "ファイルへ保存";
 "tipPin" = "画面に固定";
 "tipCancel" = "キャンセル";
@@ -220,16 +214,12 @@
 "settingsTabGeneral" = "一般";
 "settingsTabShortcuts" = "ショートカット";
 "settingsTabPermissions" = "権限";
-"settingsTabUpload" = "画像ホスト";
 "settingsTabAbout" = "情報";
-"settingsTabTranslation" = "翻訳";
 "settingsTabToolbar" = "ツールバー";
 "settingsNoPermissionsNeeded" = "権限は不要";
 "settingsSubtitleGeneral" = "クリップボード、ファイル、履歴、保存動作";
 "settingsSubtitleShortcuts" = "グローバル監視を使わないエディターショートカット";
 "settingsSubtitleToolbar" = "エディターに表示する注釈ツールを並べ替え";
-"settingsSubtitleUpload" = "画像ホスティングサービスを設定";
-"settingsSubtitleTranslation" = "OCR と翻訳サービスを設定";
 "settingsSubtitleAbout" = "製品情報とプロジェクトリンク";
 "settingsQuit" = "アプリを終了";
 
@@ -310,145 +300,20 @@
 "quitConfirmAction" = "終了";
 "quitConfirmCancel" = "キャンセル";
 
-/* Upload — toolbar / toast / progress */
-"tipUpload" = "画像ホストにアップロード";
-"uploadingTitle" = "アップロード中";
-"uploadCopied" = "画像 URL をコピーしました";
-"uploadCopiedMarkdown" = "Markdown リンクをコピーしました";
-"uploadNoProvider" = "先に設定で画像ホストを構成してください";
-"uploadFailedPrefix" = "アップロードに失敗";
-
-/* Upload — settings tab */
-"uploadDefaultProvider" = "デフォルトの画像ホスト";
-"uploadDefaultNone" = "無効";
-"uploadSetDefaultButton" = "デフォルトに設定";
-"uploadSaveButton" = "保存";
-"uploadClearButton" = "クリア";
-"uploadSavedToast" = "設定を保存しました";
-"uploadCurrentDefault" = "現在のデフォルト";
-"uploadMarkdownToggleTitle" = "Markdown リンクとしてコピー";
-"uploadMarkdownToggleSubtitle" = "オンにすると、アップロード後に Markdown 画像タグ（![](url)）をコピーします。オフの場合は通常の URL をコピーします。履歴では、⌘ を押しながらアップロード済み画像をクリックすると Markdown リンクを、そのままクリックすると通常の URL をコピーします";
-"filenameRuleTitle" = "ファイル名ルール";
-"filenameRulePresetLabel" = "プリセット";
-"filenameRulePresetCustom" = "カスタム";
-"filenameRulePresetShort" = "短め";
-"filenameRulePresetCompact" = "短いリンク";
-"filenameRulePresetUnique" = "重複を避ける";
-"filenameRulePresetCounter" = "日次カウンター";
-"filenameRulePresetRestore" = "既定に戻す";
-"filenameRuleImageLabel" = "画像";
-"filenameRuleVariablesLabel" = "変数";
-"filenameRuleVariableDate" = "日付";
-"filenameRuleVariableTime" = "時刻";
-"filenameRuleVariableDaily" = "日次番号";
-"filenameRuleVariableRandom" = "ランダム";
-"filenameRuleVariableSize" = "サイズ";
-"filenameRulePreview" = "%@";
-
-/* Upload — provider field labels */
-"uploadFieldBucket" = "バケット";
-"uploadFieldBucketSpace" = "バケット";
-"uploadFieldRegion" = "リージョン";
-"uploadFieldRegionOptional" = "任意のリージョン";
-"uploadFieldPathOptional" = "任意のパス";
-"uploadFieldCustomUrlOptional" = "任意のカスタムドメイン";
-"uploadFieldPublicDomain" = "公開ドメイン";
-"uploadFieldEndpointArea" = "エンドポイント";
-"uploadFieldEndpointOptional" = "任意のエンドポイント";
-"uploadFieldAccountId" = "アカウント ID";
-"uploadTestImageFailed" = "テスト画像を生成できませんでした";
-
-/* Upload — provider names */
-"providerTencentCOS" = "Tencent COS";
-"providerQiniuKodo" = "Qiniu Kodo";
-"providerAliyunOSS" = "Aliyun OSS";
-
-/* Upload — errors */
-"uploadErrMissingConfig" = "アップロード先が設定されていません";
-"uploadErrInvalidConfigPrefix" = "設定が無効です";
-"uploadErrNetworkPrefix" = "ネットワークエラー";
-"uploadErrServerPrefix" = "アップロードに失敗 コード %d";
-"uploadErrUnexpectedResponsePrefix" = "予期しない応答";
-"missingField" = "%@ がありません";
-
-/* Upload — test/validation pill */
-"uploadStatusUntested" = "未テスト";
-"uploadStatusTesting" = "テスト中";
-"uploadStatusValid" = "有効";
-"uploadStatusInvalid" = "無効な設定";
-
-/* Upload — log lines */
-"uploadLogStartingTest" = "テストアップロードを開始";
-"uploadLogConfigSaved" = "設定を保存しました";
-"uploadLogMissingFields" = "必須項目が不足しています: %@";
-"uploadLogTestSucceeded" = "テストアップロード成功: %@";
-"uploadLogTestFailed" = "テストアップロード失敗: %@";
-"uploadLogProviderDisabled" = "この画像ホストを無効にしました";
-"uploadLogConfigCleared" = "設定をクリアしました";
-
 /* Permissions — status label */
 "permissionGranted" = "許可済み";
 "permissionNotGranted" = "未許可";
 
-/* OCR & Translation — result panel */
+/* OCR result panel */
 "ocrTextHeader" = "認識されたテキスト";
 "ocrRecognizing" = "認識中";
 "ocrNoText" = "テキストが見つかりません";
 "ocrCopy" = "コピー";
 "ocrCopied" = "コピーしました";
-"ocrRetry" = "再試行";
-"ocrTranslating" = "翻訳中";
-"ocrTranslateFailedPrefix" = "失敗";
-"ocrNoProviderTitle" = "翻訳サービスが設定されていません";
-"ocrNoProviderHint" = "設定 → 翻訳 で AI サービスを追加してください";
-"ocrOpenSettings" = "設定を開く";
 "ocrLineCopied" = "行をコピーしました";
 "copyImageTextCopying" = "コピー中";
 "copyImageTextCopied" = "画像内テキストをコピーしました";
 "copyImageTextNoText" = "テキストが見つかりません";
-"screenshotTranslationHeader" = "翻訳";
-"screenshotTranslationLanguageButton" = "%@へ";
-"dictionaryEntryLabel" = "見出し語";
-"dictionaryPhoneticLabel" = "発音記号";
-"dictionaryPartOfSpeechLabel" = "品詞";
-"dictionaryDefinitionLabel" = "意味";
-"dictionaryExampleLabel" = "例文";
-"dictionaryDifficultyLabel" = "難易度";
-"dictionaryNoProviderTitle" = "辞書モード対応の AI サービスが設定されていません";
-"dictionaryNoProviderHint" = "設定 → 翻訳で OpenAI、DeepSeek、Claude、または OpenAI 互換のカスタムサービスを有効にしてください";
-
-/* Translation — settings tab */
-"translationDictionaryModeTitle" = "辞書モード";
-"translationDictionaryModeSubtitle" = "スクリーンショット翻訳で英単語を 1 つだけ認識した場合、発音、意味、例文、翻訳、CEFR レベルを表示します";
-"translationTargetLanguage" = "翻訳先の言語";
-"translationTargetHint" = "認識されたテキストはこの言語に翻訳されます。すでにこの言語の場合は英語に翻訳されます";
-"translationProvidersHeader" = "AI 翻訳サービス";
-"translationApiKey" = "API キー";
-"translationApiKeyOptional" = "任意の API キー";
-"translationModel" = "モデル";
-"translationEndpoint" = "エンドポイント";
-"translationEndpointOptional" = "任意のエンドポイント";
-"translationSave" = "保存";
-"translationClear" = "クリア";
-"translationConfigSaved" = "設定を保存しました";
-"translationTesting" = "テスト中";
-"translationTestPassed" = "テスト成功";
-"translationTestFailed" = "テスト失敗";
-"translationTestFailedTitle" = "保存しましたが、接続テストに失敗しました";
-"translationProviderCustom" = "カスタム OpenAI 互換";
-"translationMoveUp" = "上へ移動";
-"translationMoveDown" = "下へ移動";
-
-/* Translation — target language names */
-"transLangChinese" = "中国語";
-"transLangEnglish" = "英語";
-"transLangJapanese" = "日本語";
-"transLangKorean" = "韓国語";
-
-/* Translation — errors */
-"translationErrMissingAPIKey" = "API キーが設定されていません";
-"translationErrBadEndpoint" = "エンドポイントが無効です";
-"translationErrBadResponse" = "予期しない応答";
 
 /* Image Merge */
 "imageMergeShortcutHeader" = "画像を結合";

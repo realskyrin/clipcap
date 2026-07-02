@@ -9,7 +9,7 @@
 "pinAcrossSpaces" = "Show Pins Across Desktops";
 "pinAcrossSpacesHint" = "New pinned images appear on every desktop and full-screen Space";
 "historyCacheToggleLabel" = "Cache Images";
-"historyCacheToggleHint" = "Store recent images, picked colors, and upload links for quick reuse from the menu bar";
+"historyCacheToggleHint" = "Store recent images and picked colors for quick reuse from the menu bar";
 "historyCacheLabel" = "History Cache Size";
 "historyCacheHint" = "Keep the most recent images for quick re-copy";
 "historyPanelDisplayModeLabel" = "History Panel Display";
@@ -60,8 +60,6 @@
 "textRecognitionShortcutDefaultDisplay" = "Not set";
 "copyImageTextShortcutHeader" = "Copy Image Text";
 "copyImageTextShortcutDefaultDisplay" = "Not set";
-"screenshotTranslationShortcutHeader" = "Image Translation";
-"screenshotTranslationShortcutDefaultDisplay" = "Not set";
 "fullScreenScreenshotShortcutHeader" = "Full Screen Image";
 "fullScreenScreenshotShortcutDefaultDisplay" = "Not set";
 "colorPickerShortcutHeader" = "Color Picker";
@@ -98,7 +96,6 @@
 "shortcutConflictClipboardImageEdit" = "This key combination is already used by the Edit Clipboard Image shortcut. Please choose a different one";
 "shortcutConflictTextRecognition" = "This key combination is already used by the Text Recognition shortcut. Please choose a different one";
 "shortcutConflictCopyImageText" = "This key combination is already used by the Copy Image Text shortcut. Please choose a different one";
-"shortcutConflictScreenshotTranslation" = "This key combination is already used by the Image Translation shortcut. Please choose a different one";
 "shortcutConflictFullScreenScreenshot" = "This key combination is already used by the Full Screen Image shortcut. Please choose a different one";
 "shortcutConflictColorPicker" = "This key combination is already used by the Color Picker shortcut. Please choose a different one";
 
@@ -113,7 +110,6 @@
 "historyClear" = "Clear History";
 "historyCleared" = "History cleared";
 "historyShowInFinder" = "Show in Finder";
-"historyCloudMarkdownTip" = "Hold ⌘ and click the preview image to copy a Markdown image link";
 "historyPanelMenu" = "History Panel";
 "historyPanelFilterAll" = "All";
 "historyPanelFilterScreenshots" = "Images";
@@ -129,7 +125,6 @@
 "dragToScreenshotAspect" = "Click window or drag to image · Drag selection %@ (R)";
 "dragToTextRecognition" = "Click window or select area to recognize text";
 "dragToCopyImageText" = "Click window or select area to copy text";
-"dragToScreenshotTranslation" = "Click window or select area to translate content";
 
 /* Toast */
 "copiedToClipboard" = "Copied to clipboard";
@@ -177,7 +172,6 @@
 "tipScrollCapture" = "Scroll Capture";
 "tipBeautify" = "Beautify";
 "tipOCR" = "Text Recognition";
-"tipScreenshotTranslate" = "Image Translation";
 "tipSave" = "Save to File";
 "tipPin" = "Pin to Screen";
 "tipCancel" = "Cancel";
@@ -220,16 +214,12 @@
 "settingsTabGeneral" = "General";
 "settingsTabShortcuts" = "Shortcuts";
 "settingsTabPermissions" = "Permissions";
-"settingsTabUpload" = "Upload";
 "settingsTabAbout" = "About";
-"settingsTabTranslation" = "Translation";
 "settingsTabToolbar" = "Toolbar";
 "settingsNoPermissionsNeeded" = "No permissions needed";
 "settingsSubtitleGeneral" = "Clipboard, files, history, and save behavior";
 "settingsSubtitleShortcuts" = "Local editor shortcuts without global monitoring";
 "settingsSubtitleToolbar" = "Arrange the annotation tools shown in the editor";
-"settingsSubtitleUpload" = "Configure image hosting providers";
-"settingsSubtitleTranslation" = "Configure OCR and translation providers";
 "settingsSubtitleAbout" = "Product identity and project links";
 "settingsQuit" = "Quit App";
 
@@ -310,145 +300,20 @@
 "quitConfirmAction" = "Quit";
 "quitConfirmCancel" = "Cancel";
 
-/* Upload — toolbar / toast / progress */
-"tipUpload" = "Upload to image host";
-"uploadingTitle" = "Uploading";
-"uploadCopied" = "Image URL copied";
-"uploadCopiedMarkdown" = "Markdown link copied";
-"uploadNoProvider" = "Configure an uploader in Settings first";
-"uploadFailedPrefix" = "Upload failed";
-
-/* Upload — settings tab */
-"uploadDefaultProvider" = "Default Uploader";
-"uploadDefaultNone" = "Disabled";
-"uploadSetDefaultButton" = "Set Default";
-"uploadSaveButton" = "Save";
-"uploadClearButton" = "Clear";
-"uploadSavedToast" = "Config saved";
-"uploadCurrentDefault" = "Current default";
-"uploadMarkdownToggleTitle" = "Copy as Markdown link";
-"uploadMarkdownToggleSubtitle" = "When on, copies a Markdown image tag (![](url)) after upload; when off, copies a plain URL. In History, ⌘-click an uploaded image to copy a Markdown link, or click it directly for a plain URL";
-"filenameRuleTitle" = "File name rules";
-"filenameRulePresetLabel" = "Preset";
-"filenameRulePresetCustom" = "Custom";
-"filenameRulePresetShort" = "Short";
-"filenameRulePresetCompact" = "Tiny link";
-"filenameRulePresetUnique" = "Avoid duplicates";
-"filenameRulePresetCounter" = "Daily counter";
-"filenameRulePresetRestore" = "Restore default";
-"filenameRuleImageLabel" = "Image";
-"filenameRuleVariablesLabel" = "Variables";
-"filenameRuleVariableDate" = "Date";
-"filenameRuleVariableTime" = "Time";
-"filenameRuleVariableDaily" = "Daily #";
-"filenameRuleVariableRandom" = "Random";
-"filenameRuleVariableSize" = "Size";
-"filenameRulePreview" = "%@";
-
-/* Upload — provider field labels */
-"uploadFieldBucket" = "Bucket";
-"uploadFieldBucketSpace" = "Bucket";
-"uploadFieldRegion" = "Region";
-"uploadFieldRegionOptional" = "Optional region";
-"uploadFieldPathOptional" = "Optional path";
-"uploadFieldCustomUrlOptional" = "Optional custom URL";
-"uploadFieldPublicDomain" = "Public Domain";
-"uploadFieldEndpointArea" = "Endpoint";
-"uploadFieldEndpointOptional" = "Optional endpoint";
-"uploadFieldAccountId" = "Account ID";
-"uploadTestImageFailed" = "Failed to build test image";
-
-/* Upload — provider names */
-"providerTencentCOS" = "Tencent COS";
-"providerQiniuKodo" = "Qiniu Kodo";
-"providerAliyunOSS" = "Aliyun OSS";
-
-/* Upload — errors */
-"uploadErrMissingConfig" = "No uploader configured";
-"uploadErrInvalidConfigPrefix" = "Invalid config";
-"uploadErrNetworkPrefix" = "Network error";
-"uploadErrServerPrefix" = "Upload failed code %d";
-"uploadErrUnexpectedResponsePrefix" = "Unexpected response";
-"missingField" = "Missing %@";
-
-/* Upload — test/validation pill */
-"uploadStatusUntested" = "Not tested";
-"uploadStatusTesting" = "Testing";
-"uploadStatusValid" = "Active";
-"uploadStatusInvalid" = "Invalid config";
-
-/* Upload — log lines */
-"uploadLogStartingTest" = "Starting test upload";
-"uploadLogConfigSaved" = "Config saved";
-"uploadLogMissingFields" = "Missing required fields: %@";
-"uploadLogTestSucceeded" = "Test upload succeeded: %@";
-"uploadLogTestFailed" = "Test upload failed: %@";
-"uploadLogProviderDisabled" = "Provider disabled";
-"uploadLogConfigCleared" = "Config cleared";
-
 /* Permissions — status label */
 "permissionGranted" = "Granted";
 "permissionNotGranted" = "Not granted";
 
-/* OCR & Translation — result panel */
+/* OCR result panel */
 "ocrTextHeader" = "Recognized Text";
 "ocrRecognizing" = "Recognizing";
 "ocrNoText" = "No text found";
 "ocrCopy" = "Copy";
 "ocrCopied" = "Copied";
-"ocrRetry" = "Retry";
-"ocrTranslating" = "Translating";
-"ocrTranslateFailedPrefix" = "Failed";
-"ocrNoProviderTitle" = "No translation service configured";
-"ocrNoProviderHint" = "Add an AI service in Settings → Translation";
-"ocrOpenSettings" = "Open Settings";
 "ocrLineCopied" = "Line copied";
 "copyImageTextCopying" = "Copying";
 "copyImageTextCopied" = "Image text copied";
 "copyImageTextNoText" = "No text found";
-"screenshotTranslationHeader" = "Translation";
-"screenshotTranslationLanguageButton" = "To %@";
-"dictionaryEntryLabel" = "Entry";
-"dictionaryPhoneticLabel" = "Pronunciation";
-"dictionaryPartOfSpeechLabel" = "Part of speech";
-"dictionaryDefinitionLabel" = "Meaning";
-"dictionaryExampleLabel" = "Example";
-"dictionaryDifficultyLabel" = "Difficulty";
-"dictionaryNoProviderTitle" = "No dictionary-capable AI service configured";
-"dictionaryNoProviderHint" = "Enable OpenAI, DeepSeek, Claude, or a custom OpenAI-compatible service in Settings → Translation";
-
-/* Translation — settings tab */
-"translationDictionaryModeTitle" = "Dictionary Mode";
-"translationDictionaryModeSubtitle" = "When image translation recognizes a single English word, show pronunciation, meaning, example, translation, and CEFR level";
-"translationTargetLanguage" = "Target Language";
-"translationTargetHint" = "Recognized text is translated into this language; if it is already in that language, it is translated to English instead";
-"translationProvidersHeader" = "AI Translation Services";
-"translationApiKey" = "API Key";
-"translationApiKeyOptional" = "Optional API Key";
-"translationModel" = "Model";
-"translationEndpoint" = "Endpoint";
-"translationEndpointOptional" = "Optional endpoint";
-"translationSave" = "Save";
-"translationClear" = "Clear";
-"translationConfigSaved" = "Config saved";
-"translationTesting" = "Testing";
-"translationTestPassed" = "Test passed";
-"translationTestFailed" = "Test failed";
-"translationTestFailedTitle" = "Saved, but the connection test failed";
-"translationProviderCustom" = "Custom OpenAI-compatible";
-"translationMoveUp" = "Move up";
-"translationMoveDown" = "Move down";
-
-/* Translation — target language names */
-"transLangChinese" = "Chinese";
-"transLangEnglish" = "English";
-"transLangJapanese" = "Japanese";
-"transLangKorean" = "Korean";
-
-/* Translation — errors */
-"translationErrMissingAPIKey" = "API key not configured";
-"translationErrBadEndpoint" = "Invalid endpoint";
-"translationErrBadResponse" = "Unexpected response";
 
 /* Image Merge */
 "imageMergeShortcutHeader" = "Merge Images";

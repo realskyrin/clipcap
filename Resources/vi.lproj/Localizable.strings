@@ -9,7 +9,7 @@
 "pinAcrossSpaces" = "Hiển thị ghim trên mọi màn hình nền";
 "pinAcrossSpacesHint" = "Ảnh ghim mới xuất hiện trên mọi màn hình nền và Space toàn màn hình";
 "historyCacheToggleLabel" = "Lưu ảnh vào bộ nhớ";
-"historyCacheToggleHint" = "Lưu ảnh gần đây, màu đã chọn và liên kết tải lên để sao chép lại nhanh từ thanh menu";
+"historyCacheToggleHint" = "Lưu ảnh gần đây và màu đã chọn để sao chép lại nhanh từ thanh menu";
 "historyCacheLabel" = "Kích thước bộ nhớ lịch sử";
 "historyCacheHint" = "Giữ các ảnh gần đây nhất để sao chép lại nhanh";
 "historyPanelDisplayModeLabel" = "Cách hiển thị bảng lịch sử";
@@ -60,8 +60,6 @@
 "textRecognitionShortcutDefaultDisplay" = "Chưa đặt";
 "copyImageTextShortcutHeader" = "Sao chép chữ trong ảnh";
 "copyImageTextShortcutDefaultDisplay" = "Chưa đặt";
-"screenshotTranslationShortcutHeader" = "Dịch ảnh chụp màn hình";
-"screenshotTranslationShortcutDefaultDisplay" = "Chưa đặt";
 "fullScreenScreenshotShortcutHeader" = "Chụp toàn màn hình";
 "fullScreenScreenshotShortcutDefaultDisplay" = "Chưa đặt";
 "colorPickerShortcutHeader" = "Chọn màu";
@@ -98,7 +96,6 @@
 "shortcutConflictClipboardImageEdit" = "Tổ hợp phím này đã được dùng cho phím tắt chỉnh sửa ảnh từ clipboard. Vui lòng chọn tổ hợp khác";
 "shortcutConflictTextRecognition" = "Tổ hợp phím này đã được dùng cho phím tắt nhận dạng văn bản. Vui lòng chọn tổ hợp khác";
 "shortcutConflictCopyImageText" = "Tổ hợp phím này đã được dùng cho phím tắt sao chép chữ trong ảnh. Vui lòng chọn tổ hợp khác";
-"shortcutConflictScreenshotTranslation" = "Tổ hợp phím này đã được dùng cho phím tắt dịch ảnh chụp màn hình. Vui lòng chọn tổ hợp khác";
 "shortcutConflictFullScreenScreenshot" = "Tổ hợp phím này đã được dùng cho phím tắt chụp toàn màn hình. Vui lòng chọn tổ hợp khác";
 "shortcutConflictColorPicker" = "Tổ hợp phím này đã được dùng cho phím tắt Chọn màu. Vui lòng chọn tổ hợp khác";
 
@@ -113,7 +110,6 @@
 "historyClear" = "Xóa lịch sử";
 "historyCleared" = "Đã xóa lịch sử";
 "historyShowInFinder" = "Hiển thị trong Finder";
-"historyCloudMarkdownTip" = "Giữ ⌘ và nhấp vào ảnh xem trước để sao chép liên kết ảnh dạng Markdown";
 "historyPanelMenu" = "Bảng lịch sử";
 "historyPanelFilterAll" = "Tất cả";
 "historyPanelFilterScreenshots" = "Ảnh chụp";
@@ -129,7 +125,6 @@
 "dragToScreenshotAspect" = "Nhấp vào cửa sổ hoặc kéo để chụp · Kéo %@ (R)";
 "dragToTextRecognition" = "Nhấp vào cửa sổ hoặc chọn vùng để nhận dạng văn bản";
 "dragToCopyImageText" = "Nhấp vào cửa sổ hoặc chọn vùng để sao chép văn bản";
-"dragToScreenshotTranslation" = "Nhấp vào cửa sổ hoặc chọn vùng để dịch nội dung";
 
 /* Toast */
 "copiedToClipboard" = "Đã sao chép vào clipboard";
@@ -177,7 +172,6 @@
 "tipScrollCapture" = "Chụp cuộn";
 "tipBeautify" = "Làm đẹp";
 "tipOCR" = "Nhận dạng văn bản";
-"tipScreenshotTranslate" = "Dịch ảnh chụp màn hình";
 "tipSave" = "Lưu vào tệp";
 "tipPin" = "Ghim lên màn hình";
 "tipCancel" = "Hủy";
@@ -220,16 +214,12 @@
 "settingsTabGeneral" = "Chung";
 "settingsTabShortcuts" = "Phím tắt";
 "settingsTabPermissions" = "Quyền";
-"settingsTabUpload" = "Tải lên";
 "settingsTabAbout" = "Giới thiệu";
-"settingsTabTranslation" = "Dịch";
 "settingsTabToolbar" = "Thanh công cụ";
 "settingsNoPermissionsNeeded" = "Không cần quyền";
 "settingsSubtitleGeneral" = "Clipboard, tệp, lịch sử và lưu ảnh";
 "settingsSubtitleShortcuts" = "Phím tắt trình chỉnh sửa không cần theo dõi toàn cục";
 "settingsSubtitleToolbar" = "Sắp xếp công cụ chú thích trong trình chỉnh sửa";
-"settingsSubtitleUpload" = "Cấu hình dịch vụ lưu trữ ảnh";
-"settingsSubtitleTranslation" = "Cấu hình OCR và dịch";
 "settingsSubtitleAbout" = "Danh tính sản phẩm và liên kết dự án";
 "settingsQuit" = "Thoát ứng dụng";
 
@@ -310,145 +300,20 @@
 "quitConfirmAction" = "Thoát";
 "quitConfirmCancel" = "Hủy";
 
-/* Upload — toolbar / toast / progress */
-"tipUpload" = "Tải lên dịch vụ lưu trữ ảnh";
-"uploadingTitle" = "Đang tải lên";
-"uploadCopied" = "Đã sao chép URL ảnh";
-"uploadCopiedMarkdown" = "Đã sao chép liên kết Markdown";
-"uploadNoProvider" = "Hãy cấu hình dịch vụ tải lên trong Cài đặt trước";
-"uploadFailedPrefix" = "Tải lên thất bại";
-
-/* Upload — settings tab */
-"uploadDefaultProvider" = "Dịch vụ tải lên mặc định";
-"uploadDefaultNone" = "Đã tắt";
-"uploadSetDefaultButton" = "Đặt mặc định";
-"uploadSaveButton" = "Lưu";
-"uploadClearButton" = "Xóa";
-"uploadSavedToast" = "Đã lưu cấu hình";
-"uploadCurrentDefault" = "Mặc định hiện tại";
-"uploadMarkdownToggleTitle" = "Sao chép dưới dạng liên kết Markdown";
-"uploadMarkdownToggleSubtitle" = "Khi bật, sau khi tải lên sẽ sao chép thẻ ảnh Markdown (![](url)); khi tắt, sao chép URL thuần. Trong Lịch sử, ⌘-nhấp ảnh đã tải lên để sao chép liên kết Markdown, hoặc nhấp trực tiếp để sao chép URL thuần";
-"filenameRuleTitle" = "Quy tắc tên tệp";
-"filenameRulePresetLabel" = "Mẫu";
-"filenameRulePresetCustom" = "Tùy chỉnh";
-"filenameRulePresetShort" = "Ngắn";
-"filenameRulePresetCompact" = "Liên kết ngắn";
-"filenameRulePresetUnique" = "Tránh trùng";
-"filenameRulePresetCounter" = "Đếm theo ngày";
-"filenameRulePresetRestore" = "Khôi phục";
-"filenameRuleImageLabel" = "Ảnh";
-"filenameRuleVariablesLabel" = "Biến";
-"filenameRuleVariableDate" = "Ngày";
-"filenameRuleVariableTime" = "Giờ";
-"filenameRuleVariableDaily" = "Số ngày";
-"filenameRuleVariableRandom" = "Ngẫu nhiên";
-"filenameRuleVariableSize" = "Kích thước";
-"filenameRulePreview" = "%@";
-
-/* Upload — provider field labels */
-"uploadFieldBucket" = "Bucket";
-"uploadFieldBucketSpace" = "Bucket";
-"uploadFieldRegion" = "Vùng";
-"uploadFieldRegionOptional" = "Vùng tùy chọn";
-"uploadFieldPathOptional" = "Đường dẫn tùy chọn";
-"uploadFieldCustomUrlOptional" = "URL tùy chỉnh không bắt buộc";
-"uploadFieldPublicDomain" = "Tên miền công khai";
-"uploadFieldEndpointArea" = "Endpoint";
-"uploadFieldEndpointOptional" = "Endpoint tùy chọn";
-"uploadFieldAccountId" = "ID tài khoản";
-"uploadTestImageFailed" = "Không thể tạo ảnh thử nghiệm";
-
-/* Upload — provider names */
-"providerTencentCOS" = "Tencent COS";
-"providerQiniuKodo" = "Qiniu Kodo";
-"providerAliyunOSS" = "Aliyun OSS";
-
-/* Upload — errors */
-"uploadErrMissingConfig" = "Chưa cấu hình dịch vụ tải lên";
-"uploadErrInvalidConfigPrefix" = "Cấu hình không hợp lệ";
-"uploadErrNetworkPrefix" = "Lỗi mạng";
-"uploadErrServerPrefix" = "Tải lên thất bại mã %d";
-"uploadErrUnexpectedResponsePrefix" = "Phản hồi không mong đợi";
-"missingField" = "Thiếu %@";
-
-/* Upload — test/validation pill */
-"uploadStatusUntested" = "Chưa kiểm tra";
-"uploadStatusTesting" = "Đang kiểm tra";
-"uploadStatusValid" = "Đang hoạt động";
-"uploadStatusInvalid" = "Cấu hình không hợp lệ";
-
-/* Upload — log lines */
-"uploadLogStartingTest" = "Đang bắt đầu tải lên thử nghiệm";
-"uploadLogConfigSaved" = "Đã lưu cấu hình";
-"uploadLogMissingFields" = "Thiếu trường bắt buộc: %@";
-"uploadLogTestSucceeded" = "Tải lên thử nghiệm thành công: %@";
-"uploadLogTestFailed" = "Tải lên thử nghiệm thất bại: %@";
-"uploadLogProviderDisabled" = "Đã tắt nhà cung cấp";
-"uploadLogConfigCleared" = "Đã xóa cấu hình";
-
 /* Permissions — status label */
 "permissionGranted" = "Đã cấp";
 "permissionNotGranted" = "Chưa cấp";
 
-/* OCR & Translation — result panel */
+/* OCR result panel */
 "ocrTextHeader" = "Văn bản đã nhận dạng";
 "ocrRecognizing" = "Đang nhận dạng";
 "ocrNoText" = "Không tìm thấy văn bản";
 "ocrCopy" = "Sao chép";
 "ocrCopied" = "Đã sao chép";
-"ocrRetry" = "Thử lại";
-"ocrTranslating" = "Đang dịch";
-"ocrTranslateFailedPrefix" = "Thất bại";
-"ocrNoProviderTitle" = "Chưa cấu hình dịch vụ dịch";
-"ocrNoProviderHint" = "Thêm dịch vụ AI trong Cài đặt → Dịch";
-"ocrOpenSettings" = "Mở Cài đặt";
 "ocrLineCopied" = "Đã sao chép dòng";
 "copyImageTextCopying" = "Đang sao chép";
 "copyImageTextCopied" = "Đã sao chép chữ trong ảnh";
 "copyImageTextNoText" = "Không tìm thấy văn bản";
-"screenshotTranslationHeader" = "Bản dịch";
-"screenshotTranslationLanguageButton" = "Sang %@";
-"dictionaryEntryLabel" = "Mục từ";
-"dictionaryPhoneticLabel" = "Phát âm";
-"dictionaryPartOfSpeechLabel" = "Từ loại";
-"dictionaryDefinitionLabel" = "Nghĩa";
-"dictionaryExampleLabel" = "Ví dụ";
-"dictionaryDifficultyLabel" = "Độ khó";
-"dictionaryNoProviderTitle" = "Chưa cấu hình dịch vụ AI hỗ trợ từ điển";
-"dictionaryNoProviderHint" = "Bật OpenAI, DeepSeek, Claude hoặc một dịch vụ tùy chỉnh tương thích OpenAI trong Cài đặt → Dịch";
-
-/* Translation — settings tab */
-"translationDictionaryModeTitle" = "Chế độ từ điển";
-"translationDictionaryModeSubtitle" = "Khi dịch ảnh chụp nhận ra một từ tiếng Anh đơn lẻ, hiển thị phát âm, nghĩa, ví dụ, bản dịch và cấp độ CEFR";
-"translationTargetLanguage" = "Ngôn ngữ đích";
-"translationTargetHint" = "Văn bản nhận dạng sẽ được dịch sang ngôn ngữ này; nếu đã ở ngôn ngữ đó, văn bản sẽ được dịch sang tiếng Anh";
-"translationProvidersHeader" = "Dịch vụ dịch AI";
-"translationApiKey" = "API Key";
-"translationApiKeyOptional" = "API Key tùy chọn";
-"translationModel" = "Model";
-"translationEndpoint" = "Endpoint";
-"translationEndpointOptional" = "Endpoint tùy chọn";
-"translationSave" = "Lưu";
-"translationClear" = "Xóa";
-"translationConfigSaved" = "Đã lưu cấu hình";
-"translationTesting" = "Đang kiểm tra";
-"translationTestPassed" = "Kiểm tra thành công";
-"translationTestFailed" = "Kiểm tra thất bại";
-"translationTestFailedTitle" = "Đã lưu, nhưng kiểm tra kết nối thất bại";
-"translationProviderCustom" = "Tùy chỉnh tương thích OpenAI";
-"translationMoveUp" = "Di chuyển lên";
-"translationMoveDown" = "Di chuyển xuống";
-
-/* Translation — target language names */
-"transLangChinese" = "Tiếng Trung";
-"transLangEnglish" = "Tiếng Anh";
-"transLangJapanese" = "Tiếng Nhật";
-"transLangKorean" = "Tiếng Hàn";
-
-/* Translation — errors */
-"translationErrMissingAPIKey" = "Chưa cấu hình API key";
-"translationErrBadEndpoint" = "Endpoint không hợp lệ";
-"translationErrBadResponse" = "Phản hồi không mong đợi";
 
 /* Image Merge */
 "imageMergeShortcutHeader" = "Ghép ảnh";

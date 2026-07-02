@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## [1.8.0] - 2026-07-02
+
+### Changed
+
+- Removed image hosting, upload providers, upload history URL handling, and upload settings
+- Removed third-party translation providers, screenshot translation, dictionary mode, and translation settings
+- Kept OCR text recognition, Live Text selection, image annotation, save, pin, history, and file/clipboard input workflows
+
 ## [1.7.0] - 2026-07-02
 
 ### Changed

@@ -27,10 +27,8 @@ enum ToolbarItemID: String, Codable, CaseIterable {
     case scrollCapture
     case beautify
     case ocr
-    case screenshotTranslate
     // Output actions
     case save
-    case upload
     case pin
     case close
     case confirm
@@ -58,7 +56,7 @@ extension ToolbarItemID {
             return .toggleAction
         case .moveSelection:
             return .dragHandle
-        case .insertImage, .colorPicker, .undo, .redo, .ocr, .screenshotTranslate, .save, .upload, .pin, .close, .confirm:
+        case .insertImage, .colorPicker, .undo, .redo, .ocr, .save, .pin, .close, .confirm:
             return .momentary
         }
     }
@@ -105,9 +103,7 @@ extension ToolbarItemID {
         case .scrollCapture: return "arrow.up.and.down.text.horizontal"
         case .beautify:      return "sparkles"
         case .ocr:           return "text.viewfinder"
-        case .screenshotTranslate: return "character.bubble"
         case .save:          return "square.and.arrow.down"
-        case .upload:        return "icloud.and.arrow.up"
         case .pin:           return "pin"
         case .close:         return "xmark"
         case .confirm:       return "checkmark"
@@ -139,9 +135,7 @@ extension ToolbarItemID {
         case .scrollCapture: title = L10n.tipScrollCapture
         case .beautify:      title = L10n.tipBeautify
         case .ocr:           title = L10n.tipOCR
-        case .screenshotTranslate: title = L10n.tipScreenshotTranslate
         case .save:          title = L10n.tipSave
-        case .upload:        title = L10n.tipUpload
         case .pin:           title = L10n.tipPin
         case .close:         title = L10n.tipCancel
         case .confirm:       title = L10n.tipConfirm
@@ -215,8 +209,7 @@ struct ToolbarLayout: Equatable {
     static let canonicalOrder: [ToolbarItemID] = [
         .rectangle, .ellipse, .line, .arrow, .pen, .marker, .mosaic, .eraser, .numbered, .text, .emoji, .insertImage,
         .magnifier, .undo, .redo, .moveSelection, .beautify, .qrCode, .ocr,
-        .screenshotTranslate,
-        .save, .upload, .pin, .close, .confirm,
+        .save, .pin, .close, .confirm,
     ]
 
     /// Default layout: annotation tools + edit actions on the primary
@@ -226,9 +219,9 @@ struct ToolbarLayout: Equatable {
         ToolbarLayout(
             primary: [
                 .rectangle, .ellipse, .line, .arrow, .pen, .marker, .mosaic, .eraser, .numbered, .text, .emoji, .insertImage,
-                .magnifier, .beautify, .qrCode, .ocr, .screenshotTranslate, .undo, .redo, .moveSelection,
+                .magnifier, .beautify, .qrCode, .ocr, .undo, .redo, .moveSelection,
             ],
-            side: [.upload, .save, .pin, .close, .confirm],
+            side: [.save, .pin, .close, .confirm],
             hidden: []
         )
     }

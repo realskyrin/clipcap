@@ -66,12 +66,11 @@ extension Notification.Name {
     static let historyDidUpdate = Notification.Name("clipcap.historyDidUpdate")
     static let historyPanelDisplayModesDidChange = Notification.Name("clipcap.historyPanelDisplayModesDidChange")
     static let hotkeyDidChange = Notification.Name("clipcap.hotkeyDidChange")
-    static let translationConfigDidChange = Notification.Name("clipcap.translationConfigDidChange")
 }
 
 /// Centralized accessor for every user-facing string. Each property resolves a
-/// key from the current language's `Localizable.strings`; the translations
-/// themselves live in `Resources/<lang>.lproj/Localizable.strings`.
+/// key from the current language's `Localizable.strings`; the localized values
+/// live in `Resources/<lang>.lproj/Localizable.strings`.
 enum L10n {
     static var lang: AppLanguage { Defaults.language }
 
@@ -147,8 +146,6 @@ enum L10n {
     static var textRecognitionShortcutDefaultDisplay: String { s("textRecognitionShortcutDefaultDisplay") }
     static var copyImageTextShortcutHeader: String { s("copyImageTextShortcutHeader") }
     static var copyImageTextShortcutDefaultDisplay: String { s("copyImageTextShortcutDefaultDisplay") }
-    static var screenshotTranslationShortcutHeader: String { s("screenshotTranslationShortcutHeader") }
-    static var screenshotTranslationShortcutDefaultDisplay: String { s("screenshotTranslationShortcutDefaultDisplay") }
     static var imageMergeShortcutHeader: String { s("imageMergeShortcutHeader") }
     static var imageMergeShortcutDefaultDisplay: String { s("imageMergeShortcutDefaultDisplay") }
     static var fullScreenScreenshotShortcutHeader: String { s("fullScreenScreenshotShortcutHeader") }
@@ -189,7 +186,6 @@ enum L10n {
     static var shortcutConflictClipboardImageEdit: String { s("shortcutConflictClipboardImageEdit") }
     static var shortcutConflictTextRecognition: String { s("shortcutConflictTextRecognition") }
     static var shortcutConflictCopyImageText: String { s("shortcutConflictCopyImageText") }
-    static var shortcutConflictScreenshotTranslation: String { s("shortcutConflictScreenshotTranslation") }
     static var shortcutConflictImageMerge: String { s("shortcutConflictImageMerge") }
     static var shortcutConflictFullScreenScreenshot: String { s("shortcutConflictFullScreenScreenshot") }
     static var shortcutConflictColorPicker: String { s("shortcutConflictColorPicker") }
@@ -209,7 +205,6 @@ enum L10n {
     static var historyClear: String { s("historyClear") }
     static var historyCleared: String { s("historyCleared") }
     static var historyShowInFinder: String { s("historyShowInFinder") }
-    static var historyCloudMarkdownTip: String { s("historyCloudMarkdownTip") }
     static var historyPanelMenu: String { s("historyPanelMenu") }
     static var historyPanelFilterAll: String { s("historyPanelFilterAll") }
     static var historyPanelFilterScreenshots: String { s("historyPanelFilterScreenshots") }
@@ -227,7 +222,6 @@ enum L10n {
     }
     static var dragToTextRecognition: String { s("dragToTextRecognition") }
     static var dragToCopyImageText: String { s("dragToCopyImageText") }
-    static var dragToScreenshotTranslation: String { s("dragToScreenshotTranslation") }
     // Toast
     static var copiedToClipboard: String { s("copiedToClipboard") }
     static var mergedLongScreenshot: String { s("mergedLongScreenshot") }
@@ -286,7 +280,6 @@ enum L10n {
     static var tipScrollCapture: String { s("tipScrollCapture") }
     static var tipBeautify: String { s("tipBeautify") }
     static var tipOCR: String { s("tipOCR") }
-    static var tipScreenshotTranslate: String { s("tipScreenshotTranslate") }
     static var tipSave: String { s("tipSave") }
     static var tipPin: String { s("tipPin") }
     static var tipCancel: String { s("tipCancel") }
@@ -335,16 +328,12 @@ enum L10n {
     static var settingsTabGeneral: String { s("settingsTabGeneral") }
     static var settingsTabShortcuts: String { s("settingsTabShortcuts") }
     static var settingsTabPermissions: String { s("settingsTabPermissions") }
-    static var settingsTabUpload: String { s("settingsTabUpload") }
     static var settingsTabAbout: String { s("settingsTabAbout") }
-    static var settingsTabTranslation: String { s("settingsTabTranslation") }
     static var settingsTabToolbar: String { s("settingsTabToolbar") }
     static var settingsNoPermissionsNeeded: String { s("settingsNoPermissionsNeeded") }
     static var settingsSubtitleGeneral: String { s("settingsSubtitleGeneral") }
     static var settingsSubtitleShortcuts: String { s("settingsSubtitleShortcuts") }
     static var settingsSubtitleToolbar: String { s("settingsSubtitleToolbar") }
-    static var settingsSubtitleUpload: String { s("settingsSubtitleUpload") }
-    static var settingsSubtitleTranslation: String { s("settingsSubtitleTranslation") }
     static var settingsSubtitleAbout: String { s("settingsSubtitleAbout") }
     static var settingsQuit: String { s("settingsQuit") }
 
@@ -444,159 +433,20 @@ enum L10n {
     static var quitConfirmAction: String { s("quitConfirmAction") }
     static var quitConfirmCancel: String { s("quitConfirmCancel") }
 
-    // Upload — toolbar / toast / progress
-    static var tipUpload: String { s("tipUpload") }
-    static var uploadingTitle: String { s("uploadingTitle") }
-    static var uploadCopied: String { s("uploadCopied") }
-    static var uploadCopiedMarkdown: String { s("uploadCopiedMarkdown") }
-    static var uploadNoProvider: String { s("uploadNoProvider") }
-    static var uploadFailedPrefix: String { s("uploadFailedPrefix") }
-
-    // Upload — settings tab
-    static var uploadDefaultProvider: String { s("uploadDefaultProvider") }
-    static var uploadDefaultNone: String { s("uploadDefaultNone") }
-    static var uploadSetDefaultButton: String { s("uploadSetDefaultButton") }
-    static var uploadSaveButton: String { s("uploadSaveButton") }
-    static var uploadClearButton: String { s("uploadClearButton") }
-    static var uploadSavedToast: String { s("uploadSavedToast") }
-    static var uploadCurrentDefault: String { s("uploadCurrentDefault") }
-    static var uploadMarkdownToggleTitle: String { s("uploadMarkdownToggleTitle") }
-    static var uploadMarkdownToggleSubtitle: String { s("uploadMarkdownToggleSubtitle") }
-    static var filenameRuleTitle: String { s("filenameRuleTitle") }
-    static var filenameRulePresetLabel: String { s("filenameRulePresetLabel") }
-    static var filenameRulePresetCustom: String { s("filenameRulePresetCustom") }
-    static var filenameRulePresetShort: String { s("filenameRulePresetShort") }
-    static var filenameRulePresetCompact: String { s("filenameRulePresetCompact") }
-    static var filenameRulePresetUnique: String { s("filenameRulePresetUnique") }
-    static var filenameRulePresetCounter: String { s("filenameRulePresetCounter") }
-    static var filenameRulePresetRestore: String { s("filenameRulePresetRestore") }
-    static var filenameRuleImageLabel: String { s("filenameRuleImageLabel") }
-    static var filenameRuleVariablesLabel: String { s("filenameRuleVariablesLabel") }
-    static var filenameRuleVariableDate: String { s("filenameRuleVariableDate") }
-    static var filenameRuleVariableTime: String { s("filenameRuleVariableTime") }
-    static var filenameRuleVariableDaily: String { s("filenameRuleVariableDaily") }
-    static var filenameRuleVariableRandom: String { s("filenameRuleVariableRandom") }
-    static var filenameRuleVariableSize: String { s("filenameRuleVariableSize") }
-    static func filenameRulePreview(_ value: String) -> String {
-        String(format: s("filenameRulePreview"), value)
-    }
-
-    // Upload — provider field labels
-    static var uploadFieldBucket: String { s("uploadFieldBucket") }
-    static var uploadFieldBucketSpace: String { s("uploadFieldBucketSpace") }
-    static var uploadFieldRegion: String { s("uploadFieldRegion") }
-    static var uploadFieldRegionOptional: String { s("uploadFieldRegionOptional") }
-    static var uploadFieldPathOptional: String { s("uploadFieldPathOptional") }
-    static var uploadFieldCustomUrlOptional: String { s("uploadFieldCustomUrlOptional") }
-    static var uploadFieldPublicDomain: String { s("uploadFieldPublicDomain") }
-    static var uploadFieldEndpointArea: String { s("uploadFieldEndpointArea") }
-    static var uploadFieldEndpointOptional: String { s("uploadFieldEndpointOptional") }
-    static var uploadFieldAccountId: String { s("uploadFieldAccountId") }
-    static var uploadTestImageFailed: String { s("uploadTestImageFailed") }
-
-    // Upload — provider names
-    static var providerTencentCOS: String { s("providerTencentCOS") }
-    static var providerQiniuKodo: String { s("providerQiniuKodo") }
-    static var providerAliyunOSS: String { s("providerAliyunOSS") }
-
-    // Upload — errors
-    static var uploadErrMissingConfig: String { s("uploadErrMissingConfig") }
-    static var uploadErrInvalidConfigPrefix: String { s("uploadErrInvalidConfigPrefix") }
-    static var uploadErrNetworkPrefix: String { s("uploadErrNetworkPrefix") }
-    static func uploadErrServerPrefix(_ code: Int) -> String {
-        String(format: s("uploadErrServerPrefix"), code)
-    }
-    static var uploadErrUnexpectedResponsePrefix: String { s("uploadErrUnexpectedResponsePrefix") }
-    static func missingField(_ key: String) -> String {
-        String(format: s("missingField"), key)
-    }
-
-    // Upload — test/validation pill
-    static var uploadStatusUntested: String { s("uploadStatusUntested") }
-    static var uploadStatusTesting: String { s("uploadStatusTesting") }
-    static var uploadStatusValid: String { s("uploadStatusValid") }
-    static var uploadStatusInvalid: String { s("uploadStatusInvalid") }
-
-    // Upload — log lines
-    static var uploadLogStartingTest: String { s("uploadLogStartingTest") }
-    static var uploadLogConfigSaved: String { s("uploadLogConfigSaved") }
-    static func uploadLogMissingFields(_ keys: [String]) -> String {
-        String(format: s("uploadLogMissingFields"), keys.joined(separator: ", "))
-    }
-    static func uploadLogTestSucceeded(_ url: String) -> String {
-        String(format: s("uploadLogTestSucceeded"), url)
-    }
-    static func uploadLogTestFailed(_ message: String) -> String {
-        String(format: s("uploadLogTestFailed"), message)
-    }
-    static var uploadLogProviderDisabled: String { s("uploadLogProviderDisabled") }
-    static var uploadLogConfigCleared: String { s("uploadLogConfigCleared") }
-
     // Permissions — status label
     static var permissionGranted: String { s("permissionGranted") }
     static var permissionNotGranted: String { s("permissionNotGranted") }
 
-    // OCR & Translation — result panel
+    // OCR result panel
     static var ocrTextHeader: String { s("ocrTextHeader") }
     static var ocrRecognizing: String { s("ocrRecognizing") }
     static var ocrNoText: String { s("ocrNoText") }
     static var ocrCopy: String { s("ocrCopy") }
     static var ocrCopied: String { s("ocrCopied") }
-    static var ocrRetry: String { s("ocrRetry") }
-    static var ocrTranslating: String { s("ocrTranslating") }
-    static var ocrTranslateFailedPrefix: String { s("ocrTranslateFailedPrefix") }
-    static var ocrNoProviderTitle: String { s("ocrNoProviderTitle") }
-    static var ocrNoProviderHint: String { s("ocrNoProviderHint") }
-    static var ocrOpenSettings: String { s("ocrOpenSettings") }
     static var ocrLineCopied: String { s("ocrLineCopied") }
     static var copyImageTextCopying: String { s("copyImageTextCopying") }
     static var copyImageTextCopied: String { s("copyImageTextCopied") }
     static var copyImageTextNoText: String { s("copyImageTextNoText") }
-    static var screenshotTranslationHeader: String { s("screenshotTranslationHeader") }
-    static func screenshotTranslationLanguageButton(_ language: String) -> String {
-        String(format: s("screenshotTranslationLanguageButton"), language)
-    }
-    static var dictionaryEntryLabel: String { s("dictionaryEntryLabel") }
-    static var dictionaryPhoneticLabel: String { s("dictionaryPhoneticLabel") }
-    static var dictionaryPartOfSpeechLabel: String { s("dictionaryPartOfSpeechLabel") }
-    static var dictionaryDefinitionLabel: String { s("dictionaryDefinitionLabel") }
-    static var dictionaryExampleLabel: String { s("dictionaryExampleLabel") }
-    static var dictionaryDifficultyLabel: String { s("dictionaryDifficultyLabel") }
-    static var dictionaryNoProviderTitle: String { s("dictionaryNoProviderTitle") }
-    static var dictionaryNoProviderHint: String { s("dictionaryNoProviderHint") }
-
-    // Translation — settings tab
-    static var translationDictionaryModeTitle: String { s("translationDictionaryModeTitle") }
-    static var translationDictionaryModeSubtitle: String { s("translationDictionaryModeSubtitle") }
-    static var translationTargetLanguage: String { s("translationTargetLanguage") }
-    static var translationTargetHint: String { s("translationTargetHint") }
-    static var translationProvidersHeader: String { s("translationProvidersHeader") }
-    static var translationApiKey: String { s("translationApiKey") }
-    static var translationApiKeyOptional: String { s("translationApiKeyOptional") }
-    static var translationModel: String { s("translationModel") }
-    static var translationEndpoint: String { s("translationEndpoint") }
-    static var translationEndpointOptional: String { s("translationEndpointOptional") }
-    static var translationSave: String { s("translationSave") }
-    static var translationClear: String { s("translationClear") }
-    static var translationConfigSaved: String { s("translationConfigSaved") }
-    static var translationTesting: String { s("translationTesting") }
-    static var translationTestPassed: String { s("translationTestPassed") }
-    static var translationTestFailed: String { s("translationTestFailed") }
-    static var translationTestFailedTitle: String { s("translationTestFailedTitle") }
-    static var translationProviderCustom: String { s("translationProviderCustom") }
-    static var translationMoveUp: String { s("translationMoveUp") }
-    static var translationMoveDown: String { s("translationMoveDown") }
-
-    // Translation — target language names
-    static var transLangChinese: String { s("transLangChinese") }
-    static var transLangEnglish: String { s("transLangEnglish") }
-    static var transLangJapanese: String { s("transLangJapanese") }
-    static var transLangKorean: String { s("transLangKorean") }
-
-    // Translation — errors
-    static var translationErrMissingAPIKey: String { s("translationErrMissingAPIKey") }
-    static var translationErrBadEndpoint: String { s("translationErrBadEndpoint") }
-    static var translationErrBadResponse: String { s("translationErrBadResponse") }
 
     // Image Merge workbench
     static var imageMergeWindowTitle: String { s("imageMergeWindowTitle") }
@@ -769,7 +619,6 @@ struct Defaults {
         clearClipboardImageEditHotkey()
         clearTextRecognitionHotkey()
         clearCopyImageTextHotkey()
-        clearScreenshotTranslationHotkey()
         clearImageMergeHotkey()
         clearFullScreenScreenshotHotkey()
         clearColorPickerHotkey()
@@ -820,7 +669,7 @@ struct Defaults {
         defaults.removeObject(forKey: "clipboardImageEditHotkeyModifiers")
     }
 
-    // Legacy OCR/translation hotkey preferences retained only for migration.
+    // Legacy OCR hotkey preferences retained only for migration.
 
     static var textRecognitionHotkeyKeyCode: Int {
         get { defaults.integer(forKey: "textRecognitionHotkeyKeyCode") }
@@ -858,25 +707,6 @@ struct Defaults {
     static func clearCopyImageTextHotkey() {
         defaults.removeObject(forKey: "copyImageTextHotkeyKeyCode")
         defaults.removeObject(forKey: "copyImageTextHotkeyModifiers")
-    }
-
-    static var screenshotTranslationHotkeyKeyCode: Int {
-        get { defaults.integer(forKey: "screenshotTranslationHotkeyKeyCode") }
-        set { defaults.set(newValue, forKey: "screenshotTranslationHotkeyKeyCode") }
-    }
-
-    static var screenshotTranslationHotkeyModifiers: Int {
-        get { defaults.integer(forKey: "screenshotTranslationHotkeyModifiers") }
-        set { defaults.set(newValue, forKey: "screenshotTranslationHotkeyModifiers") }
-    }
-
-    static var hasCustomScreenshotTranslationHotkey: Bool {
-        defaults.object(forKey: "screenshotTranslationHotkeyKeyCode") != nil
-    }
-
-    static func clearScreenshotTranslationHotkey() {
-        defaults.removeObject(forKey: "screenshotTranslationHotkeyKeyCode")
-        defaults.removeObject(forKey: "screenshotTranslationHotkeyModifiers")
     }
 
     static var imageMergeHotkeyKeyCode: Int {
