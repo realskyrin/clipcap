@@ -351,6 +351,14 @@ enum L10n {
 
     // About pane
     static var aboutTagline: String { s("aboutTagline") }
+    static var aboutDescription: String { s("aboutDescription") }
+    static var aboutRepositoriesTitle: String { s("aboutRepositoriesTitle") }
+    static func aboutBundleID(_ bundleID: String) -> String {
+        String(format: s("aboutBundleID"), bundleID)
+    }
+    static func aboutVersion(_ version: String) -> String {
+        String(format: s("aboutVersion"), version)
+    }
     static var aboutLicense: String { s("aboutLicense") }
     static var aboutSourceCode: String { s("aboutSourceCode") }
     static var aboutStarOnGitHub: String { s("aboutStarOnGitHub") }

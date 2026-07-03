@@ -235,7 +235,11 @@
 "toolbarSettingsApply" = "Применить";
 
 /* About pane */
-"aboutTagline" = "Инструмент для снимков экрана в строке меню";
+"aboutTagline" = "Легкая версия capcap";
+"aboutDescription" = "Без разрешений, для разметки и сжатия изображений";
+"aboutRepositoriesTitle" = "Репозитории";
+"aboutBundleID" = "Bundle ID %@";
+"aboutVersion" = "Версия %@";
 "aboutLicense" = "Лицензия";
 "aboutSourceCode" = "Исходный код";
 "aboutStarOnGitHub" = "Поставить звезду на GitHub 🌟";

@@ -235,7 +235,11 @@
 "toolbarSettingsApply" = "Apply";
 
 /* About pane */
-"aboutTagline" = "Menu bar image tool";
+"aboutTagline" = "The light version of capcap";
+"aboutDescription" = "No permissions needed, focused on image annotation and compression";
+"aboutRepositoriesTitle" = "Repositories";
+"aboutBundleID" = "Bundle ID %@";
+"aboutVersion" = "Version %@";
 "aboutLicense" = "License";
 "aboutSourceCode" = "Source code";
 "aboutStarOnGitHub" = "Star clipcap on GitHub 🌟";

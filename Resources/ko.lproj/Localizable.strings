@@ -235,7 +235,11 @@
 "toolbarSettingsApply" = "적용";
 
 /* About pane */
-"aboutTagline" = "메뉴 막대 스크린샷 도구";
+"aboutTagline" = "capcap의 light 버전";
+"aboutDescription" = "권한 없이 이미지 주석과 압축에 집중";
+"aboutRepositoriesTitle" = "저장소";
+"aboutBundleID" = "Bundle ID %@";
+"aboutVersion" = "버전 %@";
 "aboutLicense" = "라이선스";
 "aboutSourceCode" = "소스 코드";
 "aboutStarOnGitHub" = "GitHub에서 별 누르기 🌟";

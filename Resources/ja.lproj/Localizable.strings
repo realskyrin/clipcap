@@ -235,7 +235,11 @@
 "toolbarSettingsApply" = "適用";
 
 /* About pane */
-"aboutTagline" = "メニューバー スクリーンショットツール";
+"aboutTagline" = "capcap の light バージョン";
+"aboutDescription" = "権限不要で画像注釈と圧縮に集中";
+"aboutRepositoriesTitle" = "リポジトリ";
+"aboutBundleID" = "Bundle ID %@";
+"aboutVersion" = "バージョン %@";
 "aboutLicense" = "ライセンス";
 "aboutSourceCode" = "ソースコード";
 "aboutStarOnGitHub" = "GitHub でスターを付ける 🌟";

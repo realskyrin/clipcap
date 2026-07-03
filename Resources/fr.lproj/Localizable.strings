@@ -235,7 +235,11 @@
 "toolbarSettingsApply" = "Appliquer";
 
 /* About pane */
-"aboutTagline" = "Outil de capture d'écran dans la barre des menus";
+"aboutTagline" = "La version light de capcap";
+"aboutDescription" = "Aucune autorisation requise, axé sur l'annotation et la compression d'images";
+"aboutRepositoriesTitle" = "Dépôts";
+"aboutBundleID" = "Bundle ID %@";
+"aboutVersion" = "Version %@";
 "aboutLicense" = "Licence";
 "aboutSourceCode" = "Code source";
 "aboutStarOnGitHub" = "Mettre une étoile sur GitHub 🌟";

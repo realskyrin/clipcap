@@ -235,7 +235,11 @@
 "toolbarSettingsApply" = "应用";
 
 /* About pane */
-"aboutTagline" = "菜单栏截图工具";
+"aboutTagline" = "capcap 的 light 版本";
+"aboutDescription" = "无需任何权限，专注图片标注与压缩";
+"aboutRepositoriesTitle" = "仓库地址";
+"aboutBundleID" = "Bundle ID %@";
+"aboutVersion" = "版本 %@";
 "aboutLicense" = "开源协议";
 "aboutSourceCode" = "源代码";
 "aboutStarOnGitHub" = "给 clipcap 点个 Star 🌟";

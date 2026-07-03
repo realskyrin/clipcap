@@ -418,14 +418,13 @@ final class SettingsView: NSView {
         let card = CardView()
         let about = cardStack(spacing: 10)
         about.addArrangedSubview(makeSectionHeader("clipcap"))
-        about.addArrangedSubview(makeBody("Image annotation for clipboard, files, drag input, and Open With"))
-        about.addArrangedSubview(makeBody("Bundle ID cn.skyrin.clipcap"))
-        about.addArrangedSubview(makeBody("Repository github.com/realskyrin/clipcap"))
+        about.addArrangedSubview(makeBody(L10n.aboutTagline))
+        about.addArrangedSubview(makeBody(L10n.aboutDescription))
+        about.addArrangedSubview(makeBody(L10n.aboutBundleID("cn.skyrin.clipcap")))
         let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0.0"
-        about.addArrangedSubview(makeBody("Version \(version)"))
+        about.addArrangedSubview(makeBody(L10n.aboutVersion(version)))
 
-        let sourceButton = makeButton(title: L10n.aboutSourceCode, action: #selector(openSourceCode))
-        about.addArrangedSubview(sourceButton)
+        about.addArrangedSubview(makeRepositorySection())
         card.embed(about)
         addCard(card, to: stack)
         return wrapPane(stack)
@@ -511,6 +510,49 @@ final class SettingsView: NSView {
         let label = secondaryLabel(text, wrapping: true)
         label.maximumNumberOfLines = 0
         return label
+    }
+
+    private func makeRepositorySection() -> NSView {
+        let stack = cardStack(spacing: 6)
+        stack.addArrangedSubview(makeSectionHeader(L10n.aboutRepositoriesTitle))
+        stack.addArrangedSubview(makeRepositoryRow(name: "clipcap", urlString: "https://github.com/realskyrin/clipcap"))
+        stack.addArrangedSubview(makeRepositoryRow(name: "capcap", urlString: "https://github.com/realskyrin/capcap"))
+        return stack
+    }
+
+    private func makeRepositoryRow(name: String, urlString: String) -> NSView {
+        let row = NSStackView()
+        row.orientation = .horizontal
+        row.alignment = .firstBaseline
+        row.spacing = 10
+        row.translatesAutoresizingMaskIntoConstraints = false
+
+        let nameLabel = primaryLabel(name)
+        nameLabel.font = NSFont.systemFont(ofSize: 12, weight: .semibold)
+        nameLabel.widthAnchor.constraint(equalToConstant: 54).isActive = true
+
+        let linkButton = makeLinkButton(title: urlString, urlString: urlString)
+        row.addArrangedSubview(nameLabel)
+        row.addArrangedSubview(linkButton)
+        return row
+    }
+
+    private func makeLinkButton(title: String, urlString: String) -> NSButton {
+        let button = NSButton(title: title, target: self, action: #selector(openRepositoryLink(_:)))
+        button.isBordered = false
+        button.controlSize = .small
+        button.identifier = NSUserInterfaceItemIdentifier(rawValue: urlString)
+        button.toolTip = title
+        button.attributedTitle = NSAttributedString(
+            string: title,
+            attributes: [
+                .font: NSFont.systemFont(ofSize: 11, weight: .medium),
+                .foregroundColor: NSColor.linkColor,
+                .underlineStyle: NSUnderlineStyle.single.rawValue,
+            ]
+        )
+        button.setContentHuggingPriority(.required, for: .horizontal)
+        return button
     }
 
     private func switchRow(
@@ -842,8 +884,11 @@ final class SettingsView: NSView {
         NSWorkspace.shared.activateFileViewerSelecting([url])
     }
 
-    @objc private func openSourceCode() {
-        guard let url = URL(string: "https://github.com/realskyrin/clipcap") else { return }
+    @objc private func openRepositoryLink(_ sender: NSButton) {
+        guard
+            let rawValue = sender.identifier?.rawValue,
+            let url = URL(string: rawValue)
+        else { return }
         NSWorkspace.shared.open(url)
     }
 

@@ -235,7 +235,11 @@
 "toolbarSettingsApply" = "Áp dụng";
 
 /* About pane */
-"aboutTagline" = "Công cụ chụp màn hình trên thanh menu";
+"aboutTagline" = "Phiên bản light của capcap";
+"aboutDescription" = "Không cần quyền, tập trung vào chú thích và nén ảnh";
+"aboutRepositoriesTitle" = "Kho mã nguồn";
+"aboutBundleID" = "Bundle ID %@";
+"aboutVersion" = "Phiên bản %@";
 "aboutLicense" = "Giấy phép";
 "aboutSourceCode" = "Mã nguồn";
 "aboutStarOnGitHub" = "Đánh dấu sao clipcap trên GitHub 🌟";
