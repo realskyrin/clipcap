@@ -356,6 +356,19 @@
 "imageMergeEmptyBody" = "加入檔案、從剪貼簿加入，或直接把圖片拖到這裡";
 "imageMergeClipboardSourceName" = "剪貼簿圖片";
 
+/* Image quality */
+"screenshotQualityTitle" = "圖片品質";
+"screenshotQualitySubtitle" = "儲存或複製前依所選檔位處理圖片，預設保留原圖";
+"screenshotQualitySaveLabel" = "儲存到檔案";
+"screenshotQualityClipboardLabel" = "複製到剪貼簿";
+"screenshotQualityOriginal" = "原圖";
+"screenshotQualityOriginalHint" = "PNG 原尺寸無損畫質，檔案最大";
+"screenshotQualityCompressed" = "壓縮";
+"screenshotQualityCompressedHint" = "保留原尺寸，做本地 PNG 壓縮";
+"screenshotQualityCompressingSave" = "正在壓縮後儲存";
+"screenshotQualityCompressingClipboard" = "正在壓縮後複製";
+"screenshotCompressionFailed" = "圖片壓縮失敗";
+
 /* Save paths */
 "savePathTitle" = "儲存路徑";
 "savePathSubtitle" = "圖片會直接儲存到這個路徑，不再詢問儲存位置";

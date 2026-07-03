@@ -356,6 +356,19 @@
 "imageMergeEmptyBody" = "Add files, paste from clipboard, or drag images here";
 "imageMergeClipboardSourceName" = "Clipboard Image";
 
+/* Image quality */
+"screenshotQualityTitle" = "Image quality";
+"screenshotQualitySubtitle" = "Images are processed before saving or copying, original is the default";
+"screenshotQualitySaveLabel" = "Save to file";
+"screenshotQualityClipboardLabel" = "Copy to clipboard";
+"screenshotQualityOriginal" = "Original";
+"screenshotQualityOriginalHint" = "PNG at full size and lossless quality, largest file";
+"screenshotQualityCompressed" = "Compressed";
+"screenshotQualityCompressedHint" = "Keeps original dimensions and applies local PNG compression";
+"screenshotQualityCompressingSave" = "Compressing before save";
+"screenshotQualityCompressingClipboard" = "Compressing before copy";
+"screenshotCompressionFailed" = "Image compression failed";
+
 /* Save paths */
 "savePathTitle" = "Save paths";
 "savePathSubtitle" = "Images save here without asking for a destination";

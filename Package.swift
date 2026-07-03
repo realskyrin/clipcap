@@ -23,6 +23,7 @@ let package = Package(
                 .linkedFramework("CoreImage"),
                 .linkedFramework("ImageIO"),
                 .linkedFramework("UniformTypeIdentifiers"),
+                .linkedLibrary("z"),
             ]
         ),
         .executableTarget(
