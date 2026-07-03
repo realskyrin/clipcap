@@ -1,10 +1,15 @@
 import AppKit
+import Carbon
 
 final class HotkeyManager {
     static let shared = HotkeyManager()
 
-    private var historyPanelMonitor: Any?
+    private var historyPanelHotKeyRef: EventHotKeyRef?
     private var historyPanelCallback: (() -> Void)?
+    private var eventHandlerRef: EventHandlerRef?
+
+    private static let hotKeySignature: OSType = OSType(0x434C_4950) // 'CLIP'
+    private static let historyPanelHotKeyID: UInt32 = 1
 
     private init() {}
 
@@ -33,20 +38,32 @@ final class HotkeyManager {
     func registerColorPicker(callback: @escaping () -> Void) {}
     func unregisterColorPicker() {}
     func registerHistoryPanel(callback: @escaping () -> Void) {
-        historyPanelCallback = callback
-        guard historyPanelMonitor == nil else { return }
-        historyPanelMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
-            guard HotkeyManager.eventMatchesHistoryPanelHotkey(event) else { return event }
-            self?.historyPanelCallback?()
-            return nil
+        unregisterHistoryPanel()
+        self.historyPanelCallback = callback
+
+        guard let (keyCode, modifiers) = currentHistoryPanelHotkey() else { return }
+
+        installEventHandlerIfNeeded()
+        var ref: EventHotKeyRef?
+        let id = EventHotKeyID(signature: Self.hotKeySignature, id: Self.historyPanelHotKeyID)
+        let status = RegisterEventHotKey(
+            keyCode,
+            modifiers,
+            id,
+            GetApplicationEventTarget(),
+            0,
+            &ref
+        )
+        if status == noErr, let ref {
+            historyPanelHotKeyRef = ref
         }
     }
 
     func unregisterHistoryPanel() {
-        if let historyPanelMonitor {
-            NSEvent.removeMonitor(historyPanelMonitor)
+        if let historyPanelHotKeyRef {
+            UnregisterEventHotKey(historyPanelHotKeyRef)
         }
-        historyPanelMonitor = nil
+        historyPanelHotKeyRef = nil
         historyPanelCallback = nil
     }
 
@@ -139,6 +156,56 @@ final class HotkeyManager {
 
     func hotkeyConflictMessage(keyCode: UInt32, modifiers: UInt32, slot: Any? = nil) -> String? {
         nil
+    }
+
+    private func currentHistoryPanelHotkey() -> (keyCode: UInt32, modifiers: UInt32)? {
+        guard Defaults.hasCustomHistoryPanelHotkey else { return nil }
+        let keyCode = UInt32(Defaults.historyPanelHotkeyKeyCode)
+        let modifiers = UInt32(Defaults.historyPanelHotkeyModifiers)
+        guard modifiers != 0 || Self.isFunctionKey(UInt16(keyCode)) else { return nil }
+        return (keyCode, modifiers)
+    }
+
+    private func installEventHandlerIfNeeded() {
+        guard eventHandlerRef == nil else { return }
+        var spec = EventTypeSpec(
+            eventClass: OSType(kEventClassKeyboard),
+            eventKind: UInt32(kEventHotKeyPressed)
+        )
+        let selfPtr = Unmanaged.passUnretained(self).toOpaque()
+        InstallEventHandler(
+            GetEventDispatcherTarget(),
+            { (_, eventRef, userData) -> OSStatus in
+                guard let userData else { return OSStatus(eventNotHandledErr) }
+                let manager = Unmanaged<HotkeyManager>.fromOpaque(userData).takeUnretainedValue()
+
+                var hotKeyID = EventHotKeyID()
+                let status = GetEventParameter(
+                    eventRef,
+                    EventParamName(kEventParamDirectObject),
+                    EventParamType(typeEventHotKeyID),
+                    nil,
+                    MemoryLayout<EventHotKeyID>.size,
+                    nil,
+                    &hotKeyID
+                )
+                guard status == noErr,
+                      hotKeyID.signature == HotkeyManager.hotKeySignature,
+                      hotKeyID.id == HotkeyManager.historyPanelHotKeyID
+                else {
+                    return OSStatus(eventNotHandledErr)
+                }
+
+                if let callback = manager.historyPanelCallback {
+                    MainRunLoopScheduler.perform(callback)
+                }
+                return noErr
+            },
+            1,
+            &spec,
+            selfPtr,
+            &eventHandlerRef
+        )
     }
 
     private static var effectiveClipboardHotkey: (keyCode: Int, modifiers: Int) {

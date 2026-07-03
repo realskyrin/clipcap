@@ -1058,8 +1058,8 @@ struct Defaults {
     }
 
     // History panel shortcut. Defaults to unset; users can opt in from
-    // Settings. It is matched against app-local keyDown events, so it avoids
-    // a global keyboard listener while clipcap remains permission-light.
+    // Settings. It is registered as a system hotkey for one chosen key
+    // combination without installing an event tap or Accessibility monitor.
 
     static var historyPanelHotkeyKeyCode: Int {
         get { defaults.integer(forKey: "historyPanelHotkeyKeyCode") }

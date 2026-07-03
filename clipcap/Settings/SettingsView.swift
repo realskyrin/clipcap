@@ -887,6 +887,7 @@ final class SettingsView: NSView {
     @objc private func shortcutRestoreClicked(_ sender: NSButton) {
         guard let slot = ShortcutSlot(rawValue: sender.tag) else { return }
         slot.clearShortcut()
+        NotificationCenter.default.post(name: .hotkeyDidChange, object: nil)
         refreshShortcutRows()
     }
 
@@ -922,6 +923,7 @@ final class SettingsView: NSView {
             shortcutRecordingMonitor = nil
         }
         activeShortcutSlot = nil
+        NotificationCenter.default.post(name: .hotkeyDidChange, object: nil)
         refreshShortcutRows()
         return true
     }

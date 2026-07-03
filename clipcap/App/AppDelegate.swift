@@ -62,9 +62,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             onOpenSettings: { [weak self] in self?.openSettings() }
         )
         statusBarController.setMenuBarVisible(Defaults.showMenuBar)
-        HotkeyManager.shared.registerHistoryPanel { [weak self] in
-            self?.handleHistoryPanelTrigger(holdOpenUntilMouseEnters: true)
+
+        NotificationCenter.default.addObserver(
+            forName: .hotkeyDidChange,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.applyHotkeyState()
         }
+        applyHotkeyState()
     }
 
     private func configuredSettingsController() -> SettingsWindowController {
@@ -78,6 +84,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func handleHistoryPanelTrigger(holdOpenUntilMouseEnters: Bool = false) {
         historyPanelController?.toggleFromUserRequest(holdOpenUntilMouseEnters: holdOpenUntilMouseEnters)
+    }
+
+    private func applyHotkeyState() {
+        if Defaults.hasCustomHistoryPanelHotkey {
+            HotkeyManager.shared.registerHistoryPanel { [weak self] in
+                self?.handleHistoryPanelTrigger(holdOpenUntilMouseEnters: true)
+            }
+        } else {
+            HotkeyManager.shared.unregisterHistoryPanel()
+        }
     }
 
     func handleClipboardImageEditTrigger() {
