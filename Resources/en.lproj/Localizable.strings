@@ -67,8 +67,8 @@
 
 /* Copy-to-clipboard shortcut (editor confirm) */
 "clipboardShortcutHeader" = "Copy to Clipboard";
-"clipboardShortcutHint" = "Pressed inside the editor to commit the edit and copy the image to the clipboard. Defaults to ⌘↩";
-"clipboardShortcutDefaultDisplay" = "⌘↩";
+"clipboardShortcutHint" = "Pressed inside the editor to commit the edit and copy the image to the clipboard. Defaults to ↩";
+"clipboardShortcutDefaultDisplay" = "↩";
 
 /* Save-to-file shortcut (editor save) */
 "fileSaveShortcutHeader" = "Save to File";
@@ -238,7 +238,6 @@
 "aboutTagline" = "The light version of capcap";
 "aboutDescription" = "No permissions needed, focused on image annotation and compression";
 "aboutRepositoriesTitle" = "Repositories";
-"aboutBundleID" = "Bundle ID %@";
 "aboutVersion" = "Version %@";
 "aboutLicense" = "License";
 "aboutSourceCode" = "Source code";

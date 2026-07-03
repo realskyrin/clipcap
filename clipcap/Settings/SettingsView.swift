@@ -426,7 +426,6 @@ final class SettingsView: NSView {
         about.addArrangedSubview(makeSectionHeader("clipcap"))
         about.addArrangedSubview(makeBody(L10n.aboutTagline))
         about.addArrangedSubview(makeBody(L10n.aboutDescription))
-        about.addArrangedSubview(makeBody(L10n.aboutBundleID("cn.skyrin.clipcap")))
         let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0.0"
         about.addArrangedSubview(makeBody(L10n.aboutVersion(version)))
 
@@ -1120,7 +1119,7 @@ private enum ShortcutSlot: Int, CaseIterable {
             }
         }
         switch self {
-        case .clipboard: return 256
+        case .clipboard: return 0
         case .fileSave: return 256
         case .previousHistoryImage: return 0
         case .nextHistoryImage: return 0

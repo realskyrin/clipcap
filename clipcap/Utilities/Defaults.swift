@@ -364,9 +364,6 @@ enum L10n {
     static var aboutTagline: String { s("aboutTagline") }
     static var aboutDescription: String { s("aboutDescription") }
     static var aboutRepositoriesTitle: String { s("aboutRepositoriesTitle") }
-    static func aboutBundleID(_ bundleID: String) -> String {
-        String(format: s("aboutBundleID"), bundleID)
-    }
     static func aboutVersion(_ version: String) -> String {
         String(format: s("aboutVersion"), version)
     }
@@ -1061,8 +1058,8 @@ struct Defaults {
     }
 
     // History panel shortcut. Defaults to unset; users can opt in from
-    // Settings. The global hotkey opens the dialog mode when enabled, or the
-    // notch mode when dialog mode is disabled.
+    // Settings. It is matched against app-local keyDown events, so it avoids
+    // a global keyboard listener while clipcap remains permission-light.
 
     static var historyPanelHotkeyKeyCode: Int {
         get { defaults.integer(forKey: "historyPanelHotkeyKeyCode") }

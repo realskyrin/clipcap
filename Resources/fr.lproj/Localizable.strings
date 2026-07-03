@@ -67,8 +67,8 @@
 
 /* Copy-to-clipboard shortcut (editor confirm) */
 "clipboardShortcutHeader" = "Copier dans le presse-papiers";
-"clipboardShortcutHint" = "Appuyez dessus dans l'éditeur pour valider l'édition et copier l'image dans le presse-papiers. ⌘↩ par défaut";
-"clipboardShortcutDefaultDisplay" = "⌘↩";
+"clipboardShortcutHint" = "Appuyez dessus dans l'éditeur pour valider l'édition et copier l'image dans le presse-papiers. ↩ par défaut";
+"clipboardShortcutDefaultDisplay" = "↩";
 
 /* Save-to-file shortcut (editor save) */
 "fileSaveShortcutHeader" = "Enregistrer dans un fichier";
@@ -238,7 +238,6 @@
 "aboutTagline" = "La version light de capcap";
 "aboutDescription" = "Aucune autorisation requise, axé sur l'annotation et la compression d'images";
 "aboutRepositoriesTitle" = "Dépôts";
-"aboutBundleID" = "Bundle ID %@";
 "aboutVersion" = "Version %@";
 "aboutLicense" = "Licence";
 "aboutSourceCode" = "Code source";

@@ -67,8 +67,8 @@
 
 /* Copy-to-clipboard shortcut (editor confirm) */
 "clipboardShortcutHeader" = "Sao chép vào clipboard";
-"clipboardShortcutHint" = "Nhấn trong trình chỉnh sửa để xác nhận chỉnh sửa và sao chép ảnh vào clipboard. Mặc định là ⌘↩";
-"clipboardShortcutDefaultDisplay" = "⌘↩";
+"clipboardShortcutHint" = "Nhấn trong trình chỉnh sửa để xác nhận chỉnh sửa và sao chép ảnh vào clipboard. Mặc định là ↩";
+"clipboardShortcutDefaultDisplay" = "↩";
 
 /* Save-to-file shortcut (editor save) */
 "fileSaveShortcutHeader" = "Lưu vào tệp";
@@ -238,7 +238,6 @@
 "aboutTagline" = "Phiên bản light của capcap";
 "aboutDescription" = "Không cần quyền, tập trung vào chú thích và nén ảnh";
 "aboutRepositoriesTitle" = "Kho mã nguồn";
-"aboutBundleID" = "Bundle ID %@";
 "aboutVersion" = "Phiên bản %@";
 "aboutLicense" = "Giấy phép";
 "aboutSourceCode" = "Mã nguồn";

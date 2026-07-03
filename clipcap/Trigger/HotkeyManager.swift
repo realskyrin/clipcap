@@ -3,6 +3,9 @@ import AppKit
 final class HotkeyManager {
     static let shared = HotkeyManager()
 
+    private var historyPanelMonitor: Any?
+    private var historyPanelCallback: (() -> Void)?
+
     private init() {}
 
     func register(callback: @escaping () -> Void) {}
@@ -29,8 +32,23 @@ final class HotkeyManager {
     func unregisterFullScreenScreenshot() {}
     func registerColorPicker(callback: @escaping () -> Void) {}
     func unregisterColorPicker() {}
-    func registerHistoryPanel(callback: @escaping () -> Void) {}
-    func unregisterHistoryPanel() {}
+    func registerHistoryPanel(callback: @escaping () -> Void) {
+        historyPanelCallback = callback
+        guard historyPanelMonitor == nil else { return }
+        historyPanelMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
+            guard HotkeyManager.eventMatchesHistoryPanelHotkey(event) else { return event }
+            self?.historyPanelCallback?()
+            return nil
+        }
+    }
+
+    func unregisterHistoryPanel() {
+        if let historyPanelMonitor {
+            NSEvent.removeMonitor(historyPanelMonitor)
+        }
+        historyPanelMonitor = nil
+        historyPanelCallback = nil
+    }
 
     static func currentClipboardDisplayString() -> String? {
         displayString(keyCode: effectiveClipboardHotkey.keyCode, modifiers: effectiveClipboardHotkey.modifiers)
@@ -126,7 +144,7 @@ final class HotkeyManager {
     private static var effectiveClipboardHotkey: (keyCode: Int, modifiers: Int) {
         Defaults.hasCustomClipboardHotkey
             ? (Defaults.clipboardHotkeyKeyCode, Defaults.clipboardHotkeyModifiers)
-            : (36, 256)
+            : (36, 0)
     }
 
     private static var effectiveFileSaveHotkey: (keyCode: Int, modifiers: Int) {

@@ -62,6 +62,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             onOpenSettings: { [weak self] in self?.openSettings() }
         )
         statusBarController.setMenuBarVisible(Defaults.showMenuBar)
+        HotkeyManager.shared.registerHistoryPanel { [weak self] in
+            self?.handleHistoryPanelTrigger(holdOpenUntilMouseEnters: true)
+        }
     }
 
     private func configuredSettingsController() -> SettingsWindowController {

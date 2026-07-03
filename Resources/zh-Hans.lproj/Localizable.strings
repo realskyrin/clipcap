@@ -67,8 +67,8 @@
 
 /* Copy-to-clipboard shortcut (editor confirm) */
 "clipboardShortcutHeader" = "复制到剪贴板";
-"clipboardShortcutHint" = "在编辑器内按下以确认编辑并把图片复制到剪贴板。未设置时默认 ⌘↩";
-"clipboardShortcutDefaultDisplay" = "⌘↩";
+"clipboardShortcutHint" = "在编辑器内按下以确认编辑并把图片复制到剪贴板。未设置时默认 ↩";
+"clipboardShortcutDefaultDisplay" = "↩";
 
 /* Save-to-file shortcut (editor save) */
 "fileSaveShortcutHeader" = "保存到文件";
@@ -238,7 +238,6 @@
 "aboutTagline" = "capcap 的 light 版本";
 "aboutDescription" = "无需任何权限，专注图片标注与压缩";
 "aboutRepositoriesTitle" = "仓库地址";
-"aboutBundleID" = "Bundle ID %@";
 "aboutVersion" = "版本 %@";
 "aboutLicense" = "开源协议";
 "aboutSourceCode" = "源代码";

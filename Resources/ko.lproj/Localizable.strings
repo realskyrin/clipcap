@@ -67,8 +67,8 @@
 
 /* Copy-to-clipboard shortcut (editor confirm) */
 "clipboardShortcutHeader" = "클립보드에 복사";
-"clipboardShortcutHint" = "편집기에서 누르면 편집을 확정하고 이미지를 클립보드에 복사합니다. 기본값은 ⌘↩입니다";
-"clipboardShortcutDefaultDisplay" = "⌘↩";
+"clipboardShortcutHint" = "편집기에서 누르면 편집을 확정하고 이미지를 클립보드에 복사합니다. 기본값은 ↩입니다";
+"clipboardShortcutDefaultDisplay" = "↩";
 
 /* Save-to-file shortcut (editor save) */
 "fileSaveShortcutHeader" = "파일로 저장";
@@ -238,7 +238,6 @@
 "aboutTagline" = "capcap의 light 버전";
 "aboutDescription" = "권한 없이 이미지 주석과 압축에 집중";
 "aboutRepositoriesTitle" = "저장소";
-"aboutBundleID" = "Bundle ID %@";
 "aboutVersion" = "버전 %@";
 "aboutLicense" = "라이선스";
 "aboutSourceCode" = "소스 코드";

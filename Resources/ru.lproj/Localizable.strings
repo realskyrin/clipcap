@@ -67,8 +67,8 @@
 
 /* Copy-to-clipboard shortcut (editor confirm) */
 "clipboardShortcutHeader" = "Копировать в буфер обмена";
-"clipboardShortcutHint" = "Нажмите в редакторе, чтобы подтвердить правку и скопировать изображение в буфер обмена. По умолчанию — ⌘↩";
-"clipboardShortcutDefaultDisplay" = "⌘↩";
+"clipboardShortcutHint" = "Нажмите в редакторе, чтобы подтвердить правку и скопировать изображение в буфер обмена. По умолчанию — ↩";
+"clipboardShortcutDefaultDisplay" = "↩";
 
 /* Save-to-file shortcut (editor save) */
 "fileSaveShortcutHeader" = "Сохранить в файл";
@@ -238,7 +238,6 @@
 "aboutTagline" = "Легкая версия capcap";
 "aboutDescription" = "Без разрешений, для разметки и сжатия изображений";
 "aboutRepositoriesTitle" = "Репозитории";
-"aboutBundleID" = "Bundle ID %@";
 "aboutVersion" = "Версия %@";
 "aboutLicense" = "Лицензия";
 "aboutSourceCode" = "Исходный код";

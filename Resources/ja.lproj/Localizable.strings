@@ -67,8 +67,8 @@
 
 /* Copy-to-clipboard shortcut (editor confirm) */
 "clipboardShortcutHeader" = "クリップボードへコピー";
-"clipboardShortcutHint" = "エディター内で押すと編集を確定し、画像をクリップボードへコピーします。既定は ⌘↩";
-"clipboardShortcutDefaultDisplay" = "⌘↩";
+"clipboardShortcutHint" = "エディター内で押すと編集を確定し、画像をクリップボードへコピーします。既定は ↩";
+"clipboardShortcutDefaultDisplay" = "↩";
 
 /* Save-to-file shortcut (editor save) */
 "fileSaveShortcutHeader" = "ファイルへ保存";
@@ -238,7 +238,6 @@
 "aboutTagline" = "capcap の light バージョン";
 "aboutDescription" = "権限不要で画像注釈と圧縮に集中";
 "aboutRepositoriesTitle" = "リポジトリ";
-"aboutBundleID" = "Bundle ID %@";
 "aboutVersion" = "バージョン %@";
 "aboutLicense" = "ライセンス";
 "aboutSourceCode" = "ソースコード";
