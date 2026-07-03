@@ -9,6 +9,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var historyPanelController: HistoryPanelController?
     private var suspendedEditDraft: OverlayWindowController.SuspendedEditDraft?
     private var pendingReopenSettingsWorkItem: DispatchWorkItem?
+    private var didInitializeApp = false
+    private var pendingOpenImageURLs: [URL] = []
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         false
@@ -16,6 +18,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         initializeApp()
+        didInitializeApp = true
+        flushPendingOpenImageURLs()
     }
 
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
@@ -24,15 +28,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func application(_ application: NSApplication, open urls: [URL]) {
-        _ = openImageURLs(urls)
+        _ = requestOpenImageURLs(urls)
     }
 
     func application(_ sender: NSApplication, openFile filename: String) -> Bool {
-        openImageURLs([URL(fileURLWithPath: filename)])
+        requestOpenImageURLs([URL(fileURLWithPath: filename)])
     }
 
     func application(_ sender: NSApplication, openFiles filenames: [String]) {
-        let handled = openImageURLs(filenames.map { URL(fileURLWithPath: $0) })
+        let handled = requestOpenImageURLs(filenames.map { URL(fileURLWithPath: $0) })
         sender.reply(toOpenOrPrint: handled ? .success : .failure)
     }
 
@@ -103,8 +107,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.activate(ignoringOtherApps: true)
         panel.begin { [weak self] response in
             guard response == .OK, let url = panel.url else { return }
-            self?.openImageURLs([url])
+            self?.requestOpenImageURLs([url])
         }
+    }
+
+    @discardableResult
+    private func requestOpenImageURLs(_ urls: [URL]) -> Bool {
+        guard didInitializeApp else {
+            guard Self.containsImageFile(in: urls) else { return false }
+            pendingOpenImageURLs.append(contentsOf: urls)
+            return true
+        }
+
+        return openImageURLs(urls)
+    }
+
+    private func flushPendingOpenImageURLs() {
+        guard !pendingOpenImageURLs.isEmpty else { return }
+        let urls = pendingOpenImageURLs
+        pendingOpenImageURLs.removeAll()
+        _ = openImageURLs(urls)
     }
 
     @discardableResult
@@ -266,7 +288,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         cancelPendingReopenSettings()
-        openImageURLs([URL(fileURLWithPath: filePath)])
+        requestOpenImageURLs([URL(fileURLWithPath: filePath)])
+    }
+
+    private static func containsImageFile(in urls: [URL]) -> Bool {
+        urls.lazy.compactMap(resolvedImageFileURL).contains(where: isImageFile)
     }
 
     private static func isImageFile(_ url: URL) -> Bool {
