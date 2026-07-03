@@ -67,8 +67,8 @@
 
 /* Copy-to-clipboard shortcut (editor confirm) */
 "clipboardShortcutHeader" = "Sao chép vào clipboard";
-"clipboardShortcutHint" = "Nhấn trong trình chỉnh sửa để xác nhận chỉnh sửa và sao chép ảnh vào clipboard. Mặc định là ⌘Return";
-"clipboardShortcutDefaultDisplay" = "⌘Return";
+"clipboardShortcutHint" = "Nhấn trong trình chỉnh sửa để xác nhận chỉnh sửa và sao chép ảnh vào clipboard. Mặc định là ⌘↩";
+"clipboardShortcutDefaultDisplay" = "⌘↩";
 
 /* Save-to-file shortcut (editor save) */
 "fileSaveShortcutHeader" = "Lưu vào tệp";
@@ -362,6 +362,6 @@
 "savePathReveal" = "Hiện";
 "chooseScreenshotSavePathTitle" = "Chọn đường dẫn lưu ảnh";
 
-"editClipboardImage" = "Edit Clipboard Image";
-"openImage" = "Open Image";
-"openImageNoImage" = "Copy an image to the clipboard or choose an image file";
+"editClipboardImage" = "Sửa ảnh trong bảng nhớ tạm";
+"openImage" = "Mở ảnh";
+"openImageNoImage" = "Sao chép ảnh vào bảng nhớ tạm hoặc chọn một tệp ảnh";

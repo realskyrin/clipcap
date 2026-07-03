@@ -67,8 +67,8 @@
 
 /* Copy-to-clipboard shortcut (editor confirm) */
 "clipboardShortcutHeader" = "Copier dans le presse-papiers";
-"clipboardShortcutHint" = "Appuyez dessus dans l'éditeur pour valider l'édition et copier l'image dans le presse-papiers. ⌘Return par défaut";
-"clipboardShortcutDefaultDisplay" = "⌘Return";
+"clipboardShortcutHint" = "Appuyez dessus dans l'éditeur pour valider l'édition et copier l'image dans le presse-papiers. ⌘↩ par défaut";
+"clipboardShortcutDefaultDisplay" = "⌘↩";
 
 /* Save-to-file shortcut (editor save) */
 "fileSaveShortcutHeader" = "Enregistrer dans un fichier";
@@ -362,6 +362,6 @@
 "savePathReveal" = "Afficher";
 "chooseScreenshotSavePathTitle" = "Choisir le chemin des images";
 
-"editClipboardImage" = "Edit Clipboard Image";
-"openImage" = "Open Image";
-"openImageNoImage" = "Copy an image to the clipboard or choose an image file";
+"editClipboardImage" = "Modifier l’image du presse-papiers";
+"openImage" = "Ouvrir une image";
+"openImageNoImage" = "Copiez une image dans le presse-papiers ou choisissez un fichier image";

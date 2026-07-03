@@ -67,8 +67,8 @@
 
 /* Copy-to-clipboard shortcut (editor confirm) */
 "clipboardShortcutHeader" = "Copy to Clipboard";
-"clipboardShortcutHint" = "Pressed inside the editor to commit the edit and copy the image to the clipboard. Defaults to ⌘Return";
-"clipboardShortcutDefaultDisplay" = "⌘Return";
+"clipboardShortcutHint" = "Pressed inside the editor to commit the edit and copy the image to the clipboard. Defaults to ⌘↩";
+"clipboardShortcutDefaultDisplay" = "⌘↩";
 
 /* Save-to-file shortcut (editor save) */
 "fileSaveShortcutHeader" = "Save to File";

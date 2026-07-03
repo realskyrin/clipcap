@@ -67,8 +67,8 @@
 
 /* Copy-to-clipboard shortcut (editor confirm) */
 "clipboardShortcutHeader" = "クリップボードへコピー";
-"clipboardShortcutHint" = "エディター内で押すと編集を確定し、画像をクリップボードへコピーします。既定は ⌘Return";
-"clipboardShortcutDefaultDisplay" = "⌘Return";
+"clipboardShortcutHint" = "エディター内で押すと編集を確定し、画像をクリップボードへコピーします。既定は ⌘↩";
+"clipboardShortcutDefaultDisplay" = "⌘↩";
 
 /* Save-to-file shortcut (editor save) */
 "fileSaveShortcutHeader" = "ファイルへ保存";
@@ -362,6 +362,6 @@
 "savePathReveal" = "表示";
 "chooseScreenshotSavePathTitle" = "画像の保存先を選択";
 
-"editClipboardImage" = "Edit Clipboard Image";
-"openImage" = "Open Image";
-"openImageNoImage" = "Copy an image to the clipboard or choose an image file";
+"editClipboardImage" = "クリップボードの画像を編集";
+"openImage" = "画像を開く";
+"openImageNoImage" = "画像をクリップボードにコピーするか画像ファイルを選択してください";

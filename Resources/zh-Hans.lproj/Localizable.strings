@@ -67,8 +67,8 @@
 
 /* Copy-to-clipboard shortcut (editor confirm) */
 "clipboardShortcutHeader" = "复制到剪贴板";
-"clipboardShortcutHint" = "在编辑器内按下以确认编辑并把图片复制到剪贴板。未设置时默认 ⌘Return";
-"clipboardShortcutDefaultDisplay" = "⌘Return";
+"clipboardShortcutHint" = "在编辑器内按下以确认编辑并把图片复制到剪贴板。未设置时默认 ⌘↩";
+"clipboardShortcutDefaultDisplay" = "⌘↩";
 
 /* Save-to-file shortcut (editor save) */
 "fileSaveShortcutHeader" = "保存到文件";
@@ -362,6 +362,6 @@
 "savePathReveal" = "显示";
 "chooseScreenshotSavePathTitle" = "选择图片保存路径";
 
-"editClipboardImage" = "Edit Clipboard Image";
-"openImage" = "Open Image";
-"openImageNoImage" = "Copy an image to the clipboard or choose an image file";
+"editClipboardImage" = "编辑剪贴板图片";
+"openImage" = "打开图片";
+"openImageNoImage" = "复制图片到剪贴板，或选择一个图片文件";

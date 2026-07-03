@@ -135,8 +135,8 @@ final class ToolbarSettingsPane: NSView {
 
         NSLayoutConstraint.activate([
             stack.topAnchor.constraint(equalTo: topAnchor, constant: 4),
-            stack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 22),
-            stack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -22),
+            stack.leadingAnchor.constraint(equalTo: leadingAnchor),
+            stack.trailingAnchor.constraint(equalTo: trailingAnchor),
             stack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -22),
         ])
 

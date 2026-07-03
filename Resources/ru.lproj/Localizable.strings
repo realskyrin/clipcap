@@ -67,8 +67,8 @@
 
 /* Copy-to-clipboard shortcut (editor confirm) */
 "clipboardShortcutHeader" = "Копировать в буфер обмена";
-"clipboardShortcutHint" = "Нажмите в редакторе, чтобы подтвердить правку и скопировать изображение в буфер обмена. По умолчанию — ⌘Return";
-"clipboardShortcutDefaultDisplay" = "⌘Return";
+"clipboardShortcutHint" = "Нажмите в редакторе, чтобы подтвердить правку и скопировать изображение в буфер обмена. По умолчанию — ⌘↩";
+"clipboardShortcutDefaultDisplay" = "⌘↩";
 
 /* Save-to-file shortcut (editor save) */
 "fileSaveShortcutHeader" = "Сохранить в файл";
@@ -362,6 +362,6 @@
 "savePathReveal" = "Показать";
 "chooseScreenshotSavePathTitle" = "Выберите путь для изображений";
 
-"editClipboardImage" = "Edit Clipboard Image";
-"openImage" = "Open Image";
-"openImageNoImage" = "Copy an image to the clipboard or choose an image file";
+"editClipboardImage" = "Редактировать изображение из буфера";
+"openImage" = "Открыть изображение";
+"openImageNoImage" = "Скопируйте изображение в буфер обмена или выберите файл изображения";
