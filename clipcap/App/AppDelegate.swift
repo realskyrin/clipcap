@@ -2,10 +2,13 @@ import AppKit
 import UniformTypeIdentifiers
 
 class AppDelegate: NSObject, NSApplicationDelegate {
+    private static let shareHandoffNotificationName = Notification.Name("cn.skyrin.clipcap.share-handoff")
+
     private var statusBarController: StatusBarController!
     private var overlayController: OverlayWindowController?
     private var historyPanelController: HistoryPanelController?
     private var suspendedEditDraft: OverlayWindowController.SuspendedEditDraft?
+    private var pendingReopenSettingsWorkItem: DispatchWorkItem?
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         false
@@ -16,16 +19,32 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
-        openSettings()
+        scheduleSettingsOpenFromReopen()
         return false
     }
 
     func application(_ application: NSApplication, open urls: [URL]) {
-        openImageURLs(urls)
+        _ = openImageURLs(urls)
+    }
+
+    func application(_ sender: NSApplication, openFile filename: String) -> Bool {
+        openImageURLs([URL(fileURLWithPath: filename)])
+    }
+
+    func application(_ sender: NSApplication, openFiles filenames: [String]) {
+        let handled = openImageURLs(filenames.map { URL(fileURLWithPath: $0) })
+        sender.reply(toOpenOrPrint: handled ? .success : .failure)
     }
 
     private func initializeApp() {
         ImageEditLauncher.clearTempDir()
+        DistributedNotificationCenter.default().addObserver(
+            self,
+            selector: #selector(handleShareHandoffNotification(_:)),
+            name: Self.shareHandoffNotificationName,
+            object: nil,
+            suspensionBehavior: .deliverImmediately
+        )
 
         ImageMergeLauncher.shared.onContinueEditing = { [weak self] image in
             self?.continueEditingGeneratedImage(image, source: .merge)
@@ -88,16 +107,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    private func openImageURLs(_ urls: [URL]) {
-        guard overlayController == nil else { return }
-        guard let url = urls.first(where: Self.isImageFile) else {
+    @discardableResult
+    private func openImageURLs(_ urls: [URL]) -> Bool {
+        guard overlayController == nil else { return true }
+        guard let url = urls.lazy.compactMap(Self.resolvedImageFileURL).first(where: Self.isImageFile) else {
             ToastWindow.show(message: L10n.openImageNoImage)
-            return
+            return false
         }
-        launchImageFile(url)
+
+        let didLaunch = launchImageFile(url)
+        if didLaunch {
+            cancelPendingReopenSettings()
+        }
+        return didLaunch
     }
 
-    private func launchImageFile(_ url: URL) {
+    @discardableResult
+    private func launchImageFile(_ url: URL) -> Bool {
         guard let controller = ImageEditLauncher.launch(
             sourceURL: url,
             onSuspend: { [weak self] draft in
@@ -108,9 +134,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         ) else {
             ToastWindow.show(message: L10n.openImageNoImage)
-            return
+            return false
         }
         overlayController = controller
+        return true
     }
 
     private func launchClipboardImageEdit() -> OverlayWindowController? {
@@ -215,8 +242,52 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         configuredSettingsController().showAsSettings()
     }
 
+    private func scheduleSettingsOpenFromReopen() {
+        cancelPendingReopenSettings()
+
+        let workItem = DispatchWorkItem { [weak self] in
+            guard let self, self.overlayController == nil else { return }
+            self.openSettings()
+        }
+        pendingReopenSettingsWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6, execute: workItem)
+    }
+
+    private func cancelPendingReopenSettings() {
+        pendingReopenSettingsWorkItem?.cancel()
+        pendingReopenSettingsWorkItem = nil
+    }
+
+    @objc private func handleShareHandoffNotification(_ notification: Notification) {
+        guard let filePath = notification.userInfo?["file"] as? String,
+              !filePath.isEmpty
+        else {
+            return
+        }
+
+        cancelPendingReopenSettings()
+        openImageURLs([URL(fileURLWithPath: filePath)])
+    }
+
     private static func isImageFile(_ url: URL) -> Bool {
         let values = try? url.resourceValues(forKeys: [.contentTypeKey])
         return values?.contentType?.conforms(to: .image) == true
+    }
+
+    private static func resolvedImageFileURL(from url: URL) -> URL? {
+        if url.isFileURL {
+            return url
+        }
+
+        guard url.scheme?.caseInsensitiveCompare("clipcap") == .orderedSame,
+              url.host?.caseInsensitiveCompare("edit") == .orderedSame,
+              let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+              let filePath = components.queryItems?.first(where: { $0.name == "file" })?.value,
+              !filePath.isEmpty
+        else {
+            return nil
+        }
+
+        return URL(fileURLWithPath: filePath)
     }
 }

@@ -7,6 +7,10 @@ let package = Package(
     platforms: [
         .macOS(.v14)
     ],
+    products: [
+        .executable(name: "clipcap", targets: ["clipcap"]),
+        .executable(name: "ClipcapShareExtension", targets: ["ClipcapShareExtension"])
+    ],
     targets: [
         .executableTarget(
             name: "clipcap",
@@ -18,6 +22,15 @@ let package = Package(
                 .linkedFramework("VisionKit"),
                 .linkedFramework("CoreImage"),
                 .linkedFramework("ImageIO"),
+                .linkedFramework("UniformTypeIdentifiers"),
+            ]
+        ),
+        .executableTarget(
+            name: "ClipcapShareExtension",
+            path: "clipcap-share-extension",
+            exclude: ["Info.plist"],
+            linkerSettings: [
+                .linkedFramework("AppKit"),
                 .linkedFramework("UniformTypeIdentifiers"),
             ]
         )
