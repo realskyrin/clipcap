@@ -235,7 +235,7 @@
 "toolbarSettingsApply" = "Áp dụng";
 
 /* About pane */
-"aboutTagline" = "Phiên bản light của capcap";
+"aboutTagline" = "Phiên bản light của capcap, không cần quyền, chỉ hỗ trợ chú thích và nén ảnh, bản đầy đủ tại github.com/realskyrin/capcap";
 "aboutDescription" = "Không cần quyền, tập trung vào chú thích và nén ảnh";
 "aboutRepositoriesTitle" = "Kho mã nguồn";
 "aboutVersion" = "Phiên bản %@";

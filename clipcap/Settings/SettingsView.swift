@@ -69,6 +69,8 @@ final class SettingsView: NSView {
     private var shortcutRows: [ShortcutSlot: ShortcutRowViews] = [:]
     private var activeShortcutSlot: ShortcutSlot?
     private var shortcutRecordingMonitor: Any?
+    private var aboutUpdateStatusLabel: NSTextField?
+    private var aboutUpdateButton: NSButton?
 
     override var acceptsFirstResponder: Bool { true }
 
@@ -83,6 +85,12 @@ final class SettingsView: NSView {
             self,
             selector: #selector(languageChanged),
             name: .languageDidChange,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(refreshUpdateRow),
+            name: .updateStateDidChange,
             object: nil
         )
     }
@@ -421,18 +429,71 @@ final class SettingsView: NSView {
 
     private func makeAboutPane() -> NSView {
         let stack = paneStack()
-        let card = CardView()
-        let about = cardStack(spacing: 10)
-        about.addArrangedSubview(makeSectionHeader("clipcap"))
-        about.addArrangedSubview(makeBody(L10n.aboutTagline))
-        about.addArrangedSubview(makeBody(L10n.aboutDescription))
-        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0.0"
-        about.addArrangedSubview(makeBody(L10n.aboutVersion(version)))
 
-        about.addArrangedSubview(makeRepositorySection())
-        card.embed(about)
-        addCard(card, to: stack)
+        let headerCard = CardView()
+        let headerRow = NSStackView()
+        headerRow.orientation = .horizontal
+        headerRow.alignment = .centerY
+        headerRow.spacing = 16
+        headerRow.translatesAutoresizingMaskIntoConstraints = false
+        headerCard.embed(headerRow)
+
+        let iconView = NSImageView()
+        iconView.image = NSApp.applicationIconImage
+        iconView.imageScaling = .scaleProportionallyUpOrDown
+        iconView.translatesAutoresizingMaskIntoConstraints = false
+        iconView.widthAnchor.constraint(equalToConstant: 56).isActive = true
+        iconView.heightAnchor.constraint(equalToConstant: 56).isActive = true
+
+        let nameLabel = NSTextField(labelWithString: "clipcap")
+        nameLabel.font = NSFont.systemFont(ofSize: 22, weight: .bold)
+        nameLabel.textColor = NSColor.white.withAlphaComponent(0.96)
+
+        let versionLabel = NSTextField(labelWithString: appVersionDisplayString())
+        versionLabel.font = NSFont.systemFont(ofSize: 13, weight: .regular)
+        versionLabel.textColor = NSColor.white.withAlphaComponent(0.56)
+
+        let taglineLabel = secondaryLabel(L10n.aboutTagline, wrapping: true)
+
+        let textStack = NSStackView(views: [nameLabel, versionLabel, taglineLabel])
+        textStack.orientation = .vertical
+        textStack.alignment = .leading
+        textStack.spacing = 4
+        textStack.translatesAutoresizingMaskIntoConstraints = false
+
+        headerRow.addArrangedSubview(iconView)
+        headerRow.addArrangedSubview(textStack)
+        headerRow.addArrangedSubview(flexSpacer())
+
+        addCard(headerCard, to: stack)
+
+        let infoCard = CardView()
+        infoCard.layer?.masksToBounds = true
+        let infoInner = verticalInnerStack()
+        infoCard.addSubview(infoInner)
+        pin(infoInner, to: infoCard, insets: NSEdgeInsets(top: 4, left: 0, bottom: 4, right: 0))
+
+        let updateRow = makeUpdateRow()
+        addFullWidth(updateRow, to: infoInner)
+        addFullWidth(rowDivider(), to: infoInner)
+
+        let license = makeInfoRow(title: L10n.aboutLicense, value: "MIT")
+        addFullWidth(license, to: infoInner)
+        addFullWidth(rowDivider(), to: infoInner)
+
+        let source = makeLinkRow(
+            title: L10n.aboutSourceCode,
+            value: "github.com/realskyrin/clipcap",
+            action: #selector(openSourceRepo)
+        )
+        addFullWidth(source, to: infoInner)
+
+        addCard(infoCard, to: stack)
         return wrapPane(stack)
+    }
+
+    private func appVersionDisplayString() -> String {
+        "v\(UpdateChecker.shared.currentVersion)"
     }
 
     private func paneStack() -> NSStackView {
@@ -558,6 +619,109 @@ final class SettingsView: NSView {
         )
         button.setContentHuggingPriority(.required, for: .horizontal)
         return button
+    }
+
+    private func makeInfoRow(title: String, value: String) -> NSView {
+        let row = NSView()
+        row.translatesAutoresizingMaskIntoConstraints = false
+
+        let titleLabel = primaryLabel(title)
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        let valueLabel = NSTextField(labelWithString: value)
+        valueLabel.font = NSFont.systemFont(ofSize: 13, weight: .semibold)
+        valueLabel.textColor = NSColor.white.withAlphaComponent(0.58)
+        valueLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        row.addSubview(titleLabel)
+        row.addSubview(valueLabel)
+        NSLayoutConstraint.activate([
+            row.heightAnchor.constraint(equalToConstant: 48),
+            titleLabel.leadingAnchor.constraint(equalTo: row.leadingAnchor, constant: 14),
+            titleLabel.centerYAnchor.constraint(equalTo: row.centerYAnchor),
+            valueLabel.trailingAnchor.constraint(equalTo: row.trailingAnchor, constant: -14),
+            valueLabel.centerYAnchor.constraint(equalTo: row.centerYAnchor),
+            valueLabel.leadingAnchor.constraint(greaterThanOrEqualTo: titleLabel.trailingAnchor, constant: 10),
+        ])
+        return row
+    }
+
+    private func makeLinkRow(title: String, value: String, action: Selector) -> NSView {
+        let button = NSButton(title: "", target: self, action: action)
+        button.isBordered = false
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setButtonType(.momentaryChange)
+
+        let titleLabel = primaryLabel(title)
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        let valueLabel = NSTextField(labelWithString: value)
+        valueLabel.font = NSFont.systemFont(ofSize: 13, weight: .medium)
+        valueLabel.textColor = NSColor(calibratedRed: 0.42, green: 0.66, blue: 0.98, alpha: 1.0)
+        valueLabel.translatesAutoresizingMaskIntoConstraints = false
+        valueLabel.setContentHuggingPriority(.required, for: .horizontal)
+
+        let chevron = NSTextField(labelWithString: "\u{203A}")
+        chevron.font = NSFont.systemFont(ofSize: 18, weight: .regular)
+        chevron.textColor = NSColor.white.withAlphaComponent(0.32)
+        chevron.translatesAutoresizingMaskIntoConstraints = false
+        chevron.setContentHuggingPriority(.required, for: .horizontal)
+
+        button.addSubview(titleLabel)
+        button.addSubview(valueLabel)
+        button.addSubview(chevron)
+        NSLayoutConstraint.activate([
+            button.heightAnchor.constraint(equalToConstant: 48),
+            titleLabel.leadingAnchor.constraint(equalTo: button.leadingAnchor, constant: 14),
+            titleLabel.centerYAnchor.constraint(equalTo: button.centerYAnchor),
+            chevron.trailingAnchor.constraint(equalTo: button.trailingAnchor, constant: -14),
+            chevron.centerYAnchor.constraint(equalTo: button.centerYAnchor),
+            valueLabel.trailingAnchor.constraint(equalTo: chevron.leadingAnchor, constant: -8),
+            valueLabel.centerYAnchor.constraint(equalTo: button.centerYAnchor),
+            valueLabel.leadingAnchor.constraint(greaterThanOrEqualTo: titleLabel.trailingAnchor, constant: 10),
+        ])
+        return button
+    }
+
+    private func makeUpdateRow() -> NSView {
+        let row = NSView()
+        row.translatesAutoresizingMaskIntoConstraints = false
+
+        let titleLabel = primaryLabel(L10n.aboutUpdateTitle)
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        let statusLabel = NSTextField(labelWithString: "")
+        statusLabel.font = NSFont.systemFont(ofSize: 13, weight: .semibold)
+        statusLabel.textColor = NSColor.white.withAlphaComponent(0.58)
+        statusLabel.lineBreakMode = .byTruncatingTail
+        statusLabel.translatesAutoresizingMaskIntoConstraints = false
+        aboutUpdateStatusLabel = statusLabel
+
+        let button = NSButton(title: L10n.checkForUpdates, target: self, action: #selector(aboutUpdateButtonClicked))
+        button.bezelStyle = .rounded
+        button.controlSize = .small
+        button.font = NSFont.systemFont(ofSize: 13, weight: .semibold)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setContentHuggingPriority(.required, for: .horizontal)
+        button.setContentCompressionResistancePriority(.required, for: .horizontal)
+        aboutUpdateButton = button
+
+        row.addSubview(titleLabel)
+        row.addSubview(statusLabel)
+        row.addSubview(button)
+        NSLayoutConstraint.activate([
+            row.heightAnchor.constraint(equalToConstant: 48),
+            titleLabel.leadingAnchor.constraint(equalTo: row.leadingAnchor, constant: 14),
+            titleLabel.centerYAnchor.constraint(equalTo: row.centerYAnchor),
+            button.trailingAnchor.constraint(equalTo: row.trailingAnchor, constant: -14),
+            button.centerYAnchor.constraint(equalTo: row.centerYAnchor),
+            statusLabel.trailingAnchor.constraint(equalTo: button.leadingAnchor, constant: -12),
+            statusLabel.centerYAnchor.constraint(equalTo: row.centerYAnchor),
+            statusLabel.leadingAnchor.constraint(greaterThanOrEqualTo: titleLabel.trailingAnchor, constant: 10),
+        ])
+
+        refreshUpdateRow()
+        return row
     }
 
     private func switchRow(
@@ -910,6 +1074,11 @@ final class SettingsView: NSView {
 
         let keyCode = Int(event.keyCode)
         let modifiers = HotkeyManager.legacyModifiers(from: event.modifierFlags)
+        if slot.requiresRegisteredHotkey,
+           modifiers == 0,
+           !HotkeyManager.isFunctionKey(event.keyCode) {
+            return true
+        }
         if let conflict = ShortcutSlot.allCases.first(where: {
             $0 != slot && $0.effectiveKeyCode == keyCode && $0.effectiveModifiers == modifiers
         }) {
@@ -1022,6 +1191,77 @@ final class SettingsView: NSView {
         NSWorkspace.shared.open(url)
     }
 
+    @objc private func openSourceRepo() {
+        guard let url = URL(string: "https://github.com/realskyrin/clipcap") else { return }
+        NSWorkspace.shared.open(url)
+    }
+
+    @objc private func aboutUpdateButtonClicked() {
+        switch UpdateChecker.shared.state {
+        case .available(let version):
+            StatusBarController.presentUpdateAvailableAlertAfterRefresh(fallbackVersion: version)
+        case .installFailed:
+            if let url = UpdateChecker.shared.latestPageURL {
+                NSWorkspace.shared.open(url)
+            }
+        default:
+            UpdateChecker.shared.check(manual: true)
+        }
+    }
+
+    @objc private func refreshUpdateRow() {
+        guard let statusLabel = aboutUpdateStatusLabel,
+              let button = aboutUpdateButton
+        else { return }
+
+        let muted = NSColor.white.withAlphaComponent(0.58)
+        let accent = NSColor(calibratedRed: 0.42, green: 0.66, blue: 0.98, alpha: 1.0)
+        let warning = NSColor(calibratedRed: 0.95, green: 0.55, blue: 0.45, alpha: 1.0)
+
+        switch UpdateChecker.shared.state {
+        case .idle:
+            statusLabel.stringValue = appVersionDisplayString()
+            statusLabel.textColor = muted
+            button.title = L10n.checkForUpdates
+            button.isEnabled = true
+        case .checking:
+            statusLabel.stringValue = L10n.updateChecking
+            statusLabel.textColor = muted
+            button.title = L10n.checkForUpdates
+            button.isEnabled = false
+        case .upToDate:
+            statusLabel.stringValue = L10n.updateUpToDateStatus
+            statusLabel.textColor = muted
+            button.title = L10n.checkForUpdates
+            button.isEnabled = true
+        case .available(let version):
+            statusLabel.stringValue = L10n.updateNewVersionStatus(version)
+            statusLabel.textColor = accent
+            button.title = L10n.updateInstallNowButton
+            button.isEnabled = true
+        case .downloading(_, let fraction):
+            statusLabel.stringValue = L10n.updateDownloadingStatus(Int(fraction * 100))
+            statusLabel.textColor = accent
+            button.title = L10n.updateInstallNowButton
+            button.isEnabled = false
+        case .installing:
+            statusLabel.stringValue = L10n.updateInstallingStatus
+            statusLabel.textColor = accent
+            button.title = L10n.updateInstallNowButton
+            button.isEnabled = false
+        case .failed:
+            statusLabel.stringValue = L10n.updateFailedStatus
+            statusLabel.textColor = warning
+            button.title = L10n.updateRetryButton
+            button.isEnabled = true
+        case .installFailed:
+            statusLabel.stringValue = L10n.updateInstallFailedStatus
+            statusLabel.textColor = warning
+            button.title = L10n.updateDownloadButton
+            button.isEnabled = true
+        }
+    }
+
     @objc private func languageChanged() {
         for tab in SettingsTab.allCases {
             tabButtons[tab]?.refreshTitle()
@@ -1042,10 +1282,18 @@ private enum ShortcutSlot: Int, CaseIterable {
     case fileSave
     case previousHistoryImage
     case nextHistoryImage
+    case selectedImageEdit
+    case clipboardImageEdit
+    case selectedImagePin
+    case clipboardImagePin
     case historyPanel
 
     var title: String {
         switch self {
+        case .selectedImageEdit: return L10n.selectedImageEditShortcutHeader
+        case .clipboardImageEdit: return L10n.clipboardImageEditShortcutHeader
+        case .selectedImagePin: return L10n.selectedImagePinShortcutHeader
+        case .clipboardImagePin: return L10n.clipboardImagePinShortcutHeader
         case .clipboard: return L10n.clipboardShortcutHeader
         case .fileSave: return L10n.fileSaveShortcutHeader
         case .previousHistoryImage: return L10n.previousHistoryImageShortcutHeader
@@ -1056,6 +1304,10 @@ private enum ShortcutSlot: Int, CaseIterable {
 
     var hint: String {
         switch self {
+        case .selectedImageEdit: return L10n.selectedImageEditShortcutHint
+        case .clipboardImageEdit: return L10n.clipboardImageEditShortcutHint
+        case .selectedImagePin: return ""
+        case .clipboardImagePin: return ""
         case .clipboard: return L10n.clipboardShortcutHint
         case .fileSave: return L10n.fileSaveShortcutHint
         case .previousHistoryImage: return L10n.previousHistoryImageShortcutHint
@@ -1068,11 +1320,26 @@ private enum ShortcutSlot: Int, CaseIterable {
         if let keyCode = effectiveKeyCode, let modifiers = effectiveModifiers {
             return HotkeyManager.displayString(keyCode: keyCode, modifiers: modifiers)
         }
-        return L10n.historyPanelShortcutDefaultDisplay
+        return defaultDisplay
+    }
+
+    var defaultDisplay: String {
+        switch self {
+        case .selectedImageEdit: return L10n.selectedImageEditShortcutDefaultDisplay
+        case .clipboardImageEdit: return L10n.clipboardImageEditShortcutDefaultDisplay
+        case .selectedImagePin: return L10n.selectedImagePinShortcutDefaultDisplay
+        case .clipboardImagePin: return L10n.clipboardImagePinShortcutDefaultDisplay
+        case .historyPanel: return L10n.historyPanelShortcutDefaultDisplay
+        default: return L10n.historyPanelShortcutDefaultDisplay
+        }
     }
 
     var message: String {
         switch self {
+        case .selectedImageEdit: return L10n.shortcutConflictSelectedImageEdit
+        case .clipboardImageEdit: return L10n.shortcutConflictClipboardImageEdit
+        case .selectedImagePin: return L10n.shortcutConflictSelectedImagePin
+        case .clipboardImagePin: return L10n.shortcutConflictClipboardImagePin
         case .clipboard: return L10n.shortcutConflictClipboard
         case .fileSave: return L10n.shortcutConflictFileSave
         case .previousHistoryImage: return L10n.shortcutConflictPreviousHistoryImage
@@ -1083,6 +1350,10 @@ private enum ShortcutSlot: Int, CaseIterable {
 
     var hasCustomShortcut: Bool {
         switch self {
+        case .selectedImageEdit: return Defaults.hasCustomSelectedImageEditHotkey
+        case .clipboardImageEdit: return Defaults.hasCustomClipboardImageEditHotkey
+        case .selectedImagePin: return Defaults.hasCustomSelectedImagePinHotkey
+        case .clipboardImagePin: return Defaults.hasCustomClipboardImagePinHotkey
         case .clipboard: return Defaults.hasCustomClipboardHotkey
         case .fileSave: return Defaults.hasCustomFileSaveHotkey
         case .previousHistoryImage: return Defaults.hasCustomPreviousHistoryImageHotkey
@@ -1094,6 +1365,10 @@ private enum ShortcutSlot: Int, CaseIterable {
     var effectiveKeyCode: Int? {
         if hasCustomShortcut {
             switch self {
+            case .selectedImageEdit: return Defaults.selectedImageEditHotkeyKeyCode
+            case .clipboardImageEdit: return Defaults.clipboardImageEditHotkeyKeyCode
+            case .selectedImagePin: return Defaults.selectedImagePinHotkeyKeyCode
+            case .clipboardImagePin: return Defaults.clipboardImagePinHotkeyKeyCode
             case .clipboard: return Defaults.clipboardHotkeyKeyCode
             case .fileSave: return Defaults.fileSaveHotkeyKeyCode
             case .previousHistoryImage: return Defaults.previousHistoryImageHotkeyKeyCode
@@ -1102,6 +1377,8 @@ private enum ShortcutSlot: Int, CaseIterable {
             }
         }
         switch self {
+        case .selectedImageEdit, .clipboardImageEdit, .selectedImagePin, .clipboardImagePin:
+            return nil
         case .clipboard: return 36
         case .fileSave: return 1
         case .previousHistoryImage: return 43
@@ -1113,6 +1390,10 @@ private enum ShortcutSlot: Int, CaseIterable {
     var effectiveModifiers: Int? {
         if hasCustomShortcut {
             switch self {
+            case .selectedImageEdit: return Defaults.selectedImageEditHotkeyModifiers
+            case .clipboardImageEdit: return Defaults.clipboardImageEditHotkeyModifiers
+            case .selectedImagePin: return Defaults.selectedImagePinHotkeyModifiers
+            case .clipboardImagePin: return Defaults.clipboardImagePinHotkeyModifiers
             case .clipboard: return Defaults.clipboardHotkeyModifiers
             case .fileSave: return Defaults.fileSaveHotkeyModifiers
             case .previousHistoryImage: return Defaults.previousHistoryImageHotkeyModifiers
@@ -1121,6 +1402,8 @@ private enum ShortcutSlot: Int, CaseIterable {
             }
         }
         switch self {
+        case .selectedImageEdit, .clipboardImageEdit, .selectedImagePin, .clipboardImagePin:
+            return nil
         case .clipboard: return 0
         case .fileSave: return 256
         case .previousHistoryImage: return 0
@@ -1131,6 +1414,18 @@ private enum ShortcutSlot: Int, CaseIterable {
 
     func setShortcut(keyCode: Int, modifiers: Int) {
         switch self {
+        case .selectedImageEdit:
+            Defaults.selectedImageEditHotkeyKeyCode = keyCode
+            Defaults.selectedImageEditHotkeyModifiers = modifiers
+        case .clipboardImageEdit:
+            Defaults.clipboardImageEditHotkeyKeyCode = keyCode
+            Defaults.clipboardImageEditHotkeyModifiers = modifiers
+        case .selectedImagePin:
+            Defaults.selectedImagePinHotkeyKeyCode = keyCode
+            Defaults.selectedImagePinHotkeyModifiers = modifiers
+        case .clipboardImagePin:
+            Defaults.clipboardImagePinHotkeyKeyCode = keyCode
+            Defaults.clipboardImagePinHotkeyModifiers = modifiers
         case .clipboard:
             Defaults.clipboardHotkeyKeyCode = keyCode
             Defaults.clipboardHotkeyModifiers = modifiers
@@ -1151,11 +1446,24 @@ private enum ShortcutSlot: Int, CaseIterable {
 
     func clearShortcut() {
         switch self {
+        case .selectedImageEdit: Defaults.clearSelectedImageEditHotkey()
+        case .clipboardImageEdit: Defaults.clearClipboardImageEditHotkey()
+        case .selectedImagePin: Defaults.clearSelectedImagePinHotkey()
+        case .clipboardImagePin: Defaults.clearClipboardImagePinHotkey()
         case .clipboard: Defaults.clearClipboardHotkey()
         case .fileSave: Defaults.clearFileSaveHotkey()
         case .previousHistoryImage: Defaults.clearPreviousHistoryImageHotkey()
         case .nextHistoryImage: Defaults.clearNextHistoryImageHotkey()
         case .historyPanel: Defaults.clearHistoryPanelHotkey()
+        }
+    }
+
+    var requiresRegisteredHotkey: Bool {
+        switch self {
+        case .selectedImageEdit, .clipboardImageEdit, .selectedImagePin, .clipboardImagePin, .historyPanel:
+            return true
+        case .clipboard, .fileSave, .previousHistoryImage, .nextHistoryImage:
+            return false
         }
     }
 }

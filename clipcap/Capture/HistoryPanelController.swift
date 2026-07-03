@@ -800,7 +800,7 @@ private enum HistoryPanelPresentation {
     var tileWidth: CGFloat {
         switch self {
         case .dialog: return 180
-        case .notch: return 168
+        case .notch: return 150
         }
     }
 
@@ -1237,13 +1237,7 @@ private final class HistoryPanelContentView: NSView {
         let tileHeight = presentation.tileHeight
         let gap: CGFloat = 14
         let sideInset: CGFloat = presentation == .notch ? 12 : 0
-        var tileWidth = presentation.tileWidth
-
-        if presentation == .notch, tileCount > 0, viewportWidth > 0 {
-            let availableWidth = max(0, viewportWidth - sideInset * 2)
-            let fittingWidth = floor((availableWidth - gap * CGFloat(tileCount - 1)) / CGFloat(tileCount))
-            tileWidth = min(max(150, fittingWidth), 260)
-        }
+        let tileWidth = presentation.tileWidth
 
         let rowWidth = tileCount > 0
             ? CGFloat(tileCount) * tileWidth + CGFloat(tileCount - 1) * gap

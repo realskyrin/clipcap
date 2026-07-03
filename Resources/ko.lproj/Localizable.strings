@@ -235,7 +235,7 @@
 "toolbarSettingsApply" = "적용";
 
 /* About pane */
-"aboutTagline" = "capcap의 light 버전";
+"aboutTagline" = "capcap의 light 버전, 권한 없이 이미지 주석과 압축만 지원, 전체 버전은 github.com/realskyrin/capcap";
 "aboutDescription" = "권한 없이 이미지 주석과 압축에 집중";
 "aboutRepositoriesTitle" = "저장소";
 "aboutVersion" = "버전 %@";

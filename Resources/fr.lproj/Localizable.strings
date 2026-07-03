@@ -235,7 +235,7 @@
 "toolbarSettingsApply" = "Appliquer";
 
 /* About pane */
-"aboutTagline" = "La version light de capcap";
+"aboutTagline" = "La version light de capcap, sans autorisation, annotation et compression d'images uniquement, version complète sur github.com/realskyrin/capcap";
 "aboutDescription" = "Aucune autorisation requise, axé sur l'annotation et la compression d'images";
 "aboutRepositoriesTitle" = "Dépôts";
 "aboutVersion" = "Version %@";

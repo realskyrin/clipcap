@@ -3,6 +3,7 @@ import AppKit
 /// Where a pinned item was loaded from — drives the X-key clear behavior for
 /// clipboard-backed pins.
 enum PinSource {
+    case finder
     case clipboard
     case clipboardText
 }
@@ -47,6 +48,8 @@ final class PinWindow: NSWindow {
 
     private func clearSource() {
         switch pinSource {
+        case .finder:
+            FinderSelection.clearSelection()
         case .clipboard, .clipboardText:
             ClipboardImageSource.clear()
         case nil:
@@ -63,8 +66,15 @@ enum PinLauncher {
 
     @discardableResult
     static func pinSelectedImagesIfAvailable() -> Bool {
-        ToastWindow.show(message: L10n.selectedImagePinNoImage)
-        return false
+        let finderImages = FinderSelection.currentImageFileURLs().compactMap(loadImage)
+        guard !finderImages.isEmpty else {
+            ToastWindow.show(message: L10n.selectedImagePinNoImage)
+            return false
+        }
+
+        pin(images: finderImages, source: .finder)
+        ToastWindow.show(message: L10n.pinFromFinderHint)
+        return true
     }
 
     /// Pins the image currently on the clipboard. This shortcut is
@@ -289,6 +299,8 @@ enum PinLauncher {
 
     private static func debugSourceName(_ source: PinSource?) -> String {
         switch source {
+        case .finder:
+            return "finder"
         case .clipboard:
             return "clipboard"
         case .clipboardText:

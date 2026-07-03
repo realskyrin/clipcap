@@ -235,7 +235,7 @@
 "toolbarSettingsApply" = "Применить";
 
 /* About pane */
-"aboutTagline" = "Легкая версия capcap";
+"aboutTagline" = "Легкая версия capcap, без разрешений, только разметка и сжатие изображений, полная версия на github.com/realskyrin/capcap";
 "aboutDescription" = "Без разрешений, для разметки и сжатия изображений";
 "aboutRepositoriesTitle" = "Репозитории";
 "aboutVersion" = "Версия %@";

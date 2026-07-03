@@ -235,7 +235,7 @@
 "toolbarSettingsApply" = "適用";
 
 /* About pane */
-"aboutTagline" = "capcap の light バージョン";
+"aboutTagline" = "capcap の light バージョン、権限不要で画像注釈と圧縮のみ対応、完全版は github.com/realskyrin/capcap";
 "aboutDescription" = "権限不要で画像注釈と圧縮に集中";
 "aboutRepositoriesTitle" = "リポジトリ";
 "aboutVersion" = "バージョン %@";

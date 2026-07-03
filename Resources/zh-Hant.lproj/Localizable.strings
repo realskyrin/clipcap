@@ -235,7 +235,7 @@
 "toolbarSettingsApply" = "套用";
 
 /* About pane */
-"aboutTagline" = "capcap 的 light 版本";
+"aboutTagline" = "capcap 的 light 版本，無需任何權限，僅支援標註與圖片壓縮，完整版見 github.com/realskyrin/capcap";
 "aboutDescription" = "不需要任何權限，主打圖片標註與壓縮";
 "aboutRepositoriesTitle" = "倉庫地址";
 "aboutVersion" = "版本 %@";

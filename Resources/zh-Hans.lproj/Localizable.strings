@@ -235,7 +235,7 @@
 "toolbarSettingsApply" = "应用";
 
 /* About pane */
-"aboutTagline" = "capcap 的 light 版本";
+"aboutTagline" = "capcap 的 light 版本，无需任何权限，仅支持标注与图片压缩，完整版见 github.com/realskyrin/capcap";
 "aboutDescription" = "无需任何权限，专注图片标注与压缩";
 "aboutRepositoriesTitle" = "仓库地址";
 "aboutVersion" = "版本 %@";
