@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+## [1.8.1] - 2026-07-03
+
+### Added
+
+- Added configurable image compression for file saves and clipboard copies
+- Added share extension and file open handling for explicit image input workflows
+
+### Changed
+
+- Refreshed settings UI and localization coverage for image quality and file input flows
+
 ## [1.8.0] - 2026-07-02
 
 ### Changed
