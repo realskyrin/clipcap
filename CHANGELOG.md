@@ -2,6 +2,22 @@
 
 ## Unreleased
 
+## [1.8.2] - 2026-07-03
+
+### Added
+
+- Added Finder image edit and pin shortcuts for selected images and clipboard images
+- Added a refreshed About pane with update checking and clearer permission-light product copy
+
+### Fixed
+
+- Fixed the history panel shortcut so it works outside the Settings window
+
+### Changed
+
+- Changed the default copy-to-clipboard shortcut to Return
+- Kept history panel items at a consistent compact width in notch mode
+
 ## [1.8.1] - 2026-07-03
 
 ### Added
