@@ -1287,6 +1287,7 @@ private enum ShortcutSlot: Int, CaseIterable {
     case selectedImagePin
     case clipboardImagePin
     case historyPanel
+    case imageMerge
 
     var title: String {
         switch self {
@@ -1299,6 +1300,7 @@ private enum ShortcutSlot: Int, CaseIterable {
         case .previousHistoryImage: return L10n.previousHistoryImageShortcutHeader
         case .nextHistoryImage: return L10n.nextHistoryImageShortcutHeader
         case .historyPanel: return L10n.historyPanelShortcutHeader
+        case .imageMerge: return L10n.imageMergeShortcutHeader
         }
     }
 
@@ -1313,6 +1315,7 @@ private enum ShortcutSlot: Int, CaseIterable {
         case .previousHistoryImage: return L10n.previousHistoryImageShortcutHint
         case .nextHistoryImage: return L10n.nextHistoryImageShortcutHint
         case .historyPanel: return L10n.historyPanelShortcutHint
+        case .imageMerge: return ""
         }
     }
 
@@ -1330,6 +1333,7 @@ private enum ShortcutSlot: Int, CaseIterable {
         case .selectedImagePin: return L10n.selectedImagePinShortcutDefaultDisplay
         case .clipboardImagePin: return L10n.clipboardImagePinShortcutDefaultDisplay
         case .historyPanel: return L10n.historyPanelShortcutDefaultDisplay
+        case .imageMerge: return L10n.imageMergeShortcutDefaultDisplay
         default: return L10n.historyPanelShortcutDefaultDisplay
         }
     }
@@ -1345,6 +1349,7 @@ private enum ShortcutSlot: Int, CaseIterable {
         case .previousHistoryImage: return L10n.shortcutConflictPreviousHistoryImage
         case .nextHistoryImage: return L10n.shortcutConflictNextHistoryImage
         case .historyPanel: return L10n.shortcutConflictHistoryPanel
+        case .imageMerge: return L10n.shortcutConflictImageMerge
         }
     }
 
@@ -1359,6 +1364,7 @@ private enum ShortcutSlot: Int, CaseIterable {
         case .previousHistoryImage: return Defaults.hasCustomPreviousHistoryImageHotkey
         case .nextHistoryImage: return Defaults.hasCustomNextHistoryImageHotkey
         case .historyPanel: return Defaults.hasCustomHistoryPanelHotkey
+        case .imageMerge: return Defaults.hasCustomImageMergeHotkey
         }
     }
 
@@ -1374,6 +1380,7 @@ private enum ShortcutSlot: Int, CaseIterable {
             case .previousHistoryImage: return Defaults.previousHistoryImageHotkeyKeyCode
             case .nextHistoryImage: return Defaults.nextHistoryImageHotkeyKeyCode
             case .historyPanel: return Defaults.historyPanelHotkeyKeyCode
+            case .imageMerge: return Defaults.imageMergeHotkeyKeyCode
             }
         }
         switch self {
@@ -1383,7 +1390,7 @@ private enum ShortcutSlot: Int, CaseIterable {
         case .fileSave: return 1
         case .previousHistoryImage: return 43
         case .nextHistoryImage: return 47
-        case .historyPanel: return nil
+        case .historyPanel, .imageMerge: return nil
         }
     }
 
@@ -1399,6 +1406,7 @@ private enum ShortcutSlot: Int, CaseIterable {
             case .previousHistoryImage: return Defaults.previousHistoryImageHotkeyModifiers
             case .nextHistoryImage: return Defaults.nextHistoryImageHotkeyModifiers
             case .historyPanel: return Defaults.historyPanelHotkeyModifiers
+            case .imageMerge: return Defaults.imageMergeHotkeyModifiers
             }
         }
         switch self {
@@ -1408,7 +1416,7 @@ private enum ShortcutSlot: Int, CaseIterable {
         case .fileSave: return 256
         case .previousHistoryImage: return 0
         case .nextHistoryImage: return 0
-        case .historyPanel: return nil
+        case .historyPanel, .imageMerge: return nil
         }
     }
 
@@ -1441,6 +1449,9 @@ private enum ShortcutSlot: Int, CaseIterable {
         case .historyPanel:
             Defaults.historyPanelHotkeyKeyCode = keyCode
             Defaults.historyPanelHotkeyModifiers = modifiers
+        case .imageMerge:
+            Defaults.imageMergeHotkeyKeyCode = keyCode
+            Defaults.imageMergeHotkeyModifiers = modifiers
         }
     }
 
@@ -1455,12 +1466,13 @@ private enum ShortcutSlot: Int, CaseIterable {
         case .previousHistoryImage: Defaults.clearPreviousHistoryImageHotkey()
         case .nextHistoryImage: Defaults.clearNextHistoryImageHotkey()
         case .historyPanel: Defaults.clearHistoryPanelHotkey()
+        case .imageMerge: Defaults.clearImageMergeHotkey()
         }
     }
 
     var requiresRegisteredHotkey: Bool {
         switch self {
-        case .selectedImageEdit, .clipboardImageEdit, .selectedImagePin, .clipboardImagePin, .historyPanel:
+        case .selectedImageEdit, .clipboardImageEdit, .selectedImagePin, .clipboardImagePin, .historyPanel, .imageMerge:
             return true
         case .clipboard, .fileSave, .previousHistoryImage, .nextHistoryImage:
             return false

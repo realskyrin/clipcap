@@ -4,6 +4,7 @@ class StatusBarController: NSObject {
     private var statusItem: NSStatusItem
     private let onEditClipboardImage: () -> Void
     private let onOpenImage: () -> Void
+    private let onMergeImages: () -> Void
     private let onOpenHistoryPanel: () -> Void
     private let onOpenSettings: () -> Void
     private var historyMenu: NSMenu?
@@ -12,11 +13,13 @@ class StatusBarController: NSObject {
     init(
         onEditClipboardImage: @escaping () -> Void,
         onOpenImage: @escaping () -> Void,
+        onMergeImages: @escaping () -> Void,
         onOpenHistoryPanel: @escaping () -> Void,
         onOpenSettings: @escaping () -> Void
     ) {
         self.onEditClipboardImage = onEditClipboardImage
         self.onOpenImage = onOpenImage
+        self.onMergeImages = onMergeImages
         self.onOpenHistoryPanel = onOpenHistoryPanel
         self.onOpenSettings = onOpenSettings
 
@@ -42,6 +45,9 @@ class StatusBarController: NSObject {
         NotificationCenter.default.addObserver(forName: .historyCacheEnabledDidChange, object: nil, queue: .main) { [weak self] _ in
             self?.setupMenu()
         }
+        NotificationCenter.default.addObserver(forName: .hotkeyDidChange, object: nil, queue: .main) { [weak self] _ in
+            self?.setupMenu()
+        }
         NotificationCenter.default.addObserver(forName: .updateStateDidChange, object: nil, queue: .main) { [weak self] _ in
             self?.setupMenu()
             self?.syncUpdateProgressHUD()
@@ -54,12 +60,19 @@ class StatusBarController: NSObject {
         let clipboardItem = NSMenuItem(title: L10n.editClipboardImage, action: #selector(editClipboardImage), keyEquivalent: "")
         clipboardItem.target = self
         clipboardItem.image = Self.menuIcon(systemName: "doc.on.clipboard")
+        HotkeyManager.applyClipboardImageEditToMenuItem(clipboardItem)
         menu.addItem(clipboardItem)
 
         let openImageItem = NSMenuItem(title: L10n.openImage, action: #selector(openImage), keyEquivalent: "")
         openImageItem.target = self
         openImageItem.image = Self.menuIcon(systemName: "folder")
         menu.addItem(openImageItem)
+
+        let mergeItem = NSMenuItem(title: L10n.mergeImages, action: #selector(mergeImages), keyEquivalent: "")
+        mergeItem.target = self
+        mergeItem.image = Self.menuIcon(systemName: "square.grid.2x2")
+        HotkeyManager.applyImageMergeToMenuItem(mergeItem)
+        menu.addItem(mergeItem)
 
         menu.addItem(NSMenuItem.separator())
 
@@ -76,6 +89,7 @@ class StatusBarController: NSObject {
             let historyPanelItem = NSMenuItem(title: L10n.historyPanelMenu, action: #selector(openHistoryPanel), keyEquivalent: "")
             historyPanelItem.target = self
             historyPanelItem.image = Self.menuIcon(systemName: "rectangle.stack")
+            HotkeyManager.applyHistoryPanelToMenuItem(historyPanelItem)
             menu.addItem(historyPanelItem)
 
             menu.addItem(NSMenuItem.separator())
@@ -136,6 +150,10 @@ class StatusBarController: NSObject {
 
     @objc private func openImage() {
         onOpenImage()
+    }
+
+    @objc private func mergeImages() {
+        onMergeImages()
     }
 
     @objc private func openSettings() {

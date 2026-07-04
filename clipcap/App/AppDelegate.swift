@@ -58,6 +58,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusBarController = StatusBarController(
             onEditClipboardImage: { [weak self] in self?.handleClipboardImageEditTrigger() },
             onOpenImage: { [weak self] in self?.openImagePanel() },
+            onMergeImages: { [weak self] in self?.handleImageMergeMenuTrigger() },
             onOpenHistoryPanel: { [weak self] in self?.handleHistoryPanelTrigger(holdOpenUntilMouseEnters: true) },
             onOpenSettings: { [weak self] in self?.openSettings() }
         )
@@ -84,6 +85,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func handleHistoryPanelTrigger(holdOpenUntilMouseEnters: Bool = false) {
         historyPanelController?.toggleFromUserRequest(holdOpenUntilMouseEnters: holdOpenUntilMouseEnters)
+    }
+
+    func handleImageMergeMenuTrigger() {
+        guard overlayController == nil else { return }
+        ImageMergeLauncher.shared.openEmpty()
+    }
+
+    @objc func handleImageMergeShortcutTrigger(_ sender: Any?) {
+        guard overlayController == nil,
+              !ImageMergeLauncher.shared.isWorkbenchActive
+        else { return }
+        ImageMergeLauncher.shared.openFromShortcutSources()
     }
 
     private func applyHotkeyState() {
@@ -125,6 +138,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         } else {
             HotkeyManager.shared.unregisterHistoryPanel()
+        }
+
+        if Defaults.hasCustomImageMergeHotkey {
+            HotkeyManager.shared.registerImageMerge { [weak self] in
+                self?.handleImageMergeShortcutTrigger(nil)
+            }
+        } else {
+            HotkeyManager.shared.unregisterImageMerge()
         }
     }
 

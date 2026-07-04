@@ -9,11 +9,13 @@ final class HotkeyManager {
     private var selectedImageEditHotKeyRef: EventHotKeyRef?
     private var clipboardImageEditHotKeyRef: EventHotKeyRef?
     private var historyPanelHotKeyRef: EventHotKeyRef?
+    private var imageMergeHotKeyRef: EventHotKeyRef?
     private var selectedImagePinCallback: (() -> Void)?
     private var clipboardImagePinCallback: (() -> Void)?
     private var selectedImageEditCallback: (() -> Void)?
     private var clipboardImageEditCallback: (() -> Void)?
     private var historyPanelCallback: (() -> Void)?
+    private var imageMergeCallback: (() -> Void)?
     private var eventHandlerRef: EventHandlerRef?
 
     private static let hotKeySignature: OSType = OSType(0x434C_4950) // 'CLIP'
@@ -22,6 +24,7 @@ final class HotkeyManager {
     private static let selectedImageEditHotKeyID: UInt32 = 3
     private static let clipboardImageEditHotKeyID: UInt32 = 4
     private static let historyPanelHotKeyID: UInt32 = 5
+    private static let imageMergeHotKeyID: UInt32 = 6
 
     private init() {}
 
@@ -83,8 +86,18 @@ final class HotkeyManager {
     func unregisterTextRecognition() {}
     func registerCopyImageText(callback: @escaping () -> Void) {}
     func unregisterCopyImageText() {}
-    func registerImageMerge(callback: @escaping () -> Void) {}
-    func unregisterImageMerge() {}
+    func registerImageMerge(callback: @escaping () -> Void) {
+        unregisterImageMerge()
+        imageMergeCallback = callback
+        guard let hotkey = currentImageMergeHotkey() else { return }
+        imageMergeHotKeyRef = registerHotKey(hotkey, id: Self.imageMergeHotKeyID)
+    }
+
+    func unregisterImageMerge() {
+        unregisterHotKey(&imageMergeHotKeyRef)
+        imageMergeCallback = nil
+    }
+
     func registerFullScreenScreenshot(callback: @escaping () -> Void) {}
     func unregisterFullScreenScreenshot() {}
     func registerColorPicker(callback: @escaping () -> Void) {}
@@ -149,7 +162,11 @@ final class HotkeyManager {
 
     static func currentTextRecognitionDisplayString() -> String? { nil }
     static func currentCopyImageTextDisplayString() -> String? { nil }
-    static func currentImageMergeDisplayString() -> String? { nil }
+    static func currentImageMergeDisplayString() -> String? {
+        guard let hotkey = HotkeyManager.shared.currentImageMergeHotkey() else { return nil }
+        return displayString(keyCode: Int(hotkey.keyCode), modifiers: Int(hotkey.modifiers))
+    }
+
     static func currentFullScreenScreenshotDisplayString() -> String? { nil }
     static func currentColorPickerDisplayString() -> String? { nil }
     static func currentHistoryPanelDisplayString() -> String? {
@@ -179,6 +196,18 @@ final class HotkeyManager {
             event,
             hotkey: (Defaults.historyPanelHotkeyKeyCode, Defaults.historyPanelHotkeyModifiers)
         )
+    }
+
+    static func applyClipboardImageEditToMenuItem(_ item: NSMenuItem) {
+        applyToMenuItem(item, hotkey: HotkeyManager.shared.currentClipboardImageEditHotkey())
+    }
+
+    static func applyImageMergeToMenuItem(_ item: NSMenuItem) {
+        applyToMenuItem(item, hotkey: HotkeyManager.shared.currentImageMergeHotkey())
+    }
+
+    static func applyHistoryPanelToMenuItem(_ item: NSMenuItem) {
+        applyToMenuItem(item, hotkey: HotkeyManager.shared.currentHistoryPanelHotkey())
     }
 
     static func displayString(keyCode: Int, modifiers: Int) -> String {
@@ -246,6 +275,14 @@ final class HotkeyManager {
             hasCustom: Defaults.hasCustomHistoryPanelHotkey,
             keyCode: Defaults.historyPanelHotkeyKeyCode,
             modifiers: Defaults.historyPanelHotkeyModifiers
+        )
+    }
+
+    private func currentImageMergeHotkey() -> (keyCode: UInt32, modifiers: UInt32)? {
+        currentGlobalHotkey(
+            hasCustom: Defaults.hasCustomImageMergeHotkey,
+            keyCode: Defaults.imageMergeHotkeyKeyCode,
+            modifiers: Defaults.imageMergeHotkeyModifiers
         )
     }
 
@@ -327,6 +364,8 @@ final class HotkeyManager {
                     callback = manager.clipboardImageEditCallback
                 case HotkeyManager.historyPanelHotKeyID:
                     callback = manager.historyPanelCallback
+                case HotkeyManager.imageMergeHotKeyID:
+                    callback = manager.imageMergeCallback
                 default:
                     callback = nil
                 }
@@ -371,6 +410,74 @@ final class HotkeyManager {
         Int(event.keyCode) == hotkey.keyCode
             && legacyModifiers(from: event.modifierFlags) == hotkey.modifiers
     }
+
+    private static func applyToMenuItem(
+        _ item: NSMenuItem,
+        hotkey: (keyCode: UInt32, modifiers: UInt32)?
+    ) {
+        item.attributedTitle = nil
+        guard let hotkey,
+              let keyEquivalent = menuKeyEquivalent(for: hotkey.keyCode)
+        else {
+            item.keyEquivalent = ""
+            item.keyEquivalentModifierMask = []
+            return
+        }
+
+        item.keyEquivalent = keyEquivalent
+        item.keyEquivalentModifierMask = modifierFlags(fromLegacyModifiers: Int(hotkey.modifiers))
+    }
+
+    private static func modifierFlags(fromLegacyModifiers modifiers: Int) -> NSEvent.ModifierFlags {
+        var flags: NSEvent.ModifierFlags = []
+        if modifiers & 4096 != 0 { flags.insert(.control) }
+        if modifiers & 2048 != 0 { flags.insert(.option) }
+        if modifiers & 512 != 0 { flags.insert(.shift) }
+        if modifiers & 256 != 0 { flags.insert(.command) }
+        return flags
+    }
+
+    private static func menuKeyEquivalent(for keyCode: UInt32) -> String? {
+        if let special = specialMenuKeyEquivalents[keyCode] {
+            return special
+        }
+
+        let key = keyName(UInt16(keyCode))
+        guard !key.hasPrefix("#") else { return nil }
+        return key.lowercased()
+    }
+
+    private static let specialMenuKeyEquivalents: [UInt32: String] = [
+        UInt32(kVK_F1): "\u{F704}",
+        UInt32(kVK_F2): "\u{F705}",
+        UInt32(kVK_F3): "\u{F706}",
+        UInt32(kVK_F4): "\u{F707}",
+        UInt32(kVK_F5): "\u{F708}",
+        UInt32(kVK_F6): "\u{F709}",
+        UInt32(kVK_F7): "\u{F70A}",
+        UInt32(kVK_F8): "\u{F70B}",
+        UInt32(kVK_F9): "\u{F70C}",
+        UInt32(kVK_F10): "\u{F70D}",
+        UInt32(kVK_F11): "\u{F70E}",
+        UInt32(kVK_F12): "\u{F70F}",
+        UInt32(kVK_F13): "\u{F710}",
+        UInt32(kVK_F14): "\u{F711}",
+        UInt32(kVK_F15): "\u{F712}",
+        UInt32(kVK_F16): "\u{F713}",
+        UInt32(kVK_F17): "\u{F714}",
+        UInt32(kVK_F18): "\u{F715}",
+        UInt32(kVK_F19): "\u{F716}",
+        UInt32(kVK_F20): "\u{F717}",
+        UInt32(kVK_Space): " ",
+        UInt32(kVK_Return): "\r",
+        UInt32(kVK_Delete): "\u{7F}",
+        UInt32(kVK_ForwardDelete): "\u{F728}",
+        UInt32(kVK_Escape): "\u{1B}",
+        UInt32(kVK_LeftArrow): "\u{F702}",
+        UInt32(kVK_RightArrow): "\u{F703}",
+        UInt32(kVK_UpArrow): "\u{F700}",
+        UInt32(kVK_DownArrow): "\u{F701}",
+    ]
 
     private static func keyName(_ keyCode: UInt16) -> String {
         switch keyCode {
