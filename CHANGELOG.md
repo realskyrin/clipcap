@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [1.8.3] - 2026-07-04
+
+### Added
+
+- Added customizable image merge hotkey support and surfaced configured shortcuts in the status bar menu (6e5ccf4)
+
 ## [1.8.2] - 2026-07-03
 
 ### Added
