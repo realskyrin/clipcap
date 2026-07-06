@@ -1,6 +1,17 @@
 import AppKit
 import UniformTypeIdentifiers
 
+enum ImageMergeTheme {
+    static let windowBackground = NSColor(calibratedRed: 0.09, green: 0.12, blue: 0.16, alpha: 1.0)
+    static let canvasBackground = NSColor(calibratedWhite: 0.075, alpha: 1.0)
+    static let sidebarBackground = NSColor(calibratedRed: 0.075, green: 0.10, blue: 0.14, alpha: 1.0)
+    static let cardBackground = NSColor.white.withAlphaComponent(0.06)
+    static let cardBorder = NSColor.white.withAlphaComponent(0.08)
+    static let rowBackground = NSColor.white.withAlphaComponent(0.055)
+    static let rowBorder = NSColor.white.withAlphaComponent(0.10)
+    static let badgeBackground = NSColor(calibratedWhite: 0.08, alpha: 0.94)
+}
+
 private final class ImageMergeWindow: NSWindow {
     override func performKeyEquivalent(with event: NSEvent) -> Bool {
         let commandModifiers: NSEvent.ModifierFlags = [.command, .shift, .option, .control]
@@ -52,6 +63,8 @@ final class ImageMergeWindowController: NSWindowController, NSWindowDelegate {
         )
         window.title = L10n.imageMergeWindowTitle
         window.minSize = NSSize(width: 860, height: 560)
+        window.appearance = NSAppearance(named: .darkAqua)
+        window.backgroundColor = ImageMergeTheme.windowBackground
         window.center()
 
         super.init(window: window)
@@ -89,6 +102,8 @@ final class ImageMergeWindowController: NSWindowController, NSWindowDelegate {
     private func buildContentView() -> NSView {
         let root = NSView()
         root.translatesAutoresizingMaskIntoConstraints = false
+        root.wantsLayer = true
+        root.layer?.backgroundColor = ImageMergeTheme.windowBackground.cgColor
 
         let split = NSSplitView()
         split.isVertical = true
@@ -124,6 +139,8 @@ final class ImageMergeWindowController: NSWindowController, NSWindowDelegate {
     private func buildControlsView() -> NSView {
         let container = NSView()
         container.translatesAutoresizingMaskIntoConstraints = false
+        container.wantsLayer = true
+        container.layer?.backgroundColor = ImageMergeTheme.sidebarBackground.cgColor
 
         let scrollView = NSScrollView()
         scrollView.hasVerticalScroller = true
@@ -612,7 +629,8 @@ private final class ImageMergeSidebarCardView: NSView {
         wantsLayer = true
         layer?.cornerRadius = 12
         layer?.cornerCurve = .continuous
-        layer?.backgroundColor = NSColor.controlBackgroundColor.withAlphaComponent(0.72).cgColor
-        layer?.borderWidth = 0
+        layer?.backgroundColor = ImageMergeTheme.cardBackground.cgColor
+        layer?.borderColor = ImageMergeTheme.cardBorder.cgColor
+        layer?.borderWidth = 1
     }
 }

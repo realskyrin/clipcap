@@ -63,7 +63,7 @@ final class ImageMergeCanvasView: NSView {
     override var acceptsFirstResponder: Bool { true }
 
     override func draw(_ dirtyRect: NSRect) {
-        NSColor.windowBackgroundColor.setFill()
+        ImageMergeTheme.canvasBackground.setFill()
         bounds.fill()
 
         guard let document else { return }
@@ -798,7 +798,7 @@ final class ImageMergeCanvasView: NSView {
             height: badgeHeight
         )
 
-        NSColor.windowBackgroundColor.withAlphaComponent(0.92).setFill()
+        ImageMergeTheme.badgeBackground.setFill()
         NSBezierPath(roundedRect: badgeRect, xRadius: 5, yRadius: 5).fill()
         NSColor.separatorColor.withAlphaComponent(0.55).setStroke()
         let border = NSBezierPath(roundedRect: badgeRect.insetBy(dx: 0.5, dy: 0.5), xRadius: 5, yRadius: 5)
@@ -1159,9 +1159,9 @@ final class ImageMergeThumbnailListView: NSView {
         defer { cgContext.restoreGState() }
 
         let path = NSBezierPath(roundedRect: rect.insetBy(dx: 1, dy: 1), xRadius: 8, yRadius: 8)
-        (selected ? NSColor.controlAccentColor.withAlphaComponent(0.16) : NSColor.controlBackgroundColor).setFill()
+        (selected ? NSColor.controlAccentColor.withAlphaComponent(0.18) : ImageMergeTheme.rowBackground).setFill()
         path.fill()
-        (selected ? NSColor.controlAccentColor.withAlphaComponent(0.8) : NSColor.separatorColor).setStroke()
+        (selected ? NSColor.controlAccentColor.withAlphaComponent(0.8) : ImageMergeTheme.rowBorder).setStroke()
         path.lineWidth = selected ? 1.5 : 1
         path.stroke()
 
