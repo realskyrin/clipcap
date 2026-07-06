@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [1.8.4] - 2026-07-06
+
+### Changed
+
+- Refined the Image Merge workbench dark theme styling (9a20aba)
+
 ## [1.8.3] - 2026-07-04
 
 ### Added
