@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [1.8.5] - 2026-07-06
+
+### Fixed
+
+- Fixed Image Merge template button text contrast in the dark theme (e1bfbd5)
+
 ## [1.8.4] - 2026-07-06
 
 ### Changed
