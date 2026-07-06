@@ -596,9 +596,6 @@ private final class ImageMergeTemplateChipButton: NSButton {
 
     private func updateAppearance() {
         let selected = state == .on
-        let textColor = selected
-            ? NSColor.white
-            : NSColor.labelColor.withAlphaComponent(0.92)
         layer?.backgroundColor = (selected
             ? NSColor.controlAccentColor
             : NSColor.labelColor.withAlphaComponent(0.10)
@@ -607,7 +604,7 @@ private final class ImageMergeTemplateChipButton: NSButton {
             string: template.title,
             attributes: [
                 .font: NSFont.systemFont(ofSize: 13, weight: .semibold),
-                .foregroundColor: textColor
+                .foregroundColor: NSColor.white
             ]
         )
     }
