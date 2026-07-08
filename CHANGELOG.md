@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [1.8.6] - 2026-07-09
+
+### Added
+
+- Added shift and command multi-select support to the history panel (55b6e2e)
+
 ## [1.8.5] - 2026-07-06
 
 ### Fixed
