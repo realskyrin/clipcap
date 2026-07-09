@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [1.8.7] - 2026-07-09
+
+### Fixed
+
+- Fixed Escape key clearing for history panel multi-selection (3ff02c5)
+
 ## [1.8.6] - 2026-07-09
 
 ### Added
