@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [1.8.8] - 2026-07-10
+
+### Added
+
+- Added bulk delete support to the history panel (01212ae)
+
 ## [1.8.7] - 2026-07-09
 
 ### Fixed
