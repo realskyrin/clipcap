@@ -1739,7 +1739,12 @@ class EditCanvasView: NSView {
         }
 
         if let preset = beautifyPreset {
-            let pad = beautifyPadding ?? BeautifyRenderer.paddingSliderDefault
+            let previewPadding = beautifyPadding ?? BeautifyRenderer.paddingSliderDefault
+            let pad = BeautifyRenderer.outputPadding(
+                previewPadding: previewPadding,
+                previewInnerSize: bounds.size,
+                outputInnerSize: innerImage.size
+            )
             let rendered = BeautifyRenderer.render(
                 innerImage: innerImage,
                 preset: preset,

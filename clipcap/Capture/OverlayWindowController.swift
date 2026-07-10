@@ -219,6 +219,8 @@ final class OverlayWindowController {
     }
 
     private static func fittedRect(imageSize: NSSize, in bounds: NSRect) -> NSRect {
+        let preferredVerticalOffset: CGFloat = 48
+        let minimumTopClearance: CGFloat = 64
         let maxSize = NSSize(
             width: max(bounds.width - 220, 320),
             height: max(min(bounds.height * 0.70, bounds.height - 220), 240)
@@ -228,9 +230,15 @@ final class OverlayWindowController {
             width: max(1, imageSize.width * scale),
             height: max(1, imageSize.height * scale)
         )
+        let centeredY = bounds.midY - size.height / 2
+        let availableTopClearance = bounds.maxY - (centeredY + size.height)
+        let verticalOffset = min(
+            preferredVerticalOffset,
+            max(0, availableTopClearance - minimumTopClearance)
+        )
         return NSRect(
             x: bounds.midX - size.width / 2,
-            y: bounds.midY - size.height / 2,
+            y: centeredY + verticalOffset,
             width: size.width,
             height: size.height
         )

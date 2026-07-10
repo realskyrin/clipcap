@@ -28,8 +28,8 @@ final class BeautifyContainerView: NSView {
 
     /// User-driven padding override. When `nil`, `relayout()` falls back to
     /// `BeautifyRenderer.padding(for:)`. When set, the live preview uses this
-    /// value and the controller is responsible for forwarding the same value
-    /// to `BeautifyRenderer.render(innerImage:preset:padding:)` at save time.
+    /// value. Export scales the preview-space value to the source image so the
+    /// final image keeps the same visible padding ratio.
     private(set) var customPadding: CGFloat?
 
     var isBeautifyEnabled: Bool { beautifyPreset != nil }

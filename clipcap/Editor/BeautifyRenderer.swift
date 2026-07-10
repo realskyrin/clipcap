@@ -57,6 +57,31 @@ enum BeautifyRenderer {
         return CGRect(x: padding, y: padding, width: innerSize.width, height: innerSize.height)
     }
 
+    /// Converts a padding value chosen against the on-screen preview into the
+    /// source image's coordinate space. The editor scales images down to fit
+    /// the display, so reusing the preview value directly would make exported
+    /// padding proportionally smaller than what the user saw.
+    static func outputPadding(
+        previewPadding: CGFloat,
+        previewInnerSize: CGSize,
+        outputInnerSize: CGSize
+    ) -> CGFloat {
+        guard
+            previewInnerSize.width > 0,
+            previewInnerSize.height > 0,
+            outputInnerSize.width > 0,
+            outputInnerSize.height > 0
+        else {
+            return previewPadding
+        }
+
+        let scaleX = outputInnerSize.width / previewInnerSize.width
+        let scaleY = outputInnerSize.height / previewInnerSize.height
+        let scale = min(scaleX, scaleY)
+        guard scale.isFinite, scale > 0 else { return previewPadding }
+        return previewPadding * scale
+    }
+
     // MARK: - Wallpaper
 
     /// Longest-edge pixel cap for the cached wallpaper bitmap. The raw desktop
