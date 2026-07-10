@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## [1.8.9] - 2026-07-10
+
+### Fixed
+
+- Fixed release packaging to include the Share Extension (1e97a3f)
+- Scaled beautify padding to preserve the export preview ratio (15d1c99)
+
 ## [1.8.8] - 2026-07-10
 
 ### Added
