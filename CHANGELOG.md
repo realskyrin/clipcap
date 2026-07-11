@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [1.8.10] - 2026-07-11
+
+### Changed
+
+- Refined pinned image zoom interactions with an interactive preview and animated viewport transitions (7247389)
+
 ## [1.8.9] - 2026-07-10
 
 ### Fixed
