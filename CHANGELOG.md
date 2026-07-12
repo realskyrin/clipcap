@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [1.8.11] - 2026-07-12
+
+### Added
+
+- Added image preview and edit actions to the history panel (26c3906)
+
 ## [1.8.10] - 2026-07-11
 
 ### Changed
