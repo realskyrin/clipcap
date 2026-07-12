@@ -10,12 +10,14 @@ final class HotkeyManager {
     private var clipboardImageEditHotKeyRef: EventHotKeyRef?
     private var historyPanelHotKeyRef: EventHotKeyRef?
     private var imageMergeHotKeyRef: EventHotKeyRef?
+    private var historyPreviewHotKeyRef: EventHotKeyRef?
     private var selectedImagePinCallback: (() -> Void)?
     private var clipboardImagePinCallback: (() -> Void)?
     private var selectedImageEditCallback: (() -> Void)?
     private var clipboardImageEditCallback: (() -> Void)?
     private var historyPanelCallback: (() -> Void)?
     private var imageMergeCallback: (() -> Void)?
+    private var historyPreviewCallback: (() -> Void)?
     private var eventHandlerRef: EventHandlerRef?
 
     private static let hotKeySignature: OSType = OSType(0x434C_4950) // 'CLIP'
@@ -25,6 +27,7 @@ final class HotkeyManager {
     private static let clipboardImageEditHotKeyID: UInt32 = 4
     private static let historyPanelHotKeyID: UInt32 = 5
     private static let imageMergeHotKeyID: UInt32 = 6
+    private static let historyPreviewHotKeyID: UInt32 = 7
 
     private init() {}
 
@@ -113,6 +116,36 @@ final class HotkeyManager {
     func unregisterHistoryPanel() {
         unregisterHotKey(&historyPanelHotKeyRef)
         historyPanelCallback = nil
+    }
+
+    /// Temporarily captures an unmodified Space press while an image history
+    /// tile is hovered in the non-activating history panel
+    @discardableResult
+    func registerHistoryPreview(callback: @escaping () -> Void) -> Bool {
+        unregisterHistoryPreview()
+        historyPreviewCallback = callback
+        installEventHandlerIfNeeded()
+        var ref: EventHotKeyRef?
+        let id = EventHotKeyID(signature: Self.hotKeySignature, id: Self.historyPreviewHotKeyID)
+        let status = RegisterEventHotKey(
+            UInt32(kVK_Space),
+            0,
+            id,
+            GetApplicationEventTarget(),
+            0,
+            &ref
+        )
+        if status == noErr, let ref {
+            historyPreviewHotKeyRef = ref
+            return true
+        }
+        historyPreviewCallback = nil
+        return false
+    }
+
+    func unregisterHistoryPreview() {
+        unregisterHotKey(&historyPreviewHotKeyRef)
+        historyPreviewCallback = nil
     }
 
     static func currentClipboardDisplayString() -> String? {
@@ -366,6 +399,8 @@ final class HotkeyManager {
                     callback = manager.historyPanelCallback
                 case HotkeyManager.imageMergeHotKeyID:
                     callback = manager.imageMergeCallback
+                case HotkeyManager.historyPreviewHotKeyID:
+                    callback = manager.historyPreviewCallback
                 default:
                     callback = nil
                 }

@@ -54,7 +54,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             self?.continueEditingGeneratedImage(image, source: .merge)
         }
 
-        historyPanelController = HistoryPanelController()
+        historyPanelController = HistoryPanelController { [weak self] entry in
+            _ = self?.launchImageFile(entry.fileURL)
+        }
         statusBarController = StatusBarController(
             onEditClipboardImage: { [weak self] in self?.handleClipboardImageEditTrigger() },
             onOpenImage: { [weak self] in self?.openImagePanel() },

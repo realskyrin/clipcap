@@ -1,5 +1,6 @@
 import AppKit
 import Carbon
+import ImageIO
 
 private enum HistoryPanelLayout {
     static let headerTopInset: CGFloat = 12
@@ -8,11 +9,13 @@ private enum HistoryPanelLayout {
 }
 
 final class HistoryPanelController {
+    private let onEditEntry: (HistoryEntry) -> Void
     private var dialogPanel: NSPanel?
     private var dialogOutsideMonitors: [Any] = []
     private var notchController: HistoryNotchWindowController?
 
-    init() {
+    init(onEditEntry: @escaping (HistoryEntry) -> Void) {
+        self.onEditEntry = onEditEntry
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(displayModesChanged),
@@ -82,7 +85,7 @@ final class HistoryPanelController {
         if let notchController {
             return notchController
         }
-        let controller = HistoryNotchWindowController()
+        let controller = HistoryNotchWindowController(onEditEntry: onEditEntry)
         notchController = controller
         return controller
     }
@@ -128,9 +131,11 @@ final class HistoryPanelController {
         chrome.frame = NSRect(origin: .zero, size: frame.size)
         chrome.autoresizingMask = [.width, .height]
 
-        let content = HistoryPanelContentView(presentation: .dialog) { [weak self] in
-            self?.closeDialog()
-        }
+        let content = HistoryPanelContentView(
+            presentation: .dialog,
+            onRequestDismiss: { [weak self] in self?.closeDialog() },
+            onEditEntry: onEditEntry
+        )
         content.frame = chrome.bounds
         content.autoresizingMask = [.width, .height]
         chrome.addSubview(content)
@@ -213,7 +218,7 @@ private final class HistoryPanelChromeView: NSView {
 }
 
 private final class HistoryNotchWindowController: NSWindowController {
-    private let rootView = HistoryNotchRootView()
+    private let rootView: HistoryNotchRootView
     private var hoverSampler: DispatchSourceTimer?
     private var expandWorkItem: DispatchWorkItem?
     private var collapseWorkItem: DispatchWorkItem?
@@ -228,7 +233,8 @@ private final class HistoryNotchWindowController: NSWindowController {
     private let sampleInterval: TimeInterval = 0.035
     private let postExpandGrace: TimeInterval = 0.5
 
-    init() {
+    init(onEditEntry: @escaping (HistoryEntry) -> Void) {
+        rootView = HistoryNotchRootView(onEditEntry: onEditEntry)
         let screen = Self.anchorScreen()
         rootView.updateGeometry(for: screen)
         let frame = Self.frame(for: screen, expandedSize: rootView.expandedSize)
@@ -509,7 +515,7 @@ private final class HistoryNotchRootView: NSView {
     var visibleHeight: CGFloat { currentSize.height }
 
     private let shellView = HistoryNotchShellView()
-    private let contentView = HistoryPanelContentView(presentation: .notch)
+    private let contentView: HistoryPanelContentView
     private let collapsedLabel = NSTextField(labelWithString: "")
     private let countQueue = DispatchQueue(label: "clipcap.historyNotchCount", qos: .utility)
 
@@ -523,8 +529,19 @@ private final class HistoryNotchRootView: NSView {
         }
     }
 
+    init(onEditEntry: @escaping (HistoryEntry) -> Void) {
+        contentView = HistoryPanelContentView(presentation: .notch, onEditEntry: onEditEntry)
+        super.init(frame: .zero)
+        commonInit()
+    }
+
     override init(frame frameRect: NSRect) {
+        contentView = HistoryPanelContentView(presentation: .notch)
         super.init(frame: frameRect)
+        commonInit()
+    }
+
+    private func commonInit() {
         wantsLayer = true
         layer?.backgroundColor = NSColor.clear.cgColor
 
@@ -862,6 +879,7 @@ private enum HistoryPanelFilter: CaseIterable {
 
 private final class HistoryPanelContentView: NSView {
     private let presentation: HistoryPanelPresentation
+    private let onEditEntry: (HistoryEntry) -> Void
     var onRequestDismiss: (() -> Void)?
 
     private var selectedFilter: HistoryPanelFilter = .all
@@ -876,6 +894,7 @@ private final class HistoryPanelContentView: NSView {
     private var deleteButtonWidthConstraint: NSLayoutConstraint?
     private var confirmationDismissMonitor: Any?
     private var selectionKeyMonitor: Any?
+    private var previewController: HistoryPreviewWindowController?
     private weak var activeHoverTile: HistoryPanelTileView?
     private var visibleEntries: [HistoryEntry] = []
     private var selectedEntryIDs: [String] = []
@@ -883,9 +902,14 @@ private final class HistoryPanelContentView: NSView {
     private var reloadGeneration = 0
     private var isConfirmingDelete = false
 
-    init(presentation: HistoryPanelPresentation, onRequestDismiss: (() -> Void)? = nil) {
+    init(
+        presentation: HistoryPanelPresentation,
+        onRequestDismiss: (() -> Void)? = nil,
+        onEditEntry: @escaping (HistoryEntry) -> Void = { _ in }
+    ) {
         self.presentation = presentation
         self.onRequestDismiss = onRequestDismiss
+        self.onEditEntry = onEditEntry
         super.init(frame: .zero)
         wantsLayer = true
         layer?.backgroundColor = NSColor.clear.cgColor
@@ -913,6 +937,8 @@ private final class HistoryPanelContentView: NSView {
         NotificationCenter.default.removeObserver(self)
         stopConfirmationDismissMonitoring()
         stopSelectionKeyMonitoring()
+        previewController?.close()
+        HotkeyManager.shared.unregisterHistoryPreview()
     }
 
     override func layout() {
@@ -1096,8 +1122,7 @@ private final class HistoryPanelContentView: NSView {
     }
 
     private func applyEntries(_ entries: [HistoryEntry], hasAnyEntries: Bool) {
-        activeHoverTile?.setHovered(false)
-        activeHoverTile = nil
+        clearActiveHoverTile()
         visibleEntries = entries
         pruneSelection(to: entries)
         stripView.subviews.forEach { $0.removeFromSuperview() }
@@ -1340,14 +1365,19 @@ private final class HistoryPanelContentView: NSView {
 
     private func updateActiveHoverTile(_ tile: HistoryPanelTileView, isHovered: Bool) {
         if isHovered {
-            if activeHoverTile !== tile {
+            let hoverChanged = activeHoverTile !== tile
+            if hoverChanged {
                 activeHoverTile?.setHovered(false)
                 activeHoverTile = tile
             }
             tile.setHovered(true)
+            if hoverChanged {
+                updateHistoryPreviewHotkey()
+            }
         } else if activeHoverTile === tile {
             tile.setHovered(false)
             activeHoverTile = nil
+            updateHistoryPreviewHotkey()
         } else {
             tile.setHovered(false)
         }
@@ -1356,6 +1386,22 @@ private final class HistoryPanelContentView: NSView {
     private func clearActiveHoverTile() {
         activeHoverTile?.setHovered(false)
         activeHoverTile = nil
+        updateHistoryPreviewHotkey()
+    }
+
+    private func updateHistoryPreviewHotkey() {
+        guard previewController == nil,
+              let entry = activeHoverTile?.entry,
+              case .image = entry.kind else {
+            HotkeyManager.shared.unregisterHistoryPreview()
+            return
+        }
+        HotkeyManager.shared.registerHistoryPreview { [weak self] in
+            guard let self,
+                  let hoveredEntry = self.activeHoverTile?.entry,
+                  case .image = hoveredEntry.kind else { return }
+            self.presentPreview(startingAt: hoveredEntry)
+        }
     }
 
     private func startConfirmationDismissMonitoring() {
@@ -1380,6 +1426,12 @@ private final class HistoryPanelContentView: NSView {
             guard event.window === self.window else { return event }
 
             let modifiers = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+            if event.keyCode == UInt16(kVK_Space), modifiers.isEmpty,
+               let hoveredEntry = self.activeHoverTile?.entry,
+               case .image = hoveredEntry.kind {
+                self.presentPreview(startingAt: hoveredEntry)
+                return nil
+            }
             let hasUnsupportedSelectAllModifier = !modifiers.intersection([.control, .option, .shift]).isEmpty
             if event.keyCode == UInt16(kVK_ANSI_A),
                modifiers.contains(.command),
@@ -1412,6 +1464,32 @@ private final class HistoryPanelContentView: NSView {
             NSEvent.removeMonitor(selectionKeyMonitor)
             self.selectionKeyMonitor = nil
         }
+    }
+
+    private func presentPreview(startingAt entry: HistoryEntry) {
+        let imageEntries = visibleEntries.filter { candidate in
+            if case .image = candidate.kind { return true }
+            return false
+        }
+        guard !imageEntries.isEmpty else { return }
+        HotkeyManager.shared.unregisterHistoryPreview()
+        previewController?.close()
+        let controller = HistoryPreviewWindowController(
+            entries: imageEntries,
+            initialEntry: entry,
+            onEdit: { [weak self] selectedEntry in
+                self?.previewController = nil
+                self?.onRequestDismiss?()
+                self?.onEditEntry(selectedEntry)
+            }
+        )
+        controller.onClose = { [weak self, weak controller] in
+            guard self?.previewController === controller else { return }
+            self?.previewController = nil
+            self?.syncHoverStateWithCurrentMouse()
+        }
+        previewController = controller
+        controller.show(relativeTo: window?.screen)
     }
 
     private func collapseDeleteConfirmationIfNeeded(for event: NSEvent) {
@@ -1973,7 +2051,7 @@ private final class HistoryPanelTileView: NSView, NSDraggingSource {
         layer?.borderColor = NSColor.white.withAlphaComponent(0.08).cgColor
         layer?.borderWidth = 1
 
-        imageView.imageScaling = .scaleProportionallyUpOrDown
+        imageView.imageScaling = .scaleProportionallyDown
         imageView.imageAlignment = .alignCenter
         imageView.wantsLayer = true
         imageView.layer?.cornerRadius = 5
@@ -2358,6 +2436,294 @@ private final class HistoryPanelTileView: NSView, NSDraggingSource {
         formatter.setLocalizedDateFormatFromTemplate("MdHm")
         return formatter
     }()
+}
+
+private final class HistoryPreviewPanel: NSPanel {
+    var onKeyDown: ((NSEvent) -> Bool)?
+
+    override var canBecomeKey: Bool { true }
+    override var canBecomeMain: Bool { false }
+
+    override func sendEvent(_ event: NSEvent) {
+        if event.type == .keyDown, onKeyDown?(event) == true {
+            return
+        }
+        super.sendEvent(event)
+    }
+}
+
+private final class HistoryPreviewWindowController: NSWindowController, NSWindowDelegate {
+    private let entries: [HistoryEntry]
+    private let onEdit: (HistoryEntry) -> Void
+    private let imageView = NSImageView()
+    private let titlebarFilenameContainer = NSView()
+    private let titlebarFilenameLabel = NSTextField(labelWithString: "")
+    private let titlebarPositionLabel = NSTextField(labelWithString: "")
+    private let titlebarActionStack = NSStackView()
+    private var currentIndex: Int
+    private var loadGeneration = 0
+    private var placementScreen: NSScreen?
+    var onClose: (() -> Void)?
+
+    init(entries: [HistoryEntry], initialEntry: HistoryEntry, onEdit: @escaping (HistoryEntry) -> Void) {
+        self.entries = entries
+        self.onEdit = onEdit
+        currentIndex = entries.firstIndex(where: {
+            $0.fileURL.standardizedFileURL == initialEntry.fileURL.standardizedFileURL
+        }) ?? 0
+
+        let panel = HistoryPreviewPanel(
+            contentRect: NSRect(x: 0, y: 0, width: 640, height: 480),
+            styleMask: [.titled, .closable, .resizable],
+            backing: .buffered,
+            defer: false
+        )
+        panel.titleVisibility = .hidden
+        panel.titlebarAppearsTransparent = true
+        panel.isMovableByWindowBackground = true
+        panel.level = NSWindow.Level(rawValue: NSWindow.Level.popUpMenu.rawValue + 3)
+        panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
+        panel.isReleasedWhenClosed = false
+        panel.backgroundColor = NSColor(calibratedWhite: 0.055, alpha: 0.98)
+
+        super.init(window: panel)
+        panel.delegate = self
+        panel.onKeyDown = { [weak self] event in
+            self?.handleKeyDown(event) ?? false
+        }
+        setupContent(in: panel)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func show(relativeTo screen: NSScreen?) {
+        guard let window else { return }
+        placementScreen = screen ?? window.screen ?? NSScreen.main ?? NSScreen.screens.first
+        updateWindowFrame(for: currentEntry, on: placementScreen, animated: false)
+        NSApp.activate(ignoringOtherApps: true)
+        window.makeKeyAndOrderFront(nil)
+        window.makeFirstResponder(imageView)
+        loadCurrentImage()
+    }
+
+    override func close() {
+        (window as? HistoryPreviewPanel)?.onKeyDown = nil
+        super.close()
+    }
+
+    func windowWillClose(_ notification: Notification) {
+        (window as? HistoryPreviewPanel)?.onKeyDown = nil
+        onClose?()
+    }
+
+    private func setupContent(in panel: NSPanel) {
+        guard let content = panel.contentView else { return }
+        content.wantsLayer = true
+
+        imageView.imageScaling = .scaleProportionallyUpOrDown
+        imageView.imageAlignment = .alignCenter
+        imageView.isEditable = false
+        imageView.frame = content.bounds
+        imageView.autoresizingMask = [.width, .height]
+        content.addSubview(imageView)
+
+        titlebarFilenameLabel.font = NSFont.systemFont(ofSize: 13, weight: .semibold)
+        titlebarFilenameLabel.textColor = NSColor.labelColor
+        titlebarFilenameLabel.lineBreakMode = .byTruncatingTail
+        titlebarFilenameLabel.maximumNumberOfLines = 1
+        titlebarFilenameLabel.frame = titlebarFilenameContainer.bounds
+        titlebarFilenameLabel.autoresizingMask = [.width, .height]
+        titlebarFilenameContainer.addSubview(titlebarFilenameLabel)
+
+        let filenameAccessory = NSTitlebarAccessoryViewController()
+        filenameAccessory.layoutAttribute = .left
+        filenameAccessory.view = titlebarFilenameContainer
+        panel.addTitlebarAccessoryViewController(filenameAccessory)
+
+        let stack = titlebarActionStack
+        stack.orientation = .horizontal
+        stack.alignment = .centerY
+        stack.spacing = 6
+        stack.edgeInsets = NSEdgeInsets(top: 0, left: 2, bottom: 0, right: 8)
+
+        titlebarPositionLabel.font = NSFont.monospacedDigitSystemFont(ofSize: 11, weight: .medium)
+        titlebarPositionLabel.textColor = NSColor.secondaryLabelColor
+        titlebarPositionLabel.alignment = .center
+        titlebarPositionLabel.translatesAutoresizingMaskIntoConstraints = false
+        titlebarPositionLabel.widthAnchor.constraint(equalToConstant: 38).isActive = true
+        stack.addArrangedSubview(titlebarPositionLabel)
+
+        let actions: [(String, String, Selector)] = [
+            ("pencil", "\(L10n.imageMergeContinueEditing) E", #selector(editCurrent)),
+            ("doc.on.doc", "\(L10n.tipConfirm) C", #selector(copyCurrent)),
+            ("pin", "\(L10n.tipPin) P", #selector(pinCurrent)),
+        ]
+        for action in actions {
+            let symbol = NSImage(systemSymbolName: action.0, accessibilityDescription: action.1)?
+                .withSymbolConfiguration(NSImage.SymbolConfiguration(pointSize: 13, weight: .medium))
+                ?? NSImage()
+            let button = NSButton(image: symbol, target: self, action: action.2)
+            button.bezelStyle = .toolbar
+            button.isBordered = false
+            button.imagePosition = .imageOnly
+            button.contentTintColor = .secondaryLabelColor
+            button.toolTip = action.1
+            button.setAccessibilityLabel(action.1)
+            button.translatesAutoresizingMaskIntoConstraints = false
+            button.widthAnchor.constraint(equalToConstant: 30).isActive = true
+            button.heightAnchor.constraint(equalToConstant: 24).isActive = true
+            stack.addArrangedSubview(button)
+        }
+        updateTitlebarActionStackSize()
+
+        let actionAccessory = NSTitlebarAccessoryViewController()
+        actionAccessory.layoutAttribute = .right
+        actionAccessory.view = stack
+        panel.addTitlebarAccessoryViewController(actionAccessory)
+        updateTitlebarFilenameLayout()
+    }
+
+    private func handleKeyDown(_ event: NSEvent) -> Bool {
+        let blockingModifiers = event.modifierFlags.intersection([.command, .control, .option, .shift])
+        guard blockingModifiers.isEmpty else { return false }
+        switch Int(event.keyCode) {
+        case kVK_LeftArrow:
+            move(by: -1)
+        case kVK_RightArrow:
+            move(by: 1)
+        case kVK_Escape, kVK_Space:
+            close()
+        case kVK_ANSI_E:
+            editCurrent()
+        case kVK_ANSI_P:
+            pinCurrent()
+        case kVK_ANSI_C:
+            copyCurrent()
+        default:
+            return false
+        }
+        return true
+    }
+
+    private func move(by offset: Int) {
+        guard entries.count > 1 else { return }
+        currentIndex = (currentIndex + offset + entries.count) % entries.count
+        updateWindowFrame(for: currentEntry, on: placementScreen, animated: true)
+        loadCurrentImage()
+    }
+
+    private func loadCurrentImage() {
+        loadGeneration += 1
+        let generation = loadGeneration
+        let url = currentEntry.fileURL
+        imageView.image = nil
+        window?.title = url.lastPathComponent
+        titlebarFilenameLabel.stringValue = url.lastPathComponent
+        titlebarFilenameLabel.toolTip = url.lastPathComponent
+        titlebarPositionLabel.stringValue = "\(currentIndex + 1) / \(entries.count)"
+        updateTitlebarFilenameLayout()
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            let image = NSImage(contentsOf: url)
+            DispatchQueue.main.async {
+                guard let self, self.loadGeneration == generation else { return }
+                self.imageView.image = image
+                self.imageView.animates = url.pathExtension.lowercased() == "gif"
+            }
+        }
+    }
+
+    private func updateWindowFrame(for entry: HistoryEntry, on screen: NSScreen?, animated: Bool) {
+        guard let window,
+              let targetScreen = screen ?? window.screen ?? NSScreen.main ?? NSScreen.screens.first else { return }
+        let visibleFrame = targetScreen.visibleFrame
+        let pixelSize = Self.pixelSize(for: entry.fileURL)
+        guard pixelSize.width > 0, pixelSize.height > 0 else { return }
+
+        let sampleContentRect = NSRect(x: 0, y: 0, width: 100, height: 100)
+        let titlebarHeight = max(0, window.frameRect(forContentRect: sampleContentRect).height - 100)
+        let horizontalMargin = max(64, floor(visibleFrame.width * 0.08))
+        let safeFrame = visibleFrame.insetBy(dx: horizontalMargin, dy: 32)
+        guard safeFrame.width > 0, safeFrame.height > titlebarHeight else { return }
+
+        let maxContentRect = window.contentRect(forFrameRect: NSRect(origin: .zero, size: safeFrame.size))
+        let fitScale = min(maxContentRect.width / pixelSize.width, maxContentRect.height / pixelSize.height)
+        let scale = min(1, fitScale)
+        let imageSize = NSSize(
+            width: max(1, floor(pixelSize.width * scale)),
+            height: max(1, floor(pixelSize.height * scale))
+        )
+        let minimumContentSize = NSSize(width: 360, height: 220)
+        let contentSize = NSSize(
+            width: min(maxContentRect.width, max(minimumContentSize.width, imageSize.width)),
+            height: min(maxContentRect.height, max(minimumContentSize.height, imageSize.height))
+        )
+        let frameSize = window.frameRect(forContentRect: NSRect(origin: .zero, size: contentSize)).size
+        let origin = NSPoint(
+            x: safeFrame.midX - frameSize.width / 2,
+            y: safeFrame.midY - frameSize.height / 2
+        )
+        window.setFrame(NSRect(origin: origin, size: frameSize), display: true, animate: animated)
+    }
+
+    private static func pixelSize(for url: URL) -> NSSize {
+        guard let source = CGImageSourceCreateWithURL(url as CFURL, nil),
+              let properties = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [CFString: Any],
+              let width = properties[kCGImagePropertyPixelWidth] as? NSNumber,
+              let height = properties[kCGImagePropertyPixelHeight] as? NSNumber else {
+            return NSImage(contentsOf: url)?.size ?? .zero
+        }
+        return NSSize(width: width.doubleValue, height: height.doubleValue)
+    }
+
+    private var currentEntry: HistoryEntry { entries[currentIndex] }
+
+    func windowDidResize(_ notification: Notification) {
+        updateTitlebarFilenameLayout()
+    }
+
+    private func updateTitlebarFilenameLayout() {
+        guard let window else { return }
+        let trafficLightReserve: CGFloat = 148
+        let accessoryGap: CGFloat = 20
+        let availableWidth = window.frame.width
+            - trafficLightReserve
+            - titlebarActionStack.frame.width
+            - accessoryGap
+        let width = min(280, max(0, floor(availableWidth)))
+        titlebarFilenameContainer.isHidden = width < 48
+        titlebarFilenameContainer.frame = NSRect(
+            origin: .zero,
+            size: NSSize(width: width, height: 24)
+        )
+    }
+
+    private func updateTitlebarActionStackSize() {
+        titlebarActionStack.layoutSubtreeIfNeeded()
+        let fittingSize = titlebarActionStack.fittingSize
+        titlebarActionStack.frame = NSRect(
+            origin: .zero,
+            size: NSSize(width: ceil(fittingSize.width), height: max(24, ceil(fittingSize.height)))
+        )
+    }
+
+    @objc private func editCurrent() {
+        let entry = currentEntry
+        close()
+        onEdit(entry)
+    }
+
+    @objc private func pinCurrent() {
+        guard let image = NSImage(contentsOf: currentEntry.fileURL) else { return }
+        close()
+        PinLauncher.pin(image: image)
+    }
+
+    @objc private func copyCurrent() {
+        guard HistoryPanelEntryActions.copy(currentEntry) else { return }
+        close()
+    }
 }
 
 private enum HistoryPanelEntryActions {
