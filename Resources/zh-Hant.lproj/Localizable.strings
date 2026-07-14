@@ -123,6 +123,11 @@
 "historyPanelFilterGIF" = "GIF";
 "historyPanelFilterColors" = "顏色";
 "historyPanelFilterText" = "文字";
+"historyPreviewCopyText" = "複製文字";
+"historyPreviewConvertToQRCode" = "轉成二維碼";
+"historyPreviewQRCodeTooLong" = "文字太長，無法轉換為二維碼";
+"historyPreviewOriginalText" = "原文";
+"historyPreviewQRCodeTitle" = "文字二維碼";
 "historyPanelCopyHint" = "點選複製";
 "historyPanelCopyDragHint" = "點選複製 · 拖曳到應用";
 "historyPanelEmpty" = "尚無歷史";

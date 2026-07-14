@@ -123,6 +123,11 @@
 "historyPanelFilterGIF" = "GIF";
 "historyPanelFilterColors" = "Colors";
 "historyPanelFilterText" = "Text";
+"historyPreviewCopyText" = "Copy Text";
+"historyPreviewConvertToQRCode" = "Convert to QR Code";
+"historyPreviewQRCodeTooLong" = "Text is too long to convert to a QR code";
+"historyPreviewOriginalText" = "Original Text";
+"historyPreviewQRCodeTitle" = "Text QR Code";
 "historyPanelCopyHint" = "Click to copy";
 "historyPanelCopyDragHint" = "Click to copy · drag into an app";
 "historyPanelEmpty" = "No history yet";

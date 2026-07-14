@@ -123,6 +123,11 @@
 "historyPanelFilterGIF" = "GIF";
 "historyPanelFilterColors" = "Цвета";
 "historyPanelFilterText" = "Текст";
+"historyPreviewCopyText" = "Копировать текст";
+"historyPreviewConvertToQRCode" = "Преобразовать в QR-код";
+"historyPreviewQRCodeTooLong" = "Текст слишком длинный для преобразования в QR-код";
+"historyPreviewOriginalText" = "Исходный текст";
+"historyPreviewQRCodeTitle" = "QR-код текста";
 "historyPanelCopyHint" = "Нажмите для копирования";
 "historyPanelCopyDragHint" = "Нажмите для копирования · перетащите в приложение";
 "historyPanelEmpty" = "История пуста";
