@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [1.8.12] - 2026-07-14
+
+### Added
+
+- Added clipboard text history support (5ca26a4)
+
 ## [1.8.11] - 2026-07-12
 
 ### Added
