@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## [1.8.13] - 2026-07-14
+
+### Added
+
+- Added text preview actions to the history panel (7e4ed76)
+
+### Changed
+
+- Hid empty history filter tabs and the text filter when text caching is disabled (89ffb8c, d35dfd4)
+
 ## [1.8.12] - 2026-07-14
 
 ### Added
