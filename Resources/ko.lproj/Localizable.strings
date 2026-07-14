@@ -10,10 +10,12 @@
 "pinAcrossSpacesHint" = "켜면 새 고정 이미지가 모든 데스크톱과 전체 화면 Space에 표시됩니다";
 "historyCacheToggleLabel" = "이미지 캐시";
 "historyCacheToggleHint" = "최근 이미지와 선택한 색상을 저장해 메뉴 막대에서 빠르게 다시 복사할 수 있습니다";
+"clipboardTextCacheToggleLabel" = "클립보드 텍스트 캐시";
+"clipboardTextCacheToggleHint" = "복사한 텍스트를 기록에 저장해 메뉴 막대에서 빠르게 다시 사용할 수 있습니다";
 "historyCacheLabel" = "기록 캐시 개수";
-"historyCacheHint" = "최근 이미지를 보관해 빠르게 다시 복사할 수 있습니다";
+"historyCacheHint" = "최근 기록 항목을 보관해 빠르게 다시 사용할 수 있습니다";
 "historyPanelDisplayModeLabel" = "기록 패널 표시 방식";
-"historyPanelDisplayModeHint" = "팝업 또는 노치로 스크린샷 기록 보기";
+"historyPanelDisplayModeHint" = "팝업 또는 노치로 기록 보기";
 "historyPanelDialogMode" = "팝업";
 "historyPanelDialogModeHint" = "메뉴 또는 단축키로 가로 미리보기 패널 열기";
 "historyPanelNotchMode" = "노치";
@@ -120,6 +122,7 @@
 "historyPanelFilterScreenshots" = "스크린샷";
 "historyPanelFilterGIF" = "GIF";
 "historyPanelFilterColors" = "색상";
+"historyPanelFilterText" = "텍스트";
 "historyPanelCopyHint" = "클릭해 복사";
 "historyPanelCopyDragHint" = "클릭해 복사 · 앱으로 드래그";
 "historyPanelEmpty" = "기록 없음";

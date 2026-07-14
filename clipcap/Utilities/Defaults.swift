@@ -62,6 +62,7 @@ enum AppLanguage: String, CaseIterable {
 extension Notification.Name {
     static let languageDidChange = Notification.Name("clipcap.languageDidChange")
     static let historyCacheEnabledDidChange = Notification.Name("clipcap.historyCacheEnabledDidChange")
+    static let clipboardTextCacheEnabledDidChange = Notification.Name("clipcap.clipboardTextCacheEnabledDidChange")
     static let historyCacheLimitDidChange = Notification.Name("clipcap.historyCacheLimitDidChange")
     static let historyDidUpdate = Notification.Name("clipcap.historyDidUpdate")
     static let historyPanelDisplayModesDidChange = Notification.Name("clipcap.historyPanelDisplayModesDidChange")
@@ -86,6 +87,8 @@ enum L10n {
     static var pinAcrossSpacesHint: String { s("pinAcrossSpacesHint") }
     static var historyCacheToggleLabel: String { s("historyCacheToggleLabel") }
     static var historyCacheToggleHint: String { s("historyCacheToggleHint") }
+    static var clipboardTextCacheToggleLabel: String { s("clipboardTextCacheToggleLabel") }
+    static var clipboardTextCacheToggleHint: String { s("clipboardTextCacheToggleHint") }
     static var historyCacheLabel: String { s("historyCacheLabel") }
     static var historyCacheHint: String { s("historyCacheHint") }
     static var historyPanelDisplayModeLabel: String { s("historyPanelDisplayModeLabel") }
@@ -230,6 +233,7 @@ enum L10n {
     static var historyPanelFilterScreenshots: String { s("historyPanelFilterScreenshots") }
     static var historyPanelFilterGIF: String { s("historyPanelFilterGIF") }
     static var historyPanelFilterColors: String { s("historyPanelFilterColors") }
+    static var historyPanelFilterText: String { s("historyPanelFilterText") }
     static var historyPanelCopyHint: String { s("historyPanelCopyHint") }
     static var historyPanelCopyDragHint: String { s("historyPanelCopyDragHint") }
     static var historyPanelEmpty: String { s("historyPanelEmpty") }
@@ -1340,7 +1344,7 @@ struct Defaults {
     }
 
     static let historyCacheMin: Int = 10
-    static let historyCacheMax: Int = 100
+    static let historyCacheMax: Int = 200
     static let historyCacheStep: Int = 10
 
     static var historyCacheEnabled: Bool {
@@ -1360,6 +1364,26 @@ struct Defaults {
                 NotificationCenter.default.post(name: .historyCacheEnabledDidChange, object: nil)
             }
         }
+    }
+
+    static var clipboardTextCacheEnabled: Bool {
+        get {
+            if defaults.object(forKey: "clipboardTextCacheEnabled") == nil {
+                return false
+            }
+            return defaults.bool(forKey: "clipboardTextCacheEnabled")
+        }
+        set {
+            let oldValue = clipboardTextCacheEnabled
+            defaults.set(newValue, forKey: "clipboardTextCacheEnabled")
+            if oldValue != newValue {
+                NotificationCenter.default.post(name: .clipboardTextCacheEnabledDidChange, object: nil)
+            }
+        }
+    }
+
+    static var isHistoryCacheAvailable: Bool {
+        historyCacheEnabled || clipboardTextCacheEnabled
     }
 
     static var historyCacheLimit: Int {

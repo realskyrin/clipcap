@@ -57,6 +57,7 @@ final class SettingsView: NSView {
     private var launchAtLoginSwitch: NSSwitch?
     private var pinAcrossSpacesSwitch: NSSwitch?
     private var historyCacheSwitch: NSSwitch?
+    private var clipboardTextCacheSwitch: NSSwitch?
     private var historyCacheSlider: NSSlider?
     private var historyCacheValueLabel: NSTextField?
     private var autoRevealSwitch: NSSwitch?
@@ -375,6 +376,11 @@ final class SettingsView: NSView {
         pin(history, to: historyCard, insets: NSEdgeInsets(top: 4, left: 14, bottom: 14, right: 14))
         addFullWidth(
             switchRow(title: L10n.historyCacheToggleLabel, subtitle: L10n.historyCacheToggleHint, isOn: Defaults.historyCacheEnabled, action: #selector(historyCacheToggled(_:))) { self.historyCacheSwitch = $0 },
+            to: history
+        )
+        addFullWidth(rowDivider(), to: history)
+        addFullWidth(
+            switchRow(title: L10n.clipboardTextCacheToggleLabel, subtitle: L10n.clipboardTextCacheToggleHint, isOn: Defaults.clipboardTextCacheEnabled, action: #selector(clipboardTextCacheToggled(_:))) { self.clipboardTextCacheSwitch = $0 },
             to: history
         )
         addFullWidth(rowDivider(), to: history)
@@ -802,7 +808,7 @@ final class SettingsView: NSView {
         slider.numberOfTickMarks = ((Defaults.historyCacheMax - Defaults.historyCacheMin) / Defaults.historyCacheStep) + 1
         slider.allowsTickMarkValuesOnly = true
         slider.controlSize = .small
-        slider.isEnabled = Defaults.historyCacheEnabled
+        slider.isEnabled = Defaults.isHistoryCacheAvailable
         historyCacheSlider = slider
 
         let value = NSTextField(labelWithString: "\(Defaults.historyCacheLimit)")
@@ -1134,9 +1140,13 @@ final class SettingsView: NSView {
     }
 
     @objc private func historyCacheToggled(_ sender: NSSwitch) {
-        let enabled = sender.state == .on
-        Defaults.historyCacheEnabled = enabled
-        historyCacheSlider?.isEnabled = enabled
+        Defaults.historyCacheEnabled = sender.state == .on
+        historyCacheSlider?.isEnabled = Defaults.isHistoryCacheAvailable
+    }
+
+    @objc private func clipboardTextCacheToggled(_ sender: NSSwitch) {
+        Defaults.clipboardTextCacheEnabled = sender.state == .on
+        historyCacheSlider?.isEnabled = Defaults.isHistoryCacheAvailable
     }
 
     @objc private func historyLimitChanged(_ sender: NSSlider) {

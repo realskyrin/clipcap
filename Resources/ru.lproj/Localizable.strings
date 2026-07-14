@@ -10,10 +10,12 @@
 "pinAcrossSpacesHint" = "Новые закрепленные изображения появляются на каждом рабочем столе и полноэкранном Space";
 "historyCacheToggleLabel" = "Кэшировать изображения";
 "historyCacheToggleHint" = "Сохраняет недавние изображения и выбранные цвета для быстрого повторного копирования из строки меню";
+"clipboardTextCacheToggleLabel" = "Кэшировать текст буфера обмена";
+"clipboardTextCacheToggleHint" = "Сохраняет скопированный текст в истории для быстрого повторного использования из строки меню";
 "historyCacheLabel" = "Размер кэша истории";
-"historyCacheHint" = "Хранит недавние изображения для быстрого повторного копирования";
+"historyCacheHint" = "Хранит недавние элементы истории для быстрого повторного использования";
 "historyPanelDisplayModeLabel" = "Отображение панели истории";
-"historyPanelDisplayModeHint" = "Выберите диалог или вырез для истории снимков";
+"historyPanelDisplayModeHint" = "Выберите диалог или вырез для истории";
 "historyPanelDialogMode" = "Диалог";
 "historyPanelDialogModeHint" = "Открывает горизонтальную панель предпросмотра из меню или по сочетанию";
 "historyPanelNotchMode" = "Вырез";
@@ -120,6 +122,7 @@
 "historyPanelFilterScreenshots" = "Снимки";
 "historyPanelFilterGIF" = "GIF";
 "historyPanelFilterColors" = "Цвета";
+"historyPanelFilterText" = "Текст";
 "historyPanelCopyHint" = "Нажмите для копирования";
 "historyPanelCopyDragHint" = "Нажмите для копирования · перетащите в приложение";
 "historyPanelEmpty" = "История пуста";

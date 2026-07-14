@@ -11,15 +11,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var pendingReopenSettingsWorkItem: DispatchWorkItem?
     private var didInitializeApp = false
     private var pendingOpenImageURLs: [URL] = []
+    private let clipboardTextHistoryMonitor = ClipboardTextHistoryMonitor()
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         false
     }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        clipboardTextHistoryMonitor.start()
         initializeApp()
         didInitializeApp = true
         flushPendingOpenImageURLs()
+    }
+
+    func applicationWillTerminate(_ notification: Notification) {
+        clipboardTextHistoryMonitor.stop()
     }
 
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {

@@ -10,10 +10,12 @@
 "pinAcrossSpacesHint" = "オンにすると新しいピン画像がすべてのデスクトップとフルスクリーン操作スペースに表示されます";
 "historyCacheToggleLabel" = "画像をキャッシュ";
 "historyCacheToggleHint" = "最近の画像と取得した色を保存し、メニューバーからすばやく再コピーできます";
+"clipboardTextCacheToggleLabel" = "クリップボードのテキストをキャッシュ";
+"clipboardTextCacheToggleHint" = "コピーしたテキストを履歴に保存し、メニューバーからすばやく再利用できます";
 "historyCacheLabel" = "履歴キャッシュ数";
-"historyCacheHint" = "最近の画像を保持し、すばやく再コピーできます";
+"historyCacheHint" = "最近の履歴項目を保持し、すばやく再利用できます";
 "historyPanelDisplayModeLabel" = "履歴パネルの表示方式";
-"historyPanelDisplayModeHint" = "ダイアログまたはノッチでスクリーンショット履歴を表示";
+"historyPanelDisplayModeHint" = "ダイアログまたはノッチで履歴を表示";
 "historyPanelDialogMode" = "ダイアログ";
 "historyPanelDialogModeHint" = "メニューまたはショートカットから横スクロールのプレビューパネルを開きます";
 "historyPanelNotchMode" = "ノッチ";
@@ -120,6 +122,7 @@
 "historyPanelFilterScreenshots" = "スクリーンショット";
 "historyPanelFilterGIF" = "GIF";
 "historyPanelFilterColors" = "カラー";
+"historyPanelFilterText" = "テキスト";
 "historyPanelCopyHint" = "クリックでコピー";
 "historyPanelCopyDragHint" = "クリックでコピー · アプリへドラッグ";
 "historyPanelEmpty" = "履歴がありません";

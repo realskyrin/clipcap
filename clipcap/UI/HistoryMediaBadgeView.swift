@@ -7,7 +7,7 @@ enum HistoryMediaBadgeKind {
         switch entry.kind {
         case .image where entry.fileURL.pathExtension.lowercased() == "gif":
             self = .gif
-        case .image, .color:
+        case .image, .color, .text:
             return nil
         }
     }

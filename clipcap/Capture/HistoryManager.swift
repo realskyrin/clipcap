@@ -3,6 +3,7 @@ import AppKit
 enum HistoryEntryKind {
     case image
     case color(hex: String)
+    case text(String)
 }
 
 struct HistoryEntry {
@@ -36,9 +37,18 @@ final class HistoryManager {
             name: .historyCacheEnabledDidChange,
             object: nil
         )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(clipboardTextCacheEnabledChanged),
+            name: .clipboardTextCacheEnabledDidChange,
+            object: nil
+        )
 
         if !Defaults.historyCacheEnabled {
-            removeAllEntries()
+            removeStoredHistoryEntries(withExtensions: ["png", "gif", "color"])
+        }
+        if !Defaults.clipboardTextCacheEnabled {
+            removeStoredHistoryEntries(withExtensions: ["txt"])
         }
     }
 
@@ -59,7 +69,19 @@ final class HistoryManager {
         queue.async { [weak self] in
             guard let self else { return }
             if !Defaults.historyCacheEnabled {
-                self.removeAllEntries()
+                self.removeStoredHistoryEntries(withExtensions: ["png", "gif", "color"])
+            }
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: .historyDidUpdate, object: nil)
+            }
+        }
+    }
+
+    @objc private func clipboardTextCacheEnabledChanged() {
+        queue.async { [weak self] in
+            guard let self else { return }
+            if !Defaults.clipboardTextCacheEnabled {
+                self.removeStoredHistoryEntries(withExtensions: ["txt"])
             }
             DispatchQueue.main.async {
                 NotificationCenter.default.post(name: .historyDidUpdate, object: nil)
@@ -107,6 +129,25 @@ final class HistoryManager {
         }
     }
 
+    func addText(_ text: String) {
+        guard Defaults.clipboardTextCacheEnabled, !text.isEmpty else { return }
+        queue.async { [weak self] in
+            guard let self else { return }
+            guard Defaults.clipboardTextCacheEnabled else { return }
+            let name = Self.filenameFormatter.string(from: Date()) + ".txt"
+            let url = self.directoryURL.appendingPathComponent(name)
+            do {
+                try text.write(to: url, atomically: true, encoding: .utf8)
+            } catch {
+                return
+            }
+            self.pruneToLimit()
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: .historyDidUpdate, object: nil)
+            }
+        }
+    }
+
     func addFile(_ sourceURL: URL) {
         guard Defaults.historyCacheEnabled else { return }
         let ext = sourceURL.pathExtension.lowercased()
@@ -135,7 +176,7 @@ final class HistoryManager {
     }
 
     func entries() -> [HistoryEntry] {
-        guard Defaults.historyCacheEnabled else { return [] }
+        guard Defaults.isHistoryCacheAvailable else { return [] }
         return loadEntries()
     }
 
@@ -160,7 +201,14 @@ final class HistoryManager {
     }
 
     private func loadCachedEntries() -> [HistoryEntry] {
-        entries(in: directoryURL, allowedExtensions: ["png", "gif", "color"])
+        var allowedExtensions = Set<String>()
+        if Defaults.historyCacheEnabled {
+            allowedExtensions.formUnion(["png", "gif", "color"])
+        }
+        if Defaults.clipboardTextCacheEnabled {
+            allowedExtensions.insert("txt")
+        }
+        return entries(in: directoryURL, allowedExtensions: allowedExtensions)
     }
 
     private func entries(in directory: URL, allowedExtensions: Set<String>) -> [HistoryEntry] {
@@ -186,6 +234,9 @@ final class HistoryManager {
                 let trimmed = hex.trimmingCharacters(in: .whitespacesAndNewlines)
                 guard !trimmed.isEmpty else { return nil }
                 return HistoryEntry(fileURL: url, createdAt: date, kind: .color(hex: trimmed))
+            case "txt":
+                guard let text = try? String(contentsOf: url, encoding: .utf8), !text.isEmpty else { return nil }
+                return HistoryEntry(fileURL: url, createdAt: date, kind: .text(text))
             default:
                 return nil
             }
@@ -245,7 +296,7 @@ final class HistoryManager {
     }
 
     private func pruneToLimit() {
-        guard Defaults.historyCacheEnabled else {
+        guard Defaults.isHistoryCacheAvailable else {
             removeAllEntries()
             return
         }
@@ -265,6 +316,13 @@ final class HistoryManager {
         }
     }
 
+    private func removeStoredHistoryEntries(withExtensions extensions: Set<String>) {
+        let fm = FileManager.default
+        for url in storedHistoryFileURLs() where extensions.contains(url.pathExtension.lowercased()) {
+            try? fm.removeItem(at: url)
+        }
+    }
+
     private func storedHistoryFileURLs() -> [URL] {
         let fm = FileManager.default
         guard let urls = try? fm.contentsOfDirectory(
@@ -276,7 +334,7 @@ final class HistoryManager {
         }
         return urls.filter { url in
             switch url.pathExtension.lowercased() {
-            case "png", "gif", "color":
+            case "png", "gif", "color", "txt":
                 return true
             default:
                 return false

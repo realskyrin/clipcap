@@ -10,10 +10,12 @@
 "pinAcrossSpacesHint" = "New pinned images appear on every desktop and full-screen Space";
 "historyCacheToggleLabel" = "Cache Images";
 "historyCacheToggleHint" = "Store recent images and picked colors for quick reuse from the menu bar";
+"clipboardTextCacheToggleLabel" = "Cache Clipboard Text";
+"clipboardTextCacheToggleHint" = "Store copied text in history for quick reuse from the menu bar";
 "historyCacheLabel" = "History Cache Size";
-"historyCacheHint" = "Keep the most recent images for quick re-copy";
+"historyCacheHint" = "Keep the most recent history items for quick reuse";
 "historyPanelDisplayModeLabel" = "History Panel Display";
-"historyPanelDisplayModeHint" = "Choose Dialog or Notch for image history";
+"historyPanelDisplayModeHint" = "Choose Dialog or Notch for history";
 "historyPanelDialogMode" = "Dialog";
 "historyPanelDialogModeHint" = "Open a horizontal preview panel from the menu or shortcut";
 "historyPanelNotchMode" = "Notch";
@@ -120,6 +122,7 @@
 "historyPanelFilterScreenshots" = "Images";
 "historyPanelFilterGIF" = "GIF";
 "historyPanelFilterColors" = "Colors";
+"historyPanelFilterText" = "Text";
 "historyPanelCopyHint" = "Click to copy";
 "historyPanelCopyDragHint" = "Click to copy · drag into an app";
 "historyPanelEmpty" = "No history yet";
