@@ -11,7 +11,7 @@
 "historyCacheToggleLabel" = "快取圖片";
 "historyCacheToggleHint" = "保存最近圖片和取色結果，方便從選單列快速再次複製";
 "clipboardTextCacheToggleLabel" = "快取剪貼簿文字";
-"clipboardTextCacheToggleHint" = "將複製的文字保存到歷史記錄，方便從選單列快速再次使用";
+"clipboardTextCacheToggleHint" = "將複製的文字保存到歷史記錄，方便從歷史記錄快速重複使用";
 "historyCacheLabel" = "歷史快取數量";
 "historyCacheHint" = "保留最近的歷史項目，方便快速再次使用";
 "historyPanelDisplayModeLabel" = "歷史面板顯示方式";

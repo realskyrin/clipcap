@@ -11,7 +11,7 @@
 "historyCacheToggleLabel" = "Cache Images";
 "historyCacheToggleHint" = "Store recent images and picked colors for quick reuse from the menu bar";
 "clipboardTextCacheToggleLabel" = "Cache Clipboard Text";
-"clipboardTextCacheToggleHint" = "Store copied text in history for quick reuse from the menu bar";
+"clipboardTextCacheToggleHint" = "Store copied text in history for quick reuse";
 "historyCacheLabel" = "History Cache Size";
 "historyCacheHint" = "Keep the most recent history items for quick reuse";
 "historyPanelDisplayModeLabel" = "History Panel Display";

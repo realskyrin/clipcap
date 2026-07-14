@@ -11,7 +11,7 @@
 "historyCacheToggleLabel" = "Mettre les images en cache";
 "historyCacheToggleHint" = "Enregistre les images récentes et les couleurs prélevées pour les recopier depuis la barre de menus";
 "clipboardTextCacheToggleLabel" = "Mettre le texte du presse-papiers en cache";
-"clipboardTextCacheToggleHint" = "Enregistre le texte copié dans l’historique pour le réutiliser depuis la barre de menus";
+"clipboardTextCacheToggleHint" = "Enregistre le texte copié dans l’historique pour le réutiliser rapidement";
 "historyCacheLabel" = "Taille du cache d'historique";
 "historyCacheHint" = "Conserve les éléments récents de l’historique pour les réutiliser rapidement";
 "historyPanelDisplayModeLabel" = "Affichage du panneau d'historique";

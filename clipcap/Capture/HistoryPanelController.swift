@@ -935,6 +935,12 @@ private final class HistoryPanelContentView: NSView {
             name: .languageDidChange,
             object: nil
         )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(clipboardTextCacheEnabledChanged),
+            name: .clipboardTextCacheEnabledDidChange,
+            object: nil
+        )
     }
 
     required init?(coder: NSCoder) {
@@ -973,7 +979,7 @@ private final class HistoryPanelContentView: NSView {
             filterButtons[filter] = button
             toolbar.addArrangedSubview(button)
         }
-        updateFilterSelection()
+        updateFilterAvailability()
 
         finderButton.target = self
         finderButton.action = #selector(showHistoryInFinderClicked)
@@ -1068,6 +1074,20 @@ private final class HistoryPanelContentView: NSView {
         selectedFilter = sender.filter
         updateFilterSelection()
         reloadEntries()
+    }
+
+    @objc private func clipboardTextCacheEnabledChanged() {
+        updateFilterAvailability()
+        reloadEntries()
+    }
+
+    private func updateFilterAvailability() {
+        let showsTextFilter = Defaults.clipboardTextCacheEnabled
+        filterButtons[.text]?.isHidden = !showsTextFilter
+        if !showsTextFilter, selectedFilter == .text {
+            selectedFilter = .all
+        }
+        updateFilterSelection()
     }
 
     private func updateFilterSelection() {
