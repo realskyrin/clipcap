@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+## [1.8.14] - 2026-07-15
+
+### Fixed
+
+- Closed the QR code window when clicking outside (c559439)
+
+### Changed
+
+- Refactored editor toolbar and layout handling (44ee41e)
+- Improved history preview loading and filter navigation (a362717)
+- Split clipboard text retention from image and media history limits (ba8d6e3)
+
 ## [1.8.13] - 2026-07-14
 
 ### Added
