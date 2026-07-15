@@ -64,6 +64,7 @@ extension Notification.Name {
     static let historyCacheEnabledDidChange = Notification.Name("clipcap.historyCacheEnabledDidChange")
     static let clipboardTextCacheEnabledDidChange = Notification.Name("clipcap.clipboardTextCacheEnabledDidChange")
     static let historyCacheLimitDidChange = Notification.Name("clipcap.historyCacheLimitDidChange")
+    static let clipboardTextHistoryLimitDidChange = Notification.Name("clipcap.clipboardTextHistoryLimitDidChange")
     static let historyDidUpdate = Notification.Name("clipcap.historyDidUpdate")
     static let historyPanelDisplayModesDidChange = Notification.Name("clipcap.historyPanelDisplayModesDidChange")
     static let hotkeyDidChange = Notification.Name("clipcap.hotkeyDidChange")
@@ -89,6 +90,8 @@ enum L10n {
     static var historyCacheToggleHint: String { s("historyCacheToggleHint") }
     static var clipboardTextCacheToggleLabel: String { s("clipboardTextCacheToggleLabel") }
     static var clipboardTextCacheToggleHint: String { s("clipboardTextCacheToggleHint") }
+    static var clipboardTextHistoryLimitLabel: String { s("clipboardTextHistoryLimitLabel") }
+    static var clipboardTextHistoryLimitHint: String { s("clipboardTextHistoryLimitHint") }
     static var historyCacheLabel: String { s("historyCacheLabel") }
     static var historyCacheHint: String { s("historyCacheHint") }
     static var historyPanelDisplayModeLabel: String { s("historyPanelDisplayModeLabel") }
@@ -1351,6 +1354,9 @@ struct Defaults {
     static let historyCacheMin: Int = 10
     static let historyCacheMax: Int = 200
     static let historyCacheStep: Int = 10
+    static let clipboardTextHistoryLimitMin: Int = 50
+    static let clipboardTextHistoryLimitMax: Int = 500
+    static let clipboardTextHistoryLimitStep: Int = 50
 
     static var historyCacheEnabled: Bool {
         get {
@@ -1405,11 +1411,37 @@ struct Defaults {
         }
     }
 
+    static var clipboardTextHistoryLimit: Int {
+        get {
+            if defaults.object(forKey: "clipboardTextHistoryLimit") == nil {
+                return 100
+            }
+            let value = defaults.integer(forKey: "clipboardTextHistoryLimit")
+            return normalizedClipboardTextHistoryLimit(value)
+        }
+        set {
+            defaults.set(
+                normalizedClipboardTextHistoryLimit(newValue),
+                forKey: "clipboardTextHistoryLimit"
+            )
+            NotificationCenter.default.post(name: .clipboardTextHistoryLimitDidChange, object: nil)
+        }
+    }
+
     private static func normalizedHistoryCacheLimit(_ value: Int) -> Int {
         let clamped = min(max(value, historyCacheMin), historyCacheMax)
         let offset = clamped - historyCacheMin
         let snapped = historyCacheMin + ((offset + historyCacheStep / 2) / historyCacheStep) * historyCacheStep
         return min(max(snapped, historyCacheMin), historyCacheMax)
+    }
+
+    private static func normalizedClipboardTextHistoryLimit(_ value: Int) -> Int {
+        let clamped = min(max(value, clipboardTextHistoryLimitMin), clipboardTextHistoryLimitMax)
+        let offset = clamped - clipboardTextHistoryLimitMin
+        let snapped = clipboardTextHistoryLimitMin
+            + ((offset + clipboardTextHistoryLimitStep / 2) / clipboardTextHistoryLimitStep)
+            * clipboardTextHistoryLimitStep
+        return min(max(snapped, clipboardTextHistoryLimitMin), clipboardTextHistoryLimitMax)
     }
 
     static var historyPanelDialogEnabled: Bool {

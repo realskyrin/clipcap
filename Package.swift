@@ -35,6 +35,11 @@ let package = Package(
                 .linkedFramework("AppKit"),
                 .linkedFramework("UniformTypeIdentifiers"),
             ]
+        ),
+        .testTarget(
+            name: "clipcapTests",
+            dependencies: ["clipcap"],
+            path: "Tests/clipcapTests"
         )
     ]
 )

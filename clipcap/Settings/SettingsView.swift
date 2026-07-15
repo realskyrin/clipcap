@@ -60,6 +60,8 @@ final class SettingsView: NSView {
     private var clipboardTextCacheSwitch: NSSwitch?
     private var historyCacheSlider: NSSlider?
     private var historyCacheValueLabel: NSTextField?
+    private var clipboardTextHistoryLimitSlider: NSSlider?
+    private var clipboardTextHistoryLimitValueLabel: NSTextField?
     private var autoRevealSwitch: NSSwitch?
     private var savePathValueLabel: NSTextField?
     private var screenshotQualitySavePopup: NSPopUpButton?
@@ -378,13 +380,13 @@ final class SettingsView: NSView {
             switchRow(title: L10n.historyCacheToggleLabel, subtitle: L10n.historyCacheToggleHint, isOn: Defaults.historyCacheEnabled, action: #selector(historyCacheToggled(_:))) { self.historyCacheSwitch = $0 },
             to: history
         )
+        addFullWidth(makeHistoryCacheSliderRow(), to: history)
         addFullWidth(rowDivider(), to: history)
         addFullWidth(
             switchRow(title: L10n.clipboardTextCacheToggleLabel, subtitle: L10n.clipboardTextCacheToggleHint, isOn: Defaults.clipboardTextCacheEnabled, action: #selector(clipboardTextCacheToggled(_:))) { self.clipboardTextCacheSwitch = $0 },
             to: history
         )
-        addFullWidth(rowDivider(), to: history)
-        addFullWidth(makeSliderRow(), to: history)
+        addFullWidth(makeClipboardTextHistoryLimitSliderRow(), to: history)
         addCard(historyCard, to: stack)
 
         addCard(makeScreenshotQualityCard(), to: stack)
@@ -782,7 +784,7 @@ final class SettingsView: NSView {
         return divider
     }
 
-    private func makeSliderRow() -> NSView {
+    private func makeHistoryCacheSliderRow() -> NSView {
         let stack = NSStackView()
         stack.orientation = .vertical
         stack.alignment = .leading
@@ -808,7 +810,7 @@ final class SettingsView: NSView {
         slider.numberOfTickMarks = ((Defaults.historyCacheMax - Defaults.historyCacheMin) / Defaults.historyCacheStep) + 1
         slider.allowsTickMarkValuesOnly = true
         slider.controlSize = .small
-        slider.isEnabled = Defaults.isHistoryCacheAvailable
+        slider.isEnabled = Defaults.historyCacheEnabled
         historyCacheSlider = slider
 
         let value = NSTextField(labelWithString: "\(Defaults.historyCacheLimit)")
@@ -818,6 +820,52 @@ final class SettingsView: NSView {
         header.addArrangedSubview(value)
 
         let hint = secondaryLabel(L10n.historyCacheHint, wrapping: true)
+
+        addFullWidth(header, to: stack)
+        addFullWidth(slider, to: stack)
+        addFullWidth(hint, to: stack)
+        return stack
+    }
+
+    private func makeClipboardTextHistoryLimitSliderRow() -> NSView {
+        let stack = NSStackView()
+        stack.orientation = .vertical
+        stack.alignment = .leading
+        stack.spacing = 8
+        stack.translatesAutoresizingMaskIntoConstraints = false
+
+        let header = NSStackView()
+        header.orientation = .horizontal
+        header.alignment = .firstBaseline
+        header.spacing = 8
+        header.translatesAutoresizingMaskIntoConstraints = false
+
+        header.addArrangedSubview(primaryLabel(L10n.clipboardTextHistoryLimitLabel))
+        header.addArrangedSubview(flexSpacer())
+
+        let slider = NSSlider(
+            value: Double(Defaults.clipboardTextHistoryLimit),
+            minValue: Double(Defaults.clipboardTextHistoryLimitMin),
+            maxValue: Double(Defaults.clipboardTextHistoryLimitMax),
+            target: self,
+            action: #selector(clipboardTextHistoryLimitChanged(_:))
+        )
+        slider.numberOfTickMarks = (
+            (Defaults.clipboardTextHistoryLimitMax - Defaults.clipboardTextHistoryLimitMin)
+                / Defaults.clipboardTextHistoryLimitStep
+        ) + 1
+        slider.allowsTickMarkValuesOnly = true
+        slider.controlSize = .small
+        slider.isEnabled = Defaults.clipboardTextCacheEnabled
+        clipboardTextHistoryLimitSlider = slider
+
+        let value = NSTextField(labelWithString: "\(Defaults.clipboardTextHistoryLimit)")
+        value.textColor = NSColor.white.withAlphaComponent(0.88)
+        value.font = NSFont.monospacedDigitSystemFont(ofSize: 13, weight: .semibold)
+        clipboardTextHistoryLimitValueLabel = value
+        header.addArrangedSubview(value)
+
+        let hint = secondaryLabel(L10n.clipboardTextHistoryLimitHint, wrapping: true)
 
         addFullWidth(header, to: stack)
         addFullWidth(slider, to: stack)
@@ -1141,17 +1189,34 @@ final class SettingsView: NSView {
 
     @objc private func historyCacheToggled(_ sender: NSSwitch) {
         Defaults.historyCacheEnabled = sender.state == .on
-        historyCacheSlider?.isEnabled = Defaults.isHistoryCacheAvailable
+        historyCacheSlider?.isEnabled = Defaults.historyCacheEnabled
     }
 
     @objc private func clipboardTextCacheToggled(_ sender: NSSwitch) {
         Defaults.clipboardTextCacheEnabled = sender.state == .on
-        historyCacheSlider?.isEnabled = Defaults.isHistoryCacheAvailable
+        clipboardTextHistoryLimitSlider?.isEnabled = Defaults.clipboardTextCacheEnabled
     }
 
     @objc private func historyLimitChanged(_ sender: NSSlider) {
+        guard Defaults.historyCacheEnabled else {
+            sender.doubleValue = Double(Defaults.historyCacheLimit)
+            return
+        }
         Defaults.historyCacheLimit = Int(sender.doubleValue.rounded())
-        historyCacheValueLabel?.stringValue = "\(Defaults.historyCacheLimit)"
+        let normalizedValue = Defaults.historyCacheLimit
+        sender.doubleValue = Double(normalizedValue)
+        historyCacheValueLabel?.stringValue = "\(normalizedValue)"
+    }
+
+    @objc private func clipboardTextHistoryLimitChanged(_ sender: NSSlider) {
+        guard Defaults.clipboardTextCacheEnabled else {
+            sender.doubleValue = Double(Defaults.clipboardTextHistoryLimit)
+            return
+        }
+        Defaults.clipboardTextHistoryLimit = Int(sender.doubleValue.rounded())
+        let normalizedValue = Defaults.clipboardTextHistoryLimit
+        sender.doubleValue = Double(normalizedValue)
+        clipboardTextHistoryLimitValueLabel?.stringValue = "\(normalizedValue)"
     }
 
     @objc private func screenshotSaveQualityChanged(_ sender: NSPopUpButton) {
