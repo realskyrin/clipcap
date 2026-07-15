@@ -1175,7 +1175,11 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
     }
 
     @objc private func filterClicked(_ sender: HistoryPanelFilterButton) {
-        selectedFilter = sender.filter
+        selectFilter(sender.filter)
+    }
+
+    private func selectFilter(_ filter: HistoryPanelFilter) {
+        selectedFilter = filter
         setDeleteConfirmation(false, animated: true)
         if hasLoadedEntries {
             applySelectedFilter(resetScrollPosition: true)
@@ -1183,6 +1187,14 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
             updateFilterSelection()
             reloadEntries()
         }
+    }
+
+    private func cycleFilter(forward: Bool) {
+        let orderedFilters = HistoryPanelFilter.allCases.filter { availableFilters.contains($0) }
+        guard orderedFilters.count > 1,
+              let currentIndex = orderedFilters.firstIndex(of: selectedFilter) else { return }
+        let offset = forward ? 1 : orderedFilters.count - 1
+        selectFilter(orderedFilters[(currentIndex + offset) % orderedFilters.count])
     }
 
     private func updateFilterAvailability(availableFilters: Set<HistoryPanelFilter>) {
@@ -1569,6 +1581,19 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
             guard event.window === self.window else { return event }
 
             let modifiers = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+            let hasFilterCycleModifier = !modifiers.intersection([.command, .control, .option, .shift]).isEmpty
+            if self.isActive, !hasFilterCycleModifier {
+                switch Int(event.keyCode) {
+                case kVK_LeftArrow:
+                    self.cycleFilter(forward: false)
+                    return nil
+                case kVK_RightArrow:
+                    self.cycleFilter(forward: true)
+                    return nil
+                default:
+                    break
+                }
+            }
             if event.keyCode == UInt16(kVK_Space), modifiers.isEmpty,
                let hoveredEntry = self.activeHoverTile?.entry,
                self.previewKind(for: hoveredEntry) != nil {
@@ -1664,6 +1689,7 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
         lastScrollOriginX = currentOriginX
         suspendHoverUpdatesDuringScrolling()
         loadNextPageIfNeeded()
+        visibleCollectionTiles.forEach { $0.loadPreviewIfNeeded() }
         updatePreviewLoading(direction: direction)
     }
 
@@ -1678,7 +1704,6 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
             guard let self, self.isActive else { return }
             self.isScrollingContent = false
             self.hoverSyncWorkItem = nil
-            self.visibleCollectionTiles.forEach { $0.loadPreviewIfNeeded() }
             self.syncHoverStateWithCurrentMouse()
         }
         hoverSyncWorkItem = workItem
@@ -1793,7 +1818,6 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
 
     private func prefetchPreviews(for entries: [HistoryEntry]) {
         let entryIDs = Set(entries.map { $0.fileURL.standardizedFileURL.path })
-        guard entryIDs != previewPrefetchEntryIDs else { return }
 
         let staleEntryIDs = previewPrefetchRequests.keys.filter { !entryIDs.contains($0) }
         for entryID in staleEntryIDs {
@@ -1815,6 +1839,7 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
                 let request = HistoryImagePreviewLoader.shared.load(
                     url: entry.fileURL,
                     pixelSize: pixelSize,
+                    priority: .prefetch,
                     completion: { [weak self] _ in
                         self?.previewPrefetchRequests.removeValue(forKey: entryID)
                     }
@@ -1901,9 +1926,7 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
         )
         let order = selectedEntryIDs.firstIndex(of: entryID(entry)).map { $0 + 1 }
         item.tileView?.setSelectionState(order: order, selectionModeActive: hasSelection)
-        if !isScrollingContent {
-            item.tileView?.loadPreviewIfNeeded()
-        }
+        item.tileView?.loadPreviewIfNeeded()
         return item
     }
 
@@ -2508,6 +2531,7 @@ private final class HistoryPanelCollectionItem: NSCollectionViewItem {
 }
 
 private final class HistoryPanelTileView: NSView, NSDraggingSource {
+    private static let textPreviewCharacterLimit = 600
     private enum PreviewLoadState {
         case idle
         case loading
@@ -3065,10 +3089,11 @@ private final class HistoryPanelTileView: NSView, NSDraggingSource {
     }
 
     private func configureTextPreview(_ text: String) {
+        let previewText = String(text.prefix(Self.textPreviewCharacterLimit))
         imageView.image = nil
         imageView.layer?.backgroundColor = NSColor.white.withAlphaComponent(0.055).cgColor
-        textPreviewLabel.stringValue = text
-        textPreviewLabel.toolTip = text
+        textPreviewLabel.stringValue = previewText
+        textPreviewLabel.toolTip = previewText
         textPreviewLabel.isHidden = false
         metaLabel.stringValue = Self.metadata(label: L10n.historyPanelFilterText, date: entry.createdAt)
         previewRequest = nil
