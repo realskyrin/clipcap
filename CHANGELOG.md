@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [1.8.16] - 2026-07-16
+
+### Changed
+
+- Promoted copied history items to the most recent position in the panel (ec80c66)
+
 ## [1.8.15] - 2026-07-16
 
 ### Fixed
