@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [1.8.17] - 2026-07-16
+
+### Fixed
+
+- Classified six-digit hexadecimal clipboard values as color history items without duplicate text entries (9902662)
+
 ## [1.8.16] - 2026-07-16
 
 ### Changed
