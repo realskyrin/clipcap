@@ -1263,7 +1263,7 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
         needsEntriesReload = false
         isReloading = true
         entriesQueue.async { [weak self] in
-            let allEntries = HistoryManager.shared.entries()
+            let allEntries = HistoryManager.shared.panelEntries()
             let availableFilters = Self.availableFilters(for: allEntries)
             DispatchQueue.main.async {
                 guard let self, self.reloadGeneration == generation, self.isActive else { return }
@@ -1758,7 +1758,7 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
         let generation = previewWarmGeneration
         let filter = selectedFilter
         entriesQueue.async { [weak self] in
-            let entries = Self.filteredEntries(from: HistoryManager.shared.entries(), filter: filter)
+            let entries = Self.filteredEntries(from: HistoryManager.shared.panelEntries(), filter: filter)
             let initialEntries = Array(entries.prefix(Self.initialPreviewCount))
             DispatchQueue.main.async {
                 guard let self, self.previewWarmGeneration == generation else { return }
@@ -3767,15 +3767,15 @@ private enum HistoryPanelEntryActions {
             guard let image = NSImage(contentsOf: entry.fileURL) else { return false }
             ClipboardManager.copyToClipboard(image: image)
             ToastWindow.show()
-            return true
+            return recordSuccessfulCopy(of: entry)
         case .color(let hex):
             ClipboardManager.copyToClipboard(text: hex.uppercased())
             ToastWindow.show(message: L10n.colorCopied(hex.uppercased()))
-            return true
+            return recordSuccessfulCopy(of: entry)
         case .text(let text):
             ClipboardManager.copyHistoryTextToClipboard(text.value)
             ToastWindow.show(message: L10n.copiedToClipboard)
-            return true
+            return recordSuccessfulCopy(of: entry)
         }
     }
 
@@ -3789,6 +3789,14 @@ private enum HistoryPanelEntryActions {
         pasteboard.clearContents()
         guard pasteboard.writeObjects(imageURLs) else { return false }
         ToastWindow.show(message: L10n.copiedToClipboard)
+        if entries.count == 1, let entry = entries.first {
+            HistoryManager.shared.promoteCopiedEntryIfNeeded(entry)
+        }
+        return true
+    }
+
+    private static func recordSuccessfulCopy(of entry: HistoryEntry) -> Bool {
+        HistoryManager.shared.promoteCopiedEntryIfNeeded(entry)
         return true
     }
 }

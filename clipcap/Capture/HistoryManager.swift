@@ -97,15 +97,22 @@ final class HistoryManager {
 
     private let queue = DispatchQueue(label: "clipcap.history", qos: .utility)
     private let directoryURL: URL
+    private let copiedEntryPromotionsURL: URL
     private let entriesCacheLock = NSLock()
     private var cachedEntries: [HistoryEntry]?
     private var cachedEntryCount: Int?
+    private var copiedEntryPromotions: [String: Date]
 
     private init() {
         let fm = FileManager.default
         let base = fm.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
             ?? URL(fileURLWithPath: NSTemporaryDirectory())
-        directoryURL = base.appendingPathComponent("clipcap/History", isDirectory: true)
+        let historyDirectoryURL = base.appendingPathComponent("clipcap/History", isDirectory: true)
+        directoryURL = historyDirectoryURL
+        copiedEntryPromotionsURL = historyDirectoryURL.appendingPathComponent(
+            ".copied-entry-promotions.plist"
+        )
+        copiedEntryPromotions = Self.loadCopiedEntryPromotions(from: copiedEntryPromotionsURL)
         try? fm.createDirectory(at: directoryURL, withIntermediateDirectories: true)
 
         NotificationCenter.default.addObserver(
@@ -308,6 +315,43 @@ final class HistoryManager {
         return entries
     }
 
+    func panelEntries() -> [HistoryEntry] {
+        let entries = entries()
+        let promotedAtByPath = copiedEntryPromotionSnapshot(validFor: entries)
+        return HistoryCopyPromotionPolicy.orderedEntries(
+            entries,
+            promotedAtByPath: promotedAtByPath
+        )
+    }
+
+    func promoteCopiedEntryIfNeeded(_ entry: HistoryEntry) {
+        let entries = entries()
+        let promotedAtByPath = copiedEntryPromotionSnapshot(validFor: entries)
+        let orderedEntries = HistoryCopyPromotionPolicy.orderedEntries(
+            entries,
+            promotedAtByPath: promotedAtByPath
+        )
+        guard let promotedAt = HistoryCopyPromotionPolicy.promotionDate(
+            afterCopying: entry,
+            in: orderedEntries,
+            promotedAtByPath: promotedAtByPath
+        ) else {
+            return
+        }
+
+        entriesCacheLock.lock()
+        copiedEntryPromotions[HistoryCopyPromotionPolicy.key(for: entry)] = promotedAt
+        let promotionsSnapshot = copiedEntryPromotions
+        entriesCacheLock.unlock()
+
+        queue.async { [weak self] in
+            self?.persistCopiedEntryPromotions(promotionsSnapshot)
+        }
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: .historyDidUpdate, object: nil)
+        }
+    }
+
     func entryCount() -> Int {
         guard Defaults.isHistoryCacheAvailable else { return 0 }
         entriesCacheLock.lock()
@@ -430,6 +474,7 @@ final class HistoryManager {
         queue.async { [weak self] in
             guard let self = self else { return }
             self.removeAllEntries()
+            self.clearCopiedEntryPromotions()
             self.invalidateEntriesCache()
             DispatchQueue.main.async {
                 NotificationCenter.default.post(name: .historyDidUpdate, object: nil)
@@ -449,14 +494,17 @@ final class HistoryManager {
         queue.async {
             let fm = FileManager.default
             var removedCount = 0
+            var removedURLs: [URL] = []
             for url in urls {
                 do {
                     try fm.removeItem(at: url)
                     removedCount += 1
+                    removedURLs.append(url)
                 } catch {
                     continue
                 }
             }
+            self.removeCopiedEntryPromotions(for: removedURLs)
             self.invalidateEntriesCache()
             DispatchQueue.main.async {
                 NotificationCenter.default.post(name: .historyDidUpdate, object: nil)
@@ -507,6 +555,77 @@ final class HistoryManager {
         cachedEntries = nil
         cachedEntryCount = nil
         entriesCacheLock.unlock()
+    }
+
+    private func copiedEntryPromotionSnapshot(validFor entries: [HistoryEntry]) -> [String: Date] {
+        let validKeys = Set(entries.map(HistoryCopyPromotionPolicy.key))
+        var promotionsToPersist: [String: Date]?
+
+        entriesCacheLock.lock()
+        let filteredPromotions = copiedEntryPromotions.filter { validKeys.contains($0.key) }
+        if filteredPromotions.count != copiedEntryPromotions.count {
+            copiedEntryPromotions = filteredPromotions
+            promotionsToPersist = filteredPromotions
+        }
+        let snapshot = copiedEntryPromotions
+        entriesCacheLock.unlock()
+
+        if let promotionsToPersist {
+            queue.async { [weak self] in
+                self?.persistCopiedEntryPromotions(promotionsToPersist)
+            }
+        }
+        return snapshot
+    }
+
+    private func clearCopiedEntryPromotions() {
+        entriesCacheLock.lock()
+        copiedEntryPromotions.removeAll()
+        entriesCacheLock.unlock()
+        persistCopiedEntryPromotions([:])
+    }
+
+    private func removeCopiedEntryPromotions(for urls: [URL]) {
+        guard !urls.isEmpty else { return }
+        let keys = Set(urls.map { $0.standardizedFileURL.path })
+
+        entriesCacheLock.lock()
+        let previousCount = copiedEntryPromotions.count
+        copiedEntryPromotions = copiedEntryPromotions.filter { !keys.contains($0.key) }
+        let promotionsSnapshot = copiedEntryPromotions
+        entriesCacheLock.unlock()
+
+        if promotionsSnapshot.count != previousCount {
+            persistCopiedEntryPromotions(promotionsSnapshot)
+        }
+    }
+
+    private static func loadCopiedEntryPromotions(from url: URL) -> [String: Date] {
+        guard let data = try? Data(contentsOf: url),
+              let storedValues = try? PropertyListSerialization.propertyList(
+                from: data,
+                options: [],
+                format: nil
+              ) as? [String: TimeInterval] else {
+            return [:]
+        }
+        return storedValues.mapValues(Date.init(timeIntervalSince1970:))
+    }
+
+    private func persistCopiedEntryPromotions(_ promotions: [String: Date]) {
+        if promotions.isEmpty {
+            try? FileManager.default.removeItem(at: copiedEntryPromotionsURL)
+            return
+        }
+        let storedValues = promotions.mapValues(\.timeIntervalSince1970)
+        guard let data = try? PropertyListSerialization.data(
+            fromPropertyList: storedValues,
+            format: .binary,
+            options: 0
+        ) else {
+            return
+        }
+        try? data.write(to: copiedEntryPromotionsURL, options: .atomic)
     }
 
     private func removeStoredHistoryEntries(withExtensions extensions: Set<String>) {
