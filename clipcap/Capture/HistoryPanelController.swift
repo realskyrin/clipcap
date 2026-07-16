@@ -475,7 +475,7 @@ private struct HistoryNotchGeometry {
     var screenWidth: CGFloat
 
     let expandedHorizontalMargin: CGFloat = 24
-    let expandedBottomInset: CGFloat = 14
+    let expandedBottomInset: CGFloat = 0
 
     static func geometry(for screen: NSScreen?) -> HistoryNotchGeometry {
         let screenFrame = screen?.frame ?? NSRect(x: 0, y: 0, width: 1200, height: 800)
@@ -865,6 +865,10 @@ private enum HistoryPanelPresentation {
         }
     }
 
+    var contentBottomInset: CGFloat {
+        outerInset
+    }
+
     var headerInset: CGFloat {
         switch self {
         case .dialog: return outerInset
@@ -877,7 +881,7 @@ private enum HistoryPanelPresentation {
             + HistoryPanelLayout.headerHeight
             + HistoryPanelLayout.verticalGap
             + tileHeight
-            + HistoryPanelLayout.verticalGap
+            + contentBottomInset
     }
 }
 
@@ -1111,7 +1115,7 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
             scrollView.topAnchor.constraint(equalTo: header.bottomAnchor, constant: HistoryPanelLayout.verticalGap),
             scrollView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: inset),
             scrollView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -inset),
-            scrollView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -HistoryPanelLayout.verticalGap),
+            scrollView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -presentation.contentBottomInset),
 
             emptyLabel.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
             emptyLabel.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor),
@@ -2551,6 +2555,7 @@ private final class HistoryPanelTileView: NSView, NSDraggingSource {
     private let badgeView = HistoryMediaBadgeView()
     private let selectionBadgeView = HistorySelectionBadgeView()
     private let metaLabel = HistoryPanelCenteredTextView()
+    private let outlineLayer = CAShapeLayer()
     private var trackingArea: NSTrackingArea?
     private var previewRequest: HistoryImagePreviewRequest?
     private var mouseDownPoint: NSPoint?
@@ -2584,8 +2589,11 @@ private final class HistoryPanelTileView: NSView, NSDraggingSource {
         layer?.cornerRadius = 8
         layer?.cornerCurve = .continuous
         layer?.backgroundColor = NSColor.white.withAlphaComponent(0.075).cgColor
-        layer?.borderColor = NSColor.white.withAlphaComponent(0.08).cgColor
-        layer?.borderWidth = 1
+        outlineLayer.fillColor = NSColor.clear.cgColor
+        outlineLayer.lineJoin = .round
+        outlineLayer.zPosition = 1000
+        layer?.addSublayer(outlineLayer)
+        updateOutlineAppearance()
 
         imageView.imageScaling = .scaleProportionallyDown
         imageView.imageAlignment = .alignCenter
@@ -2685,6 +2693,7 @@ private final class HistoryPanelTileView: NSView, NSDraggingSource {
             width: bounds.width - padding * 2,
             height: 18
         )
+        updateOutlinePath()
     }
 
     override func updateTrackingAreas() {
@@ -2721,9 +2730,7 @@ private final class HistoryPanelTileView: NSView, NSDraggingSource {
     func setHovered(_ hovered: Bool) {
         guard isHovered != hovered else { return }
         isHovered = hovered
-        layer?.borderColor = hovered
-            ? accentGreen.withAlphaComponent(0.80).cgColor
-            : selectedBorderColor
+        updateOutlineAppearance()
         layer?.backgroundColor = hovered
             ? NSColor.white.withAlphaComponent(0.11).cgColor
             : NSColor.white.withAlphaComponent(0.075).cgColor
@@ -2735,10 +2742,7 @@ private final class HistoryPanelTileView: NSView, NSDraggingSource {
         selectionOrder = order
         isSelectionModeActive = selectionModeActive
         selectionBadgeView.order = order
-        layer?.borderColor = isHovered
-            ? accentGreen.withAlphaComponent(0.80).cgColor
-            : selectedBorderColor
-        layer?.borderWidth = order == nil ? 1 : 2
+        updateOutlineAppearance()
         updateSelectionBadgeVisibility()
         needsLayout = true
     }
@@ -2747,6 +2751,37 @@ private final class HistoryPanelTileView: NSView, NSDraggingSource {
         selectionOrder == nil
             ? NSColor.white.withAlphaComponent(0.08).cgColor
             : accentGreen.withAlphaComponent(0.95).cgColor
+    }
+
+    private func updateOutlineAppearance() {
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        outlineLayer.strokeColor = isHovered
+            ? accentGreen.withAlphaComponent(0.80).cgColor
+            : selectedBorderColor
+        outlineLayer.lineWidth = selectionOrder == nil ? 1 : 2
+        CATransaction.commit()
+        updateOutlinePath()
+    }
+
+    private func updateOutlinePath() {
+        guard bounds.width > 0, bounds.height > 0 else { return }
+        let scale = window?.backingScaleFactor ?? NSScreen.main?.backingScaleFactor ?? 2
+        let inset = outlineLayer.lineWidth / 2 + 1 / scale
+        let outlineRect = bounds.insetBy(dx: inset, dy: inset)
+        let radius = max(0, 8 - inset)
+
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        outlineLayer.contentsScale = scale
+        outlineLayer.frame = bounds
+        outlineLayer.path = CGPath(
+            roundedRect: outlineRect,
+            cornerWidth: radius,
+            cornerHeight: radius,
+            transform: nil
+        )
+        CATransaction.commit()
     }
 
     private func updateSelectionBadgeVisibility() {
@@ -2784,8 +2819,7 @@ private final class HistoryPanelTileView: NSView, NSDraggingSource {
         selectionOrder = nil
         selectionBadgeView.order = nil
         selectionBadgeView.isHidden = true
-        layer?.borderColor = selectedBorderColor
-        layer?.borderWidth = 1
+        updateOutlineAppearance()
         layer?.backgroundColor = NSColor.white.withAlphaComponent(0.075).cgColor
 
         mouseDownPoint = nil

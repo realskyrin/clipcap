@@ -819,11 +819,8 @@ final class SettingsView: NSView {
         historyCacheValueLabel = value
         header.addArrangedSubview(value)
 
-        let hint = secondaryLabel(L10n.historyCacheHint, wrapping: true)
-
         addFullWidth(header, to: stack)
         addFullWidth(slider, to: stack)
-        addFullWidth(hint, to: stack)
         return stack
     }
 
@@ -865,11 +862,8 @@ final class SettingsView: NSView {
         clipboardTextHistoryLimitValueLabel = value
         header.addArrangedSubview(value)
 
-        let hint = secondaryLabel(L10n.clipboardTextHistoryLimitHint, wrapping: true)
-
         addFullWidth(header, to: stack)
         addFullWidth(slider, to: stack)
-        addFullWidth(hint, to: stack)
         return stack
     }
 
