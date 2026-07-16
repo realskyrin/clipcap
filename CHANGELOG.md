@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## [1.8.15] - 2026-07-16
+
+### Fixed
+
+- Fixed history panel margins and selection borders (f47fea5)
+
+### Changed
+
+- Removed redundant history limit descriptions from Settings (f47fea5)
+
 ## [1.8.14] - 2026-07-15
 
 ### Fixed
