@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [1.8.18] - 2026-07-26
+
+### Added
+
+- Added localized search controls to the history panel (556e1f3)
+
 ## [1.8.17] - 2026-07-16
 
 ### Fixed
