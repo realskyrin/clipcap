@@ -123,6 +123,11 @@
 "historyPanelFilterGIF" = "GIF";
 "historyPanelFilterColors" = "カラー";
 "historyPanelFilterText" = "テキスト";
+"historyPanelSearchColorsAndText" = "色とテキストを検索";
+"historyPanelSearchColors" = "色を検索";
+"historyPanelSearchText" = "テキストを検索";
+"historyPanelClearSearch" = "検索をクリア";
+"historyPanelSearchNoResults" = "一致する履歴はありません";
 "historyPreviewCopyText" = "テキストをコピー";
 "historyPreviewConvertToQRCode" = "QRコードに変換";
 "historyPreviewQRCodeTooLong" = "テキストが長すぎるためQRコードに変換できません";

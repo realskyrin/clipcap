@@ -123,6 +123,11 @@
 "historyPanelFilterGIF" = "GIF";
 "historyPanelFilterColors" = "Colors";
 "historyPanelFilterText" = "Text";
+"historyPanelSearchColorsAndText" = "Search colors and text";
+"historyPanelSearchColors" = "Search colors";
+"historyPanelSearchText" = "Search text";
+"historyPanelClearSearch" = "Clear search";
+"historyPanelSearchNoResults" = "No matching history";
 "historyPreviewCopyText" = "Copy Text";
 "historyPreviewConvertToQRCode" = "Convert to QR Code";
 "historyPreviewQRCodeTooLong" = "Text is too long to convert to a QR code";

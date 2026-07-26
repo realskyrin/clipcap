@@ -123,6 +123,11 @@
 "historyPanelFilterGIF" = "GIF";
 "historyPanelFilterColors" = "Màu";
 "historyPanelFilterText" = "Văn bản";
+"historyPanelSearchColorsAndText" = "Tìm màu và văn bản";
+"historyPanelSearchColors" = "Tìm màu";
+"historyPanelSearchText" = "Tìm văn bản";
+"historyPanelClearSearch" = "Xóa tìm kiếm";
+"historyPanelSearchNoResults" = "Không có lịch sử phù hợp";
 "historyPreviewCopyText" = "Sao chép văn bản";
 "historyPreviewConvertToQRCode" = "Chuyển thành mã QR";
 "historyPreviewQRCodeTooLong" = "Văn bản quá dài nên không thể chuyển thành mã QR";

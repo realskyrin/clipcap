@@ -123,6 +123,11 @@
 "historyPanelFilterGIF" = "GIF";
 "historyPanelFilterColors" = "顏色";
 "historyPanelFilterText" = "文字";
+"historyPanelSearchColorsAndText" = "搜尋顏色和文字";
+"historyPanelSearchColors" = "搜尋顏色";
+"historyPanelSearchText" = "搜尋文字";
+"historyPanelClearSearch" = "清除搜尋";
+"historyPanelSearchNoResults" = "沒有符合的歷史";
 "historyPreviewCopyText" = "複製文字";
 "historyPreviewConvertToQRCode" = "轉成二維碼";
 "historyPreviewQRCodeTooLong" = "文字太長，無法轉換為二維碼";

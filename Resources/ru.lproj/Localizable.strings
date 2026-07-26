@@ -123,6 +123,11 @@
 "historyPanelFilterGIF" = "GIF";
 "historyPanelFilterColors" = "Цвета";
 "historyPanelFilterText" = "Текст";
+"historyPanelSearchColorsAndText" = "Поиск по цветам и тексту";
+"historyPanelSearchColors" = "Поиск по цветам";
+"historyPanelSearchText" = "Поиск по тексту";
+"historyPanelClearSearch" = "Очистить поиск";
+"historyPanelSearchNoResults" = "Совпадений не найдено";
 "historyPreviewCopyText" = "Копировать текст";
 "historyPreviewConvertToQRCode" = "Преобразовать в QR-код";
 "historyPreviewQRCodeTooLong" = "Текст слишком длинный для преобразования в QR-код";
