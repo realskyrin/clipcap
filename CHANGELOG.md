@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- Added menu bar caffeination with indefinite, preset-duration, and chosen-end-time modes using native macOS power assertions
+
 ## [1.8.18] - 2026-07-26
 
 ### Added

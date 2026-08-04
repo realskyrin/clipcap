@@ -9,6 +9,13 @@ class StatusBarController: NSObject {
     private let onOpenSettings: () -> Void
     private var historyMenu: NSMenu?
     private var historyItem: NSMenuItem?
+    private let caffeinationController = CaffeinationController.shared
+    private var caffeinationMenu: NSMenu?
+    private var caffeinationItem: NSMenuItem?
+    private var activeCaffeinationMenuItem: NSMenuItem?
+    private var activeCaffeinationBaseTitle = ""
+    private var activeCaffeinationIsUntil = false
+    private var caffeinationCountdownTimer: Timer?
 
     init(
         onEditClipboardImage: @escaping () -> Void,
@@ -55,9 +62,13 @@ class StatusBarController: NSObject {
             self?.setupMenu()
             self?.syncUpdateProgressHUD()
         }
+        NotificationCenter.default.addObserver(forName: .caffeinationStateDidChange, object: nil, queue: .main) { [weak self] _ in
+            self?.refreshCaffeinationItemState()
+        }
     }
 
     private func setupMenu() {
+        stopCaffeinationCountdown()
         let menu = NSMenu()
 
         let clipboardItem = NSMenuItem(title: L10n.editClipboardImage, action: #selector(editClipboardImage), keyEquivalent: "")
@@ -76,6 +87,15 @@ class StatusBarController: NSObject {
         mergeItem.image = Self.menuIcon(systemName: "square.grid.2x2")
         HotkeyManager.applyImageMergeToMenuItem(mergeItem)
         menu.addItem(mergeItem)
+
+        let caffeinationItem = NSMenuItem(title: L10n.caffeinateMenu, action: nil, keyEquivalent: "")
+        let caffeinationMenu = NSMenu(title: L10n.caffeinateMenu)
+        caffeinationMenu.delegate = self
+        caffeinationItem.submenu = caffeinationMenu
+        self.caffeinationItem = caffeinationItem
+        self.caffeinationMenu = caffeinationMenu
+        menu.addItem(caffeinationItem)
+        refreshCaffeinationItemState(rebuildSubmenu: false)
 
         menu.addItem(NSMenuItem.separator())
 
@@ -147,6 +167,14 @@ class StatusBarController: NSObject {
         historyItem?.isEnabled = Defaults.isHistoryCacheAvailable
     }
 
+    private func refreshCaffeinationItemState(rebuildSubmenu: Bool = true) {
+        let symbolName = caffeinationController.isActive ? "cup.and.saucer.fill" : "cup.and.saucer"
+        caffeinationItem?.image = Self.menuIcon(systemName: symbolName)
+        if rebuildSubmenu, let caffeinationMenu {
+            rebuildCaffeinationMenu(caffeinationMenu)
+        }
+    }
+
     @objc private func editClipboardImage() {
         onEditClipboardImage()
     }
@@ -165,6 +193,202 @@ class StatusBarController: NSObject {
 
     @objc private func openHistoryPanel() {
         onOpenHistoryPanel()
+    }
+
+    @objc private func decaffeinate() {
+        caffeinationController.stop()
+    }
+
+    @objc private func toggleIndefiniteCaffeination() {
+        if caffeinationController.isIndefinite {
+            caffeinationController.stop()
+            return
+        }
+        guard caffeinationController.startIndefinitely() else {
+            ToastWindow.show(message: L10n.caffeinateFailed)
+            return
+        }
+    }
+
+    @objc private func caffeinationPresetClicked(_ sender: NSMenuItem) {
+        guard let preset = sender.representedObject as? CaffeinationPreset else { return }
+        if caffeinationController.activePreset == preset {
+            caffeinationController.stop()
+            return
+        }
+        guard caffeinationController.start(preset: preset) else {
+            ToastWindow.show(message: L10n.caffeinateFailed)
+            return
+        }
+    }
+
+    @objc private func caffeinateUntilClicked() {
+        if let session = caffeinationController.activeSession,
+           session.endDate != nil,
+           session.preset == nil {
+            caffeinationController.stop()
+            return
+        }
+
+        DispatchQueue.main.async { [weak self] in
+            self?.presentCaffeinateUntilPicker()
+        }
+    }
+
+    private func presentCaffeinateUntilPicker() {
+        let now = Date()
+        let picker = NSDatePicker(frame: NSRect(x: 0, y: 0, width: 260, height: 28))
+        picker.datePickerStyle = .textFieldAndStepper
+        picker.datePickerElements = [.yearMonthDay, .hourMinute]
+        picker.locale = Locale(identifier: L10n.lang.lprojName)
+        picker.minDate = now.addingTimeInterval(60)
+        picker.dateValue = now.addingTimeInterval(60 * 60)
+
+        let alert = NSAlert()
+        alert.messageText = L10n.caffeinateUntilTitle
+        alert.informativeText = L10n.caffeinateUntilHint
+        alert.accessoryView = picker
+        alert.addButton(withTitle: L10n.caffeinateStart)
+        alert.addButton(withTitle: L10n.caffeinateCancel)
+        NSApp.activate(ignoringOtherApps: true)
+
+        guard alert.runModal() == .alertFirstButtonReturn else { return }
+        guard picker.dateValue.timeIntervalSinceNow > 0 else {
+            ToastWindow.show(message: L10n.caffeinateFutureTimeRequired)
+            return
+        }
+        guard caffeinationController.start(until: picker.dateValue) else {
+            ToastWindow.show(message: L10n.caffeinateFailed)
+            return
+        }
+    }
+
+    private func rebuildCaffeinationMenu(_ menu: NSMenu) {
+        menu.removeAllItems()
+        activeCaffeinationMenuItem = nil
+        activeCaffeinationBaseTitle = ""
+        activeCaffeinationIsUntil = false
+
+        if caffeinationController.isActive {
+            let stopItem = NSMenuItem(title: L10n.decaffeinate, action: #selector(decaffeinate), keyEquivalent: "")
+            stopItem.target = self
+            menu.addItem(stopItem)
+            menu.addItem(NSMenuItem.separator())
+        }
+
+        menu.addItem(NSMenuItem.sectionHeader(title: L10n.caffeinateMenu))
+
+        let indefinite = NSMenuItem(
+            title: L10n.caffeinateIndefinitely,
+            action: #selector(toggleIndefiniteCaffeination),
+            keyEquivalent: ""
+        )
+        indefinite.target = self
+        indefinite.state = caffeinationController.isIndefinite ? .on : .off
+        menu.addItem(indefinite)
+
+        for preset in CaffeinationPreset.allCases {
+            let title = caffeinationTitle(for: preset)
+            let item = NSMenuItem(title: title, action: #selector(caffeinationPresetClicked(_:)), keyEquivalent: "")
+            item.target = self
+            item.representedObject = preset
+            if caffeinationController.activePreset == preset {
+                item.state = .on
+                activeCaffeinationMenuItem = item
+                activeCaffeinationBaseTitle = title
+            }
+            menu.addItem(item)
+        }
+
+        menu.addItem(NSMenuItem.separator())
+
+        let untilItem = NSMenuItem(title: L10n.caffeinateUntil, action: #selector(caffeinateUntilClicked), keyEquivalent: "")
+        untilItem.target = self
+        if let session = caffeinationController.activeSession,
+           session.endDate != nil,
+           session.preset == nil {
+            untilItem.state = .on
+            activeCaffeinationMenuItem = untilItem
+            activeCaffeinationBaseTitle = L10n.caffeinateUntil
+            activeCaffeinationIsUntil = true
+        }
+        menu.addItem(untilItem)
+
+        updateCaffeinationCountdown()
+    }
+
+    private func caffeinationTitle(for preset: CaffeinationPreset) -> String {
+        switch preset {
+        case .tenMinutes: return L10n.caffeinateTenMinutes
+        case .thirtyMinutes: return L10n.caffeinateThirtyMinutes
+        case .oneHour: return L10n.caffeinateOneHour
+        case .twoHours: return L10n.caffeinateTwoHours
+        case .fourHours: return L10n.caffeinateFourHours
+        case .eightHours: return L10n.caffeinateEightHours
+        case .twelveHours: return L10n.caffeinateTwelveHours
+        }
+    }
+
+    private func startCaffeinationCountdown() {
+        stopCaffeinationCountdown()
+        guard caffeinationController.activeEndDate != nil else { return }
+        let timer = Timer(timeInterval: 1, repeats: true) { [weak self] _ in
+            self?.updateCaffeinationCountdown()
+        }
+        RunLoop.main.add(timer, forMode: .eventTracking)
+        caffeinationCountdownTimer = timer
+        updateCaffeinationCountdown()
+    }
+
+    private func stopCaffeinationCountdown() {
+        caffeinationCountdownTimer?.invalidate()
+        caffeinationCountdownTimer = nil
+    }
+
+    private func updateCaffeinationCountdown() {
+        guard let item = activeCaffeinationMenuItem,
+              let endDate = caffeinationController.activeEndDate,
+              let remaining = caffeinationController.remainingTime()
+        else { return }
+
+        let remainingText = L10n.caffeinateRemaining(Self.compactDuration(remaining))
+        let detail = activeCaffeinationIsUntil
+            ? "\(Self.caffeinationEndDateText(endDate)) — \(remainingText)"
+            : remainingText
+
+        if #available(macOS 14.4, *) {
+            item.title = activeCaffeinationBaseTitle
+            item.subtitle = detail
+        } else {
+            item.title = "\(activeCaffeinationBaseTitle)  \(detail)"
+        }
+    }
+
+    private static func compactDuration(_ interval: TimeInterval) -> String {
+        let seconds = max(0, Int(ceil(interval)))
+        guard seconds > 0 else { return "0s" }
+
+        let formatter = DateComponentsFormatter()
+        formatter.unitsStyle = .abbreviated
+        formatter.allowedUnits = seconds >= 3600 ? [.hour, .minute, .second] : [.minute, .second]
+        formatter.maximumUnitCount = 3
+        formatter.zeroFormattingBehavior = [.dropLeading, .dropTrailing]
+        var calendar = Calendar.current
+        calendar.locale = Locale(identifier: L10n.lang.lprojName)
+        formatter.calendar = calendar
+        return formatter.string(from: TimeInterval(seconds)) ?? "\(seconds)s"
+    }
+
+    private static func caffeinationEndDateText(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: L10n.lang.lprojName)
+        if Calendar.current.isDateInToday(date) {
+            formatter.timeStyle = .short
+        } else {
+            formatter.dateStyle = .short
+            formatter.timeStyle = .short
+        }
+        return formatter.string(from: date)
     }
 
     /// Builds the update menu item — its title and action track the current
@@ -375,6 +599,10 @@ class StatusBarController: NSObject {
 
 extension StatusBarController: NSMenuDelegate {
     func menuNeedsUpdate(_ menu: NSMenu) {
+        if menu === caffeinationMenu {
+            rebuildCaffeinationMenu(menu)
+            return
+        }
         guard Defaults.isHistoryCacheAvailable, menu === historyMenu else { return }
         menu.removeAllItems()
 
@@ -407,6 +635,16 @@ extension StatusBarController: NSMenuDelegate {
             item.representedObject = entry
             menu.addItem(item)
         }
+    }
+
+    func menuWillOpen(_ menu: NSMenu) {
+        guard menu === caffeinationMenu else { return }
+        startCaffeinationCountdown()
+    }
+
+    func menuDidClose(_ menu: NSMenu) {
+        guard menu === caffeinationMenu else { return }
+        stopCaffeinationCountdown()
     }
 
     private func addHistoryUtilityItems(to menu: NSMenu, hasEntries: Bool) {

@@ -17,6 +17,7 @@ You can also drag image files to the app, choose “Open Image”, use Finder �
 - OCR, translation, dictionary mode, and configurable translation providers
 - Upload images to your own image host and copy a URL or Markdown
 - Save to a local folder, keep history, and re-copy previous images
+- Keep the Mac awake indefinitely, for preset durations, or until a chosen time without extra permissions
 - Menu bar app with no Dock icon
 
 ## Privacy Boundary

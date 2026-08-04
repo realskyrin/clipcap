@@ -68,6 +68,7 @@ extension Notification.Name {
     static let historyDidUpdate = Notification.Name("clipcap.historyDidUpdate")
     static let historyPanelDisplayModesDidChange = Notification.Name("clipcap.historyPanelDisplayModesDidChange")
     static let hotkeyDidChange = Notification.Name("clipcap.hotkeyDidChange")
+    static let caffeinationStateDidChange = Notification.Name("clipcap.caffeinationStateDidChange")
 }
 
 /// Centralized accessor for every user-facing string. Each property resolves a
@@ -213,6 +214,26 @@ enum L10n {
     static var openImageNoImage: String { s("openImageNoImage") }
     static var mergeImages: String { s("mergeImages") }
     static var colorPicker: String { s("colorPicker") }
+    static var caffeinateMenu: String { s("caffeinateMenu") }
+    static var decaffeinate: String { s("decaffeinate") }
+    static var caffeinateIndefinitely: String { s("caffeinateIndefinitely") }
+    static var caffeinateTenMinutes: String { s("caffeinateTenMinutes") }
+    static var caffeinateThirtyMinutes: String { s("caffeinateThirtyMinutes") }
+    static var caffeinateOneHour: String { s("caffeinateOneHour") }
+    static var caffeinateTwoHours: String { s("caffeinateTwoHours") }
+    static var caffeinateFourHours: String { s("caffeinateFourHours") }
+    static var caffeinateEightHours: String { s("caffeinateEightHours") }
+    static var caffeinateTwelveHours: String { s("caffeinateTwelveHours") }
+    static var caffeinateUntil: String { s("caffeinateUntil") }
+    static func caffeinateRemaining(_ duration: String) -> String {
+        String(format: s("caffeinateRemaining"), duration)
+    }
+    static var caffeinateUntilTitle: String { s("caffeinateUntilTitle") }
+    static var caffeinateUntilHint: String { s("caffeinateUntilHint") }
+    static var caffeinateStart: String { s("caffeinateStart") }
+    static var caffeinateCancel: String { s("caffeinateCancel") }
+    static var caffeinateFailed: String { s("caffeinateFailed") }
+    static var caffeinateFutureTimeRequired: String { s("caffeinateFutureTimeRequired") }
     static var settings: String { s("settings") }
     static var quitApp: String { s("quitApp") }
     static var historyMenu: String { s("historyMenu") }

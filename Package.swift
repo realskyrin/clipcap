@@ -24,6 +24,7 @@ let package = Package(
                 .linkedFramework("ImageIO"),
                 .linkedFramework("UniformTypeIdentifiers"),
                 .linkedFramework("Carbon"),
+                .linkedFramework("IOKit"),
                 .linkedLibrary("z"),
             ]
         ),
