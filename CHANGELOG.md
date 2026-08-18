@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## [1.8.21] - 2026-08-18
+
+### Added
+
+- Added image path copying from history tiles, including Option-click support (317ac35, 26ddfcb)
+- Added automatic opening of the system screenshot folder after screenshots are captured (0bc9fad)
+
 ## [1.8.20] - 2026-08-18
 
 ### Changed
