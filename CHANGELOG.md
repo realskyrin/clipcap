@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+### Changed
+
+- Simplified pinned image windows with proportional scaling, an in-image hover toolbar, and no thumbnail navigator or zoom step buttons
+
+### Fixed
+
+- Kept the PIN toolbar aligned with screenshot content when images include transparent shadow padding
+- Replaced the PIN move control with copy and cross-app image drag actions, and reduced the close control size
+- Kept PIN close and zoom controls readable at small scales with adaptive button hiding and balanced icon sizing
+
 ## [1.8.22] - 2026-08-18
 
 ### Changed
