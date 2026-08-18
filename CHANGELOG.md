@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [1.8.22] - 2026-08-18
+
+### Changed
+
+- Removed system screenshot sources after editor handoff (a0e6b7f)
+
 ## [1.8.21] - 2026-08-18
 
 ### Added
