@@ -211,6 +211,14 @@ final class HotkeyManager {
         eventMatches(event, hotkey: effectiveClipboardHotkey)
     }
 
+    static func eventMatchesCopyPathHotkey(_ event: NSEvent) -> Bool {
+        guard Defaults.hasCustomCopyPathHotkey else { return false }
+        return eventMatches(
+            event,
+            hotkey: (Defaults.copyPathHotkeyKeyCode, Defaults.copyPathHotkeyModifiers)
+        )
+    }
+
     static func eventMatchesFileSaveHotkey(_ event: NSEvent) -> Bool {
         eventMatches(event, hotkey: effectiveFileSaveHotkey)
     }

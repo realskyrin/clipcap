@@ -75,6 +75,10 @@
 "clipboardShortcutHint" = "Pressed inside the editor to commit the edit and copy the image to the clipboard. Defaults to ↩";
 "clipboardShortcutDefaultDisplay" = "↩";
 
+/* Copy-history-path shortcut (editor output) */
+"copyPathShortcutHeader" = "Copy Path to Clipboard";
+"copyPathShortcutHint" = "Pressed inside the editor to add the image to history and copy its absolute path to the clipboard. Not set by default";
+
 /* Save-to-file shortcut (editor save) */
 "fileSaveShortcutHeader" = "Save to File";
 "fileSaveShortcutHint" = "Pressed inside the editor to save the image as a PNG in the configured image folder. Defaults to ⌘S";
@@ -93,6 +97,7 @@
 "shortcutConflictClipboardImagePin" = "This key combination is already used by the Pin Clipboard Image shortcut. Please choose a different one";
 "shortcutConflictClipboardTextPin" = "This key combination is already used by the Pin Clipboard Text shortcut. Please choose a different one";
 "shortcutConflictClipboard" = "This key combination is already used by the Copy to Clipboard shortcut. Please choose a different one";
+"shortcutConflictCopyPath" = "This key combination is already used by the Copy Path to Clipboard shortcut. Please choose a different one";
 "shortcutConflictFileSave" = "This key combination is already used by the Save to File shortcut. Please choose a different one";
 "shortcutConflictPreviousHistoryImage" = "This key combination is already used by the Previous History Image shortcut. Please choose a different one";
 "shortcutConflictNextHistoryImage" = "This key combination is already used by the Next History Image shortcut. Please choose a different one";
@@ -169,6 +174,8 @@
 /* Toast */
 "copiedToClipboard" = "Copied to clipboard";
 "historyImagePathCopied" = "Copied image path to clipboard";
+"copyPathHistoryRequired" = "Enable image history before copying its path";
+"historyImagePathCopyFailed" = "Could not add the image to history or copy its path";
 "mergedLongScreenshot" = "Long image merged";
 "cropLongScreenshotHint" = "Drag the top/bottom edges to crop — press Enter or tap ✓";
 "scrollCaptureHint" = "Press any key to finish scrolling";

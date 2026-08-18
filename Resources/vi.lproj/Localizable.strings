@@ -75,6 +75,10 @@
 "clipboardShortcutHint" = "Nhấn trong trình chỉnh sửa để xác nhận chỉnh sửa và sao chép ảnh vào clipboard. Mặc định là ↩";
 "clipboardShortcutDefaultDisplay" = "↩";
 
+/* Copy-history-path shortcut (editor output) */
+"copyPathShortcutHeader" = "Sao chép đường dẫn vào clipboard";
+"copyPathShortcutHint" = "Nhấn trong trình chỉnh sửa để thêm ảnh vào lịch sử và sao chép đường dẫn tuyệt đối vào clipboard. Mặc định chưa đặt";
+
 /* Save-to-file shortcut (editor save) */
 "fileSaveShortcutHeader" = "Lưu vào tệp";
 "fileSaveShortcutHint" = "Nhấn trong trình chỉnh sửa để lưu ảnh dạng PNG vào thư mục ảnh đã đặt. Mặc định là ⌘S";
@@ -93,6 +97,7 @@
 "shortcutConflictClipboardImagePin" = "Tổ hợp phím này đã được dùng cho phím tắt ghim ảnh từ clipboard. Vui lòng chọn tổ hợp khác";
 "shortcutConflictClipboardTextPin" = "Tổ hợp phím này đã được dùng cho phím tắt ghim văn bản từ clipboard. Vui lòng chọn tổ hợp khác";
 "shortcutConflictClipboard" = "Tổ hợp phím này đã được dùng cho phím tắt sao chép vào clipboard. Vui lòng chọn tổ hợp khác";
+"shortcutConflictCopyPath" = "Tổ hợp phím này đã được dùng cho phím tắt sao chép đường dẫn vào clipboard. Vui lòng chọn tổ hợp khác";
 "shortcutConflictFileSave" = "Tổ hợp phím này đã được dùng cho phím tắt lưu vào tệp. Vui lòng chọn tổ hợp khác";
 "shortcutConflictPreviousHistoryImage" = "Tổ hợp phím này đã được dùng cho phím tắt ảnh chụp lịch sử trước. Vui lòng chọn tổ hợp khác";
 "shortcutConflictNextHistoryImage" = "Tổ hợp phím này đã được dùng cho phím tắt ảnh chụp lịch sử tiếp theo. Vui lòng chọn tổ hợp khác";
@@ -169,6 +174,8 @@
 /* Toast */
 "copiedToClipboard" = "Đã sao chép vào clipboard";
 "historyImagePathCopied" = "Đã sao chép đường dẫn ảnh vào clipboard";
+"copyPathHistoryRequired" = "Hãy bật lịch sử ảnh trước khi sao chép đường dẫn";
+"historyImagePathCopyFailed" = "Không thể thêm ảnh vào lịch sử hoặc sao chép đường dẫn";
 "mergedLongScreenshot" = "Đã ghép ảnh chụp dài";
 "cropLongScreenshotHint" = "Kéo cạnh trên/dưới để cắt — nhấn Enter hoặc bấm ✓";
 "scrollCaptureHint" = "Nhấn phím bất kỳ để kết thúc cuộn";

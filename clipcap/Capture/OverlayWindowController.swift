@@ -36,7 +36,7 @@ final class OverlayWindowController {
     private let suspendedDraft: SuspendedEditDraft?
     private let keepsEditorAcrossSpaces: Bool
     private let onRequestFocusReturn: (() -> Void)?
-    private let onComplete: (NSImage?) -> Void
+    private let onComplete: (EditorCompletion) -> Void
 
     init(
         presetImage: NSImage,
@@ -44,7 +44,7 @@ final class OverlayWindowController {
         keepsEditorAcrossSpaces: Bool = false,
         onRequestFocusReturn: (() -> Void)? = nil,
         onSuspend: ((SuspendedEditDraft) -> Void)? = nil,
-        onComplete: @escaping (NSImage?) -> Void
+        onComplete: @escaping (EditorCompletion) -> Void
     ) {
         self.presetImage = presetImage
         self.suspendedDraft = nil
@@ -57,7 +57,7 @@ final class OverlayWindowController {
         suspendedDraft: SuspendedEditDraft,
         onRequestFocusReturn: (() -> Void)? = nil,
         onSuspend: ((SuspendedEditDraft) -> Void)? = nil,
-        onComplete: @escaping (NSImage?) -> Void
+        onComplete: @escaping (EditorCompletion) -> Void
     ) {
         self.presetImage = nil
         self.suspendedDraft = suspendedDraft
@@ -79,7 +79,7 @@ final class OverlayWindowController {
     private func presentEditor() {
         guard window == nil else { return }
         guard let image = presetImage ?? suspendedDraft?.overrideBaseImage else {
-            onComplete(nil)
+            onComplete(.dismissed)
             return
         }
 
@@ -171,6 +171,10 @@ final class OverlayWindowController {
                 self.editController?.confirmFromKeyboard()
                 return nil
             }
+            if HotkeyManager.eventMatchesCopyPathHotkey(event) {
+                self.editController?.copyPathFromKeyboard()
+                return nil
+            }
             if HotkeyManager.eventMatchesFileSaveHotkey(event) {
                 self.editController?.saveFromKeyboard()
                 return nil
@@ -180,14 +184,14 @@ final class OverlayWindowController {
         }
     }
 
-    private func complete(_ image: NSImage?) {
+    private func complete(_ completion: EditorCompletion) {
         tearDown()
-        onComplete(image)
+        onComplete(completion)
     }
 
     private func cancel() {
         tearDown()
-        onComplete(nil)
+        onComplete(.dismissed)
     }
 
     private func tearDown() {

@@ -199,6 +199,10 @@ enum L10n {
     static var clipboardShortcutHint: String { s("clipboardShortcutHint") }
     static var clipboardShortcutDefaultDisplay: String { s("clipboardShortcutDefaultDisplay") }
 
+    // Copy-history-path shortcut (editor output)
+    static var copyPathShortcutHeader: String { s("copyPathShortcutHeader") }
+    static var copyPathShortcutHint: String { s("copyPathShortcutHint") }
+
     // History navigation shortcuts (editor)
     static var previousHistoryImageShortcutHeader: String { s("previousHistoryImageShortcutHeader") }
     static var previousHistoryImageShortcutHint: String { s("previousHistoryImageShortcutHint") }
@@ -219,6 +223,7 @@ enum L10n {
     static var shortcutConflictClipboardImagePin: String { s("shortcutConflictClipboardImagePin") }
     static var shortcutConflictClipboardTextPin: String { s("shortcutConflictClipboardTextPin") }
     static var shortcutConflictClipboard: String { s("shortcutConflictClipboard") }
+    static var shortcutConflictCopyPath: String { s("shortcutConflictCopyPath") }
     static var shortcutConflictFileSave: String { s("shortcutConflictFileSave") }
     static var shortcutConflictPreviousHistoryImage: String { s("shortcutConflictPreviousHistoryImage") }
     static var shortcutConflictNextHistoryImage: String { s("shortcutConflictNextHistoryImage") }
@@ -307,6 +312,8 @@ enum L10n {
     // Toast
     static var copiedToClipboard: String { s("copiedToClipboard") }
     static var historyImagePathCopied: String { s("historyImagePathCopied") }
+    static var copyPathHistoryRequired: String { s("copyPathHistoryRequired") }
+    static var historyImagePathCopyFailed: String { s("historyImagePathCopyFailed") }
     static var mergedLongScreenshot: String { s("mergedLongScreenshot") }
     static var cropLongScreenshotHint: String { s("cropLongScreenshotHint") }
     static var scrollCaptureHint: String { s("scrollCaptureHint") }
@@ -1100,6 +1107,28 @@ struct Defaults {
     static func clearClipboardHotkey() {
         defaults.removeObject(forKey: "clipboardHotkeyKeyCode")
         defaults.removeObject(forKey: "clipboardHotkeyModifiers")
+    }
+
+    // Custom copy-history-path hotkey used inside the editor overlay. It has
+    // no default binding and is matched locally against keyDown events.
+
+    static var copyPathHotkeyKeyCode: Int {
+        get { defaults.integer(forKey: "copyPathHotkeyKeyCode") }
+        set { defaults.set(newValue, forKey: "copyPathHotkeyKeyCode") }
+    }
+
+    static var copyPathHotkeyModifiers: Int {
+        get { defaults.integer(forKey: "copyPathHotkeyModifiers") }
+        set { defaults.set(newValue, forKey: "copyPathHotkeyModifiers") }
+    }
+
+    static var hasCustomCopyPathHotkey: Bool {
+        defaults.object(forKey: "copyPathHotkeyKeyCode") != nil
+    }
+
+    static func clearCopyPathHotkey() {
+        defaults.removeObject(forKey: "copyPathHotkeyKeyCode")
+        defaults.removeObject(forKey: "copyPathHotkeyModifiers")
     }
 
     // Custom save-to-file hotkey used inside the editor overlay to invoke

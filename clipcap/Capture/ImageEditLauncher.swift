@@ -10,7 +10,7 @@ enum ImageEditLauncher {
         sourceURL: URL,
         onRequestFocusReturn: (() -> Void)? = nil,
         onSuspend: ((OverlayWindowController.SuspendedEditDraft) -> Void)? = nil,
-        onComplete: @escaping (NSImage?) -> Void
+        onComplete: @escaping (EditorCompletion) -> Void
     ) -> OverlayWindowController? {
         guard let copyURL = copyToTemp(sourceURL),
               let data = try? Data(contentsOf: copyURL),
@@ -33,7 +33,7 @@ enum ImageEditLauncher {
         clipboardImage image: NSImage,
         onRequestFocusReturn: (() -> Void)? = nil,
         onSuspend: ((OverlayWindowController.SuspendedEditDraft) -> Void)? = nil,
-        onComplete: @escaping (NSImage?) -> Void
+        onComplete: @escaping (EditorCompletion) -> Void
     ) -> OverlayWindowController? {
         guard image.size.width > 0, image.size.height > 0 else { return nil }
         return present(
@@ -54,7 +54,7 @@ enum ImageEditLauncher {
         keepsEditorAcrossSpaces: Bool = false,
         onRequestFocusReturn: (() -> Void)? = nil,
         onSuspend: ((OverlayWindowController.SuspendedEditDraft) -> Void)? = nil,
-        onComplete: @escaping (NSImage?) -> Void
+        onComplete: @escaping (EditorCompletion) -> Void
     ) -> OverlayWindowController? {
         guard image.size.width > 0, image.size.height > 0 else { return nil }
         return present(
@@ -73,7 +73,7 @@ enum ImageEditLauncher {
         keepsEditorAcrossSpaces: Bool = false,
         onRequestFocusReturn: (() -> Void)?,
         onSuspend: ((OverlayWindowController.SuspendedEditDraft) -> Void)?,
-        onComplete: @escaping (NSImage?) -> Void
+        onComplete: @escaping (EditorCompletion) -> Void
     ) -> OverlayWindowController? {
         let controller = OverlayWindowController(
             presetImage: image,

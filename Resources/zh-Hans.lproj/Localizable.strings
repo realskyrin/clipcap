@@ -75,6 +75,10 @@
 "clipboardShortcutHint" = "在编辑器内按下以确认编辑并把图片复制到剪贴板。未设置时默认 ↩";
 "clipboardShortcutDefaultDisplay" = "↩";
 
+/* Copy-history-path shortcut (editor output) */
+"copyPathShortcutHeader" = "复制路径到剪贴板";
+"copyPathShortcutHint" = "在编辑器内按下后，把图片加入历史记录，并将它的绝对路径复制到剪贴板，默认未设置";
+
 /* Save-to-file shortcut (editor save) */
 "fileSaveShortcutHeader" = "保存到文件";
 "fileSaveShortcutHint" = "在编辑器内按下后，把图片保存为 PNG 到设置的图片保存路径。默认 ⌘S";
@@ -93,6 +97,7 @@
 "shortcutConflictClipboardImagePin" = "该按键组合已被钉起剪贴板图片快捷键占用，请换一个";
 "shortcutConflictClipboardTextPin" = "该按键组合已被钉起剪贴板文本快捷键占用，请换一个";
 "shortcutConflictClipboard" = "该按键组合已被复制到剪贴板快捷键占用，请换一个";
+"shortcutConflictCopyPath" = "该按键组合已被复制路径到剪贴板快捷键占用，请换一个";
 "shortcutConflictFileSave" = "该按键组合已被保存到文件快捷键占用，请换一个";
 "shortcutConflictPreviousHistoryImage" = "该按键组合已被上一张历史截图快捷键占用，请换一个";
 "shortcutConflictNextHistoryImage" = "该按键组合已被下一张历史截图快捷键占用，请换一个";
@@ -169,6 +174,8 @@
 /* Toast */
 "copiedToClipboard" = "已添加到剪贴板";
 "historyImagePathCopied" = "已复制图片路径到剪贴板";
+"copyPathHistoryRequired" = "请先开启图片历史记录再复制路径";
+"historyImagePathCopyFailed" = "无法把图片加入历史记录并复制路径";
 "mergedLongScreenshot" = "已合并长截图";
 "cropLongScreenshotHint" = "拖动上下边裁剪长图，回车或点对勾确认";
 "scrollCaptureHint" = "按任意键结束滚动";

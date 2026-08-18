@@ -1573,6 +1573,7 @@ private struct ShortcutRowViews {
 
 private enum ShortcutSlot: Int, CaseIterable {
     case clipboard
+    case copyPath
     case fileSave
     case previousHistoryImage
     case nextHistoryImage
@@ -1590,6 +1591,7 @@ private enum ShortcutSlot: Int, CaseIterable {
         case .selectedImagePin: return L10n.selectedImagePinShortcutHeader
         case .clipboardImagePin: return L10n.clipboardImagePinShortcutHeader
         case .clipboard: return L10n.clipboardShortcutHeader
+        case .copyPath: return L10n.copyPathShortcutHeader
         case .fileSave: return L10n.fileSaveShortcutHeader
         case .previousHistoryImage: return L10n.previousHistoryImageShortcutHeader
         case .nextHistoryImage: return L10n.nextHistoryImageShortcutHeader
@@ -1605,6 +1607,7 @@ private enum ShortcutSlot: Int, CaseIterable {
         case .selectedImagePin: return ""
         case .clipboardImagePin: return ""
         case .clipboard: return L10n.clipboardShortcutHint
+        case .copyPath: return L10n.copyPathShortcutHint
         case .fileSave: return L10n.fileSaveShortcutHint
         case .previousHistoryImage: return L10n.previousHistoryImageShortcutHint
         case .nextHistoryImage: return L10n.nextHistoryImageShortcutHint
@@ -1626,6 +1629,7 @@ private enum ShortcutSlot: Int, CaseIterable {
         case .clipboardImageEdit: return L10n.clipboardImageEditShortcutDefaultDisplay
         case .selectedImagePin: return L10n.selectedImagePinShortcutDefaultDisplay
         case .clipboardImagePin: return L10n.clipboardImagePinShortcutDefaultDisplay
+        case .copyPath: return L10n.historyPanelShortcutDefaultDisplay
         case .historyPanel: return L10n.historyPanelShortcutDefaultDisplay
         case .imageMerge: return L10n.imageMergeShortcutDefaultDisplay
         default: return L10n.historyPanelShortcutDefaultDisplay
@@ -1639,6 +1643,7 @@ private enum ShortcutSlot: Int, CaseIterable {
         case .selectedImagePin: return L10n.shortcutConflictSelectedImagePin
         case .clipboardImagePin: return L10n.shortcutConflictClipboardImagePin
         case .clipboard: return L10n.shortcutConflictClipboard
+        case .copyPath: return L10n.shortcutConflictCopyPath
         case .fileSave: return L10n.shortcutConflictFileSave
         case .previousHistoryImage: return L10n.shortcutConflictPreviousHistoryImage
         case .nextHistoryImage: return L10n.shortcutConflictNextHistoryImage
@@ -1654,6 +1659,7 @@ private enum ShortcutSlot: Int, CaseIterable {
         case .selectedImagePin: return Defaults.hasCustomSelectedImagePinHotkey
         case .clipboardImagePin: return Defaults.hasCustomClipboardImagePinHotkey
         case .clipboard: return Defaults.hasCustomClipboardHotkey
+        case .copyPath: return Defaults.hasCustomCopyPathHotkey
         case .fileSave: return Defaults.hasCustomFileSaveHotkey
         case .previousHistoryImage: return Defaults.hasCustomPreviousHistoryImageHotkey
         case .nextHistoryImage: return Defaults.hasCustomNextHistoryImageHotkey
@@ -1670,6 +1676,7 @@ private enum ShortcutSlot: Int, CaseIterable {
             case .selectedImagePin: return Defaults.selectedImagePinHotkeyKeyCode
             case .clipboardImagePin: return Defaults.clipboardImagePinHotkeyKeyCode
             case .clipboard: return Defaults.clipboardHotkeyKeyCode
+            case .copyPath: return Defaults.copyPathHotkeyKeyCode
             case .fileSave: return Defaults.fileSaveHotkeyKeyCode
             case .previousHistoryImage: return Defaults.previousHistoryImageHotkeyKeyCode
             case .nextHistoryImage: return Defaults.nextHistoryImageHotkeyKeyCode
@@ -1681,6 +1688,7 @@ private enum ShortcutSlot: Int, CaseIterable {
         case .selectedImageEdit, .clipboardImageEdit, .selectedImagePin, .clipboardImagePin:
             return nil
         case .clipboard: return 36
+        case .copyPath: return nil
         case .fileSave: return 1
         case .previousHistoryImage: return 43
         case .nextHistoryImage: return 47
@@ -1696,6 +1704,7 @@ private enum ShortcutSlot: Int, CaseIterable {
             case .selectedImagePin: return Defaults.selectedImagePinHotkeyModifiers
             case .clipboardImagePin: return Defaults.clipboardImagePinHotkeyModifiers
             case .clipboard: return Defaults.clipboardHotkeyModifiers
+            case .copyPath: return Defaults.copyPathHotkeyModifiers
             case .fileSave: return Defaults.fileSaveHotkeyModifiers
             case .previousHistoryImage: return Defaults.previousHistoryImageHotkeyModifiers
             case .nextHistoryImage: return Defaults.nextHistoryImageHotkeyModifiers
@@ -1707,6 +1716,7 @@ private enum ShortcutSlot: Int, CaseIterable {
         case .selectedImageEdit, .clipboardImageEdit, .selectedImagePin, .clipboardImagePin:
             return nil
         case .clipboard: return 0
+        case .copyPath: return nil
         case .fileSave: return 256
         case .previousHistoryImage: return 0
         case .nextHistoryImage: return 0
@@ -1731,6 +1741,9 @@ private enum ShortcutSlot: Int, CaseIterable {
         case .clipboard:
             Defaults.clipboardHotkeyKeyCode = keyCode
             Defaults.clipboardHotkeyModifiers = modifiers
+        case .copyPath:
+            Defaults.copyPathHotkeyKeyCode = keyCode
+            Defaults.copyPathHotkeyModifiers = modifiers
         case .fileSave:
             Defaults.fileSaveHotkeyKeyCode = keyCode
             Defaults.fileSaveHotkeyModifiers = modifiers
@@ -1756,6 +1769,7 @@ private enum ShortcutSlot: Int, CaseIterable {
         case .selectedImagePin: Defaults.clearSelectedImagePinHotkey()
         case .clipboardImagePin: Defaults.clearClipboardImagePinHotkey()
         case .clipboard: Defaults.clearClipboardHotkey()
+        case .copyPath: Defaults.clearCopyPathHotkey()
         case .fileSave: Defaults.clearFileSaveHotkey()
         case .previousHistoryImage: Defaults.clearPreviousHistoryImageHotkey()
         case .nextHistoryImage: Defaults.clearNextHistoryImageHotkey()
@@ -1768,7 +1782,7 @@ private enum ShortcutSlot: Int, CaseIterable {
         switch self {
         case .selectedImageEdit, .clipboardImageEdit, .selectedImagePin, .clipboardImagePin, .historyPanel, .imageMerge:
             return true
-        case .clipboard, .fileSave, .previousHistoryImage, .nextHistoryImage:
+        case .clipboard, .copyPath, .fileSave, .previousHistoryImage, .nextHistoryImage:
             return false
         }
     }

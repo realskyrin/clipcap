@@ -2,6 +2,12 @@ import AppKit
 import QuartzCore
 import UniformTypeIdentifiers
 
+enum EditorCompletion {
+    case dismissed
+    case copyImage(NSImage)
+    case copyImagePath(NSImage)
+}
+
 private let keyReturn = 36
 private let keyKeypadEnter = 76
 private let keyLeftArrow: Int = 123
@@ -26,7 +32,7 @@ class EditWindowController {
     private var screen: NSScreen
     private var selectionRect: NSRect
     private var selectionViewRect: NSRect
-    private let onComplete: (NSImage?) -> Void
+    private let onComplete: (EditorCompletion) -> Void
     private let onRequestFocusReturn: (() -> Void)?
     private var activeTool: EditTool = .none
     private var beautifySubToolbarView: BeautifySubToolbar?
@@ -134,7 +140,7 @@ class EditWindowController {
         isWindowCapture: Bool = false,
         onRequestFocusReturn: (() -> Void)? = nil,
         keepsHostWindowAcrossSpaces: Bool = false,
-        onComplete: @escaping (NSImage?) -> Void
+        onComplete: @escaping (EditorCompletion) -> Void
     ) {
         self.captureRect = captureRect
         self.screen = screen
@@ -153,7 +159,7 @@ class EditWindowController {
 
     func show() {
         guard let hostSelectionView else {
-            onComplete(nil)
+            onComplete(.dismissed)
             requestFocusReturn()
             return
         }
@@ -1361,7 +1367,7 @@ class EditWindowController {
         let quality = Defaults.screenshotSaveQuality
 
         tearDown()
-        onComplete(nil)
+        onComplete(.dismissed)
 
         if quality.usesLossyCompression {
             ToastWindow.show(message: L10n.screenshotQualityCompressingSave, on: targetScreen, duration: 600)
@@ -1418,7 +1424,7 @@ class EditWindowController {
         let anchorRect = selectionRect
         let targetScreen = screen
         tearDown()
-        onComplete(nil)
+        onComplete(.dismissed)
         guard let baseImage else { return }
         OCRTranslatePanel.presentTextRecognition(image: baseImage, anchorRect: anchorRect, screen: targetScreen)
     }
@@ -1515,7 +1521,7 @@ class EditWindowController {
         let targetScreen = screen
         ClipboardManager.copyToClipboard(text: payload)
         tearDown()
-        onComplete(nil)
+        onComplete(.dismissed)
         ToastWindow.show(message: L10n.qrCodeCopied, on: targetScreen)
         requestFocusReturn()
     }
@@ -1548,12 +1554,12 @@ class EditWindowController {
         PinLauncher.pin(image: finalImage, at: selectionRect.origin)
 
         tearDown()
-        onComplete(nil) // Don't copy to clipboard for pin
+        onComplete(.dismissed) // Don't copy to clipboard for pin
     }
 
     private func close() {
         tearDown()
-        onComplete(nil)
+        onComplete(.dismissed)
         requestFocusReturn()
     }
 
@@ -1815,6 +1821,24 @@ class EditWindowController {
         save()
     }
 
+    /// Copies the absolute path of the new history image instead of placing
+    /// image data on the clipboard. Like the other output shortcuts, this
+    /// first finishes any active scrolling or crop phase.
+    func copyPathFromKeyboard() {
+        if isScrollCaptureFinalizing {
+            return
+        }
+        if isScrollCapturing {
+            stopScrollCapture(reason: "copy-path-hotkey")
+            return
+        }
+        if isCropping {
+            confirmCrop()
+            return
+        }
+        copyImagePath()
+    }
+
     func confirmCropFromKeyboard(for event: NSEvent) -> Bool {
         guard isCropping else { return false }
         let blockedModifiers: NSEvent.ModifierFlags = [.command, .control, .option]
@@ -1894,12 +1918,30 @@ class EditWindowController {
         canvasView?.commitActiveTextEditing()
         guard let finalImage = currentCompositeImage() else {
             tearDown()
-            onComplete(nil)
+            onComplete(.dismissed)
             requestFocusReturn()
             return
         }
         tearDown()
-        onComplete(finalImage)
+        onComplete(.copyImage(finalImage))
+        requestFocusReturn()
+    }
+
+    private func copyImagePath() {
+        guard Defaults.historyCacheEnabled else {
+            ToastWindow.show(message: L10n.copyPathHistoryRequired, on: screen)
+            return
+        }
+
+        canvasView?.commitActiveTextEditing()
+        guard let finalImage = currentCompositeImage() else {
+            tearDown()
+            onComplete(.dismissed)
+            requestFocusReturn()
+            return
+        }
+        tearDown()
+        onComplete(.copyImagePath(finalImage))
         requestFocusReturn()
     }
 

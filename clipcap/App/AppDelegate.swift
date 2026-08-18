@@ -394,8 +394,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         overlayController = controller
     }
 
-    private func handleEditCompletion(_ finalImage: NSImage?) {
-        if let finalImage {
+    private func handleEditCompletion(_ completion: EditorCompletion) {
+        switch completion {
+        case .dismissed:
+            break
+        case .copyImage(let finalImage):
             let quality = Defaults.screenshotClipboardQuality
             if quality.usesLossyCompression {
                 ToastWindow.show(message: L10n.screenshotQualityCompressingClipboard, duration: 600)
@@ -413,6 +416,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     HistoryManager.shared.add(image: finalImage)
                     ToastWindow.show()
                 }
+            }
+        case .copyImagePath(let finalImage):
+            HistoryManager.shared.add(image: finalImage) { historyURL in
+                guard let historyURL else {
+                    ToastWindow.show(message: L10n.historyImagePathCopyFailed, duration: 3.0)
+                    return
+                }
+                ClipboardManager.copyFilePathToClipboard(historyURL)
+                ToastWindow.show(message: L10n.historyImagePathCopied)
             }
         }
         overlayController = nil

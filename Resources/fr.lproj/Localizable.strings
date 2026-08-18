@@ -75,6 +75,10 @@
 "clipboardShortcutHint" = "Appuyez dessus dans l'éditeur pour valider l'édition et copier l'image dans le presse-papiers. ↩ par défaut";
 "clipboardShortcutDefaultDisplay" = "↩";
 
+/* Copy-history-path shortcut (editor output) */
+"copyPathShortcutHeader" = "Copier le chemin dans le presse-papiers";
+"copyPathShortcutHint" = "Appuyez dessus dans l’éditeur pour ajouter l’image à l’historique et copier son chemin absolu dans le presse-papiers. Non défini par défaut";
+
 /* Save-to-file shortcut (editor save) */
 "fileSaveShortcutHeader" = "Enregistrer dans un fichier";
 "fileSaveShortcutHint" = "Appuyez dessus dans l'éditeur pour enregistrer l'image en PNG dans le dossier d'images configuré. ⌘S par défaut";
@@ -93,6 +97,7 @@
 "shortcutConflictClipboardImagePin" = "Cette combinaison de touches est déjà utilisée par le raccourci d'épinglage de l'image du presse-papiers. Veuillez en choisir une autre";
 "shortcutConflictClipboardTextPin" = "Cette combinaison de touches est déjà utilisée par le raccourci d'épinglage du texte du presse-papiers. Veuillez en choisir une autre";
 "shortcutConflictClipboard" = "Cette combinaison de touches est déjà utilisée par le raccourci de copie dans le presse-papiers. Veuillez en choisir une autre";
+"shortcutConflictCopyPath" = "Cette combinaison de touches est déjà utilisée par le raccourci Copier le chemin dans le presse-papiers. Veuillez en choisir une autre";
 "shortcutConflictFileSave" = "Cette combinaison de touches est déjà utilisée par le raccourci d'enregistrement dans un fichier. Veuillez en choisir une autre";
 "shortcutConflictPreviousHistoryImage" = "Cette combinaison de touches est déjà utilisée par le raccourci Capture précédente de l'historique. Veuillez en choisir une autre";
 "shortcutConflictNextHistoryImage" = "Cette combinaison de touches est déjà utilisée par le raccourci Capture suivante de l'historique. Veuillez en choisir une autre";
@@ -169,6 +174,8 @@
 /* Toast */
 "copiedToClipboard" = "Copié dans le presse-papiers";
 "historyImagePathCopied" = "Chemin de l’image copié dans le presse-papiers";
+"copyPathHistoryRequired" = "Activez l’historique des images avant de copier leur chemin";
+"historyImagePathCopyFailed" = "Impossible d’ajouter l’image à l’historique ou de copier son chemin";
 "mergedLongScreenshot" = "Capture longue fusionnée";
 "cropLongScreenshotHint" = "Faites glisser les bords haut/bas pour rogner — appuyez sur Entrée ou touchez ✓";
 "scrollCaptureHint" = "Appuyez sur n'importe quelle touche pour arrêter le défilement";

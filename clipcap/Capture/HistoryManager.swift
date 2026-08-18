@@ -210,23 +210,37 @@ final class HistoryManager {
         }
     }
 
-    func add(image: NSImage) {
-        guard Defaults.historyCacheEnabled else { return }
-        guard let data = image.pngDataPreservingBacking() else { return }
+    func add(image: NSImage, completion: ((URL?) -> Void)? = nil) {
+        guard Defaults.historyCacheEnabled else {
+            Self.deliverImageAddResult(nil, completion: completion)
+            return
+        }
+        guard let data = image.pngDataPreservingBacking() else {
+            Self.deliverImageAddResult(nil, completion: completion)
+            return
+        }
         queue.async { [weak self] in
-            guard let self = self else { return }
-            guard Defaults.historyCacheEnabled else { return }
+            guard let self else {
+                Self.deliverImageAddResult(nil, completion: completion)
+                return
+            }
+            guard Defaults.historyCacheEnabled else {
+                Self.deliverImageAddResult(nil, completion: completion)
+                return
+            }
             let name = Self.filenameFormatter.string(from: Date()) + ".png"
             let url = self.directoryURL.appendingPathComponent(name)
             do {
                 try data.write(to: url, options: .atomic)
             } catch {
+                Self.deliverImageAddResult(nil, completion: completion)
                 return
             }
             self.pruneMediaToLimit()
             self.invalidateEntriesCache()
             DispatchQueue.main.async {
                 NotificationCenter.default.post(name: .historyDidUpdate, object: nil)
+                completion?(url)
             }
         }
     }
@@ -670,4 +684,14 @@ final class HistoryManager {
         f.locale = Locale(identifier: "en_US_POSIX")
         return f
     }()
+
+    private static func deliverImageAddResult(
+        _ url: URL?,
+        completion: ((URL?) -> Void)?
+    ) {
+        guard let completion else { return }
+        DispatchQueue.main.async {
+            completion(url)
+        }
+    }
 }

@@ -56,8 +56,22 @@ struct ClipboardManager {
         writeTextToClipboard(text, skipHistory: true)
     }
 
-    private static func writeTextToClipboard(_ text: String, skipHistory: Bool = false) {
-        let pasteboard = NSPasteboard.general
+    static func copyFilePathToClipboard(
+        _ url: URL,
+        pasteboard: NSPasteboard = .general
+    ) {
+        writeTextToClipboard(
+            url.standardizedFileURL.path,
+            skipHistory: true,
+            pasteboard: pasteboard
+        )
+    }
+
+    private static func writeTextToClipboard(
+        _ text: String,
+        skipHistory: Bool = false,
+        pasteboard: NSPasteboard = .general
+    ) {
         pasteboard.clearContents()
         pasteboard.setString(text, forType: .string)
         if skipHistory {
