@@ -421,7 +421,7 @@
 "openImageNoImage" = "Copy an image to the clipboard or choose an image file";
 
 "systemScreenshotAutoOpenLabel" = "Automatically open system screenshots";
-"systemScreenshotAutoOpenHint" = "Opens new screenshots from a dedicated folder in the ClipCap editor without Screen Recording or Accessibility access";
+"systemScreenshotAutoOpenHint" = "Opens new screenshots in ClipCap, then removes each source file from the dedicated folder after loading without Screen Recording or Accessibility access";
 "systemScreenshotFolderLabel" = "System screenshot folder";
 "systemScreenshotFolderConfigured" = "The system screenshot location is ready";
 "systemScreenshotFolderNeedsSetup" = "Set the system screenshot save location to this folder before taking a screenshot";

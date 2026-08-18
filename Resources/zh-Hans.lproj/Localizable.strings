@@ -421,7 +421,7 @@
 "openImageNoImage" = "复制图片到剪贴板，或选择一个图片文件";
 
 "systemScreenshotAutoOpenLabel" = "自动打开系统截图";
-"systemScreenshotAutoOpenHint" = "将专用文件夹里的新截图自动交给 ClipCap 编辑，无需录屏或辅助功能权限";
+"systemScreenshotAutoOpenHint" = "将新截图自动交给 ClipCap 编辑，载入后从专用文件夹删除源文件，无需录屏或辅助功能权限";
 "systemScreenshotFolderLabel" = "系统截图文件夹";
 "systemScreenshotFolderConfigured" = "系统截图存储位置已配置";
 "systemScreenshotFolderNeedsSetup" = "截图前请将系统截图存储位置设为此文件夹";

@@ -421,7 +421,7 @@
 "openImageNoImage" = "클립보드에 이미지를 복사하거나 이미지 파일을 선택하세요";
 
 "systemScreenshotAutoOpenLabel" = "시스템 스크린샷 자동 열기";
-"systemScreenshotAutoOpenHint" = "화면 기록 또는 손쉬운 사용 권한 없이 전용 폴더의 새 스크린샷을 ClipCap 편집기에서 엽니다";
+"systemScreenshotAutoOpenHint" = "새 스크린샷을 ClipCap에서 열고 로드 후 전용 폴더의 원본 파일을 삭제하며 화면 기록 또는 손쉬운 사용 권한이 필요하지 않습니다";
 "systemScreenshotFolderLabel" = "시스템 스크린샷 폴더";
 "systemScreenshotFolderConfigured" = "시스템 스크린샷 저장 위치가 준비됨";
 "systemScreenshotFolderNeedsSetup" = "스크린샷을 찍기 전에 시스템 저장 위치를 이 폴더로 설정하세요";

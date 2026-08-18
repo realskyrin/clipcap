@@ -134,7 +134,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private func openNextQueuedSystemScreenshotIfPossible() {
         guard overlayController == nil else { return }
         while let url = systemScreenshotOpenQueue.popFirst() {
-            if launchImageFile(url) {
+            if SystemScreenshotEditorHandoff.launch(
+                sourceURL: url,
+                editorLauncher: launchImageFile
+            ) {
                 return
             }
         }

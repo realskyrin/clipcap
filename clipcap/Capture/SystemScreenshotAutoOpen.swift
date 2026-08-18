@@ -61,6 +61,40 @@ enum SystemScreenshotAutoOpen {
             NSLog("clipcap: failed to refresh SystemUIServer: \(error)")
         }
     }
+
+    /// Removes only a direct child of the dedicated screenshot directory.
+    /// The caller must invoke this after the editor has successfully loaded
+    /// the image so failed handoffs never destroy the user's only copy.
+    @discardableResult
+    static func removeImageAfterEditorHandoff(
+        at sourceURL: URL,
+        monitoredDirectoryURL: URL = directoryURL,
+        fileManager: FileManager = .default
+    ) -> Bool {
+        guard sourceURL.isFileURL, monitoredDirectoryURL.isFileURL else {
+            return false
+        }
+
+        let standardizedSourceURL = sourceURL.standardizedFileURL
+        let sourceDirectoryURL = standardizedSourceURL
+            .deletingLastPathComponent()
+            .resolvingSymlinksInPath()
+        let standardizedMonitoredDirectoryURL = monitoredDirectoryURL
+            .standardizedFileURL
+            .resolvingSymlinksInPath()
+        guard sourceDirectoryURL == standardizedMonitoredDirectoryURL else {
+            NSLog("clipcap: refused to remove screenshot outside monitored directory: \(standardizedSourceURL.path)")
+            return false
+        }
+
+        do {
+            try fileManager.removeItem(at: standardizedSourceURL)
+            return true
+        } catch {
+            NSLog("clipcap: failed to remove delivered system screenshot: \(error)")
+            return false
+        }
+    }
 }
 
 protocol SystemScreenshotLocationPreferenceStoring: AnyObject {
@@ -273,6 +307,27 @@ struct SystemScreenshotOpenQueue {
 
     mutating func removeAll() {
         urls.removeAll()
+    }
+}
+
+enum SystemScreenshotEditorHandoff {
+    /// Opens the source first, then removes it from the dedicated monitored
+    /// directory only after the editor confirms that it loaded successfully.
+    @discardableResult
+    static func launch(
+        sourceURL: URL,
+        monitoredDirectoryURL: URL = SystemScreenshotAutoOpen.directoryURL,
+        fileManager: FileManager = .default,
+        editorLauncher: (URL) -> Bool
+    ) -> Bool {
+        let standardizedSourceURL = sourceURL.standardizedFileURL
+        guard editorLauncher(standardizedSourceURL) else { return false }
+        SystemScreenshotAutoOpen.removeImageAfterEditorHandoff(
+            at: standardizedSourceURL,
+            monitoredDirectoryURL: monitoredDirectoryURL,
+            fileManager: fileManager
+        )
+        return true
     }
 }
 

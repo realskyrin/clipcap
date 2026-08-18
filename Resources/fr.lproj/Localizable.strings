@@ -421,7 +421,7 @@
 "openImageNoImage" = "Copiez une image dans le presse-papiers ou choisissez un fichier image";
 
 "systemScreenshotAutoOpenLabel" = "Ouvrir automatiquement les captures système";
-"systemScreenshotAutoOpenHint" = "Ouvre les nouvelles captures du dossier dédié dans ClipCap sans accès Enregistrement de l’écran ni Accessibilité";
+"systemScreenshotAutoOpenHint" = "Ouvre les nouvelles captures dans ClipCap, puis supprime chaque fichier source du dossier dédié après le chargement, sans accès Enregistrement de l’écran ni Accessibilité";
 "systemScreenshotFolderLabel" = "Dossier des captures système";
 "systemScreenshotFolderConfigured" = "L’emplacement des captures système est prêt";
 "systemScreenshotFolderNeedsSetup" = "Définissez ce dossier comme emplacement des captures système avant de faire une capture";

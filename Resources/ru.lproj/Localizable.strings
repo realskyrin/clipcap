@@ -421,7 +421,7 @@
 "openImageNoImage" = "Скопируйте изображение в буфер обмена или выберите файл изображения";
 
 "systemScreenshotAutoOpenLabel" = "Автоматически открывать системные снимки";
-"systemScreenshotAutoOpenHint" = "Открывает новые снимки из отдельной папки в ClipCap без разрешений на запись экрана и универсальный доступ";
+"systemScreenshotAutoOpenHint" = "Открывает новые снимки в ClipCap и удаляет исходные файлы из отдельной папки после загрузки без разрешений на запись экрана и универсальный доступ";
 "systemScreenshotFolderLabel" = "Папка системных снимков";
 "systemScreenshotFolderConfigured" = "Расположение системных снимков настроено";
 "systemScreenshotFolderNeedsSetup" = "Перед созданием снимка выберите эту папку как системное место сохранения";

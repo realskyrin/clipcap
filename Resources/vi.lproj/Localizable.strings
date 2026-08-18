@@ -421,7 +421,7 @@
 "openImageNoImage" = "Sao chép ảnh vào bảng nhớ tạm hoặc chọn một tệp ảnh";
 
 "systemScreenshotAutoOpenLabel" = "Tự động mở ảnh chụp màn hình hệ thống";
-"systemScreenshotAutoOpenHint" = "Mở ảnh chụp mới từ thư mục riêng trong ClipCap mà không cần quyền Ghi màn hình hoặc Trợ năng";
+"systemScreenshotAutoOpenHint" = "Mở ảnh chụp mới trong ClipCap rồi xóa từng tệp nguồn khỏi thư mục riêng sau khi tải mà không cần quyền Ghi màn hình hoặc Trợ năng";
 "systemScreenshotFolderLabel" = "Thư mục ảnh chụp màn hình hệ thống";
 "systemScreenshotFolderConfigured" = "Vị trí ảnh chụp màn hình hệ thống đã sẵn sàng";
 "systemScreenshotFolderNeedsSetup" = "Đặt vị trí lưu ảnh chụp màn hình hệ thống thành thư mục này trước khi chụp";

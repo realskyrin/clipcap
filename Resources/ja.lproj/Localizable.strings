@@ -421,7 +421,7 @@
 "openImageNoImage" = "画像をクリップボードにコピーするか画像ファイルを選択してください";
 
 "systemScreenshotAutoOpenLabel" = "システムスクリーンショットを自動で開く";
-"systemScreenshotAutoOpenHint" = "専用フォルダの新しいスクリーンショットを画面収録やアクセシビリティ権限なしで ClipCap エディタに開きます";
+"systemScreenshotAutoOpenHint" = "新しいスクリーンショットを ClipCap で開き、読み込み後に専用フォルダの元ファイルを削除します。画面収録やアクセシビリティ権限は不要です";
 "systemScreenshotFolderLabel" = "システムスクリーンショットフォルダ";
 "systemScreenshotFolderConfigured" = "システムスクリーンショットの保存先は設定済み";
 "systemScreenshotFolderNeedsSetup" = "撮影前にシステムスクリーンショットの保存先をこのフォルダに設定してください";
