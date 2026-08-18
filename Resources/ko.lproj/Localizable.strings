@@ -164,6 +164,7 @@
 
 /* Toast */
 "copiedToClipboard" = "클립보드에 복사됨";
+"historyImagePathCopied" = "이미지 경로를 클립보드에 복사했습니다";
 "mergedLongScreenshot" = "긴 스크린샷이 병합됨";
 "cropLongScreenshotHint" = "위/아래 가장자리를 드래그해 자르기 — Enter 키 또는 ✓ 탭";
 "scrollCaptureHint" = "아무 키나 눌러 스크롤 종료";

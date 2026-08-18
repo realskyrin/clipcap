@@ -164,6 +164,7 @@
 
 /* Toast */
 "copiedToClipboard" = "Copied to clipboard";
+"historyImagePathCopied" = "Copied image path to clipboard";
 "mergedLongScreenshot" = "Long image merged";
 "cropLongScreenshotHint" = "Drag the top/bottom edges to crop — press Enter or tap ✓";
 "scrollCaptureHint" = "Press any key to finish scrolling";

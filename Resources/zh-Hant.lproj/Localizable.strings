@@ -164,6 +164,7 @@
 
 /* Toast */
 "copiedToClipboard" = "已複製到剪貼簿";
+"historyImagePathCopied" = "已複製圖片路徑到剪貼簿";
 "mergedLongScreenshot" = "已合併長截圖";
 "cropLongScreenshotHint" = "拖曳上下邊緣裁切長截圖，按 Enter 或點一下 ✓ 確認";
 "scrollCaptureHint" = "按任意鍵結束捲動";

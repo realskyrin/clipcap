@@ -164,6 +164,7 @@
 
 /* Toast */
 "copiedToClipboard" = "Copié dans le presse-papiers";
+"historyImagePathCopied" = "Chemin de l’image copié dans le presse-papiers";
 "mergedLongScreenshot" = "Capture longue fusionnée";
 "cropLongScreenshotHint" = "Faites glisser les bords haut/bas pour rogner — appuyez sur Entrée ou touchez ✓";
 "scrollCaptureHint" = "Appuyez sur n'importe quelle touche pour arrêter le défilement";

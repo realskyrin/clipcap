@@ -164,6 +164,7 @@
 
 /* Toast */
 "copiedToClipboard" = "Скопировано в буфер обмена";
+"historyImagePathCopied" = "Путь к изображению скопирован в буфер обмена";
 "mergedLongScreenshot" = "Длинный снимок объединён";
 "cropLongScreenshotHint" = "Перетащите верхний/нижний край для обрезки — нажмите Enter или ✓";
 "scrollCaptureHint" = "Нажмите любую клавишу, чтобы остановить прокрутку";

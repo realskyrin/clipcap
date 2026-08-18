@@ -1677,6 +1677,17 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
             return
         }
 
+        let copyMode = HistoryPanelEntryCopyPolicy.mode(
+            for: tile.entry,
+            optionPressed: event.modifierFlags.contains(.option)
+        )
+        if case .imageAbsolutePath = copyMode {
+            if HistoryPanelEntryActions.copy(tile.entry, mode: copyMode) {
+                onRequestDismiss?()
+            }
+            return
+        }
+
         let tileID = entryID(tile.entry)
         if hasSelection, selectedEntryIDs.contains(tileID) {
             if case .image = tile.entry.kind,
@@ -3567,7 +3578,10 @@ private final class HistoryPanelTileView: NSView, NSDraggingSource {
         }
         if let onPrimaryClick {
             onPrimaryClick(self, event)
-        } else if HistoryPanelEntryActions.copy(entry) {
+        } else if HistoryPanelEntryActions.copy(entry, mode: HistoryPanelEntryCopyPolicy.mode(
+            for: entry,
+            optionPressed: event.modifierFlags.contains(.option)
+        )) {
             onRequestDismiss?()
         }
     }
@@ -4293,10 +4307,27 @@ private final class HistoryPreviewWindowController: NSWindowController, NSWindow
     }
 }
 
+enum HistoryPanelEntryCopyMode: Equatable {
+    case content
+    case imageAbsolutePath(String)
+}
+
+enum HistoryPanelEntryCopyPolicy {
+    static func mode(for entry: HistoryEntry, optionPressed: Bool) -> HistoryPanelEntryCopyMode {
+        guard optionPressed, case .image = entry.kind else { return .content }
+        return .imageAbsolutePath(entry.fileURL.standardizedFileURL.path)
+    }
+}
+
 private enum HistoryPanelEntryActions {
-    static func copy(_ entry: HistoryEntry) -> Bool {
+    static func copy(_ entry: HistoryEntry, mode: HistoryPanelEntryCopyMode = .content) -> Bool {
         switch entry.kind {
         case .image:
+            if case .imageAbsolutePath(let path) = mode {
+                ClipboardManager.copyHistoryTextToClipboard(path)
+                ToastWindow.show(message: L10n.historyImagePathCopied)
+                return recordSuccessfulCopy(of: entry)
+            }
             guard let image = NSImage(contentsOf: entry.fileURL) else { return false }
             ClipboardManager.copyToClipboard(image: image)
             ToastWindow.show()

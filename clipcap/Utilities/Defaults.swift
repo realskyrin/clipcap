@@ -280,6 +280,7 @@ enum L10n {
     static var dragToCopyImageText: String { s("dragToCopyImageText") }
     // Toast
     static var copiedToClipboard: String { s("copiedToClipboard") }
+    static var historyImagePathCopied: String { s("historyImagePathCopied") }
     static var mergedLongScreenshot: String { s("mergedLongScreenshot") }
     static var cropLongScreenshotHint: String { s("cropLongScreenshotHint") }
     static var scrollCaptureHint: String { s("scrollCaptureHint") }

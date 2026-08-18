@@ -164,6 +164,7 @@
 
 /* Toast */
 "copiedToClipboard" = "Đã sao chép vào clipboard";
+"historyImagePathCopied" = "Đã sao chép đường dẫn ảnh vào clipboard";
 "mergedLongScreenshot" = "Đã ghép ảnh chụp dài";
 "cropLongScreenshotHint" = "Kéo cạnh trên/dưới để cắt — nhấn Enter hoặc bấm ✓";
 "scrollCaptureHint" = "Nhấn phím bất kỳ để kết thúc cuộn";

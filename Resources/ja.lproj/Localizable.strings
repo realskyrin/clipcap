@@ -164,6 +164,7 @@
 
 /* Toast */
 "copiedToClipboard" = "クリップボードにコピーしました";
+"historyImagePathCopied" = "画像のパスをクリップボードにコピーしました";
 "mergedLongScreenshot" = "長いスクリーンショットを結合しました";
 "cropLongScreenshotHint" = "上下の端をドラッグしてトリミング — Enter キーまたは ✓ をタップ";
 "scrollCaptureHint" = "任意のキーでスクロールを終了";
