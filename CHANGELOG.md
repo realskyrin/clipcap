@@ -2,15 +2,21 @@
 
 ## Unreleased
 
+## [1.8.23] - 2026-08-19
+
+### Added
+
+- Added a copy-path editor shortcut with localized feedback (34e7e1a)
+
 ### Changed
 
-- Simplified pinned image windows with proportional scaling, an in-image hover toolbar, and no thumbnail navigator or zoom step buttons
+- Simplified pinned image windows with proportional scaling, an in-image hover toolbar, and no thumbnail navigator or zoom step buttons (9ddfaf7)
 
 ### Fixed
 
-- Kept the PIN toolbar aligned with screenshot content when images include transparent shadow padding
-- Replaced the PIN move control with copy and cross-app image drag actions, and reduced the close control size
-- Kept PIN close and zoom controls readable at small scales with adaptive button hiding and balanced icon sizing
+- Kept the PIN toolbar aligned with screenshot content when images include transparent shadow padding (9ddfaf7)
+- Replaced the PIN move control with copy and cross-app image drag actions, and reduced the close control size (9ddfaf7)
+- Kept PIN close and zoom controls readable at small scales with adaptive button hiding and balanced icon sizing (9ddfaf7)
 
 ## [1.8.22] - 2026-08-18
 
