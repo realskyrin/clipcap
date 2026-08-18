@@ -153,6 +153,7 @@
 "historyPreviewQRCodeTitle" = "文本二维码";
 "historyPanelCopyHint" = "点击复制";
 "historyPanelCopyDragHint" = "点击复制 · 拖拽到应用";
+"historyPanelCopyImagePath" = "复制图片路径";
 "historyPanelEmpty" = "暂无历史";
 
 /* Cursor chip */

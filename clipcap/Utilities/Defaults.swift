@@ -268,6 +268,7 @@ enum L10n {
     static var historyPreviewQRCodeTitle: String { s("historyPreviewQRCodeTitle") }
     static var historyPanelCopyHint: String { s("historyPanelCopyHint") }
     static var historyPanelCopyDragHint: String { s("historyPanelCopyDragHint") }
+    static var historyPanelCopyImagePath: String { s("historyPanelCopyImagePath") }
     static var historyPanelEmpty: String { s("historyPanelEmpty") }
 
     // Cursor chip

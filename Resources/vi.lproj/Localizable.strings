@@ -153,6 +153,7 @@
 "historyPreviewQRCodeTitle" = "Mã QR văn bản";
 "historyPanelCopyHint" = "Nhấp để sao chép";
 "historyPanelCopyDragHint" = "Nhấp để sao chép · kéo vào ứng dụng";
+"historyPanelCopyImagePath" = "Sao chép đường dẫn ảnh";
 "historyPanelEmpty" = "Chưa có lịch sử";
 
 /* Cursor chip */

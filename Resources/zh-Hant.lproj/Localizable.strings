@@ -153,6 +153,7 @@
 "historyPreviewQRCodeTitle" = "文字二維碼";
 "historyPanelCopyHint" = "點選複製";
 "historyPanelCopyDragHint" = "點選複製 · 拖曳到應用";
+"historyPanelCopyImagePath" = "複製圖片路徑";
 "historyPanelEmpty" = "尚無歷史";
 
 /* Cursor chip */

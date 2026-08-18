@@ -153,6 +153,7 @@
 "historyPreviewQRCodeTitle" = "テキストのQRコード";
 "historyPanelCopyHint" = "クリックでコピー";
 "historyPanelCopyDragHint" = "クリックでコピー · アプリへドラッグ";
+"historyPanelCopyImagePath" = "画像のパスをコピー";
 "historyPanelEmpty" = "履歴がありません";
 
 /* Cursor chip */

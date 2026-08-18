@@ -153,6 +153,7 @@
 "historyPreviewQRCodeTitle" = "텍스트 QR 코드";
 "historyPanelCopyHint" = "클릭해 복사";
 "historyPanelCopyDragHint" = "클릭해 복사 · 앱으로 드래그";
+"historyPanelCopyImagePath" = "이미지 경로 복사";
 "historyPanelEmpty" = "기록 없음";
 
 /* Cursor chip */

@@ -153,6 +153,7 @@
 "historyPreviewQRCodeTitle" = "Code QR du texte";
 "historyPanelCopyHint" = "Cliquez pour copier";
 "historyPanelCopyDragHint" = "Cliquez pour copier · faites glisser vers une app";
+"historyPanelCopyImagePath" = "Copier le chemin de l’image";
 "historyPanelEmpty" = "Aucun historique";
 
 /* Cursor chip */

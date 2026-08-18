@@ -153,6 +153,7 @@
 "historyPreviewQRCodeTitle" = "QR-код текста";
 "historyPanelCopyHint" = "Нажмите для копирования";
 "historyPanelCopyDragHint" = "Нажмите для копирования · перетащите в приложение";
+"historyPanelCopyImagePath" = "Копировать путь к изображению";
 "historyPanelEmpty" = "История пуста";
 
 /* Cursor chip */

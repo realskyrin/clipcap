@@ -1704,6 +1704,17 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
         }
     }
 
+    private func handlePathCopy(for tile: HistoryPanelTileView) {
+        guard case .image = tile.entry.kind else { return }
+        let selectedImages = selectedImageEntries()
+        let entries = hasSelection && !selectedImages.isEmpty
+            ? selectedImages
+            : [tile.entry]
+        if HistoryPanelEntryActions.copyImagePaths(entries) {
+            onRequestDismiss?()
+        }
+    }
+
     private func dragEntries(for tile: HistoryPanelTileView) -> [HistoryEntry] {
         let tileID = entryID(tile.entry)
         guard selectedEntryIDs.contains(tileID) else {
@@ -2292,6 +2303,9 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
             },
             onPrimaryClick: { [weak self] tile, event in
                 self?.handlePrimaryClick(for: tile, event: event)
+            },
+            onCopyPath: { [weak self] tile in
+                self?.handlePathCopy(for: tile)
             },
             dragEntriesProvider: { [weak self] tile in
                 self?.dragEntries(for: tile) ?? [tile.entry]
@@ -3045,6 +3059,7 @@ private final class HistoryPanelCollectionItem: NSCollectionViewItem {
         onHoverChanged: @escaping (HistoryPanelTileView, Bool) -> Void,
         onSelectionToggle: @escaping (HistoryPanelTileView, NSEvent) -> Void,
         onPrimaryClick: @escaping (HistoryPanelTileView, NSEvent) -> Void,
+        onCopyPath: @escaping (HistoryPanelTileView) -> Void,
         dragEntriesProvider: @escaping (HistoryPanelTileView) -> [HistoryEntry]
     ) {
         if let tileView {
@@ -3059,6 +3074,7 @@ private final class HistoryPanelCollectionItem: NSCollectionViewItem {
             onHoverChanged: onHoverChanged,
             onSelectionToggle: onSelectionToggle,
             onPrimaryClick: onPrimaryClick,
+            onCopyPath: onCopyPath,
             dragEntriesProvider: dragEntriesProvider
         )
         tile.frame = view.bounds
@@ -3092,10 +3108,12 @@ private final class HistoryPanelTileView: NSView, NSDraggingSource {
     private let onHoverChanged: ((HistoryPanelTileView, Bool) -> Void)?
     private let onSelectionToggle: ((HistoryPanelTileView, NSEvent) -> Void)?
     private let onPrimaryClick: ((HistoryPanelTileView, NSEvent) -> Void)?
+    private let onCopyPath: ((HistoryPanelTileView) -> Void)?
     private let dragEntriesProvider: ((HistoryPanelTileView) -> [HistoryEntry])?
     private let imageView = NSImageView()
     private let textPreviewLabel = HistoryPanelCenteredTextView()
     private let overlayLabel = HistoryPanelCenteredTextView()
+    private let pathCopyButton = HistoryPanelPathCopyButton()
     private let badgeView = HistoryMediaBadgeView()
     private let selectionBadgeView = HistorySelectionBadgeView()
     private let metaLabel = HistoryPanelCenteredTextView()
@@ -3119,6 +3137,7 @@ private final class HistoryPanelTileView: NSView, NSDraggingSource {
         onHoverChanged: ((HistoryPanelTileView, Bool) -> Void)? = nil,
         onSelectionToggle: ((HistoryPanelTileView, NSEvent) -> Void)? = nil,
         onPrimaryClick: ((HistoryPanelTileView, NSEvent) -> Void)? = nil,
+        onCopyPath: ((HistoryPanelTileView) -> Void)? = nil,
         dragEntriesProvider: ((HistoryPanelTileView) -> [HistoryEntry])? = nil
     ) {
         self.entry = entry
@@ -3127,6 +3146,7 @@ private final class HistoryPanelTileView: NSView, NSDraggingSource {
         self.onHoverChanged = onHoverChanged
         self.onSelectionToggle = onSelectionToggle
         self.onPrimaryClick = onPrimaryClick
+        self.onCopyPath = onCopyPath
         self.dragEntriesProvider = dragEntriesProvider
         super.init(frame: .zero)
         wantsLayer = true
@@ -3172,6 +3192,13 @@ private final class HistoryPanelTileView: NSView, NSDraggingSource {
         overlayLabel.layer?.backgroundColor = NSColor.black.withAlphaComponent(0.56).cgColor
         addSubview(overlayLabel)
 
+        pathCopyButton.target = self
+        pathCopyButton.action = #selector(copyPathClicked)
+        pathCopyButton.toolTip = L10n.historyPanelCopyImagePath
+        pathCopyButton.setAccessibilityLabel(L10n.historyPanelCopyImagePath)
+        pathCopyButton.isHidden = true
+        addSubview(pathCopyButton)
+
         if let badgeKind = HistoryMediaBadgeKind(entry: entry) {
             badgeView.title = badgeKind.title
             badgeView.isHidden = false
@@ -3214,6 +3241,13 @@ private final class HistoryPanelTileView: NSView, NSDraggingSource {
         )
         textPreviewLabel.frame = imageView.frame
         overlayLabel.frame = imageView.frame
+        let pathButtonSize: CGFloat = 28
+        pathCopyButton.frame = NSRect(
+            x: imageView.frame.minX + 7,
+            y: imageView.frame.minY + 7,
+            width: pathButtonSize,
+            height: pathButtonSize
+        )
         if !badgeView.isHidden {
             let badgeSize = badgeView.intrinsicContentSize
             let selectionOffset: CGFloat = selectionBadgeView.isHidden ? 0 : 20
@@ -3279,6 +3313,7 @@ private final class HistoryPanelTileView: NSView, NSDraggingSource {
             ? NSColor.white.withAlphaComponent(0.11).cgColor
             : NSColor.white.withAlphaComponent(0.075).cgColor
         overlayLabel.alphaValue = hovered ? 1 : 0
+        updatePathCopyButtonVisibility()
         updateSelectionBadgeVisibility()
     }
 
@@ -3333,6 +3368,10 @@ private final class HistoryPanelTileView: NSView, NSDraggingSource {
         needsLayout = true
     }
 
+    private func updatePathCopyButtonVisibility() {
+        pathCopyButton.isHidden = !isHovered || !supportsPathCopy
+    }
+
     func reconfigure(with entry: HistoryEntry) {
         cancelPendingPreviewLoad()
         previewLoadGeneration += 1
@@ -3350,6 +3389,7 @@ private final class HistoryPanelTileView: NSView, NSDraggingSource {
         overlayLabel.stringValue = overlayHint
         overlayLabel.isHidden = overlayHint.isEmpty
         overlayLabel.alphaValue = 0
+        pathCopyButton.isHidden = true
 
         if let badgeKind = HistoryMediaBadgeKind(entry: entry) {
             badgeView.title = badgeKind.title
@@ -3550,6 +3590,11 @@ private final class HistoryPanelTileView: NSView, NSDraggingSource {
         Self.supportsDrag(entry)
     }
 
+    private var supportsPathCopy: Bool {
+        guard case .image = entry.kind else { return false }
+        return true
+    }
+
     private static func supportsDrag(_ entry: HistoryEntry) -> Bool {
         switch entry.kind {
         case .image:
@@ -3562,6 +3607,15 @@ private final class HistoryPanelTileView: NSView, NSDraggingSource {
     private static func overlayHint(supportsDrag: Bool) -> String {
         guard supportsDrag else { return L10n.historyPanelCopyHint }
         return L10n.historyPanelCopyDragHint.replacingOccurrences(of: " · ", with: "\n")
+    }
+
+    @objc private func copyPathClicked() {
+        if let onCopyPath {
+            onCopyPath(self)
+        } else {
+            _ = HistoryPanelEntryActions.copyImagePaths([entry])
+            onRequestDismiss?()
+        }
     }
 
     override func mouseUp(with event: NSEvent) {
@@ -3690,6 +3744,34 @@ private final class HistoryPanelTileView: NSView, NSDraggingSource {
         formatter.setLocalizedDateFormatFromTemplate("MdHm")
         return formatter
     }()
+}
+
+private final class HistoryPanelPathCopyButton: NSButton {
+    override init(frame frameRect: NSRect) {
+        super.init(frame: frameRect)
+        isBordered = false
+        focusRingType = .none
+        imagePosition = .imageOnly
+        imageScaling = .scaleProportionallyDown
+        setButtonType(.momentaryChange)
+        wantsLayer = true
+        layer?.cornerRadius = 7
+        layer?.cornerCurve = .continuous
+        layer?.backgroundColor = NSColor.black.withAlphaComponent(0.64).cgColor
+        layer?.borderColor = NSColor.white.withAlphaComponent(0.22).cgColor
+        layer?.borderWidth = 1
+
+        let configuration = NSImage.SymbolConfiguration(pointSize: 13, weight: .semibold)
+        image = NSImage(systemSymbolName: "doc.on.clipboard", accessibilityDescription: nil)?
+            .withSymbolConfiguration(configuration)
+        contentTintColor = .white
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
 }
 
 private final class HistoryPreviewPanel: NSPanel {
@@ -4317,16 +4399,23 @@ enum HistoryPanelEntryCopyPolicy {
         guard optionPressed, case .image = entry.kind else { return .content }
         return .imageAbsolutePath(entry.fileURL.standardizedFileURL.path)
     }
+
+    static func imagePathsText(for entries: [HistoryEntry]) -> String? {
+        let paths = entries.compactMap { entry -> String? in
+            guard case .image = entry.kind else { return nil }
+            return entry.fileURL.standardizedFileURL.path
+        }
+        guard !paths.isEmpty else { return nil }
+        return paths.joined(separator: "\n")
+    }
 }
 
 private enum HistoryPanelEntryActions {
     static func copy(_ entry: HistoryEntry, mode: HistoryPanelEntryCopyMode = .content) -> Bool {
         switch entry.kind {
         case .image:
-            if case .imageAbsolutePath(let path) = mode {
-                ClipboardManager.copyHistoryTextToClipboard(path)
-                ToastWindow.show(message: L10n.historyImagePathCopied)
-                return recordSuccessfulCopy(of: entry)
+            if case .imageAbsolutePath = mode {
+                return copyImagePaths([entry])
             }
             guard let image = NSImage(contentsOf: entry.fileURL) else { return false }
             ClipboardManager.copyToClipboard(image: image)
@@ -4341,6 +4430,22 @@ private enum HistoryPanelEntryActions {
             ToastWindow.show(message: L10n.copiedToClipboard)
             return recordSuccessfulCopy(of: entry)
         }
+    }
+
+    static func copyImagePaths(_ entries: [HistoryEntry]) -> Bool {
+        let imageEntries = entries.filter { entry in
+            guard case .image = entry.kind else { return false }
+            return true
+        }
+        guard let pathsText = HistoryPanelEntryCopyPolicy.imagePathsText(for: imageEntries) else {
+            return false
+        }
+        ClipboardManager.copyHistoryTextToClipboard(pathsText)
+        ToastWindow.show(message: L10n.historyImagePathCopied)
+        if imageEntries.count == 1, let entry = imageEntries.first {
+            HistoryManager.shared.promoteCopiedEntryIfNeeded(entry)
+        }
+        return true
     }
 
     static func copyImages(_ entries: [HistoryEntry]) -> Bool {
