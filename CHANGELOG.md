@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [1.8.20] - 2026-08-18
+
+### Changed
+
+- Removed the history submenu from the status bar (a7162aa)
+
 ## [1.8.19] - 2026-08-05
 
 ### Added
