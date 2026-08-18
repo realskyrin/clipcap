@@ -419,3 +419,25 @@
 "editClipboardImage" = "クリップボードの画像を編集";
 "openImage" = "画像を開く";
 "openImageNoImage" = "画像をクリップボードにコピーするか画像ファイルを選択してください";
+
+"systemScreenshotAutoOpenLabel" = "システムスクリーンショットを自動で開く";
+"systemScreenshotAutoOpenHint" = "専用フォルダの新しいスクリーンショットを画面収録やアクセシビリティ権限なしで ClipCap エディタに開きます";
+"systemScreenshotFolderLabel" = "システムスクリーンショットフォルダ";
+"systemScreenshotFolderConfigured" = "システムスクリーンショットの保存先は設定済み";
+"systemScreenshotFolderNeedsSetup" = "撮影前にシステムスクリーンショットの保存先をこのフォルダに設定してください";
+"systemScreenshotSetup" = "設定";
+"systemScreenshotRevealFolder" = "表示";
+"systemScreenshotFloatingThumbnailHint" = "最速で開くにはスクリーンショットのオプションでフローティングサムネールを表示をオフにしてください";
+"systemScreenshotSetupTitle" = "システムスクリーンショットを設定";
+"systemScreenshotSetupMessage" = "自動設定はシステムの保存先を変更してメニューバーを更新します。手動設定はスクリーンショットを開きシステム設定をユーザー管理のままにします";
+"systemScreenshotSetupAutomatic" = "自動設定";
+"systemScreenshotSetupManual" = "スクリーンショットのオプションを開く";
+"systemScreenshotSetupCancel" = "キャンセル";
+"systemScreenshotSetupFailedTitle" = "システムスクリーンショットを設定できません";
+"systemScreenshotSetupFailedMessage" = "ClipCap はシステムの保存先を変更できませんでした。手動設定を使用してください";
+"systemScreenshotDisableTitle" = "スクリーンショットの自動起動をオフにする";
+"systemScreenshotDisableMessage" = "ClipCap が設定する前の保存先に戻すか現在のシステム保存先を維持できます";
+"systemScreenshotDisableRestore" = "オフにして復元";
+"systemScreenshotDisableKeep" = "自動起動のみオフ";
+"systemScreenshotRestoreFailedTitle" = "スクリーンショットの保存先を復元できません";
+"systemScreenshotRestoreFailedMessage" = "元の保存先情報を失わないよう自動起動を有効のままにしました。後でもう一度お試しください";

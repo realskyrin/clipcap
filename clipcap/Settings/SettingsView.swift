@@ -56,6 +56,9 @@ final class SettingsView: NSView {
     private var menuBarSwitch: NSSwitch?
     private var launchAtLoginSwitch: NSSwitch?
     private var pinAcrossSpacesSwitch: NSSwitch?
+    private var systemScreenshotAutoOpenSwitch: NSSwitch?
+    private var systemScreenshotStatusLabel: NSTextField?
+    private var systemScreenshotSetupButton: NSButton?
     private var historyCacheSwitch: NSSwitch?
     private var clipboardTextCacheSwitch: NSSwitch?
     private var historyCacheSlider: NSSlider?
@@ -94,6 +97,12 @@ final class SettingsView: NSView {
             self,
             selector: #selector(refreshUpdateRow),
             name: .updateStateDidChange,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(refreshSystemScreenshotAutoOpenControls),
+            name: NSApplication.didBecomeActiveNotification,
             object: nil
         )
     }
@@ -367,6 +376,8 @@ final class SettingsView: NSView {
             to: toggles
         )
         addCard(togglesCard, to: stack)
+
+        addCard(makeSystemScreenshotAutoOpenCard(), to: stack)
 
         let historyCard = CardView()
         let history = NSStackView()
@@ -948,6 +959,80 @@ final class SettingsView: NSView {
         return card
     }
 
+    private func makeSystemScreenshotAutoOpenCard() -> NSView {
+        let card = CardView()
+        let stack = NSStackView()
+        stack.orientation = .vertical
+        stack.alignment = .leading
+        stack.spacing = 10
+        stack.translatesAutoresizingMaskIntoConstraints = false
+
+        addFullWidth(
+            switchRow(
+                title: L10n.systemScreenshotAutoOpenLabel,
+                subtitle: L10n.systemScreenshotAutoOpenHint,
+                isOn: Defaults.systemScreenshotAutoOpenEnabled,
+                action: #selector(systemScreenshotAutoOpenToggled(_:))
+            ) { self.systemScreenshotAutoOpenSwitch = $0 },
+            to: stack
+        )
+
+        addFullWidth(rowDivider(), to: stack)
+
+        let folderRow = NSStackView()
+        folderRow.orientation = .horizontal
+        folderRow.alignment = .centerY
+        folderRow.spacing = 10
+        folderRow.translatesAutoresizingMaskIntoConstraints = false
+
+        let folderText = NSStackView()
+        folderText.orientation = .vertical
+        folderText.alignment = .leading
+        folderText.spacing = 3
+        folderText.translatesAutoresizingMaskIntoConstraints = false
+        folderText.addArrangedSubview(primaryLabel(L10n.systemScreenshotFolderLabel))
+
+        let pathLabel = secondaryLabel(
+            SaveDestination.displayPath(SystemScreenshotAutoOpen.directoryURL),
+            wrapping: false
+        )
+        pathLabel.lineBreakMode = .byTruncatingMiddle
+        pathLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        folderText.addArrangedSubview(pathLabel)
+
+        let setup = makeButton(
+            title: L10n.systemScreenshotSetup,
+            action: #selector(configureSystemScreenshotAutoOpen)
+        )
+        systemScreenshotSetupButton = setup
+        let reveal = makeButton(
+            title: L10n.systemScreenshotRevealFolder,
+            action: #selector(revealSystemScreenshotFolder)
+        )
+
+        folderRow.addArrangedSubview(folderText)
+        folderText.widthAnchor.constraint(greaterThanOrEqualToConstant: 230).isActive = true
+        folderRow.addArrangedSubview(flexSpacer())
+        folderRow.addArrangedSubview(setup)
+        folderRow.addArrangedSubview(reveal)
+        setup.setContentHuggingPriority(.required, for: .horizontal)
+        reveal.setContentHuggingPriority(.required, for: .horizontal)
+        addFullWidth(folderRow, to: stack)
+
+        let status = secondaryLabel("", wrapping: true)
+        status.maximumNumberOfLines = 0
+        systemScreenshotStatusLabel = status
+        addFullWidth(status, to: stack)
+
+        let thumbnailHint = secondaryLabel(L10n.systemScreenshotFloatingThumbnailHint, wrapping: true)
+        thumbnailHint.maximumNumberOfLines = 0
+        addFullWidth(thumbnailHint, to: stack)
+
+        card.embed(stack)
+        refreshSystemScreenshotAutoOpenControls()
+        return card
+    }
+
     private func makeScreenshotQualityRow(
         title: String,
         quality: ScreenshotImageQuality,
@@ -1175,6 +1260,146 @@ final class SettingsView: NSView {
 
     @objc private func pinAcrossSpacesToggled(_ sender: NSSwitch) {
         Defaults.pinAcrossSpaces = sender.state == .on
+    }
+
+    @objc private func systemScreenshotAutoOpenToggled(_ sender: NSSwitch) {
+        if sender.state == .on {
+            if SystemScreenshotLocationManager.shared.isTargetLocationActive {
+                Defaults.systemScreenshotAutoOpenEnabled = true
+                refreshSystemScreenshotAutoOpenControls()
+            } else {
+                sender.state = .off
+                presentSystemScreenshotSetup()
+            }
+            return
+        }
+
+        guard SystemScreenshotLocationManager.shared.isAutomaticallyManaged else {
+            Defaults.systemScreenshotAutoOpenEnabled = false
+            refreshSystemScreenshotAutoOpenControls()
+            return
+        }
+
+        sender.state = .on
+        presentSystemScreenshotDisableConfirmation()
+    }
+
+    @objc private func configureSystemScreenshotAutoOpen() {
+        presentSystemScreenshotSetup()
+    }
+
+    @objc private func revealSystemScreenshotFolder() {
+        SystemScreenshotAutoOpen.revealDirectory()
+    }
+
+    private func presentSystemScreenshotSetup() {
+        let alert = NSAlert()
+        alert.alertStyle = .informational
+        alert.messageText = L10n.systemScreenshotSetupTitle
+        alert.informativeText = L10n.systemScreenshotSetupMessage
+        alert.addButton(withTitle: L10n.systemScreenshotSetupAutomatic)
+        alert.addButton(withTitle: L10n.systemScreenshotSetupManual)
+        alert.addButton(withTitle: L10n.systemScreenshotSetupCancel)
+        beginAlert(alert) { [weak self] response in
+            guard let self else { return }
+            switch response {
+            case .alertFirstButtonReturn:
+                let wasAlreadyConfigured = SystemScreenshotLocationManager.shared.isTargetLocationActive
+                guard SystemScreenshotLocationManager.shared.configureAutomatically() else {
+                    self.presentSystemScreenshotConfigurationFailure()
+                    self.refreshSystemScreenshotAutoOpenControls()
+                    return
+                }
+                if !wasAlreadyConfigured {
+                    SystemScreenshotAutoOpen.refreshSystemScreenshotServices()
+                }
+                Defaults.systemScreenshotAutoOpenEnabled = true
+                self.refreshSystemScreenshotAutoOpenControls()
+            case .alertSecondButtonReturn:
+                guard SystemScreenshotAutoOpen.ensureDirectoryExists() else {
+                    self.presentSystemScreenshotConfigurationFailure()
+                    return
+                }
+                Defaults.systemScreenshotAutoOpenEnabled = true
+                SystemScreenshotAutoOpen.revealDirectory()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                    SystemScreenshotAutoOpen.openScreenshotTool()
+                }
+                self.refreshSystemScreenshotAutoOpenControls()
+            default:
+                self.refreshSystemScreenshotAutoOpenControls()
+            }
+        }
+    }
+
+    private func presentSystemScreenshotDisableConfirmation() {
+        let alert = NSAlert()
+        alert.alertStyle = .informational
+        alert.messageText = L10n.systemScreenshotDisableTitle
+        alert.informativeText = L10n.systemScreenshotDisableMessage
+        alert.addButton(withTitle: L10n.systemScreenshotDisableRestore)
+        alert.addButton(withTitle: L10n.systemScreenshotDisableKeep)
+        alert.addButton(withTitle: L10n.systemScreenshotSetupCancel)
+        beginAlert(alert) { [weak self] response in
+            guard let self else { return }
+            switch response {
+            case .alertFirstButtonReturn:
+                let result = SystemScreenshotLocationManager.shared.restoreAutomaticallyConfiguredLocation()
+                switch result {
+                case .restored:
+                    SystemScreenshotAutoOpen.refreshSystemScreenshotServices()
+                    Defaults.systemScreenshotAutoOpenEnabled = false
+                case .notManaged, .changedExternally:
+                    Defaults.systemScreenshotAutoOpenEnabled = false
+                case .failed:
+                    self.presentSystemScreenshotRestoreFailure()
+                }
+            case .alertSecondButtonReturn:
+                SystemScreenshotLocationManager.shared.relinquishAutomaticallyManagedLocation()
+                Defaults.systemScreenshotAutoOpenEnabled = false
+            default:
+                break
+            }
+            self.refreshSystemScreenshotAutoOpenControls()
+        }
+    }
+
+    private func presentSystemScreenshotConfigurationFailure() {
+        let alert = NSAlert()
+        alert.alertStyle = .warning
+        alert.messageText = L10n.systemScreenshotSetupFailedTitle
+        alert.informativeText = L10n.systemScreenshotSetupFailedMessage
+        alert.addButton(withTitle: L10n.systemScreenshotSetupCancel)
+        beginAlert(alert) { _ in }
+    }
+
+    private func presentSystemScreenshotRestoreFailure() {
+        let alert = NSAlert()
+        alert.alertStyle = .warning
+        alert.messageText = L10n.systemScreenshotRestoreFailedTitle
+        alert.informativeText = L10n.systemScreenshotRestoreFailedMessage
+        alert.addButton(withTitle: L10n.systemScreenshotSetupCancel)
+        beginAlert(alert) { _ in }
+    }
+
+    private func beginAlert(_ alert: NSAlert, completion: @escaping (NSApplication.ModalResponse) -> Void) {
+        if let window {
+            alert.beginSheetModal(for: window, completionHandler: completion)
+        } else {
+            completion(alert.runModal())
+        }
+    }
+
+    @objc private func refreshSystemScreenshotAutoOpenControls() {
+        systemScreenshotAutoOpenSwitch?.state = Defaults.systemScreenshotAutoOpenEnabled ? .on : .off
+        let isConfigured = SystemScreenshotLocationManager.shared.isTargetLocationActive
+        systemScreenshotStatusLabel?.stringValue = isConfigured
+            ? L10n.systemScreenshotFolderConfigured
+            : L10n.systemScreenshotFolderNeedsSetup
+        systemScreenshotStatusLabel?.textColor = isConfigured
+            ? NSColor.systemGreen.withAlphaComponent(0.86)
+            : NSColor.systemOrange.withAlphaComponent(0.86)
+        systemScreenshotSetupButton?.isEnabled = true
     }
 
     @objc private func autoRevealToggled(_ sender: NSSwitch) {

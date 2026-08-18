@@ -419,3 +419,25 @@
 "editClipboardImage" = "编辑剪贴板图片";
 "openImage" = "打开图片";
 "openImageNoImage" = "复制图片到剪贴板，或选择一个图片文件";
+
+"systemScreenshotAutoOpenLabel" = "自动打开系统截图";
+"systemScreenshotAutoOpenHint" = "将专用文件夹里的新截图自动交给 ClipCap 编辑，无需录屏或辅助功能权限";
+"systemScreenshotFolderLabel" = "系统截图文件夹";
+"systemScreenshotFolderConfigured" = "系统截图存储位置已配置";
+"systemScreenshotFolderNeedsSetup" = "截图前请将系统截图存储位置设为此文件夹";
+"systemScreenshotSetup" = "配置";
+"systemScreenshotRevealFolder" = "显示";
+"systemScreenshotFloatingThumbnailHint" = "为了最快衔接，请在系统截图的选项中关闭显示浮动缩略图";
+"systemScreenshotSetupTitle" = "配置系统截图";
+"systemScreenshotSetupMessage" = "自动配置会更改系统截图存储位置并刷新菜单栏，手动配置会打开系统截图工具并保留系统设置的控制权";
+"systemScreenshotSetupAutomatic" = "自动配置";
+"systemScreenshotSetupManual" = "打开截图选项";
+"systemScreenshotSetupCancel" = "取消";
+"systemScreenshotSetupFailedTitle" = "无法配置系统截图";
+"systemScreenshotSetupFailedMessage" = "ClipCap 无法更改系统截图存储位置，请改用手动配置";
+"systemScreenshotDisableTitle" = "关闭自动打开系统截图";
+"systemScreenshotDisableMessage" = "你可以恢复 ClipCap 配置前的截图存储位置，也可以保留当前系统位置";
+"systemScreenshotDisableRestore" = "关闭并恢复";
+"systemScreenshotDisableKeep" = "仅关闭自动打开";
+"systemScreenshotRestoreFailedTitle" = "无法恢复截图存储位置";
+"systemScreenshotRestoreFailedMessage" = "ClipCap 已保留自动打开功能，请稍后重试以免丢失原位置记录";

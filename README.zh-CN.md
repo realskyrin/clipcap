@@ -4,15 +4,17 @@ clipcap is a macOS menu bar image annotation tool. It does not capture the scree
 
 ## Recommended Workflow
 
-1. Press `Control + Shift + Command + 4` to use the macOS system screenshot tool and copy a selected region to the clipboard
-2. Open clipcap from the menu bar and choose “Edit Clipboard Image”
-3. Annotate, OCR, translate, upload, save, or copy the result
+1. Turn on “Automatically open system screenshots” in Settings > General
+2. Choose automatic setup, or manually set the Screenshot save location to `~/Pictures/ClipCap Screenshots`
+3. Use a macOS system screenshot shortcut and clipcap opens the saved image in the editor
+4. For the fastest handoff, turn off “Show Floating Thumbnail” in Screenshot Options
 
-You can also drag image files to the app, choose “Open Image”, use Finder “Open With clipcap”, or copy an image to the clipboard before editing it in clipcap
+If you do not want to change the system screenshot location, press `Control + Shift + Command + 4` to copy the screenshot, then choose “Edit Clipboard Image”. You can also drag image files to the app, choose “Open Image”, use Finder “Open With clipcap”, or copy an image to the clipboard before editing it in clipcap
 
 ## Features
 
 - Edit clipboard images and local image files
+- Watch a dedicated system screenshot folder and queue consecutive screenshots for editing
 - Add arrows, shapes, lines, pen strokes, highlights, mosaic, text, numbers, inserted images, and QR recognition
 - OCR, translation, dictionary mode, and configurable translation providers
 - Upload images to your own image host and copy a URL or Markdown
@@ -22,7 +24,7 @@ You can also drag image files to the app, choose “Open Image”, use Finder �
 
 ## Privacy Boundary
 
-clipcap only works with images the user gives it through the clipboard, file picker, drag and drop, Open With, or explicit file selection. It does not request or reuse the old-app TCC grants, does not trigger capture from global hotkeys, and does not read Finder selection through Automation
+clipcap only works with images the user gives it through the clipboard, file picker, drag and drop, Open With, explicit file selection, or the dedicated system screenshot folder the user opts into. It does not request or reuse the old-app TCC grants, does not trigger capture from global hotkeys, and does not read Finder selection through Automation
 
 ## Install
 

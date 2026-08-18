@@ -12,6 +12,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var didInitializeApp = false
     private var pendingOpenImageURLs: [URL] = []
     private let clipboardTextHistoryMonitor = ClipboardTextHistoryMonitor()
+    private var systemScreenshotDirectoryMonitor: SystemScreenshotDirectoryMonitor?
+    private var systemScreenshotOpenQueue = SystemScreenshotOpenQueue()
+    private var systemScreenshotMonitorGeneration = 0
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         false
@@ -26,6 +29,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationWillTerminate(_ notification: Notification) {
         clipboardTextHistoryMonitor.stop()
+        systemScreenshotDirectoryMonitor?.stop()
         CaffeinationController.shared.stop()
     }
 
@@ -81,6 +85,59 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             self?.applyHotkeyState()
         }
         applyHotkeyState()
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(systemScreenshotAutoOpenSettingChanged),
+            name: .systemScreenshotAutoOpenDidChange,
+            object: nil
+        )
+        applySystemScreenshotAutoOpenState()
+    }
+
+    @objc private func systemScreenshotAutoOpenSettingChanged() {
+        applySystemScreenshotAutoOpenState()
+    }
+
+    private func applySystemScreenshotAutoOpenState() {
+        systemScreenshotMonitorGeneration += 1
+        let generation = systemScreenshotMonitorGeneration
+        systemScreenshotDirectoryMonitor?.stop()
+        systemScreenshotDirectoryMonitor = nil
+
+        guard Defaults.systemScreenshotAutoOpenEnabled else {
+            systemScreenshotOpenQueue.removeAll()
+            return
+        }
+
+        guard SystemScreenshotAutoOpen.ensureDirectoryExists() else {
+            Defaults.systemScreenshotAutoOpenEnabled = false
+            return
+        }
+
+        let monitor = SystemScreenshotDirectoryMonitor { [weak self] url in
+            guard let self,
+                  self.systemScreenshotMonitorGeneration == generation,
+                  Defaults.systemScreenshotAutoOpenEnabled
+            else { return }
+            self.enqueueSystemScreenshot(url)
+        }
+        systemScreenshotDirectoryMonitor = monitor
+        monitor.start()
+    }
+
+    private func enqueueSystemScreenshot(_ url: URL) {
+        systemScreenshotOpenQueue.enqueue(url)
+        openNextQueuedSystemScreenshotIfPossible()
+    }
+
+    private func openNextQueuedSystemScreenshotIfPossible() {
+        guard overlayController == nil else { return }
+        while let url = systemScreenshotOpenQueue.popFirst() {
+            if launchImageFile(url) {
+                return
+            }
+        }
     }
 
     private func configuredSettingsController() -> SettingsWindowController {
@@ -356,6 +413,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
         overlayController = nil
+        openNextQueuedSystemScreenshotIfPossible()
     }
 
     private func handleEditSuspension(_ draft: OverlayWindowController.SuspendedEditDraft) {
@@ -366,6 +424,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             on: screen(for: draft),
             duration: 3.0
         )
+        openNextQueuedSystemScreenshotIfPossible()
     }
 
     private func resumeSuspendedEditIfAvailable() -> Bool {

@@ -419,3 +419,25 @@
 "editClipboardImage" = "Modifier l’image du presse-papiers";
 "openImage" = "Ouvrir une image";
 "openImageNoImage" = "Copiez une image dans le presse-papiers ou choisissez un fichier image";
+
+"systemScreenshotAutoOpenLabel" = "Ouvrir automatiquement les captures système";
+"systemScreenshotAutoOpenHint" = "Ouvre les nouvelles captures du dossier dédié dans ClipCap sans accès Enregistrement de l’écran ni Accessibilité";
+"systemScreenshotFolderLabel" = "Dossier des captures système";
+"systemScreenshotFolderConfigured" = "L’emplacement des captures système est prêt";
+"systemScreenshotFolderNeedsSetup" = "Définissez ce dossier comme emplacement des captures système avant de faire une capture";
+"systemScreenshotSetup" = "Configurer";
+"systemScreenshotRevealFolder" = "Afficher";
+"systemScreenshotFloatingThumbnailHint" = "Pour un transfert plus rapide, désactivez Afficher la vignette flottante dans les options de Capture d’écran";
+"systemScreenshotSetupTitle" = "Configurer les captures système";
+"systemScreenshotSetupMessage" = "La configuration automatique change l’emplacement des captures système et actualise la barre des menus. La configuration manuelle ouvre Capture d’écran et vous laisse contrôler les réglages système";
+"systemScreenshotSetupAutomatic" = "Configurer automatiquement";
+"systemScreenshotSetupManual" = "Ouvrir les options de capture";
+"systemScreenshotSetupCancel" = "Annuler";
+"systemScreenshotSetupFailedTitle" = "Impossible de configurer les captures";
+"systemScreenshotSetupFailedMessage" = "ClipCap n’a pas pu modifier l’emplacement des captures système. Utilisez la configuration manuelle";
+"systemScreenshotDisableTitle" = "Désactiver l’ouverture automatique des captures";
+"systemScreenshotDisableMessage" = "Vous pouvez restaurer l’emplacement utilisé avant la configuration de ClipCap ou conserver l’emplacement système actuel";
+"systemScreenshotDisableRestore" = "Désactiver et restaurer";
+"systemScreenshotDisableKeep" = "Désactiver uniquement";
+"systemScreenshotRestoreFailedTitle" = "Impossible de restaurer l’emplacement des captures";
+"systemScreenshotRestoreFailedMessage" = "ClipCap a conservé l’ouverture automatique afin que vous puissiez réessayer sans perdre l’emplacement enregistré";

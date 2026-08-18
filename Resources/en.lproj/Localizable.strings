@@ -419,3 +419,25 @@
 "editClipboardImage" = "Edit Clipboard Image";
 "openImage" = "Open Image";
 "openImageNoImage" = "Copy an image to the clipboard or choose an image file";
+
+"systemScreenshotAutoOpenLabel" = "Automatically open system screenshots";
+"systemScreenshotAutoOpenHint" = "Opens new screenshots from a dedicated folder in the ClipCap editor without Screen Recording or Accessibility access";
+"systemScreenshotFolderLabel" = "System screenshot folder";
+"systemScreenshotFolderConfigured" = "The system screenshot location is ready";
+"systemScreenshotFolderNeedsSetup" = "Set the system screenshot save location to this folder before taking a screenshot";
+"systemScreenshotSetup" = "Set Up";
+"systemScreenshotRevealFolder" = "Show";
+"systemScreenshotFloatingThumbnailHint" = "For the fastest handoff, turn off Show Floating Thumbnail in Screenshot Options";
+"systemScreenshotSetupTitle" = "Set up system screenshots";
+"systemScreenshotSetupMessage" = "Automatic setup changes the system screenshot save location and refreshes the menu bar. Manual setup opens Screenshot and leaves system settings under your control";
+"systemScreenshotSetupAutomatic" = "Set Up Automatically";
+"systemScreenshotSetupManual" = "Open Screenshot Options";
+"systemScreenshotSetupCancel" = "Cancel";
+"systemScreenshotSetupFailedTitle" = "Could not configure screenshots";
+"systemScreenshotSetupFailedMessage" = "ClipCap could not change the system screenshot location. Use manual setup instead";
+"systemScreenshotDisableTitle" = "Turn off automatic screenshot opening";
+"systemScreenshotDisableMessage" = "You can restore the screenshot location used before ClipCap configured it or keep the current system location";
+"systemScreenshotDisableRestore" = "Turn Off and Restore";
+"systemScreenshotDisableKeep" = "Turn Off Only";
+"systemScreenshotRestoreFailedTitle" = "Could not restore screenshot location";
+"systemScreenshotRestoreFailedMessage" = "ClipCap left automatic opening enabled so you can try again without losing the saved location";

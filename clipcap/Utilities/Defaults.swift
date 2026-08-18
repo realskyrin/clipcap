@@ -69,6 +69,7 @@ extension Notification.Name {
     static let historyPanelDisplayModesDidChange = Notification.Name("clipcap.historyPanelDisplayModesDidChange")
     static let hotkeyDidChange = Notification.Name("clipcap.hotkeyDidChange")
     static let caffeinationStateDidChange = Notification.Name("clipcap.caffeinationStateDidChange")
+    static let systemScreenshotAutoOpenDidChange = Notification.Name("clipcap.systemScreenshotAutoOpenDidChange")
 }
 
 /// Centralized accessor for every user-facing string. Each property resolves a
@@ -122,6 +123,27 @@ enum L10n {
     static var screenshotQualityCompressingSave: String { s("screenshotQualityCompressingSave") }
     static var screenshotQualityCompressingClipboard: String { s("screenshotQualityCompressingClipboard") }
     static var screenshotCompressionFailed: String { s("screenshotCompressionFailed") }
+    static var systemScreenshotAutoOpenLabel: String { s("systemScreenshotAutoOpenLabel") }
+    static var systemScreenshotAutoOpenHint: String { s("systemScreenshotAutoOpenHint") }
+    static var systemScreenshotFolderLabel: String { s("systemScreenshotFolderLabel") }
+    static var systemScreenshotFolderConfigured: String { s("systemScreenshotFolderConfigured") }
+    static var systemScreenshotFolderNeedsSetup: String { s("systemScreenshotFolderNeedsSetup") }
+    static var systemScreenshotSetup: String { s("systemScreenshotSetup") }
+    static var systemScreenshotRevealFolder: String { s("systemScreenshotRevealFolder") }
+    static var systemScreenshotFloatingThumbnailHint: String { s("systemScreenshotFloatingThumbnailHint") }
+    static var systemScreenshotSetupTitle: String { s("systemScreenshotSetupTitle") }
+    static var systemScreenshotSetupMessage: String { s("systemScreenshotSetupMessage") }
+    static var systemScreenshotSetupAutomatic: String { s("systemScreenshotSetupAutomatic") }
+    static var systemScreenshotSetupManual: String { s("systemScreenshotSetupManual") }
+    static var systemScreenshotSetupCancel: String { s("systemScreenshotSetupCancel") }
+    static var systemScreenshotSetupFailedTitle: String { s("systemScreenshotSetupFailedTitle") }
+    static var systemScreenshotSetupFailedMessage: String { s("systemScreenshotSetupFailedMessage") }
+    static var systemScreenshotDisableTitle: String { s("systemScreenshotDisableTitle") }
+    static var systemScreenshotDisableMessage: String { s("systemScreenshotDisableMessage") }
+    static var systemScreenshotDisableRestore: String { s("systemScreenshotDisableRestore") }
+    static var systemScreenshotDisableKeep: String { s("systemScreenshotDisableKeep") }
+    static var systemScreenshotRestoreFailedTitle: String { s("systemScreenshotRestoreFailedTitle") }
+    static var systemScreenshotRestoreFailedMessage: String { s("systemScreenshotRestoreFailedMessage") }
 
     // Screenshot shortcut
     static var shortcutHeader: String { s("shortcutHeader") }
@@ -915,6 +937,44 @@ struct Defaults {
         set {
             defaults.set(newValue.standardizedFileURL.path, forKey: "screenshotSaveDirectory")
         }
+    }
+
+    static var systemScreenshotAutoOpenEnabled: Bool {
+        get { defaults.bool(forKey: "systemScreenshotAutoOpenEnabled") }
+        set {
+            let oldValue = systemScreenshotAutoOpenEnabled
+            defaults.set(newValue, forKey: "systemScreenshotAutoOpenEnabled")
+            if oldValue != newValue {
+                NotificationCenter.default.post(name: .systemScreenshotAutoOpenDidChange, object: nil)
+            }
+        }
+    }
+
+    static var systemScreenshotLocationManaged: Bool {
+        get { defaults.bool(forKey: "systemScreenshotLocationManaged") }
+        set { defaults.set(newValue, forKey: "systemScreenshotLocationManaged") }
+    }
+
+    static var systemScreenshotOriginalLocationWasSet: Bool {
+        get { defaults.bool(forKey: "systemScreenshotOriginalLocationWasSet") }
+        set { defaults.set(newValue, forKey: "systemScreenshotOriginalLocationWasSet") }
+    }
+
+    static var systemScreenshotOriginalLocation: String? {
+        get { defaults.string(forKey: "systemScreenshotOriginalLocation") }
+        set {
+            if let newValue {
+                defaults.set(newValue, forKey: "systemScreenshotOriginalLocation")
+            } else {
+                defaults.removeObject(forKey: "systemScreenshotOriginalLocation")
+            }
+        }
+    }
+
+    static func clearSystemScreenshotLocationBackup() {
+        defaults.removeObject(forKey: "systemScreenshotLocationManaged")
+        defaults.removeObject(forKey: "systemScreenshotOriginalLocationWasSet")
+        defaults.removeObject(forKey: "systemScreenshotOriginalLocation")
     }
 
     static var screenshotSaveQuality: ScreenshotImageQuality {

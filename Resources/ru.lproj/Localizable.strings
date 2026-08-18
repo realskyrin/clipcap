@@ -419,3 +419,25 @@
 "editClipboardImage" = "Редактировать изображение из буфера";
 "openImage" = "Открыть изображение";
 "openImageNoImage" = "Скопируйте изображение в буфер обмена или выберите файл изображения";
+
+"systemScreenshotAutoOpenLabel" = "Автоматически открывать системные снимки";
+"systemScreenshotAutoOpenHint" = "Открывает новые снимки из отдельной папки в ClipCap без разрешений на запись экрана и универсальный доступ";
+"systemScreenshotFolderLabel" = "Папка системных снимков";
+"systemScreenshotFolderConfigured" = "Расположение системных снимков настроено";
+"systemScreenshotFolderNeedsSetup" = "Перед созданием снимка выберите эту папку как системное место сохранения";
+"systemScreenshotSetup" = "Настроить";
+"systemScreenshotRevealFolder" = "Показать";
+"systemScreenshotFloatingThumbnailHint" = "Для быстрого открытия отключите плавающую миниатюру в параметрах приложения Снимок экрана";
+"systemScreenshotSetupTitle" = "Настроить системные снимки";
+"systemScreenshotSetupMessage" = "Автоматическая настройка изменит место сохранения системных снимков и обновит строку меню. Ручная настройка откроет приложение Снимок экрана и оставит системные параметры под вашим контролем";
+"systemScreenshotSetupAutomatic" = "Настроить автоматически";
+"systemScreenshotSetupManual" = "Открыть параметры снимков";
+"systemScreenshotSetupCancel" = "Отмена";
+"systemScreenshotSetupFailedTitle" = "Не удалось настроить системные снимки";
+"systemScreenshotSetupFailedMessage" = "ClipCap не удалось изменить место сохранения системных снимков. Используйте ручную настройку";
+"systemScreenshotDisableTitle" = "Отключить автоматическое открытие снимков";
+"systemScreenshotDisableMessage" = "Можно восстановить место сохранения до настройки ClipCap или оставить текущее системное расположение";
+"systemScreenshotDisableRestore" = "Отключить и восстановить";
+"systemScreenshotDisableKeep" = "Только отключить";
+"systemScreenshotRestoreFailedTitle" = "Не удалось восстановить место сохранения снимков";
+"systemScreenshotRestoreFailedMessage" = "ClipCap оставил автоматическое открытие включённым, чтобы можно было повторить попытку без потери сохранённого расположения";
