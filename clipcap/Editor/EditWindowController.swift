@@ -15,6 +15,82 @@ private let keyRightArrow: Int = 124
 private let keyDownArrow: Int = 125
 private let keyUpArrow: Int = 126
 
+struct FixedImageCropGeometry {
+    static func adjustedSourceRect(
+        _ sourceRect: NSRect,
+        from oldViewport: NSRect,
+        to newViewport: NSRect,
+        imageBounds: NSRect
+    ) -> NSRect {
+        guard oldViewport.width > 0, oldViewport.height > 0,
+              sourceRect.width > 0, sourceRect.height > 0,
+              imageBounds.width > 0, imageBounds.height > 0
+        else { return sourceRect }
+
+        let scaleX = sourceRect.width / oldViewport.width
+        let scaleY = sourceRect.height / oldViewport.height
+        let proposed = NSRect(
+            x: sourceRect.minX + (newViewport.minX - oldViewport.minX) * scaleX,
+            y: sourceRect.minY + (newViewport.minY - oldViewport.minY) * scaleY,
+            width: sourceRect.width + (newViewport.width - oldViewport.width) * scaleX,
+            height: sourceRect.height + (newViewport.height - oldViewport.height) * scaleY
+        ).standardized
+        let clipped = proposed.intersection(imageBounds)
+        guard !clipped.isNull, clipped.width > 0, clipped.height > 0 else {
+            return sourceRect
+        }
+        return clipped
+    }
+}
+
+enum FixedImageCropRenderer {
+    static func crop(_ image: NSImage, to sourceRect: NSRect) -> NSImage? {
+        let imageBounds = NSRect(origin: .zero, size: image.size)
+        let clipped = sourceRect.standardized.intersection(imageBounds)
+        guard !clipped.isNull, clipped.width > 0, clipped.height > 0 else { return nil }
+        if clipped.equalTo(imageBounds) {
+            return image
+        }
+
+        guard let cgImage = image.cgImagePreservingBacking() else { return nil }
+        let scaleX = CGFloat(cgImage.width) / imageBounds.width
+        let scaleY = CGFloat(cgImage.height) / imageBounds.height
+        let pixelsWide = max(1, Int(round(clipped.width * scaleX)))
+        let pixelsHigh = max(1, Int(round(clipped.height * scaleY)))
+        guard let bitmap = NSBitmapImageRep(
+            bitmapDataPlanes: nil,
+            pixelsWide: pixelsWide,
+            pixelsHigh: pixelsHigh,
+            bitsPerSample: 8,
+            samplesPerPixel: 4,
+            hasAlpha: true,
+            isPlanar: false,
+            colorSpaceName: .deviceRGB,
+            bytesPerRow: 0,
+            bitsPerPixel: 0
+        ), let graphicsContext = NSGraphicsContext(bitmapImageRep: bitmap) else {
+            return nil
+        }
+        bitmap.size = clipped.size
+
+        NSGraphicsContext.saveGraphicsState()
+        NSGraphicsContext.current = graphicsContext
+        graphicsContext.imageInterpolation = .none
+        image.draw(
+            in: NSRect(origin: .zero, size: clipped.size),
+            from: clipped,
+            operation: .copy,
+            fraction: 1
+        )
+        graphicsContext.flushGraphics()
+        NSGraphicsContext.restoreGraphicsState()
+
+        let result = NSImage(size: clipped.size)
+        result.addRepresentation(bitmap)
+        return result
+    }
+}
+
 class EditWindowController {
     private var canvasView: EditCanvasView?
     private var beautifyContainerView: BeautifyContainerView?
@@ -54,6 +130,8 @@ class EditWindowController {
     /// pipeline as the editor's base image (no live capture, no preSnapshot
     /// crop). Also disables scroll capture, which is a screen-only concept.
     private let overrideBaseImage: NSImage?
+    private var overrideBaseImageCropRect: NSRect?
+    private var croppedOverrideBaseImage: NSImage?
 
     /// Single-window capture with the WindowServer's real alpha silhouette.
     /// Used as the base image and annotation clip mask for clicked-window
@@ -91,6 +169,7 @@ class EditWindowController {
     struct RestorableState {
         let canvasState: EditCanvasView.RestorableState
         let beautifyState: BeautifyState
+        let overrideBaseImageCropRect: NSRect?
     }
 
     struct BeautifyState {
@@ -149,6 +228,14 @@ class EditWindowController {
         self.hostSelectionView = hostSelectionView
         self.preSnapshot = preSnapshot
         self.overrideBaseImage = overrideBaseImage
+        if let overrideBaseImage {
+            let imageBounds = NSRect(origin: .zero, size: overrideBaseImage.size)
+            self.overrideBaseImageCropRect = imageBounds
+            self.croppedOverrideBaseImage = overrideBaseImage
+        } else {
+            self.overrideBaseImageCropRect = nil
+            self.croppedOverrideBaseImage = nil
+        }
         self.windowBaseImage = windowBaseImage
         self.keepsHostWindowAcrossSpaces = keepsHostWindowAcrossSpaces
         self.isWindowCapture = isWindowCapture
@@ -175,10 +262,11 @@ class EditWindowController {
         scrollView.automaticallyAdjustsContentInsets = false
 
         let canvas = EditCanvasView(frame: NSRect(origin: .zero, size: canvasSize))
+        canvas.hostSelectionView = hostSelectionView
         canvas.captureRect = captureRect
         canvas.captureScreen = screen
         canvas.preSnapshot = preSnapshot
-        canvas.overrideBaseImage = overrideBaseImage
+        canvas.overrideBaseImage = effectiveOverrideBaseImage
         canvas.windowBaseImage = windowBaseImage
         canvas.autoresizingMask = []
         canvas.onAnnotationSelected = { [weak self] annotation in
@@ -220,6 +308,7 @@ class EditWindowController {
         self.selectionChromeOverlay = overlay
 
         showToolbar()
+        repositionFloatingChrome()
         updateHistoryButtons(canUndo: canvas.canUndo, canRedo: canvas.canRedo)
         bringEditorToFront()
     }
@@ -303,15 +392,40 @@ class EditWindowController {
 
     func updateLayout(selectionRect: NSRect, selectionViewRect: NSRect, captureRect: CGRect) {
         dismissQRCodeOverlay()
+        let previousSelectionViewRect = self.selectionViewRect
         self.selectionRect = selectionRect
         self.selectionViewRect = selectionViewRect
         self.captureRect = captureRect
+
+        if let overrideBaseImage,
+           let currentCropRect = overrideBaseImageCropRect {
+            let imageBounds = NSRect(origin: .zero, size: overrideBaseImage.size)
+            let adjustedCropRect = FixedImageCropGeometry.adjustedSourceRect(
+                currentCropRect,
+                from: previousSelectionViewRect,
+                to: selectionViewRect,
+                imageBounds: imageBounds
+            )
+            overrideBaseImageCropRect = adjustedCropRect
+            croppedOverrideBaseImage = FixedImageCropRenderer.crop(
+                overrideBaseImage,
+                to: adjustedCropRect
+            ) ?? croppedOverrideBaseImage
+            canvasView?.overrideBaseImage = effectiveOverrideBaseImage
+            hostSelectionView?.selectionSizeLabelOverride = Self.cropSizeLabelText(
+                adjustedCropRect.size
+            )
+        }
 
         if !isWindowCapture {
             canvasView?.windowBaseImage = nil
         }
 
         let canvasSize = canvasContentSize(for: selectionViewRect.size)
+        canvasView?.preserveAnnotationScreenPositions(
+            from: previousSelectionViewRect,
+            to: selectionViewRect
+        )
         canvasView?.updateViewportSize(canvasSize)
         beautifyContainerView?.canvasSizeDidChange()
         canvasView?.captureRect = captureRect
@@ -351,7 +465,7 @@ class EditWindowController {
 
     private func canvasContentSize(for viewportSize: NSSize) -> NSSize {
         guard
-            let image = overrideBaseImage,
+            let image = effectiveOverrideBaseImage,
             image.size.width > 0,
             image.size.height > 0,
             viewportSize.width > 0
@@ -364,6 +478,14 @@ class EditWindowController {
             width: viewportSize.width,
             height: max(1, floor(image.size.height * scale))
         )
+    }
+
+    private var effectiveOverrideBaseImage: NSImage? {
+        croppedOverrideBaseImage ?? overrideBaseImage
+    }
+
+    private static func cropSizeLabelText(_ size: NSSize) -> String {
+        "\(max(1, Int(round(size.width)))) x \(max(1, Int(round(size.height))))"
     }
 
     private func selectTool(_ tool: EditTool) {
@@ -911,7 +1033,7 @@ class EditWindowController {
         }
         selectionChromeOverlay?.update(
             rect: selectionViewRect,
-            active: isBeautifyActive && canvasView?.hasPreviewImage != true
+            active: canvasView?.hasPreviewImage != true
         )
     }
 
@@ -2013,11 +2135,24 @@ class EditWindowController {
                 presetID: currentBeautifyPreset?.id,
                 padding: currentBeautifyPadding,
                 shadowEnabled: currentBeautifyShadowEnabled
-            )
+            ),
+            overrideBaseImageCropRect: overrideBaseImageCropRect
         )
     }
 
     func restoreState(_ state: RestorableState) {
+        if let overrideBaseImage,
+           let cropRect = state.overrideBaseImageCropRect {
+            overrideBaseImageCropRect = cropRect
+            croppedOverrideBaseImage = FixedImageCropRenderer.crop(
+                overrideBaseImage,
+                to: cropRect
+            ) ?? overrideBaseImage
+            canvasView?.overrideBaseImage = effectiveOverrideBaseImage
+            let canvasSize = canvasContentSize(for: selectionViewRect.size)
+            canvasView?.updateViewportSize(canvasSize)
+            beautifyContainerView?.canvasSizeDidChange()
+        }
         if state.beautifyState.isActive {
             applyBeautifyState(state.beautifyState)
         } else if isBeautifyActive {
@@ -2070,8 +2205,8 @@ class EditWindowController {
         var fallbackBaseImage: NSImage?
         if canvasView?.hasPreviewImage == true {
             fallbackBaseImage = nil
-        } else if let overrideBaseImage {
-            fallbackBaseImage = overrideBaseImage
+        } else if let effectiveOverrideBaseImage {
+            fallbackBaseImage = effectiveOverrideBaseImage
         } else if isWindowCapture, let windowBaseImage {
             fallbackBaseImage = windowBaseImage
         }
@@ -2134,7 +2269,7 @@ class EditWindowController {
         // available for any clicks that fall outside the gradient frame so the
         // user can still adjust the selection.
         hostSelectionView?.annotationToolActive = !isBlocked
-        hostSelectionView?.selectionInteractionEnabled = !(isBlocked || hasPreview || hasFixedImage)
+        hostSelectionView?.selectionInteractionEnabled = !(isBlocked || hasPreview)
         canvasScrollView?.isInteractionEnabled = (activeTool != .none) || hasPreview || hasFixedImage || isBeautifyActive
         hostSelectionView?.needsDisplay = true
     }
@@ -5010,6 +5145,25 @@ final class SelectionChromeOverlay: NSView {
         isActiveAndVisible = active
         if changed {
             needsDisplay = true
+            window?.invalidateCursorRects(for: self)
+        }
+    }
+
+    override func resetCursorRects() {
+        super.resetCursorRects()
+        guard isActiveAndVisible else { return }
+        let positions = SelectionView.handlePositions(for: selectionRectInView)
+        for (index, handle) in SelectionView.HandlePosition.allCases.enumerated() {
+            let position = positions[index]
+            let cursorRect = NSRect(
+                x: position.x - handleHitSize / 2,
+                y: position.y - handleHitSize / 2,
+                width: handleHitSize,
+                height: handleHitSize
+            ).intersection(bounds)
+            if !cursorRect.isNull {
+                addCursorRect(cursorRect, cursor: SelectionView.cursorForHandle(handle))
+            }
         }
     }
 
@@ -5041,6 +5195,7 @@ final class SelectionChromeOverlay: NSView {
 
     override func mouseDragged(with event: NSEvent) {
         guard let handle = dragHandle, let selectionView else { return }
+        SelectionView.setCursorForHandle(handle)
         let point = convert(event.locationInWindow, from: nil)
         selectionView.resizeByExternalDrag(
             handle: handle,
@@ -5050,14 +5205,22 @@ final class SelectionChromeOverlay: NSView {
     }
 
     override func mouseUp(with event: NSEvent) {
-        defer { dragHandle = nil }
+        let point = convert(event.locationInWindow, from: nil)
+        defer {
+            dragHandle = nil
+            updateCursor(at: point)
+        }
         guard dragHandle != nil, let selectionView else { return }
         selectionView.finalizeExternalResize()
     }
 
     override func mouseMoved(with event: NSEvent) {
         guard isActiveAndVisible else { return }
-        let point = convert(event.locationInWindow, from: nil)
+        updateCursor(at: convert(event.locationInWindow, from: nil))
+    }
+
+    private func updateCursor(at point: NSPoint) {
+        guard isActiveAndVisible else { return }
         if let handle = SelectionView.hitTestHandle(
             point: point,
             rect: selectionRectInView,
@@ -5109,8 +5272,12 @@ final class SelectionChromeOverlay: NSView {
             context.fillEllipse(in: handleRect)
         }
 
-        // The SelectionView draws its own size label underneath, but the
-        // beautify gradient frame covers it. Re-draw it here, above the frame.
-        SelectionView.drawSizeLabel(context: context, rect: rect)
+        // The image/beautify frame covers SelectionView's own label, so draw
+        // the current source-pixel dimensions above it here.
+        SelectionView.drawSizeLabel(
+            context: context,
+            rect: rect,
+            text: selectionView?.selectionSizeLabelOverride
+        )
     }
 }

@@ -23,6 +23,7 @@ class EditCanvasView: NSView {
     var captureRect: CGRect?
     var captureScreen: NSScreen?
     var preSnapshot: CGImage?
+    weak var hostSelectionView: SelectionView?
     /// When set (image-edit mode), this image is the source-of-truth base
     /// instead of preSnapshot/live capture.
     var overrideBaseImage: NSImage?
@@ -1791,6 +1792,40 @@ class EditCanvasView: NSView {
         needsDisplay = true
     }
 
+    /// Keep annotations anchored to the same image content when crop handles
+    /// move the viewport's minimum edges. Undo and redo snapshots receive the
+    /// same translation so history cannot restore stale geometry.
+    func preserveAnnotationScreenPositions(
+        from oldViewport: NSRect,
+        to newViewport: NSRect
+    ) {
+        let delta = NSPoint(
+            x: oldViewport.minX - newViewport.minX,
+            y: oldViewport.minY - newViewport.minY
+        )
+        guard delta != .zero else { return }
+
+        activeTextField?.commit()
+
+        func translatedAnnotations(_ source: [Annotation]) -> [Annotation] {
+            source.map { $0.translated(by: delta) }
+        }
+
+        func translatedSnapshot(_ snapshot: EditorSnapshot) -> EditorSnapshot {
+            EditorSnapshot(
+                annotations: translatedAnnotations(snapshot.annotations),
+                numberCounter: snapshot.numberCounter
+            )
+        }
+
+        annotations = translatedAnnotations(annotations)
+        undoStack = undoStack.map(translatedSnapshot)
+        redoStack = redoStack.map(translatedSnapshot)
+        pendingSnapshot = pendingSnapshot.map(translatedSnapshot)
+        needsDisplay = true
+        refreshCursorAtCurrentLocation()
+    }
+
     // MARK: - Helpers
 
     func resolveBaseImageForEditing() -> NSImage? {
@@ -3355,8 +3390,11 @@ class EditCanvasView: NSView {
             emojiPreviewPoint = nil
             needsDisplay = true
         }
-        // Let whatever's underneath manage its own cursor.
-        NSCursor.arrow.set()
+        let point = convert(event.locationInWindow, from: nil)
+        if hostSelectionView?.setResizeCursorIfNeeded(at: point, from: self) != true {
+            // Let whatever's underneath manage its own cursor.
+            NSCursor.arrow.set()
+        }
     }
 
     private func updateEmojiPreview(at point: NSPoint) {
@@ -3375,6 +3413,11 @@ class EditCanvasView: NSView {
     }
 
     private func updateCursor(at point: NSPoint) {
+        // The outer image crop frame keeps priority when canvas tracking owns
+        // the same pointer location.
+        if hostSelectionView?.setResizeCursorIfNeeded(at: point, from: self) == true {
+            return
+        }
         // Don't fight the text field's I-beam while editing.
         if activeTextField != nil { return }
         if activeTool == .eraser {

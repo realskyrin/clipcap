@@ -18,6 +18,7 @@ final class OverlayWindowController {
         let selectionSizeLabelOverride: String?
         let selectionLocked: Bool
         let selectionInteractionEnabled: Bool
+        let selectionAdjustmentBounds: NSRect?
         let preSnapshot: CGImage?
         let overrideBaseImage: NSImage?
         let windowBaseImage: NSImage?
@@ -37,6 +38,10 @@ final class OverlayWindowController {
     private let keepsEditorAcrossSpaces: Bool
     private let onRequestFocusReturn: (() -> Void)?
     private let onComplete: (EditorCompletion) -> Void
+
+    var activeSelectionViews: [SelectionView] {
+        [selectionView].compactMap { $0 }
+    }
 
     init(
         presetImage: NSImage,
@@ -87,20 +92,23 @@ final class OverlayWindowController {
         let panel = makePanel(on: screen)
         let host = SelectionView(frame: NSRect(origin: .zero, size: screen.frame.size))
         host.autoresizingMask = [.width, .height]
-        host.selectionLocked = true
-        host.selectionInteractionEnabled = false
+        host.delegate = self
         panel.contentView = host
         panel.orderFrontRegardless()
         panel.makeKey()
         NSApp.activate(ignoringOtherApps: true)
 
-        let selectionRect = suspendedDraft?.selectionRect ?? Self.fittedRect(
+        let originalImageRect = Self.fittedRect(
             imageSize: image.size,
             in: host.bounds
         )
+        let selectionRect = suspendedDraft?.selectionRect ?? originalImageRect
         host.updateSelectionRect(selectionRect)
         host.selectionSizeLabelOverride = suspendedDraft?.selectionSizeLabelOverride
             ?? Self.sizeLabelText(imageSize: image.size, displayedSize: selectionRect.size)
+        host.selectionLocked = suspendedDraft?.selectionLocked ?? true
+        host.selectionInteractionEnabled = suspendedDraft?.selectionInteractionEnabled ?? true
+        host.selectionAdjustmentBounds = suspendedDraft?.selectionAdjustmentBounds ?? originalImageRect
 
         let captureRect = suspendedDraft?.captureRect ?? Self.captureRect(
             selectionRect: selectionRect,
@@ -189,7 +197,7 @@ final class OverlayWindowController {
         onComplete(completion)
     }
 
-    private func cancel() {
+    func cancel() {
         tearDown()
         onComplete(.dismissed)
     }
@@ -201,6 +209,7 @@ final class OverlayWindowController {
         }
         editController?.tearDown()
         editController = nil
+        selectionView?.delegate = nil
         selectionView = nil
         window?.orderOut(nil)
         window?.contentView = nil
@@ -266,6 +275,40 @@ final class OverlayWindowController {
             y: primaryHeight - (screenPoint.y + selectionRect.height),
             width: selectionRect.width,
             height: selectionRect.height
+        )
+    }
+}
+
+// MARK: - SelectionViewDelegate
+
+extension OverlayWindowController: SelectionViewDelegate {
+    func selectionDidStart() {}
+
+    func selectionDidChange(rect: NSRect, inView view: NSView) {
+        updateEditorLayout(for: rect, in: view)
+    }
+
+    func selectionDidComplete(
+        rect: NSRect,
+        inView view: NSView,
+        isWindowSelection: Bool,
+        windowID: CGWindowID?
+    ) {
+        updateEditorLayout(for: rect, in: view)
+    }
+
+    func selectionDidDoubleClickInsideSelection(inView view: NSView) {
+        confirmFromKeyboard()
+    }
+
+    private func updateEditorLayout(for rect: NSRect, in view: NSView) {
+        guard view === selectionView,
+              let screen = view.window?.screen ?? window?.screen
+        else { return }
+        editController?.updateLayout(
+            selectionRect: rect,
+            selectionViewRect: rect,
+            captureRect: Self.captureRect(selectionRect: rect, screen: screen)
         )
     }
 }
