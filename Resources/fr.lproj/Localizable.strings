@@ -144,6 +144,13 @@
 "historyPanelDeleteSelected" = "Supprimer %d éléments";
 "historyPanelDeletedSelectedOne" = "%d élément supprimé";
 "historyPanelDeletedSelected" = "%d éléments supprimés";
+"historyPanelFavorite" = "Ajouter aux favoris";
+"historyPanelUnfavorite" = "Retirer des favoris";
+"historyPanelItemFavorited" = "Ajouté aux favoris";
+"historyPanelItemUnfavorited" = "Retiré des favoris";
+"historyPanelFavoriteFailed" = "Impossible de modifier les favoris";
+"historyClearedKeptFavoriteOne" = "Historique effacé, %d favori conservé";
+"historyClearedKeptFavorites" = "Historique effacé, %d favoris conservés";
 "historyPanelFilterAll" = "Tout";
 "historyPanelFilterScreenshots" = "Captures";
 "historyPanelFilterGIF" = "GIF";

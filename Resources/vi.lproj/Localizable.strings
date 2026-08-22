@@ -144,6 +144,13 @@
 "historyPanelDeleteSelected" = "Xóa %d mục";
 "historyPanelDeletedSelectedOne" = "Đã xóa %d mục";
 "historyPanelDeletedSelected" = "Đã xóa %d mục";
+"historyPanelFavorite" = "Yêu thích";
+"historyPanelUnfavorite" = "Bỏ yêu thích";
+"historyPanelItemFavorited" = "Đã thêm vào mục yêu thích";
+"historyPanelItemUnfavorited" = "Đã xóa khỏi mục yêu thích";
+"historyPanelFavoriteFailed" = "Không thể thay đổi mục yêu thích";
+"historyClearedKeptFavoriteOne" = "Đã xóa lịch sử, giữ lại %d mục yêu thích";
+"historyClearedKeptFavorites" = "Đã xóa lịch sử, giữ lại %d mục yêu thích";
 "historyPanelFilterAll" = "Tất cả";
 "historyPanelFilterScreenshots" = "Ảnh chụp";
 "historyPanelFilterGIF" = "GIF";

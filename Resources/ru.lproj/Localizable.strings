@@ -144,6 +144,13 @@
 "historyPanelDeleteSelected" = "Удалить объектов: %d";
 "historyPanelDeletedSelectedOne" = "Удалён %d объект";
 "historyPanelDeletedSelected" = "Удалено объектов: %d";
+"historyPanelFavorite" = "Добавить в избранное";
+"historyPanelUnfavorite" = "Удалить из избранного";
+"historyPanelItemFavorited" = "Добавлено в избранное";
+"historyPanelItemUnfavorited" = "Удалено из избранного";
+"historyPanelFavoriteFailed" = "Не удалось изменить избранное";
+"historyClearedKeptFavoriteOne" = "История очищена, сохранён %d избранный объект";
+"historyClearedKeptFavorites" = "История очищена, сохранено избранных объектов: %d";
 "historyPanelFilterAll" = "Все";
 "historyPanelFilterScreenshots" = "Снимки";
 "historyPanelFilterGIF" = "GIF";

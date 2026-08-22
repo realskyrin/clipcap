@@ -144,6 +144,13 @@
 "historyPanelDeleteSelected" = "删除%d个项目";
 "historyPanelDeletedSelectedOne" = "已删除%d个项目";
 "historyPanelDeletedSelected" = "已删除%d个项目";
+"historyPanelFavorite" = "收藏";
+"historyPanelUnfavorite" = "取消收藏";
+"historyPanelItemFavorited" = "已收藏";
+"historyPanelItemUnfavorited" = "已取消收藏";
+"historyPanelFavoriteFailed" = "无法更改收藏";
+"historyClearedKeptFavoriteOne" = "已清除历史记录，保留了 %d 个收藏项";
+"historyClearedKeptFavorites" = "已清除历史记录，保留了 %d 个收藏项";
 "historyPanelFilterAll" = "全部";
 "historyPanelFilterScreenshots" = "截图";
 "historyPanelFilterGIF" = "GIF";

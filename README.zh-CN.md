@@ -18,7 +18,7 @@ If you do not want to change the system screenshot location, press `Control + Sh
 - Add arrows, shapes, lines, pen strokes, highlights, mosaic, text, numbers, inserted images, and QR recognition
 - OCR, translation, dictionary mode, and configurable translation providers
 - Upload images to your own image host and copy a URL or Markdown
-- Save to a local folder, keep history, and re-copy previous images
+- Save locally and re-copy history items; hover to favorite with the bottom-right star, filter favorites, batch-favorite selections, and keep favorites through automatic pruning and Delete All History
 - Keep the Mac awake indefinitely, for preset durations, or until a chosen time without extra permissions
 - Menu bar app with no Dock icon
 

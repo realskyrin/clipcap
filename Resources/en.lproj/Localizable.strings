@@ -144,6 +144,13 @@
 "historyPanelDeleteSelected" = "Delete %d Items";
 "historyPanelDeletedSelectedOne" = "Deleted %d Item";
 "historyPanelDeletedSelected" = "Deleted %d Items";
+"historyPanelFavorite" = "Favorite";
+"historyPanelUnfavorite" = "Remove from Favorites";
+"historyPanelItemFavorited" = "Added to favorites";
+"historyPanelItemUnfavorited" = "Removed from favorites";
+"historyPanelFavoriteFailed" = "Could not change favorite";
+"historyClearedKeptFavoriteOne" = "History cleared, %d favorite kept";
+"historyClearedKeptFavorites" = "History cleared, %d favorites kept";
 "historyPanelFilterAll" = "All";
 "historyPanelFilterScreenshots" = "Images";
 "historyPanelFilterGIF" = "GIF";
