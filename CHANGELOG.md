@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [1.8.25] - 2026-08-22
+
+### Fixed
+
+- Fixed image crop geometry and resize cursor handling (c61cce1)
+
 ## [1.8.24] - 2026-08-22
 
 ### Fixed
