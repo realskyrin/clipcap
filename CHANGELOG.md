@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [1.8.24] - 2026-08-22
+
+### Fixed
+
+- Preserved favorite history items when clearing history (5909f3d)
+
 ## [1.8.23] - 2026-08-19
 
 ### Added
