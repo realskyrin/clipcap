@@ -279,9 +279,9 @@
 "settingsQuit" = "Quitter l'application";
 
 "toolbarSettingsPrimaryTitle" = "Barre principale";
-"toolbarSettingsPrimaryHint" = "Les outils apparaissent au-dessus ou en dessous de la sélection";
+"toolbarSettingsPrimaryHint" = "Les outils apparaissent au-dessus ou en dessous de la sélection, faites glisser pour ajuster la position et cliquez pour définir un raccourci";
 "toolbarSettingsSideTitle" = "Barre latérale";
-"toolbarSettingsSideHint" = "Les outils apparaissent à gauche ou à droite de la sélection";
+"toolbarSettingsSideHint" = "Les outils apparaissent à gauche ou à droite de la sélection, faites glisser pour ajuster la position et cliquez pour définir un raccourci";
 "toolbarSettingsHiddenTitle" = "Outils masqués";
 "toolbarSettingsHiddenHint" = "Les outils déposés ici n'apparaissent dans aucune barre d'outils";
 "toolbarSettingsFootnote" = "Les barres d'outils basculent automatiquement entre haut/bas et gauche/droite selon la position de la sélection";
@@ -493,3 +493,17 @@
 "translationUnsupported" = "Cette paire de langues n’est pas prise en charge par Apple Translation";
 "translationModelsMissing" = "Téléchargez les langues dans Réglages Système > Général > Langue et région > Langues de traduction puis réessayez hors ligne";
 "translationOfflineHint" = "Traduction hors ligne avec les modèles Apple installés";
+
+"toolbarSettingsShortcutHint" = "Cliquez sur un outil pour enregistrer son raccourci, faites-le glisser pour le déplacer ou faites un clic droit pour plus d’options";
+"toolbarSettingsShortcutRecording" = "Appuyez sur un nouveau raccourci pour %@ ou sur Échap pour annuler";
+"toolbarSettingsShortcutRecord" = "Enregistrer le raccourci";
+"toolbarSettingsShortcutClear" = "Effacer le raccourci";
+"toolbarSettingsShortcutRestore" = "Rétablir le raccourci par défaut";
+"toolbarSettingsShortcutResetAll" = "Réinitialiser les raccourcis de l’éditeur";
+"toolbarSettingsShortcutNone" = "Non défini";
+"toolbarSettingsShortcutUnavailable" = "N/A";
+"toolbarSettingsAdditionalShortcuts" = "Actions d’édition supplémentaires";
+"editorShortcutSelect" = "Outil de sélection";
+"editorShortcutShapeFill" = "Changer le remplissage des formes";
+"editorShortcutConflict" = "Ce raccourci est déjà attribué à %@";
+"editorShortcutReserved" = "Cette touche est réservée à une action système de l’éditeur et ne peut pas être réattribuée";

@@ -279,9 +279,9 @@
 "settingsQuit" = "Завершить приложение";
 
 "toolbarSettingsPrimaryTitle" = "Основная панель";
-"toolbarSettingsPrimaryHint" = "Инструменты появляются над или под выделением";
+"toolbarSettingsPrimaryHint" = "Инструменты появляются над или под выделением, перетащите для изменения положения и нажмите для настройки сочетания клавиш";
 "toolbarSettingsSideTitle" = "Боковая панель";
-"toolbarSettingsSideHint" = "Инструменты появляются слева или справа от выделения";
+"toolbarSettingsSideHint" = "Инструменты появляются слева или справа от выделения, перетащите для изменения положения и нажмите для настройки сочетания клавиш";
 "toolbarSettingsHiddenTitle" = "Скрытые инструменты";
 "toolbarSettingsHiddenHint" = "Инструменты, перетащенные сюда, не появляются ни на одной панели";
 "toolbarSettingsFootnote" = "Панели автоматически переключаются между расположением сверху/снизу и слева/справа в зависимости от положения выделения";
@@ -493,3 +493,17 @@
 "translationUnsupported" = "Apple Translation не поддерживает эту языковую пару";
 "translationModelsMissing" = "Загрузите языки в Системных настройках > Основные > Язык и регион > Языки перевода и повторите попытку офлайн";
 "translationOfflineHint" = "Офлайн-перевод с установленными языковыми моделями Apple";
+
+"toolbarSettingsShortcutHint" = "Нажмите инструмент для записи сочетания, перетащите его для перемещения или щёлкните правой кнопкой для дополнительных действий";
+"toolbarSettingsShortcutRecording" = "Нажмите новое сочетание для %@ или Esc для отмены";
+"toolbarSettingsShortcutRecord" = "Записать сочетание";
+"toolbarSettingsShortcutClear" = "Очистить сочетание";
+"toolbarSettingsShortcutRestore" = "Восстановить сочетание по умолчанию";
+"toolbarSettingsShortcutResetAll" = "Сбросить сочетания редактора";
+"toolbarSettingsShortcutNone" = "Не задано";
+"toolbarSettingsShortcutUnavailable" = "N/A";
+"toolbarSettingsAdditionalShortcuts" = "Дополнительные действия редактора";
+"editorShortcutSelect" = "Инструмент выделения";
+"editorShortcutShapeFill" = "Переключить заливку фигуры";
+"editorShortcutConflict" = "Это сочетание уже назначено действию %@";
+"editorShortcutReserved" = "Эта клавиша зарезервирована для системного действия редактора и не может быть переназначена";

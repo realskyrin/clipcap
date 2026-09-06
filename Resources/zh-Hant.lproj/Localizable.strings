@@ -279,9 +279,9 @@
 "settingsQuit" = "結束 App";
 
 "toolbarSettingsPrimaryTitle" = "主要工具列";
-"toolbarSettingsPrimaryHint" = "工具會顯示在選取範圍的上方或下方";
+"toolbarSettingsPrimaryHint" = "工具會顯示在選取範圍的上方或下方，拖曳調整位置，點擊設定快捷鍵";
 "toolbarSettingsSideTitle" = "側邊工具列";
-"toolbarSettingsSideHint" = "工具會顯示在選取範圍的左側或右側";
+"toolbarSettingsSideHint" = "工具會顯示在選取範圍的左側或右側，拖曳調整位置，點擊設定快捷鍵";
 "toolbarSettingsHiddenTitle" = "隱藏工具";
 "toolbarSettingsHiddenHint" = "拖到這裡的工具不會出現在任何工具列";
 "toolbarSettingsFootnote" = "工具列會依選取範圍的位置，自動在上/下與左/右配置間切換";
@@ -493,3 +493,17 @@
 "translationUnsupported" = "Apple Translation 不支援此語言組合";
 "translationModelsMissing" = "請先在系統設定 > 一般 > 語言與地區 > 翻譯語言中下載所需語言，再離線重試";
 "translationOfflineHint" = "使用已安裝的 Apple 語言模型離線翻譯";
+
+"toolbarSettingsShortcutHint" = "點按工具可錄製快捷鍵，拖動可調整位置，右鍵可清除或恢復預設";
+"toolbarSettingsShortcutRecording" = "請按下%@的新快捷鍵，按 Esc 取消";
+"toolbarSettingsShortcutRecord" = "錄製快捷鍵";
+"toolbarSettingsShortcutClear" = "清除快捷鍵";
+"toolbarSettingsShortcutRestore" = "恢復預設快捷鍵";
+"toolbarSettingsShortcutResetAll" = "重設編輯器快捷鍵";
+"toolbarSettingsShortcutNone" = "未設定";
+"toolbarSettingsShortcutUnavailable" = "N/A";
+"toolbarSettingsAdditionalShortcuts" = "其他編輯操作";
+"editorShortcutSelect" = "選取工具";
+"editorShortcutShapeFill" = "切換形狀填滿";
+"editorShortcutConflict" = "此快捷鍵已指派給%@";
+"editorShortcutReserved" = "此按鍵用於編輯器系統操作，無法重新指派";

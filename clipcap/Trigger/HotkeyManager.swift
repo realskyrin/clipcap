@@ -29,6 +29,26 @@ final class HotkeyManager {
     private static let imageMergeHotKeyID: UInt32 = 6
     private static let historyPreviewHotKeyID: UInt32 = 7
 
+    private(set) var isRecording = false
+
+    func beginRecording() {
+        guard !isRecording else { return }
+        isRecording = true
+        unregisterHotKey(&selectedImagePinHotKeyRef)
+        unregisterHotKey(&clipboardImagePinHotKeyRef)
+        unregisterHotKey(&selectedImageEditHotKeyRef)
+        unregisterHotKey(&clipboardImageEditHotKeyRef)
+        unregisterHotKey(&historyPanelHotKeyRef)
+        unregisterHotKey(&imageMergeHotKeyRef)
+        unregisterHotKey(&historyPreviewHotKeyRef)
+    }
+
+    func endRecording() {
+        guard isRecording else { return }
+        isRecording = false
+        NotificationCenter.default.post(name: .hotkeyDidChange, object: nil)
+    }
+
     private init() {}
 
     func register(callback: @escaping () -> Void) {}
@@ -523,6 +543,8 @@ final class HotkeyManager {
     ]
 
     private static func keyName(_ keyCode: UInt16) -> String {
+        let functionKeys = [122, 120, 99, 118, 96, 97, 98, 100, 101, 109, 103, 111, 105, 107, 113, 106, 64, 79, 80, 90]
+        if let index = functionKeys.firstIndex(of: Int(keyCode)) { return "F\(index + 1)" }
         switch keyCode {
         case 0: return "A"
         case 1: return "S"

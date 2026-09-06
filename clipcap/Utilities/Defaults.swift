@@ -67,6 +67,7 @@ extension Notification.Name {
     static let clipboardTextHistoryLimitDidChange = Notification.Name("clipcap.clipboardTextHistoryLimitDidChange")
     static let historyDidUpdate = Notification.Name("clipcap.historyDidUpdate")
     static let historyPanelDisplayModesDidChange = Notification.Name("clipcap.historyPanelDisplayModesDidChange")
+    static let editorShortcutsDidChange = Notification.Name("clipcap.editorShortcutsDidChange")
     static let hotkeyDidChange = Notification.Name("clipcap.hotkeyDidChange")
     static let caffeinationStateDidChange = Notification.Name("clipcap.caffeinationStateDidChange")
     static let systemScreenshotAutoOpenDidChange = Notification.Name("clipcap.systemScreenshotAutoOpenDidChange")
@@ -480,6 +481,24 @@ enum L10n {
     static var toolbarSettingsReset: String { s("toolbarSettingsReset") }
     static var toolbarSettingsCancel: String { s("toolbarSettingsCancel") }
     static var toolbarSettingsApply: String { s("toolbarSettingsApply") }
+
+    static var toolbarSettingsShortcutHint: String { s("toolbarSettingsShortcutHint") }
+    static func toolbarSettingsShortcutRecording(_ action: String) -> String {
+        String(format: s("toolbarSettingsShortcutRecording"), action)
+    }
+    static var toolbarSettingsShortcutRecord: String { s("toolbarSettingsShortcutRecord") }
+    static var toolbarSettingsShortcutClear: String { s("toolbarSettingsShortcutClear") }
+    static var toolbarSettingsShortcutRestore: String { s("toolbarSettingsShortcutRestore") }
+    static var toolbarSettingsShortcutResetAll: String { s("toolbarSettingsShortcutResetAll") }
+    static var toolbarSettingsShortcutNone: String { s("toolbarSettingsShortcutNone") }
+    static var toolbarSettingsShortcutUnavailable: String { s("toolbarSettingsShortcutUnavailable") }
+    static var toolbarSettingsAdditionalShortcuts: String { s("toolbarSettingsAdditionalShortcuts") }
+    static var editorShortcutSelect: String { s("editorShortcutSelect") }
+    static var editorShortcutShapeFill: String { s("editorShortcutShapeFill") }
+    static func editorShortcutConflict(_ action: String) -> String {
+        String(format: s("editorShortcutConflict"), action)
+    }
+    static var editorShortcutReserved: String { s("editorShortcutReserved") }
 
     // About pane
     static var aboutTagline: String { s("aboutTagline") }

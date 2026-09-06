@@ -346,6 +346,52 @@ class EditWindowController {
     /// Injects the controller's action callbacks into a toolbar. Both the
     /// primary and the side toolbar share the same wiring — a tool behaves
     /// identically regardless of which bar it was dragged to.
+    private func performToolbarItem(
+        _ item: ToolbarItemID,
+        togglesSelectedTool: Bool
+    ) -> Bool {
+        guard !ToolbarLayout.unavailableItems.contains(item) else { return false }
+        if let tool = item.editTool {
+            selectTool(togglesSelectedTool && activeTool == tool ? .none : tool)
+            return true
+        }
+
+        switch item {
+        case .insertImage:
+            showInsertImageMenu()
+        case .colorPicker:
+            runColorPicker()
+        case .undo:
+            _ = canvasView?.undo()
+        case .redo:
+            _ = canvasView?.redo()
+        case .scrollCapture:
+            toggleScrollCapture()
+        case .beautify:
+            toggleBeautify()
+        case .qrCode:
+            performQRCodeRecognition()
+        case .ocr:
+            performOCR()
+        case .translate:
+            performOCR(translate: true)
+        case .save:
+            save()
+        case .pin:
+            pin()
+        case .close:
+            close()
+        case .confirm:
+            confirm()
+        case .moveSelection:
+            return false
+        case .rectangle, .ellipse, .arrow, .line, .pen, .marker,
+             .mosaic, .eraser, .magnifier, .numbered, .text, .emoji:
+            return false
+        }
+        return true
+    }
+
     private func wireToolbarCallbacks(_ tv: ToolbarView) {
         tv.onToolSelected = { [weak self] tool in self?.selectTool(tool) }
         tv.onUndo = { [weak self] in _ = self?.canvasView?.undo() }
@@ -2008,19 +2054,15 @@ class EditWindowController {
 
     func handleEditorShortcutFromKeyboard(for event: NSEvent) -> Bool {
         guard !isScrollCaptureBusy, !isCropping else { return false }
-        guard let shortcut = EditorKeyboardShortcut(event: event) else { return false }
+        guard let shortcut = EditorShortcutRegistry.action(matching: event) else { return false }
 
         switch shortcut {
         case .select:
             selectTool(.none)
-        case .tool(let tool):
-            selectTool(tool)
-        case .fill:
+        case .shapeFill:
             return toggleShapeFillFromKeyboard()
-        case .pin:
-            pin()
-        case .close:
-            close()
+        case .toolbar(let item):
+            return performToolbarItem(item, togglesSelectedTool: false)
         }
         return true
     }
@@ -2372,41 +2414,6 @@ class EditWindowController {
         view.layer?.shadowOpacity = 0.25
         view.layer?.shadowRadius = 10
         view.layer?.shadowOffset = CGSize(width: 0, height: -2)
-    }
-}
-
-private enum EditorKeyboardShortcut {
-    case select
-    case tool(EditTool)
-    case fill
-    case pin
-    case close
-
-    init?(event: NSEvent) {
-        let blockedModifiers: NSEvent.ModifierFlags = [.command, .control, .option]
-        let modifiers = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
-        guard modifiers.intersection(blockedModifiers).isEmpty else { return nil }
-        guard let key = event.charactersIgnoringModifiers?.lowercased(), key.count == 1 else {
-            return nil
-        }
-
-        switch key {
-        case "v": self = .select
-        case "r": self = .tool(.rectangle)
-        case "o": self = .tool(.ellipse)
-        case "l": self = .tool(.line)
-        case "a": self = .tool(.arrow)
-        case "d": self = .tool(.pen)
-        case "h": self = .tool(.marker)
-        case "m": self = .tool(.mosaic)
-        case "e": self = .tool(.eraser)
-        case "f": self = .fill
-        case "t": self = .tool(.text)
-        case "n": self = .tool(.numbered)
-        case "p": self = .pin
-        case "x": self = .close
-        default: return nil
-        }
     }
 }
 

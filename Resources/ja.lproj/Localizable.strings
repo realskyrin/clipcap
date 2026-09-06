@@ -279,9 +279,9 @@
 "settingsQuit" = "アプリを終了";
 
 "toolbarSettingsPrimaryTitle" = "メインツールバー";
-"toolbarSettingsPrimaryHint" = "ツールは選択範囲の上または下に表示されます";
+"toolbarSettingsPrimaryHint" = "ツールは選択範囲の上または下に表示されます。ドラッグで位置を調整し、クリックでショートカットを設定します";
 "toolbarSettingsSideTitle" = "サイドツールバー";
-"toolbarSettingsSideHint" = "ツールは選択範囲の左または右に表示されます";
+"toolbarSettingsSideHint" = "ツールは選択範囲の左または右に表示されます。ドラッグで位置を調整し、クリックでショートカットを設定します";
 "toolbarSettingsHiddenTitle" = "非表示のツール";
 "toolbarSettingsHiddenHint" = "ここにドラッグしたツールはどのツールバーにも表示されません";
 "toolbarSettingsFootnote" = "ツールバーは選択範囲の位置に応じて上下／左右のレイアウトに自動で切り替わります";
@@ -493,3 +493,17 @@
 "translationUnsupported" = "Apple Translation はこの言語の組み合わせに対応していません";
 "translationModelsMissing" = "システム設定 > 一般 > 言語と地域 > 翻訳言語で必要な言語をダウンロードしてからオフラインで再試行してください";
 "translationOfflineHint" = "インストール済みの Apple 言語モデルでオフライン翻訳";
+
+"toolbarSettingsShortcutHint" = "ツールをクリックしてショートカットを記録し、ドラッグで移動、右クリックでその他の操作を表示";
+"toolbarSettingsShortcutRecording" = "%@の新しいショートカットを押すか Esc でキャンセル";
+"toolbarSettingsShortcutRecord" = "ショートカットを記録";
+"toolbarSettingsShortcutClear" = "ショートカットを消去";
+"toolbarSettingsShortcutRestore" = "デフォルトのショートカットに戻す";
+"toolbarSettingsShortcutResetAll" = "エディタのショートカットをリセット";
+"toolbarSettingsShortcutNone" = "未設定";
+"toolbarSettingsShortcutUnavailable" = "N/A";
+"toolbarSettingsAdditionalShortcuts" = "その他の編集操作";
+"editorShortcutSelect" = "選択ツール";
+"editorShortcutShapeFill" = "図形の塗りつぶしを切り替え";
+"editorShortcutConflict" = "このショートカットはすでに%@に割り当てられています";
+"editorShortcutReserved" = "このキーはエディタのシステム操作用に予約されているため再割り当てできません";

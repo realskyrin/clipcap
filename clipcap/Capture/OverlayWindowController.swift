@@ -161,7 +161,7 @@ final class OverlayWindowController {
 
     private func installKeyMonitor() {
         keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
-            guard let self else { return event }
+            guard let self, event.window === self.window, !HotkeyManager.shared.isRecording else { return event }
             if self.editController?.isTextEditing == true {
                 return event
             }

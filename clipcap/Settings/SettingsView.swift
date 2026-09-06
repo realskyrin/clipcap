@@ -136,9 +136,12 @@ final class SettingsView: NSView {
     func cancelClipboardImageEditShortcutRecording() { cancelShortcutRecording() }
     func cancelClipboardShortcutRecording() { cancelShortcutRecording() }
     func cancelFileSaveShortcutRecording() { cancelShortcutRecording() }
-    func closeTransientPanels() {}
+    func closeTransientPanels() { activeToolbarPane?.cancelShortcutRecording() }
+
+    private weak var activeToolbarPane: ToolbarSettingsPane?
 
     func cancelShortcutRecording() {
+        activeToolbarPane?.cancelShortcutRecording()
         guard activeShortcutSlot != nil || shortcutRecordingMonitor != nil else { return }
         if let monitor = shortcutRecordingMonitor {
             NSEvent.removeMonitor(monitor)
@@ -279,6 +282,7 @@ final class SettingsView: NSView {
     }
 
     private func selectTab(_ tab: SettingsTab) {
+        activeToolbarPane?.cancelShortcutRecording()
         selectedTab = tab
         detailTitleLabel.stringValue = tab.title
         tabButtons.values.forEach { $0.isSelectedTab = false }
@@ -292,7 +296,9 @@ final class SettingsView: NSView {
         case .shortcuts:
             pane = makeShortcutsPane()
         case .toolbar:
-            pane = wrapPane(ToolbarSettingsPane())
+            let toolbarPane = ToolbarSettingsPane()
+            activeToolbarPane = toolbarPane
+            pane = wrapPane(toolbarPane)
         case .about:
             pane = makeAboutPane()
         }
@@ -1219,6 +1225,15 @@ final class SettingsView: NSView {
             return true
         }
 
+        let binding = EditorShortcutBinding(keyCode: UInt32(keyCode), modifiers: UInt32(modifiers))
+        if let conflict = EditorShortcutAction.allCases.first(where: { action in
+            if slot == .fileSave, action == .toolbar(.save) { return false }
+            if slot == .clipboard, action == .toolbar(.confirm) { return false }
+            return EditorShortcutRegistry.binding(for: action)?.conflicts(with: binding) == true
+        }) {
+            showShortcutConflict(L10n.editorShortcutConflict(conflict.localizedTitle))
+            return true
+        }
         slot.setShortcut(keyCode: keyCode, modifiers: modifiers)
         if let monitor = shortcutRecordingMonitor {
             NSEvent.removeMonitor(monitor)
@@ -1571,7 +1586,7 @@ private struct ShortcutRowViews {
     let restoreButton: NSButton
 }
 
-private enum ShortcutSlot: Int, CaseIterable {
+enum ShortcutSlot: Int, CaseIterable {
     case clipboard
     case copyPath
     case fileSave
