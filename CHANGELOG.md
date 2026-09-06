@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## [1.8.27] - 2026-09-06
+
+### Added
+
+- Added customizable editor shortcuts and toolbar layout controls (44e9427)
+- Added Apple Translation support to OCR and history text actions (de1c161)
+
 ## [1.8.26] - 2026-09-06
 
 ### Added
