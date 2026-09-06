@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## [1.8.26] - 2026-09-06
+
+### Added
+
+- Added history panel locking and a localized keyboard shortcut guide (c7cb2b7)
+
+### Fixed
+
+- Prevented the history panel from reserving space for a hidden horizontal scroller (3f8a83c)
+
 ## [1.8.25] - 2026-08-22
 
 ### Fixed
