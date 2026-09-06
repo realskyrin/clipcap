@@ -403,6 +403,14 @@ enum L10n {
     static var tipMoveSelection: String { s("tipMoveSelection") }
     static var tipScrollCapture: String { s("tipScrollCapture") }
     static var tipBeautify: String { s("tipBeautify") }
+    static var tipTranslate: String { s("tipTranslate") }
+    static var translationTargetLanguage: String { s("translationTargetLanguage") }
+    static var translationWorking: String { s("translationWorking") }
+    static var translationFailed: String { s("translationFailed") }
+    static var translationUnavailable: String { s("translationUnavailable") }
+    static var translationUnsupported: String { s("translationUnsupported") }
+    static var translationModelsMissing: String { s("translationModelsMissing") }
+    static var translationOfflineHint: String { s("translationOfflineHint") }
     static var tipOCR: String { s("tipOCR") }
     static var tipSave: String { s("tipSave") }
     static var tipPin: String { s("tipPin") }

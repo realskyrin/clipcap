@@ -27,6 +27,7 @@ enum ToolbarItemID: String, Codable, CaseIterable {
     case scrollCapture
     case beautify
     case ocr
+    case translate
     // Output actions
     case save
     case pin
@@ -56,7 +57,7 @@ extension ToolbarItemID {
             return .toggleAction
         case .moveSelection:
             return .dragHandle
-        case .insertImage, .colorPicker, .undo, .redo, .ocr, .save, .pin, .close, .confirm:
+        case .insertImage, .colorPicker, .undo, .redo, .ocr, .translate, .save, .pin, .close, .confirm:
             return .momentary
         }
     }
@@ -102,6 +103,7 @@ extension ToolbarItemID {
         case .moveSelection: return "arrow.up.and.down.and.arrow.left.and.right"
         case .scrollCapture: return "arrow.up.and.down.text.horizontal"
         case .beautify:      return "sparkles"
+        case .translate:     return "translate"
         case .ocr:           return "text.viewfinder"
         case .save:          return "square.and.arrow.down"
         case .pin:           return "pin"
@@ -134,6 +136,7 @@ extension ToolbarItemID {
         case .moveSelection: title = L10n.tipMoveSelection
         case .scrollCapture: title = L10n.tipScrollCapture
         case .beautify:      title = L10n.tipBeautify
+        case .translate:     title = L10n.tipTranslate
         case .ocr:           title = L10n.tipOCR
         case .save:          title = L10n.tipSave
         case .pin:           title = L10n.tipPin
@@ -208,7 +211,7 @@ struct ToolbarLayout: Equatable {
     /// recorded.
     static let canonicalOrder: [ToolbarItemID] = [
         .rectangle, .ellipse, .line, .arrow, .pen, .marker, .mosaic, .eraser, .numbered, .text, .emoji, .insertImage,
-        .magnifier, .undo, .redo, .moveSelection, .beautify, .qrCode, .ocr,
+        .magnifier, .undo, .redo, .moveSelection, .beautify, .qrCode, .ocr, .translate,
         .save, .pin, .close, .confirm,
     ]
 
@@ -219,7 +222,7 @@ struct ToolbarLayout: Equatable {
         ToolbarLayout(
             primary: [
                 .rectangle, .ellipse, .line, .arrow, .pen, .marker, .mosaic, .eraser, .numbered, .text, .emoji, .insertImage,
-                .magnifier, .beautify, .qrCode, .ocr, .undo, .redo, .moveSelection,
+                .magnifier, .beautify, .qrCode, .ocr, .translate, .undo, .redo, .moveSelection,
             ],
             side: [.save, .pin, .close, .confirm],
             hidden: []

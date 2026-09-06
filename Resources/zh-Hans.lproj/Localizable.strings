@@ -484,3 +484,12 @@
 "historyPanelShortcutTranslateText" = "翻译文本";
 "historyPanelShortcutQRCode" = "生成二维码";
 "historyPanelShortcutToggleGuide" = "显示或隐藏快捷键说明";
+
+"tipTranslate" = "翻译";
+"translationTargetLanguage" = "目标语言";
+"translationWorking" = "正在翻译";
+"translationFailed" = "翻译失败，请检查已安装的语言后重试";
+"translationUnavailable" = "需要 macOS 15 或更高版本";
+"translationUnsupported" = "Apple Translation 不支持此语言组合";
+"translationModelsMissing" = "请先在系统设置 > 通用 > 语言与地区 > 翻译语言中下载所需语言，再离线重试";
+"translationOfflineHint" = "使用已安装的 Apple 语言模型离线翻译";

@@ -484,3 +484,12 @@
 "historyPanelShortcutTranslateText" = "Перевести текст";
 "historyPanelShortcutQRCode" = "Создать QR-код";
 "historyPanelShortcutToggleGuide" = "Показать или скрыть сочетания клавиш";
+
+"tipTranslate" = "Перевести";
+"translationTargetLanguage" = "Язык перевода";
+"translationWorking" = "Перевод";
+"translationFailed" = "Ошибка перевода — проверьте установленные языки и повторите попытку";
+"translationUnavailable" = "Требуется macOS 15 или новее";
+"translationUnsupported" = "Apple Translation не поддерживает эту языковую пару";
+"translationModelsMissing" = "Загрузите языки в Системных настройках > Основные > Язык и регион > Языки перевода и повторите попытку офлайн";
+"translationOfflineHint" = "Офлайн-перевод с установленными языковыми моделями Apple";

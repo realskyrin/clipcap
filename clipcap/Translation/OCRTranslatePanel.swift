@@ -768,6 +768,15 @@ final class OCRTranslatePanel: NSPanel {
     private var isLiveTextMenuOpen = false
     private var recognizedLines: [RecognizedTextLine] = []
     private var recognizedText = ""
+    private var translationProvider: AppleTranslationSessionProviding?
+    private var translationTask: Task<Void, Never>?
+    private var translationGeneration = 0
+    private var translateAfterOCR = false
+    private var translationTextView: PanelTextView?
+    private var translationCopyButton: NSButton?
+    private var translateButton: NSButton?
+    private var targetLanguagePopup: NSPopUpButton?
+    private var isDismissed = false
     private var ocrReady = false
     private var isPinned = false {
         didSet { pinButton?.setPinned(isPinned) }
@@ -779,13 +788,35 @@ final class OCRTranslatePanel: NSPanel {
         presentTextRecognition(image: image, anchorRect: anchorRect, screen: screen)
     }
 
-    static func presentTextRecognition(image: NSImage, anchorRect: NSRect, screen: NSScreen) {
-        show(image: image, anchorRect: anchorRect, screen: screen)
+    static func presentTextRecognition(image: NSImage, anchorRect: NSRect, screen: NSScreen, translate: Bool = false) {
+        show(image: image, anchorRect: anchorRect, screen: screen, translate: translate)
     }
 
-    private static func show(image: NSImage, anchorRect: NSRect, screen: NSScreen) {
+    static func presentTextTranslation(text: String, screen: NSScreen) {
+        guard #available(macOS 15.0, *) else {
+            ToastWindow.show(message: L10n.translationUnavailable)
+            return
+        }
+        current?.dismiss()
+        let panel = OCRTranslatePanel(image: NSImage(size: NSSize(width: 1, height: 1)),
+                                      anchorRect: NSRect(x: 0, y: 0, width: 500, height: 320), screen: screen)
+        panel.contentStack.removeArrangedSubview(panel.previewView)
+        panel.previewView.removeFromSuperview()
+        panel.recognizedText = text
+        panel.ocrReady = true
+        panel.finishTextRecognition()
+        panel.translateButton?.isEnabled = !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        current = panel
+        panel.refreshHeight()
+        panel.makeKeyAndOrderFront(nil)
+        NSApp.activate(ignoringOtherApps: true)
+        panel.translateTapped()
+    }
+
+    private static func show(image: NSImage, anchorRect: NSRect, screen: NSScreen, translate: Bool = false) {
         current?.dismiss()
         let panel = OCRTranslatePanel(image: image, anchorRect: anchorRect, screen: screen)
+        panel.translateAfterOCR = translate
         current = panel
         panel.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
@@ -902,6 +933,7 @@ final class OCRTranslatePanel: NSPanel {
 
         buildScreenshotCard()
         buildOCRCard()
+        buildTranslationCard()
     }
 
     private func addStackRow(_ view: NSView) {
@@ -957,6 +989,98 @@ final class OCRTranslatePanel: NSPanel {
         addStackRow(card)
     }
 
+    // MARK: On-device Apple Translation
+
+    private func buildTranslationCard() {
+        guard let provider = AppleTranslationSessionProviderFactory.makeProvider() else { return }
+        translationProvider = provider
+        let host = provider.hostView
+        host.frame = NSRect(x: 0, y: 0, width: 1, height: 1)
+        contentView?.addSubview(host)
+
+        let card = makeCard()
+        let inner = makeCardStack()
+        card.addSubview(inner)
+        pin(inner, to: card, inset: 12)
+        let popup = NSPopUpButton(frame: .zero, pullsDown: false)
+        popup.controlSize = .small
+        popup.font = .systemFont(ofSize: 11)
+        popup.addItems(withTitles: TranslationLanguage.allCases.map(\.localizedDisplayName))
+        let saved = UserDefaults.standard.string(forKey: "appleTranslationTargetLanguage")
+        let target = saved.flatMap(TranslationLanguage.init(rawValue:)) ?? .appDefault
+        popup.selectItem(at: TranslationLanguage.allCases.firstIndex(of: target) ?? 0)
+        popup.target = self
+        popup.action = #selector(translationLanguageChanged)
+        popup.setAccessibilityLabel(L10n.translationTargetLanguage)
+        targetLanguagePopup = popup
+        let button = makeSmallButton(L10n.tipTranslate, action: #selector(translateTapped))
+        button.target = self
+        button.isEnabled = false
+        translateButton = button
+        let copy = makeSmallButton(L10n.ocrCopy, action: #selector(copyTranslationTapped))
+        copy.target = self
+        copy.isEnabled = false
+        translationCopyButton = copy
+        let header = NSStackView(views: [popup, flexSpacer(), button, copy])
+        header.orientation = .horizontal
+        header.alignment = .centerY
+        inner.addArrangedSubview(makeLabel("Apple Translation", size: 12, weight: .semibold, alpha: 0.92))
+        inner.addArrangedSubview(header)
+        header.widthAnchor.constraint(equalTo: inner.widthAnchor).isActive = true
+        let (scroll, text) = makeTextScroll(editable: false, height: 116)
+        text.string = L10n.translationOfflineHint
+        translationTextView = text
+        inner.addArrangedSubview(scroll)
+        scroll.widthAnchor.constraint(equalTo: inner.widthAnchor).isActive = true
+        addStackRow(card)
+    }
+
+    @objc private func translationLanguageChanged() {
+        guard let popup = targetLanguagePopup,
+              TranslationLanguage.allCases.indices.contains(popup.indexOfSelectedItem) else { return }
+        UserDefaults.standard.set(TranslationLanguage.allCases[popup.indexOfSelectedItem].rawValue,
+                                  forKey: "appleTranslationTargetLanguage")
+        if ocrReady { translateTapped() }
+    }
+
+    @objc private func translateTapped() {
+        guard !isDismissed, ocrReady, let provider = translationProvider,
+              let popup = targetLanguagePopup,
+              TranslationLanguage.allCases.indices.contains(popup.indexOfSelectedItem) else { return }
+        let text = (ocrTextView?.string ?? recognizedText).trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !text.isEmpty else { return }
+        translationTask?.cancel()
+        provider.cancel()
+        translationGeneration += 1
+        let generation = translationGeneration
+        let target = TranslationLanguage.allCases[popup.indexOfSelectedItem]
+        translationTextView?.string = L10n.translationWorking
+        translationCopyButton?.isEnabled = false
+        translationTask = Task { @MainActor [weak self] in
+            do {
+                let result = try await provider.translate(text: text, target: target)
+                guard let self, !Task.isCancelled, !self.isDismissed,
+                      self.translationGeneration == generation else { return }
+                self.translationTextView?.string = result
+                self.translationCopyButton?.isEnabled = !result.isEmpty
+            } catch {
+                guard let self, !Task.isCancelled, !self.isDismissed,
+                      self.translationGeneration == generation else { return }
+                self.translationTextView?.string = (error as? OfflineTranslationError)?.errorDescription
+                    ?? L10n.translationFailed
+            }
+        }
+    }
+
+    @objc private func copyTranslationTapped() {
+        guard translationCopyButton?.isEnabled == true, let text = translationTextView?.string else { return }
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(text, forType: .string)
+        if let button = translationCopyButton {
+            flashButton(button, to: L10n.ocrCopied, restore: L10n.ocrCopy)
+        }
+    }
+
     // MARK: OCR
 
     private func runOCR() {
@@ -992,7 +1116,9 @@ final class OCRTranslatePanel: NSPanel {
                 self.applyOCRResult(text: Self.text(from: lines), lines: lines, liveTextAnalysis: nil)
             }
 
+            guard !self.isDismissed else { return }
             self.ocrReady = true
+            self.translateButton?.isEnabled = !self.recognizedText.isEmpty
             self.logOCR(
                 "panel-run-ocr-ready",
                 metadata: [
@@ -1003,6 +1129,7 @@ final class OCRTranslatePanel: NSPanel {
             )
 
             self.finishTextRecognition()
+            if self.translateAfterOCR { self.translateTapped() }
             self.refreshHeight()
         }
     }
@@ -1287,6 +1414,11 @@ final class OCRTranslatePanel: NSPanel {
     }
 
     func dismiss() {
+        isDismissed = true
+        translationGeneration += 1
+        translationTask?.cancel()
+        translationTask = nil
+        translationProvider?.cancel()
         logOCR("panel-dismiss")
         if let keyMonitor { NSEvent.removeMonitor(keyMonitor); self.keyMonitor = nil }
         if let outsideClickLocalMonitor {

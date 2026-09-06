@@ -484,3 +484,12 @@
 "historyPanelShortcutTranslateText" = "텍스트 번역";
 "historyPanelShortcutQRCode" = "QR 코드 만들기";
 "historyPanelShortcutToggleGuide" = "키보드 단축키 표시 또는 숨기기";
+
+"tipTranslate" = "번역";
+"translationTargetLanguage" = "대상 언어";
+"translationWorking" = "번역 중";
+"translationFailed" = "번역 실패 설치된 언어를 확인하고 다시 시도하세요";
+"translationUnavailable" = "macOS 15 이상 필요";
+"translationUnsupported" = "Apple Translation에서 지원하지 않는 언어 조합";
+"translationModelsMissing" = "시스템 설정 > 일반 > 언어 및 지역 > 번역 언어에서 필요한 언어를 다운로드한 후 오프라인으로 다시 시도하세요";
+"translationOfflineHint" = "설치된 Apple 언어 모델로 오프라인 번역";

@@ -484,3 +484,12 @@
 "historyPanelShortcutTranslateText" = "Dịch văn bản";
 "historyPanelShortcutQRCode" = "Tạo mã QR";
 "historyPanelShortcutToggleGuide" = "Hiện hoặc ẩn phím tắt";
+
+"tipTranslate" = "Dịch";
+"translationTargetLanguage" = "Ngôn ngữ đích";
+"translationWorking" = "Đang dịch";
+"translationFailed" = "Dịch thất bại — kiểm tra ngôn ngữ đã cài đặt rồi thử lại";
+"translationUnavailable" = "Yêu cầu macOS 15 trở lên";
+"translationUnsupported" = "Apple Translation không hỗ trợ cặp ngôn ngữ này";
+"translationModelsMissing" = "Tải ngôn ngữ trong Cài đặt hệ thống > Cài đặt chung > Ngôn ngữ & Vùng > Ngôn ngữ dịch rồi thử lại ngoại tuyến";
+"translationOfflineHint" = "Dịch ngoại tuyến bằng mô hình ngôn ngữ Apple đã cài đặt";

@@ -484,3 +484,12 @@
 "historyPanelShortcutTranslateText" = "テキストを翻訳";
 "historyPanelShortcutQRCode" = "QRコードを作成";
 "historyPanelShortcutToggleGuide" = "ショートカット一覧を表示または非表示";
+
+"tipTranslate" = "翻訳";
+"translationTargetLanguage" = "翻訳先の言語";
+"translationWorking" = "翻訳中";
+"translationFailed" = "翻訳に失敗しました インストール済みの言語を確認して再試行してください";
+"translationUnavailable" = "macOS 15 以降が必要です";
+"translationUnsupported" = "Apple Translation はこの言語の組み合わせに対応していません";
+"translationModelsMissing" = "システム設定 > 一般 > 言語と地域 > 翻訳言語で必要な言語をダウンロードしてからオフラインで再試行してください";
+"translationOfflineHint" = "インストール済みの Apple 言語モデルでオフライン翻訳";

@@ -2895,6 +2895,7 @@ private final class HistoryPanelShortcutGuideView: NSView {
                 Item(shortcut: "P", description: L10n.historyPanelShortcutPinImage),
             ],
             [
+                Item(shortcut: "T", description: L10n.historyPanelShortcutTranslateText),
                 Item(shortcut: "Q", description: L10n.historyPanelShortcutQRCode),
                 Item(shortcut: "⌘ ?", description: L10n.historyPanelShortcutToggleGuide),
             ],
@@ -4607,6 +4608,7 @@ private final class HistoryPreviewWindowController: NSWindowController, NSWindow
         case .text:
             actions = [
                 ("doc.on.doc", L10n.historyPreviewCopyText, "C", #selector(copyCurrent)),
+                ("translate", L10n.tipTranslate, "T", #selector(translateCurrent)),
                 ("qrcode", L10n.historyPreviewConvertToQRCode, "Q", #selector(showQRCodeCurrent)),
             ]
         }
@@ -4658,6 +4660,9 @@ private final class HistoryPreviewWindowController: NSWindowController, NSWindow
             pinCurrent()
         case kVK_ANSI_C:
             copyCurrent()
+        case kVK_ANSI_T:
+            guard contentKind == .text else { return false }
+            translateCurrent()
         case kVK_ANSI_Q:
             guard contentKind == .text else { return false }
             showQRCodeCurrent()
@@ -4907,6 +4912,17 @@ private final class HistoryPreviewWindowController: NSWindowController, NSWindow
     @objc private func copyCurrent() {
         guard HistoryPanelEntryActions.copy(currentEntry) else { return }
         close()
+    }
+
+    @objc private func translateCurrent() {
+        guard #available(macOS 15.0, *) else {
+            ToastWindow.show(message: L10n.translationUnavailable)
+            return
+        }
+        guard case .text(let text) = currentEntry.kind,
+              let screen = window?.screen ?? placementScreen ?? NSScreen.main ?? NSScreen.screens.first else { return }
+        close()
+        OCRTranslatePanel.presentTextTranslation(text: text.value, screen: screen)
     }
 
     @objc private func showQRCodeCurrent() {

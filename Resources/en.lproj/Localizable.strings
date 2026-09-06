@@ -484,3 +484,12 @@
 "historyPanelShortcutTranslateText" = "Translate text";
 "historyPanelShortcutQRCode" = "Create QR code";
 "historyPanelShortcutToggleGuide" = "Show or hide keyboard shortcuts";
+
+"tipTranslate" = "Translate";
+"translationTargetLanguage" = "Target language";
+"translationWorking" = "Translating";
+"translationFailed" = "Translation failed — check the installed languages and try again";
+"translationUnavailable" = "Requires macOS 15 or later";
+"translationUnsupported" = "This language pair is not supported by Apple Translation";
+"translationModelsMissing" = "Download the required languages in System Settings > General > Language & Region > Translation Languages, then try again offline";
+"translationOfflineHint" = "Offline translation using installed Apple language models";

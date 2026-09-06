@@ -484,3 +484,12 @@
 "historyPanelShortcutTranslateText" = "Traduire le texte";
 "historyPanelShortcutQRCode" = "Créer un code QR";
 "historyPanelShortcutToggleGuide" = "Afficher ou masquer les raccourcis clavier";
+
+"tipTranslate" = "Traduire";
+"translationTargetLanguage" = "Langue cible";
+"translationWorking" = "Traduction en cours";
+"translationFailed" = "Échec de la traduction — vérifiez les langues installées puis réessayez";
+"translationUnavailable" = "Nécessite macOS 15 ou ultérieur";
+"translationUnsupported" = "Cette paire de langues n’est pas prise en charge par Apple Translation";
+"translationModelsMissing" = "Téléchargez les langues dans Réglages Système > Général > Langue et région > Langues de traduction puis réessayez hors ligne";
+"translationOfflineHint" = "Traduction hors ligne avec les modèles Apple installés";

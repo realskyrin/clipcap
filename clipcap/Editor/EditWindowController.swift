@@ -355,6 +355,7 @@ class EditWindowController {
         tv.onBeautify = { [weak self] in self?.toggleBeautify() }
         tv.onInsertImage = { [weak self] in self?.showInsertImageMenu() }
         tv.onQRCode = { [weak self] in self?.performQRCodeRecognition() }
+        tv.onTranslate = { [weak self] in self?.performOCR(translate: true) }
         tv.onOCR = { [weak self] in self?.performOCR() }
         tv.onSave = { [weak self] in self?.save() }
         tv.onPin = { [weak self] in self?.pin() }
@@ -1540,7 +1541,11 @@ class EditWindowController {
     /// Text-recognition action: exits the selection/editor, then opens the OCR
     /// panel anchored to the original selection. Uses the raw capture (no
     /// annotations) so recognition is not polluted by drawn marks.
-    private func performOCR() {
+    private func performOCR(translate: Bool = false) {
+        if translate, !ProcessInfo.processInfo.isOperatingSystemAtLeast(OperatingSystemVersion(majorVersion: 15, minorVersion: 0, patchVersion: 0)) {
+            ToastWindow.show(message: L10n.translationUnavailable)
+            return
+        }
         canvasView?.commitActiveTextEditing()
         let baseImage = canvasView?.resolveBaseImageForEditing() ?? currentCompositeImage()
         let anchorRect = selectionRect
@@ -1548,7 +1553,7 @@ class EditWindowController {
         tearDown()
         onComplete(.dismissed)
         guard let baseImage else { return }
-        OCRTranslatePanel.presentTextRecognition(image: baseImage, anchorRect: anchorRect, screen: targetScreen)
+        OCRTranslatePanel.presentTextRecognition(image: baseImage, anchorRect: anchorRect, screen: targetScreen, translate: translate)
     }
 
     private func performQRCodeRecognition() {
@@ -2498,6 +2503,7 @@ class ToolbarView: NSView {
     var onBeautify: (() -> Void)?
     var onInsertImage: (() -> Void)?
     var onQRCode: (() -> Void)?
+    var onTranslate: (() -> Void)?
     var onOCR: (() -> Void)?
     var onSave: (() -> Void)?
     var onPin: (() -> Void)?
@@ -2633,6 +2639,7 @@ class ToolbarView: NSView {
         case .scrollCapture: onScrollCapture?()
         case .beautify:      onBeautify?()
         case .qrCode:        onQRCode?()
+        case .translate:     onTranslate?()
         case .ocr:           onOCR?()
         case .save:          onSave?()
         case .pin:           onPin?()
