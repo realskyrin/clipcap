@@ -298,7 +298,7 @@ final class SettingsView: NSView {
         case .toolbar:
             let toolbarPane = ToolbarSettingsPane()
             activeToolbarPane = toolbarPane
-            pane = wrapPane(toolbarPane)
+            pane = toolbarPane
         case .about:
             pane = makeAboutPane()
         }
