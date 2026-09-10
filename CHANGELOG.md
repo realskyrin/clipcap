@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## [1.8.28] - 2026-09-10
+
+### Added
+
+- Added scheduled reminder controls and status-bar menu access (51117e6)
+
+### Changed
+
+- Updated reminder settings copy for the new schedule controls (8b13d0b)
+
 ## [1.8.27] - 2026-09-06
 
 ### Added
