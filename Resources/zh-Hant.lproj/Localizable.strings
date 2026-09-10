@@ -539,3 +539,17 @@
 "reminderWeekdaysHint" = "工作日為週一至週五";
 "reminderCount" = "%d 項";
 "reminderActiveCount" = "%d 項已啟用";
+"reminderWeekend" = "週末";
+"reminderDay1" = "週日";
+"reminderDay2" = "週一";
+"reminderDay3" = "週二";
+"reminderDay4" = "週三";
+"reminderDay5" = "週四";
+"reminderDay6" = "週五";
+"reminderDay7" = "週六";
+"reminderNoDays" = "未選擇星期";
+"reminderSoundTimes" = "%d 次";
+"reminderSoundInfinite" = "無限循環";
+"reminderSoundRepeat" = "鈴聲循環次數";
+"reminderStopSound" = "停止鈴聲";
+"reminderSoundLoopHint" = "循環鈴聲需要保持 clipcap 運行，點擊提醒通知可停止";

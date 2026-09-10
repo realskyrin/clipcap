@@ -94,7 +94,7 @@ class StatusBarController: NSObject {
 
         let reminderItem = NSMenuItem(title: Localizer.string("reminderTitle"), action: #selector(openReminder), keyEquivalent: "")
         reminderItem.target = self
-        reminderItem.image = Self.menuIcon(systemName: "bell")
+        reminderItem.image = Self.menuIcon(systemName: "clock")
         menu.addItem(reminderItem)
 
         menu.addItem(NSMenuItem.separator())

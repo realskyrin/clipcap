@@ -539,3 +539,17 @@
 "reminderWeekdaysHint" = "平日は月曜日から金曜日";
 "reminderCount" = "%d 件";
 "reminderActiveCount" = "%d 件が有効";
+"reminderWeekend" = "週末";
+"reminderDay1" = "日";
+"reminderDay2" = "月";
+"reminderDay3" = "火";
+"reminderDay4" = "水";
+"reminderDay5" = "木";
+"reminderDay6" = "金";
+"reminderDay7" = "土";
+"reminderNoDays" = "曜日未選択";
+"reminderSoundTimes" = "%d 回";
+"reminderSoundInfinite" = "無限ループ";
+"reminderSoundRepeat" = "サウンドの繰り返し回数";
+"reminderStopSound" = "サウンドを停止";
+"reminderSoundLoopHint" = "繰り返し再生には clipcap の起動が必要です 通知をクリックすると停止します";

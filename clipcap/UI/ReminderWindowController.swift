@@ -69,13 +69,15 @@ final class ReminderWindowController: NSWindowController, NSTableViewDataSource,
     private let empty = NSTextField(labelWithString: "")
     private let time = NSDatePicker()
     private let frequency = NSSegmentedControl()
+    private var weekdayButtons: [NSButton] = []
     private let message = NSTextView()
     private let sound = NSPopUpButton()
+    private let soundRepeats = NSPopUpButton()
     private let status = NSTextField(wrappingLabelWithString: "")
     private var entries: [ReminderEntry] = []
     private var selectedID: String?
     private var loading = false
-    private var preview: NSSound?
+    private var preview: ReminderSoundPlayer?
     // All writes, including deletion, run in order even when notification APIs suspend
     private var pending: Task<Void, Never>?
     private var revision = 0
@@ -199,13 +201,26 @@ final class ReminderWindowController: NSWindowController, NSTableViewDataSource,
         time.datePickerElements = .hourMinute
         time.target = self
         time.action = #selector(fieldsChanged)
-        frequency.segmentCount = 2
+        frequency.segmentCount = 3
         frequency.setLabel(text("reminderDaily"), forSegment: 0)
         frequency.setLabel(text("reminderWeekdaysShort"), forSegment: 1)
+        frequency.setLabel(text("reminderWeekend"), forSegment: 2)
         frequency.trackingMode = .selectOne
         frequency.target = self
-        frequency.action = #selector(fieldsChanged)
-        editor.addArrangedSubview(group([row("reminderTime", control: time), separator(), row("reminderRepeat", control: frequency)]))
+        frequency.action = #selector(presetChanged)
+        weekdayButtons = [2, 3, 4, 5, 6, 7, 1].map { day in
+            let button = NSButton(title: text("reminderDay\(day)"), target: self, action: #selector(weekdayChanged(_:)))
+            button.tag = day
+            button.setButtonType(.pushOnPushOff)
+            button.bezelStyle = .rounded
+            button.font = .systemFont(ofSize: 12)
+            button.setAccessibilityLabel(button.title)
+            return button
+        }
+        let days = NSStackView(views: weekdayButtons)
+        days.distribution = .fillEqually
+        days.spacing = 6
+        editor.addArrangedSubview(group([row("reminderTime", control: time), separator(), row("reminderRepeat", control: frequency), days]))
         message.font = .systemFont(ofSize: 14)
         message.isRichText = false
         message.allowsUndo = true
@@ -229,12 +244,23 @@ final class ReminderWindowController: NSWindowController, NSTableViewDataSource,
         }
         sound.target = self
         sound.action = #selector(fieldsChanged)
+        for count in 1...10 {
+            soundRepeats.addItem(withTitle: String(format: text("reminderSoundTimes"), count))
+            soundRepeats.lastItem?.representedObject = count
+        }
+        soundRepeats.addItem(withTitle: text("reminderSoundInfinite"))
+        soundRepeats.lastItem?.representedObject = 0
+        soundRepeats.setAccessibilityLabel(text("reminderSoundRepeat"))
+        soundRepeats.toolTip = text("reminderSoundRepeat")
+        soundRepeats.target = self
+        soundRepeats.action = #selector(fieldsChanged)
         let play = ReminderActionButton(title: text("reminderPreview")) { [weak self] in self?.playSound() }
         play.bezelStyle = .rounded
         play.image = NSImage(systemSymbolName: "speaker.wave.2", accessibilityDescription: nil)
         play.imagePosition = .imageLeading
-        editor.addArrangedSubview(group([label("reminderMessage"), messageScroll, separator(), row("reminderSound", control: NSStackView(views: [sound, play]))]))
-        let hint = label("reminderWeekdaysHint", size: 12)
+        editor.addArrangedSubview(group([label("reminderMessage"), messageScroll, separator(), row("reminderSound", control: NSStackView(views: [sound, soundRepeats, play]))]))
+        let hint = NSTextField(wrappingLabelWithString: text("reminderSoundLoopHint"))
+        hint.font = .systemFont(ofSize: 12)
         hint.textColor = .secondaryLabelColor
         editor.addArrangedSubview(hint)
         status.textColor = .systemRed
@@ -275,7 +301,7 @@ final class ReminderWindowController: NSWindowController, NSTableViewDataSource,
         let value = entry.settings
         let clock = NSTextField(labelWithString: String(format: "%02d:%02d", value.hour, value.minute))
         clock.font = .monospacedDigitSystemFont(ofSize: 22, weight: .medium)
-        let summary = NSTextField(labelWithString: text(value.weekdaysOnly ? "reminderWeekdaysShort" : "reminderDaily") + " · " + value.message)
+        let summary = NSTextField(labelWithString: repeatSummary(value) + " · " + value.message)
         summary.textColor = .secondaryLabelColor
         summary.lineBreakMode = .byTruncatingTail
         let words = vertical([clock, summary], spacing: 4)
@@ -329,8 +355,9 @@ final class ReminderWindowController: NSWindowController, NSTableViewDataSource,
         empty.isHidden = entry != nil
         guard let value = entry?.settings else { return }
         time.dateValue = Calendar.current.date(bySettingHour: value.hour, minute: value.minute, second: 0, of: Date()) ?? Date()
-        frequency.selectedSegment = value.weekdaysOnly ? 1 : 0
+        updateRepeatControls(value)
         message.string = value.message
+        soundRepeats.selectItem(at: value.playbackCount == 0 ? 10 : value.playbackCount - 1)
         sound.selectItem(at: sound.itemArray.firstIndex { ($0.representedObject as? String) == value.sound } ?? 0)
     }
     func textDidChange(_ notification: Notification) {
@@ -341,11 +368,38 @@ final class ReminderWindowController: NSWindowController, NSTableViewDataSource,
         guard !loading, let index = entries.firstIndex(where: { $0.id == selectedID }) else { return }
         entries[index].settings.hour = Calendar.current.component(.hour, from: time.dateValue)
         entries[index].settings.minute = Calendar.current.component(.minute, from: time.dateValue)
-        entries[index].settings.weekdaysOnly = frequency.selectedSegment == 1
         entries[index].settings.message = message.string
         entries[index].settings.sound = sound.selectedItem?.representedObject as? String ?? ""
+        entries[index].settings.soundRepeatCount = soundRepeats.selectedItem?.representedObject as? Int ?? 1
+        preview?.stop()
         enqueue(entries[index])
         refresh()
+    }
+    private func repeatSummary(_ value: ReminderSettings) -> String {
+        if let preset = value.repeatPreset {
+            return text(["reminderDaily", "reminderWeekdaysShort", "reminderWeekend"][preset])
+        }
+        let days = [2, 3, 4, 5, 6, 7, 1].filter { value.selectedWeekdays.contains($0) }
+        return days.isEmpty ? text("reminderNoDays") : days.map { text("reminderDay\($0)") }.joined(separator: " ")
+    }
+    private func updateRepeatControls(_ value: ReminderSettings) {
+        for index in 0..<3 { frequency.setSelected(value.repeatPreset == index, forSegment: index) }
+        for button in weekdayButtons {
+            button.state = value.selectedWeekdays.contains(button.tag) ? .on : .off
+        }
+    }
+    @objc private func presetChanged() {
+        guard !loading, let index = entries.firstIndex(where: { $0.id == selectedID }),
+              (0..<3).contains(frequency.selectedSegment) else { return }
+        entries[index].settings.selectedWeekdays = ReminderSettings.repeatPresets[frequency.selectedSegment]
+        updateRepeatControls(entries[index].settings)
+        fieldsChanged()
+    }
+    @objc private func weekdayChanged(_ sender: NSButton) {
+        guard !loading, let index = entries.firstIndex(where: { $0.id == selectedID }) else { return }
+        entries[index].settings.selectedWeekdays = Set(weekdayButtons.filter { $0.state == .on }.map(\.tag))
+        updateRepeatControls(entries[index].settings)
+        fieldsChanged()
     }
     private func addReminder() {
         let entry = ReminderEntry()
@@ -387,10 +441,9 @@ final class ReminderWindowController: NSWindowController, NSTableViewDataSource,
     }
     private func playSound() {
         preview?.stop()
-        guard let filename = sound.selectedItem?.representedObject as? String,
-              let url = ReminderController.sounds.first(where: { $0.lastPathComponent == filename }) else { return }
-        preview = NSSound(contentsOf: url, byReference: true)
-        preview?.play()
+        guard let filename = sound.selectedItem?.representedObject as? String, !filename.isEmpty else { return }
+        preview = ReminderSoundPlayer()
+        preview?.play(filename: filename, count: soundRepeats.selectedItem?.representedObject as? Int ?? 1, message: text("reminderPreview"), showStopControl: true)
     }
     func windowWillClose(_ notification: Notification) { preview?.stop() }
 }

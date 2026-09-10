@@ -539,3 +539,17 @@
 "reminderWeekdaysHint" = "工作日为周一至周五";
 "reminderCount" = "%d 项";
 "reminderActiveCount" = "%d 项已启用";
+"reminderWeekend" = "周末";
+"reminderDay1" = "周日";
+"reminderDay2" = "周一";
+"reminderDay3" = "周二";
+"reminderDay4" = "周三";
+"reminderDay5" = "周四";
+"reminderDay6" = "周五";
+"reminderDay7" = "周六";
+"reminderNoDays" = "未选择星期";
+"reminderSoundTimes" = "%d 次";
+"reminderSoundInfinite" = "无限循环";
+"reminderSoundRepeat" = "铃声循环次数";
+"reminderStopSound" = "停止铃声";
+"reminderSoundLoopHint" = "循环铃声需要保持 clipcap 运行，点击提醒通知可停止";

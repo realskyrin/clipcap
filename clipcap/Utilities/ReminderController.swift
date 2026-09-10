@@ -4,13 +4,30 @@ import UserNotifications
 struct ReminderSettings: Codable, Equatable {
     var enabled = false
     var weekdaysOnly = false
+    // Missing in older saved reminders, which retain their original repeat mode
+    var weekdays: Set<Int>?
+    static let repeatPresets: [Set<Int>] = [Set(1...7), Set(2...6), [1, 7]]
+    var selectedWeekdays: Set<Int> {
+        get { weekdays ?? Self.repeatPresets[weekdaysOnly ? 1 : 0] }
+        set { weekdays = newValue.intersection(1...7) }
+    }
+    var repeatPreset: Int? { Self.repeatPresets.firstIndex(of: selectedWeekdays) }
     var hour = 9
     var minute = 0
     var message = ""
     var sound = "Glass.aiff"
+    var soundRepeatCount: Int?
+    var playbackCount: Int { min(10, max(0, soundRepeatCount ?? 1)) }
+
+    func isDue(after start: Date, through end: Date, calendar: Calendar = .current) -> Bool {
+        enabled && dates.contains { components in
+            guard let next = calendar.nextDate(after: start, matching: components, matchingPolicy: .nextTime) else { return false }
+            return next <= end
+        }
+    }
 
     var dates: [DateComponents] {
-        (weekdaysOnly ? Array(2...6).map { Optional($0) } : [nil]).map { weekday in
+        (selectedWeekdays == Self.repeatPresets[0] ? [nil] : selectedWeekdays.sorted().map { Optional($0) }).map { weekday in
             var components = DateComponents()
             components.hour = hour
             components.minute = minute
@@ -46,6 +63,10 @@ final class ReminderController: NSObject, UNUserNotificationCenterDelegate {
     static let shared = ReminderController()
     private let center = UNUserNotificationCenter.current()
     private let prefix = "clipcap.reminder."
+    private var soundTimer: Timer?
+    private var lastSoundCheck = Date()
+    private var stoppedThrough: [String: Date] = [:]
+    private var ringing: [String: ReminderSoundPlayer] = [:]
     var entries: [ReminderEntry] { ReminderEntry.load(from: .standard) }
 
     private func persist(_ entries: [ReminderEntry]) throws {
@@ -56,6 +77,7 @@ final class ReminderController: NSObject, UNUserNotificationCenterDelegate {
     @MainActor func delete(_ entry: ReminderEntry) async throws {
         let pending = await center.pendingNotificationRequests().filter { entry.owns($0.identifier) }
         try persist(entries.filter { $0.id != entry.id })
+        ringing.removeValue(forKey: entry.id)?.stop()
         center.removePendingNotificationRequests(withIdentifiers: pending.map(\.identifier))
         let delivered = await center.deliveredNotifications().filter { entry.owns($0.request.identifier) }
         center.removeDeliveredNotifications(withIdentifiers: delivered.map { $0.request.identifier })
@@ -65,7 +87,29 @@ final class ReminderController: NSObject, UNUserNotificationCenterDelegate {
         ((try? FileManager.default.contentsOfDirectory(at: URL(fileURLWithPath: "/System/Library/Sounds"), includingPropertiesForKeys: nil)) ?? [])
             .filter { $0.pathExtension == "aiff" }.sorted { $0.lastPathComponent < $1.lastPathComponent }
     }
-    func start() { center.delegate = self }
+    @MainActor func start() {
+        center.delegate = self
+        guard soundTimer == nil else { return }
+        lastSoundCheck = Date()
+        soundTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
+            Task { @MainActor in self?.checkSounds() }
+        }
+    }
+
+    @MainActor private func checkSounds() {
+        let now = Date()
+        // Do not replay missed alarms after a long sleep or clock adjustment
+        let start = max(lastSoundCheck, now.addingTimeInterval(-60))
+        lastSoundCheck = now
+        for entry in entries where entry.settings.playbackCount != 1 && !entry.settings.sound.isEmpty {
+            guard entry.settings.isDue(after: max(start, stoppedThrough[entry.id] ?? start), through: now) else { continue }
+            ringing.removeValue(forKey: entry.id)?.stop()
+            let player = ReminderSoundPlayer()
+            ringing[entry.id] = player
+            player.play(filename: entry.settings.sound, count: entry.settings.playbackCount, message: entry.settings.message)
+        }
+        ringing = ringing.filter { $0.value.isPlaying }
+    }
 
     @MainActor func save(_ entry: ReminderEntry) async throws {
         let value = entry.settings
@@ -82,7 +126,7 @@ final class ReminderController: NSObject, UNUserNotificationCenterDelegate {
                 let content = UNMutableNotificationContent()
                 content.title = Localizer.string("reminderTitle")
                 content.body = value.message
-                if !value.sound.isEmpty {
+                if !value.sound.isEmpty && value.playbackCount == 1 {
                     guard let source = Self.sounds.first(where: { $0.lastPathComponent == value.sound }) else { throw ReminderError.sound }
                     let folder = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask)[0].appendingPathComponent("Sounds")
                     try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
@@ -101,6 +145,7 @@ final class ReminderController: NSObject, UNUserNotificationCenterDelegate {
             if let index = updated.firstIndex(where: { $0.id == entry.id }) { updated[index] = entry }
             else { updated.append(entry) }
             try persist(updated)
+            ringing.removeValue(forKey: entry.id)?.stop()
             center.removePendingNotificationRequests(withIdentifiers: old.map(\.identifier))
         } catch {
             center.removePendingNotificationRequests(withIdentifiers: added)
@@ -110,6 +155,16 @@ final class ReminderController: NSObject, UNUserNotificationCenterDelegate {
 
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.banner, .list, .sound])
+    }
+
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        Task { @MainActor in
+            for entry in entries where entry.owns(response.notification.request.identifier) {
+                stoppedThrough[entry.id] = Date()
+                ringing.removeValue(forKey: entry.id)?.stop()
+            }
+            completionHandler()
+        }
     }
 
     enum ReminderError: LocalizedError {

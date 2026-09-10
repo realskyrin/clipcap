@@ -539,3 +539,17 @@
 "reminderWeekdaysHint" = "Từ thứ Hai đến thứ Sáu";
 "reminderCount" = "%d lời nhắc";
 "reminderActiveCount" = "%d đã bật";
+"reminderWeekend" = "Cuối tuần";
+"reminderDay1" = "CN";
+"reminderDay2" = "T2";
+"reminderDay3" = "T3";
+"reminderDay4" = "T4";
+"reminderDay5" = "T5";
+"reminderDay6" = "T6";
+"reminderDay7" = "T7";
+"reminderNoDays" = "Chưa chọn ngày";
+"reminderSoundTimes" = "%d lần";
+"reminderSoundInfinite" = "Lặp vô hạn";
+"reminderSoundRepeat" = "Số lần lặp âm thanh";
+"reminderStopSound" = "Dừng âm thanh";
+"reminderSoundLoopHint" = "Giữ clipcap chạy để lặp âm thanh và nhấp thông báo để dừng";

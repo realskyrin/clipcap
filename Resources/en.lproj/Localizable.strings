@@ -539,3 +539,17 @@
 "reminderWeekdaysHint" = "Weekdays are Monday through Friday";
 "reminderCount" = "%d reminders";
 "reminderActiveCount" = "%d enabled";
+"reminderWeekend" = "Weekend";
+"reminderDay1" = "Sun";
+"reminderDay2" = "Mon";
+"reminderDay3" = "Tue";
+"reminderDay4" = "Wed";
+"reminderDay5" = "Thu";
+"reminderDay6" = "Fri";
+"reminderDay7" = "Sat";
+"reminderNoDays" = "No days selected";
+"reminderSoundTimes" = "%d times";
+"reminderSoundInfinite" = "Loop forever";
+"reminderSoundRepeat" = "Sound repetitions";
+"reminderStopSound" = "Stop sound";
+"reminderSoundLoopHint" = "Keep clipcap running for loops and click the notification to stop";

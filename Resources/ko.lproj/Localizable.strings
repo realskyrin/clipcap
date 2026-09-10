@@ -539,3 +539,17 @@
 "reminderWeekdaysHint" = "평일은 월요일부터 금요일";
 "reminderCount" = "%d개";
 "reminderActiveCount" = "%d개 활성화";
+"reminderWeekend" = "주말";
+"reminderDay1" = "일";
+"reminderDay2" = "월";
+"reminderDay3" = "화";
+"reminderDay4" = "수";
+"reminderDay5" = "목";
+"reminderDay6" = "금";
+"reminderDay7" = "토";
+"reminderNoDays" = "선택한 요일 없음";
+"reminderSoundTimes" = "%d회";
+"reminderSoundInfinite" = "무한 반복";
+"reminderSoundRepeat" = "벨소리 반복 횟수";
+"reminderStopSound" = "벨소리 중지";
+"reminderSoundLoopHint" = "반복 재생하려면 clipcap을 실행해 두세요 알림을 클릭하면 멈춥니다";

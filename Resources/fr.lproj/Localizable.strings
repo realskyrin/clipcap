@@ -539,3 +539,17 @@
 "reminderWeekdaysHint" = "Du lundi au vendredi";
 "reminderCount" = "%d rappels";
 "reminderActiveCount" = "%d activés";
+"reminderWeekend" = "Week-end";
+"reminderDay1" = "Dim";
+"reminderDay2" = "Lun";
+"reminderDay3" = "Mar";
+"reminderDay4" = "Mer";
+"reminderDay5" = "Jeu";
+"reminderDay6" = "Ven";
+"reminderDay7" = "Sam";
+"reminderNoDays" = "Aucun jour sélectionné";
+"reminderSoundTimes" = "%d fois";
+"reminderSoundInfinite" = "En boucle";
+"reminderSoundRepeat" = "Répétitions du son";
+"reminderStopSound" = "Arrêter le son";
+"reminderSoundLoopHint" = "Gardez clipcap ouvert pour les boucles et cliquez sur la notification pour arrêter";

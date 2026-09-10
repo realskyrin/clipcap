@@ -539,3 +539,17 @@
 "reminderWeekdaysHint" = "С понедельника по пятницу";
 "reminderCount" = "Напоминаний: %d";
 "reminderActiveCount" = "Включено: %d";
+"reminderWeekend" = "Выходные";
+"reminderDay1" = "Вс";
+"reminderDay2" = "Пн";
+"reminderDay3" = "Вт";
+"reminderDay4" = "Ср";
+"reminderDay5" = "Чт";
+"reminderDay6" = "Пт";
+"reminderDay7" = "Сб";
+"reminderNoDays" = "Дни не выбраны";
+"reminderSoundTimes" = "%d раз";
+"reminderSoundInfinite" = "Бесконечно";
+"reminderSoundRepeat" = "Повторы звука";
+"reminderStopSound" = "Остановить звук";
+"reminderSoundLoopHint" = "Для повтора оставьте clipcap открытым Нажмите уведомление для остановки";
