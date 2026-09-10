@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [1.8.29] - 2026-09-10
+
+### Added
+
+- Added custom reminder schedules and sound repeat controls (274e175)
+
 ## [1.8.28] - 2026-09-10
 
 ### Added
