@@ -507,3 +507,35 @@
 "editorShortcutShapeFill" = "Переключить заливку фигуры";
 "editorShortcutConflict" = "Это сочетание уже назначено действию %@";
 "editorShortcutReserved" = "Эта клавиша зарезервирована для системного действия редактора и не может быть переназначена";
+
+/* Scheduled reminder */
+"reminderTitle" = "Напоминание по расписанию";
+"reminderEnabled" = "Включить напоминание";
+"reminderDaily" = "Ежедневно";
+"reminderWeekdays" = "Будни · понедельник–пятница";
+"reminderMessage" = "Текст напоминания";
+"reminderSilent" = "Без звука";
+"reminderPreview" = "Прослушать";
+"reminderSound" = "Звук";
+"reminderHint" = "Местное время и системные уведомления с учётом режима фокусирования и настроек звука";
+"reminderSave" = "Сохранить";
+"reminderMessageRequired" = "Введите текст напоминания";
+"reminderSaved" = "Напоминание сохранено";
+"reminderPermission" = "Разрешите уведомления clipcap в Системных настройках и сохраните снова";
+"reminderSoundError" = "Выбранный системный звук недоступен";
+"reminderSaveError" = "Не удалось сохранить напоминание, повторите попытку";
+"reminderAdd" = "Добавить напоминание";
+"reminderEmpty" = "Нет напоминаний";
+"reminderDisabled" = "Отключено";
+"reminderEdit" = "Изменить";
+"reminderDelete" = "Удалить напоминание";
+"reminderDeleted" = "Напоминание удалено";
+"reminderListTitle" = "Мои напоминания";
+"reminderEditorTitle" = "Изменить напоминание";
+"reminderEditorSubtitle" = "Настройте время, текст и звук";
+"reminderTime" = "Время";
+"reminderRepeat" = "Повтор";
+"reminderWeekdaysShort" = "Будни";
+"reminderWeekdaysHint" = "С понедельника по пятницу";
+"reminderCount" = "Напоминаний: %d";
+"reminderActiveCount" = "Включено: %d";

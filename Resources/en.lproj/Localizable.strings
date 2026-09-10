@@ -507,3 +507,35 @@
 "editorShortcutShapeFill" = "Toggle shape fill";
 "editorShortcutConflict" = "This shortcut is already assigned to %@";
 "editorShortcutReserved" = "This key is reserved for an editor system action and cannot be reassigned";
+
+/* Scheduled reminder */
+"reminderTitle" = "Scheduled Reminder";
+"reminderEnabled" = "Enable reminder";
+"reminderDaily" = "Every day";
+"reminderWeekdays" = "Weekdays · Mon–Fri";
+"reminderMessage" = "Reminder message";
+"reminderSilent" = "No sound";
+"reminderPreview" = "Preview";
+"reminderSound" = "Sound";
+"reminderHint" = "Uses local time and system notifications, subject to Focus and notification sound settings";
+"reminderSave" = "Save";
+"reminderMessageRequired" = "Enter a reminder message";
+"reminderSaved" = "Reminder saved";
+"reminderPermission" = "Allow clipcap notifications in System Settings, then save again";
+"reminderSoundError" = "The selected system sound is unavailable";
+"reminderSaveError" = "Could not save reminder, please try again";
+"reminderAdd" = "Add reminder";
+"reminderEmpty" = "No reminders yet";
+"reminderDisabled" = "Disabled";
+"reminderEdit" = "Edit";
+"reminderDelete" = "Delete reminder";
+"reminderDeleted" = "Reminder deleted";
+"reminderListTitle" = "My Reminders";
+"reminderEditorTitle" = "Edit Reminder";
+"reminderEditorSubtitle" = "Set the time, message and sound";
+"reminderTime" = "Time";
+"reminderRepeat" = "Repeat";
+"reminderWeekdaysShort" = "Weekdays";
+"reminderWeekdaysHint" = "Weekdays are Monday through Friday";
+"reminderCount" = "%d reminders";
+"reminderActiveCount" = "%d enabled";

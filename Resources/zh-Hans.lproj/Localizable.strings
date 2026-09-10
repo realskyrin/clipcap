@@ -507,3 +507,35 @@
 "editorShortcutShapeFill" = "切换形状填充";
 "editorShortcutConflict" = "该快捷键已分配给%@";
 "editorShortcutReserved" = "该按键用于编辑器系统操作，不能重新分配";
+
+/* Scheduled reminder */
+"reminderTitle" = "定时提醒";
+"reminderEnabled" = "启用提醒";
+"reminderDaily" = "每天";
+"reminderWeekdays" = "工作日 · 周一至周五";
+"reminderMessage" = "提醒内容";
+"reminderSilent" = "无铃声";
+"reminderPreview" = "试听";
+"reminderSound" = "铃声";
+"reminderHint" = "按本地时间发送系统通知，受专注模式及系统通知声音设置影响";
+"reminderSave" = "保存";
+"reminderMessageRequired" = "请输入提醒内容";
+"reminderSaved" = "提醒已保存";
+"reminderPermission" = "请在系统设置中允许 clipcap 通知后重新保存";
+"reminderSoundError" = "所选系统铃声不可用";
+"reminderSaveError" = "提醒保存失败，请重试";
+"reminderAdd" = "新增提醒";
+"reminderEmpty" = "暂无提醒";
+"reminderDisabled" = "已停用";
+"reminderEdit" = "编辑";
+"reminderDelete" = "删除提醒";
+"reminderDeleted" = "提醒已删除";
+"reminderListTitle" = "我的提醒";
+"reminderEditorTitle" = "编辑提醒";
+"reminderEditorSubtitle" = "设置时间、内容与铃声";
+"reminderTime" = "提醒时间";
+"reminderRepeat" = "重复";
+"reminderWeekdaysShort" = "工作日";
+"reminderWeekdaysHint" = "工作日为周一至周五";
+"reminderCount" = "%d 项";
+"reminderActiveCount" = "%d 项已启用";

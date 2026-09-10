@@ -92,6 +92,11 @@ class StatusBarController: NSObject {
         menu.addItem(caffeinationItem)
         refreshCaffeinationItemState(rebuildSubmenu: false)
 
+        let reminderItem = NSMenuItem(title: Localizer.string("reminderTitle"), action: #selector(openReminder), keyEquivalent: "")
+        reminderItem.target = self
+        reminderItem.image = Self.menuIcon(systemName: "bell")
+        menu.addItem(reminderItem)
+
         menu.addItem(NSMenuItem.separator())
 
         if Defaults.isHistoryCacheAvailable {
@@ -163,6 +168,8 @@ class StatusBarController: NSObject {
     @objc private func mergeImages() {
         onMergeImages()
     }
+
+    @objc private func openReminder() { Task { @MainActor in ReminderWindowController.shared.open() } }
 
     @objc private func openSettings() {
         onOpenSettings()

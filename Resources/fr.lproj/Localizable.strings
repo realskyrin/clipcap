@@ -507,3 +507,35 @@
 "editorShortcutShapeFill" = "Changer le remplissage des formes";
 "editorShortcutConflict" = "Ce raccourci est déjà attribué à %@";
 "editorShortcutReserved" = "Cette touche est réservée à une action système de l’éditeur et ne peut pas être réattribuée";
+
+/* Scheduled reminder */
+"reminderTitle" = "Rappel programmé";
+"reminderEnabled" = "Activer le rappel";
+"reminderDaily" = "Tous les jours";
+"reminderWeekdays" = "En semaine · lundi à vendredi";
+"reminderMessage" = "Message du rappel";
+"reminderSilent" = "Aucun son";
+"reminderPreview" = "Écouter";
+"reminderSound" = "Son";
+"reminderHint" = "Utilise l’heure locale et les notifications système, selon les réglages de concentration et de son";
+"reminderSave" = "Enregistrer";
+"reminderMessageRequired" = "Saisissez un message";
+"reminderSaved" = "Rappel enregistré";
+"reminderPermission" = "Autorisez les notifications de clipcap dans les Réglages Système puis réessayez";
+"reminderSoundError" = "Le son système sélectionné est indisponible";
+"reminderSaveError" = "Impossible d’enregistrer le rappel, réessayez";
+"reminderAdd" = "Ajouter un rappel";
+"reminderEmpty" = "Aucun rappel";
+"reminderDisabled" = "Désactivé";
+"reminderEdit" = "Modifier";
+"reminderDelete" = "Supprimer le rappel";
+"reminderDeleted" = "Rappel supprimé";
+"reminderListTitle" = "Mes rappels";
+"reminderEditorTitle" = "Modifier le rappel";
+"reminderEditorSubtitle" = "Choisir l’heure, le message et le son";
+"reminderTime" = "Heure";
+"reminderRepeat" = "Répéter";
+"reminderWeekdaysShort" = "En semaine";
+"reminderWeekdaysHint" = "Du lundi au vendredi";
+"reminderCount" = "%d rappels";
+"reminderActiveCount" = "%d activés";

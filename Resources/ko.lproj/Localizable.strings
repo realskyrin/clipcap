@@ -507,3 +507,35 @@
 "editorShortcutShapeFill" = "도형 채우기 전환";
 "editorShortcutConflict" = "이 단축키는 이미 %@에 할당되어 있습니다";
 "editorShortcutReserved" = "이 키는 편집기 시스템 작업에 예약되어 있어 다시 할당할 수 없습니다";
+
+/* Scheduled reminder */
+"reminderTitle" = "예약 알림";
+"reminderEnabled" = "알림 사용";
+"reminderDaily" = "매일";
+"reminderWeekdays" = "평일 · 월요일부터 금요일";
+"reminderMessage" = "알림 내용";
+"reminderSilent" = "소리 없음";
+"reminderPreview" = "미리 듣기";
+"reminderSound" = "알림음";
+"reminderHint" = "현지 시간으로 시스템 알림을 보내며 집중 모드 및 알림 소리 설정이 적용됩니다";
+"reminderSave" = "저장";
+"reminderMessageRequired" = "알림 내용을 입력하세요";
+"reminderSaved" = "알림 저장됨";
+"reminderPermission" = "시스템 설정에서 clipcap 알림을 허용한 후 다시 저장하세요";
+"reminderSoundError" = "선택한 시스템 알림음을 사용할 수 없습니다";
+"reminderSaveError" = "알림을 저장할 수 없습니다, 다시 시도하세요";
+"reminderAdd" = "알림 추가";
+"reminderEmpty" = "알림 없음";
+"reminderDisabled" = "비활성화됨";
+"reminderEdit" = "편집";
+"reminderDelete" = "알림 삭제";
+"reminderDeleted" = "알림 삭제됨";
+"reminderListTitle" = "내 알림";
+"reminderEditorTitle" = "알림 편집";
+"reminderEditorSubtitle" = "시간, 내용 및 소리 설정";
+"reminderTime" = "시간";
+"reminderRepeat" = "반복";
+"reminderWeekdaysShort" = "평일";
+"reminderWeekdaysHint" = "평일은 월요일부터 금요일";
+"reminderCount" = "%d개";
+"reminderActiveCount" = "%d개 활성화";

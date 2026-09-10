@@ -507,3 +507,35 @@
 "editorShortcutShapeFill" = "Bật tắt tô hình";
 "editorShortcutConflict" = "Phím tắt này đã được gán cho %@";
 "editorShortcutReserved" = "Phím này được dành cho thao tác hệ thống của trình chỉnh sửa và không thể gán lại";
+
+/* Scheduled reminder */
+"reminderTitle" = "Lời nhắc theo lịch";
+"reminderEnabled" = "Bật lời nhắc";
+"reminderDaily" = "Hằng ngày";
+"reminderWeekdays" = "Ngày trong tuần · thứ Hai đến thứ Sáu";
+"reminderMessage" = "Nội dung lời nhắc";
+"reminderSilent" = "Không có âm thanh";
+"reminderPreview" = "Nghe thử";
+"reminderSound" = "Âm thanh";
+"reminderHint" = "Dùng giờ địa phương và thông báo hệ thống, tuân theo chế độ Tập trung và cài đặt âm thanh thông báo";
+"reminderSave" = "Lưu";
+"reminderMessageRequired" = "Nhập nội dung lời nhắc";
+"reminderSaved" = "Đã lưu lời nhắc";
+"reminderPermission" = "Cho phép thông báo clipcap trong Cài đặt hệ thống rồi lưu lại";
+"reminderSoundError" = "Âm thanh hệ thống đã chọn không khả dụng";
+"reminderSaveError" = "Không thể lưu lời nhắc, vui lòng thử lại";
+"reminderAdd" = "Thêm lời nhắc";
+"reminderEmpty" = "Chưa có lời nhắc";
+"reminderDisabled" = "Đã tắt";
+"reminderEdit" = "Sửa";
+"reminderDelete" = "Xóa lời nhắc";
+"reminderDeleted" = "Đã xóa lời nhắc";
+"reminderListTitle" = "Lời nhắc của tôi";
+"reminderEditorTitle" = "Sửa lời nhắc";
+"reminderEditorSubtitle" = "Đặt giờ, nội dung và âm thanh";
+"reminderTime" = "Giờ";
+"reminderRepeat" = "Lặp lại";
+"reminderWeekdaysShort" = "Ngày trong tuần";
+"reminderWeekdaysHint" = "Từ thứ Hai đến thứ Sáu";
+"reminderCount" = "%d lời nhắc";
+"reminderActiveCount" = "%d đã bật";

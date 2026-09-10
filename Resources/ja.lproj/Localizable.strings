@@ -507,3 +507,35 @@
 "editorShortcutShapeFill" = "図形の塗りつぶしを切り替え";
 "editorShortcutConflict" = "このショートカットはすでに%@に割り当てられています";
 "editorShortcutReserved" = "このキーはエディタのシステム操作用に予約されているため再割り当てできません";
+
+/* Scheduled reminder */
+"reminderTitle" = "時刻指定リマインダー";
+"reminderEnabled" = "リマインダーを有効にする";
+"reminderDaily" = "毎日";
+"reminderWeekdays" = "平日 · 月曜日から金曜日";
+"reminderMessage" = "リマインダーの内容";
+"reminderSilent" = "サウンドなし";
+"reminderPreview" = "試聴";
+"reminderSound" = "サウンド";
+"reminderHint" = "現地時刻でシステム通知を送信し、集中モードと通知サウンド設定に従います";
+"reminderSave" = "保存";
+"reminderMessageRequired" = "リマインダーの内容を入力してください";
+"reminderSaved" = "リマインダーを保存しました";
+"reminderPermission" = "システム設定で clipcap の通知を許可してから再度保存してください";
+"reminderSoundError" = "選択したシステムサウンドは利用できません";
+"reminderSaveError" = "保存できませんでした、もう一度お試しください";
+"reminderAdd" = "リマインダーを追加";
+"reminderEmpty" = "リマインダーはありません";
+"reminderDisabled" = "無効";
+"reminderEdit" = "編集";
+"reminderDelete" = "リマインダーを削除";
+"reminderDeleted" = "リマインダーを削除しました";
+"reminderListTitle" = "マイリマインダー";
+"reminderEditorTitle" = "リマインダーを編集";
+"reminderEditorSubtitle" = "時刻、内容、サウンドを設定";
+"reminderTime" = "時刻";
+"reminderRepeat" = "繰り返し";
+"reminderWeekdaysShort" = "平日";
+"reminderWeekdaysHint" = "平日は月曜日から金曜日";
+"reminderCount" = "%d 件";
+"reminderActiveCount" = "%d 件が有効";
