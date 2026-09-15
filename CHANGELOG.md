@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [1.8.30] - 2026-09-15
+
+### Fixed
+
+- Preserved favorite history items when deleting entries or disabling caches (8e4130e)
+
 ## [1.8.29] - 2026-09-10
 
 ### Added
