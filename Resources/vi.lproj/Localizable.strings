@@ -149,8 +149,7 @@
 "historyPanelItemFavorited" = "Đã thêm vào mục yêu thích";
 "historyPanelItemUnfavorited" = "Đã xóa khỏi mục yêu thích";
 "historyPanelFavoriteFailed" = "Không thể thay đổi mục yêu thích";
-"historyClearedKeptFavoriteOne" = "Đã xóa lịch sử, giữ lại %d mục yêu thích";
-"historyClearedKeptFavorites" = "Đã xóa lịch sử, giữ lại %d mục yêu thích";
+"historyDeletedSkippingFavorites" = "Đã xóa %d mục, bỏ qua %d mục yêu thích";
 "historyPanelFilterAll" = "Tất cả";
 "historyPanelFilterScreenshots" = "Ảnh chụp";
 "historyPanelFilterGIF" = "GIF";

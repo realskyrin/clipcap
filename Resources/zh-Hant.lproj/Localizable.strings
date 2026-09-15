@@ -149,8 +149,7 @@
 "historyPanelItemFavorited" = "已收藏";
 "historyPanelItemUnfavorited" = "已取消收藏";
 "historyPanelFavoriteFailed" = "無法更改收藏";
-"historyClearedKeptFavoriteOne" = "已清除歷史記錄，保留了 %d 個收藏項";
-"historyClearedKeptFavorites" = "已清除歷史記錄，保留了 %d 個收藏項";
+"historyDeletedSkippingFavorites" = "已刪除 %d 個項目，跳過 %d 個收藏";
 "historyPanelFilterAll" = "全部";
 "historyPanelFilterScreenshots" = "截圖";
 "historyPanelFilterGIF" = "GIF";

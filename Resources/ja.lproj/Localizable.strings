@@ -149,8 +149,7 @@
 "historyPanelItemFavorited" = "お気に入りに追加しました";
 "historyPanelItemUnfavorited" = "お気に入りから削除しました";
 "historyPanelFavoriteFailed" = "お気に入りを変更できません";
-"historyClearedKeptFavoriteOne" = "履歴を削除しました、%d件のお気に入りを保持";
-"historyClearedKeptFavorites" = "履歴を削除しました、%d件のお気に入りを保持";
+"historyDeletedSkippingFavorites" = "項目を%d件削除、お気に入りを%d件スキップ";
 "historyPanelFilterAll" = "すべて";
 "historyPanelFilterScreenshots" = "スクリーンショット";
 "historyPanelFilterGIF" = "GIF";

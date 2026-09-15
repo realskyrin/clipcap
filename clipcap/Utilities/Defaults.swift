@@ -289,9 +289,8 @@ enum L10n {
     static var historyPanelItemFavorited: String { s("historyPanelItemFavorited") }
     static var historyPanelItemUnfavorited: String { s("historyPanelItemUnfavorited") }
     static var historyPanelFavoriteFailed: String { s("historyPanelFavoriteFailed") }
-    static func historyClearedKeptFavorites(_ count: Int) -> String {
-        let key = count == 1 ? "historyClearedKeptFavoriteOne" : "historyClearedKeptFavorites"
-        return String(format: s(key), count)
+    static func historyDeletedSkippingFavorites(removed: Int, skipped: Int) -> String {
+        String(format: s("historyDeletedSkippingFavorites"), removed, skipped)
     }
     static var historyPanelFilterAll: String { s("historyPanelFilterAll") }
     static var historyPanelFilterScreenshots: String { s("historyPanelFilterScreenshots") }
@@ -1573,7 +1572,7 @@ struct Defaults {
     }
 
     static var isHistoryCacheAvailable: Bool {
-        historyCacheEnabled || clipboardTextCacheEnabled
+        historyCacheEnabled || clipboardTextCacheEnabled || HistoryManager.shared.hasFavoriteEntries()
     }
 
     static var historyCacheLimit: Int {

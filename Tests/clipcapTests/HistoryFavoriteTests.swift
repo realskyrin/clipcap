@@ -62,6 +62,86 @@ final class HistoryFavoriteTests: XCTestCase {
         XCTAssertEqual(decision.remove, [plain])
     }
 
+    func testSelectedDeletionKeepsFavoritesAndDeletesOtherSelectedEntries() throws {
+        let favorite = try makeFile(name: "favorite.png", contents: Data([0x01]))
+        let plain = try makeFile(name: "plain.png", contents: Data([0x02]))
+        XCTAssertTrue(HistoryManager.setFavorite(true, on: favorite))
+
+        let result = HistoryManager.removeUnfavoritedEntries([favorite, plain])
+
+        XCTAssertEqual(result.removed, [plain])
+        XCTAssertEqual(result.kept, [favorite])
+        XCTAssertTrue(FileManager.default.fileExists(atPath: favorite.path))
+        XCTAssertFalse(FileManager.default.fileExists(atPath: plain.path))
+    }
+
+    func testDeletionToastReportsDeletedAndSkippedCounts() {
+        let root = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let languageBundleURL = root.appendingPathComponent("Resources/zh-Hans.lproj")
+        let languageBundle = Bundle(url: languageBundleURL)
+        XCTAssertNotNil(languageBundle)
+        let format = languageBundle?.localizedString(
+            forKey: "historyDeletedSkippingFavorites", value: nil, table: nil)
+
+        XCTAssertEqual(String(format: format ?? "", 1, 2),
+                       "已删除 1 个项目，跳过 2 个收藏")
+        XCTAssertEqual(String(format: format ?? "", 0, 2),
+                       "已删除 0 个项目，跳过 2 个收藏")
+    }
+
+    func testCacheDisablingKeepsFavoritesOfEachType() throws {
+        let favoriteImage = try makeFile(name: "favorite.png", contents: Data([0x01]))
+        let plainImage = try makeFile(name: "plain.png", contents: Data([0x02]))
+        let favoriteText = try makeFile(name: "favorite.txt", contents: Data("saved".utf8))
+        let plainText = try makeFile(name: "plain.txt", contents: Data("temporary".utf8))
+        XCTAssertTrue(HistoryManager.setFavorite(true, on: favoriteImage))
+        XCTAssertTrue(HistoryManager.setFavorite(true, on: favoriteText))
+
+        let candidates = [favoriteImage, plainImage, favoriteText, plainText]
+        let mediaResult = HistoryManager.removeStoredHistoryEntries(
+            candidates, withExtensions: ["png", "gif", "color"])
+        XCTAssertTrue(FileManager.default.fileExists(atPath: plainText.path),
+                      "disabling image cache must not clear text history")
+        let textResult = HistoryManager.removeStoredHistoryEntries(
+            candidates, withExtensions: ["txt"])
+
+        XCTAssertEqual(mediaResult.removed, [plainImage])
+        XCTAssertEqual(textResult.removed, [plainText])
+        XCTAssertEqual(mediaResult.kept, [favoriteImage])
+        XCTAssertEqual(textResult.kept, [favoriteText])
+        XCTAssertTrue(FileManager.default.fileExists(atPath: favoriteImage.path))
+        XCTAssertTrue(FileManager.default.fileExists(atPath: favoriteText.path))
+        XCTAssertFalse(FileManager.default.fileExists(atPath: plainImage.path))
+        XCTAssertFalse(FileManager.default.fileExists(atPath: plainText.path))
+    }
+
+    func testFavoritesRemainVisibleWhenTheirCacheIsDisabled() throws {
+        let favoriteImage = try makeFile(name: "favorite.png", contents: Data([0x01]))
+        let plainImage = try makeFile(name: "plain.png", contents: Data([0x02]))
+        let favoriteText = try makeFile(name: "favorite.txt", contents: Data("saved".utf8))
+        let unsupported = try makeFile(name: "favorite.pdf", contents: Data([0x03]))
+        for url in [favoriteImage, favoriteText, unsupported] {
+            XCTAssertTrue(HistoryManager.setFavorite(true, on: url))
+        }
+
+        let supported: Set<String> = ["png", "txt"]
+        XCTAssertTrue(HistoryManager.shouldIncludeEntry(favoriteImage,
+                                                        allowedExtensions: [],
+                                                        supportedExtensions: supported))
+        XCTAssertTrue(HistoryManager.shouldIncludeEntry(favoriteText,
+                                                        allowedExtensions: [],
+                                                        supportedExtensions: supported))
+        XCTAssertFalse(HistoryManager.shouldIncludeEntry(plainImage,
+                                                         allowedExtensions: [],
+                                                         supportedExtensions: supported))
+        XCTAssertFalse(HistoryManager.shouldIncludeEntry(unsupported,
+                                                         allowedExtensions: [],
+                                                         supportedExtensions: supported))
+    }
+
     func testFavoriteFilterIsSecondAfterAll() {
         XCTAssertEqual(Array(HistoryPanelFilter.allCases.prefix(2)), [.all, .favorites])
     }

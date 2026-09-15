@@ -319,7 +319,6 @@ final class HistoryManager {
     }
 
     func entries() -> [HistoryEntry] {
-        guard Defaults.isHistoryCacheAvailable else { return [] }
         entriesCacheLock.lock()
         defer { entriesCacheLock.unlock() }
         if let cachedEntries {
@@ -369,7 +368,6 @@ final class HistoryManager {
     }
 
     func entryCount() -> Int {
-        guard Defaults.isHistoryCacheAvailable else { return 0 }
         entriesCacheLock.lock()
         defer { entriesCacheLock.unlock() }
         if let cachedEntryCount {
@@ -378,6 +376,10 @@ final class HistoryManager {
         let count = loadEntryCount()
         cachedEntryCount = count
         return count
+    }
+
+    func hasFavoriteEntries() -> Bool {
+        storedHistoryFileURLs().contains { Self.isFavorite(url: $0) }
     }
 
     func imageEntries() -> [HistoryEntry] {
@@ -408,7 +410,8 @@ final class HistoryManager {
         if Defaults.clipboardTextCacheEnabled {
             allowedExtensions.insert("txt")
         }
-        return entries(in: directoryURL, allowedExtensions: allowedExtensions)
+        return entries(in: directoryURL, allowedExtensions: allowedExtensions,
+                       supportedExtensions: ["png", "gif", "color", "txt"])
     }
 
     private func loadEntryCount() -> Int {
@@ -419,15 +422,16 @@ final class HistoryManager {
         if Defaults.clipboardTextCacheEnabled {
             allowedExtensions.insert("txt")
         }
-        guard !allowedExtensions.isEmpty,
-              let urls = try? FileManager.default.contentsOfDirectory(
+        guard let urls = try? FileManager.default.contentsOfDirectory(
                 at: directoryURL,
                 includingPropertiesForKeys: [.fileSizeKey, .isRegularFileKey],
                 options: [.skipsHiddenFiles]
               ) else { return 0 }
 
         var identities = Set<String>()
-        for url in urls where allowedExtensions.contains(url.pathExtension.lowercased()) {
+        for url in urls where Self.shouldIncludeEntry(url,
+                                                      allowedExtensions: allowedExtensions,
+                                                      supportedExtensions: ["png", "gif", "color", "txt"]) {
             let values = try? url.resourceValues(forKeys: [.fileSizeKey, .isRegularFileKey])
             guard values?.isRegularFile != false, (values?.fileSize ?? 0) > 0 else { continue }
             identities.insert(Self.fileIdentity(for: url))
@@ -435,7 +439,8 @@ final class HistoryManager {
         return identities.count
     }
 
-    private func entries(in directory: URL, allowedExtensions: Set<String>) -> [HistoryEntry] {
+    private func entries(in directory: URL, allowedExtensions: Set<String>,
+                         supportedExtensions: Set<String>) -> [HistoryEntry] {
         let fm = FileManager.default
         guard let urls = try? fm.contentsOfDirectory(
             at: directory,
@@ -446,7 +451,9 @@ final class HistoryManager {
         }
         return urls.compactMap { url in
             let ext = url.pathExtension.lowercased()
-            guard allowedExtensions.contains(ext) else { return nil }
+            guard Self.shouldIncludeEntry(url,
+                                          allowedExtensions: allowedExtensions,
+                                          supportedExtensions: supportedExtensions) else { return nil }
             let values = try? url.resourceValues(forKeys: [.contentModificationDateKey, .fileSizeKey, .isRegularFileKey])
             guard values?.isRegularFile != false else { return nil }
             let date = values?.contentModificationDate ?? .distantPast
@@ -471,6 +478,13 @@ final class HistoryManager {
         }
     }
 
+    static func shouldIncludeEntry(_ url: URL, allowedExtensions: Set<String>,
+                                   supportedExtensions: Set<String>) -> Bool {
+        let ext = url.pathExtension.lowercased()
+        return supportedExtensions.contains(ext)
+            && (allowedExtensions.contains(ext) || isFavorite(url: url))
+    }
+
     private func deduplicatedEntries(_ entries: [HistoryEntry]) -> [HistoryEntry] {
         var seen = Set<String>()
         return entries.compactMap { entry in
@@ -481,25 +495,25 @@ final class HistoryManager {
     }
 
     func image(for entry: HistoryEntry) -> NSImage? {
-        guard Defaults.historyCacheEnabled else { return nil }
+        guard Defaults.historyCacheEnabled || Self.isFavorite(url: entry.fileURL) else { return nil }
         guard case .image = entry.kind else { return nil }
         return NSImage(contentsOf: entry.fileURL)
     }
 
-    func clearAll(completion: ((Int) -> Void)? = nil) {
+    func clearAll(completion: ((Int, Int) -> Void)? = nil) {
         queue.async { [weak self] in
             guard let self = self else { return }
-            let kept = self.removeAllEntries()
-            self.keepCopiedEntryPromotions(forKeptURLs: kept)
+            let result = self.removeAllEntries()
+            self.keepCopiedEntryPromotions(forKeptURLs: result.kept)
             self.invalidateEntriesCache()
             DispatchQueue.main.async {
                 NotificationCenter.default.post(name: .historyDidUpdate, object: nil)
-                completion?(kept.count)
+                completion?(result.removed.count, result.kept.count)
             }
         }
     }
 
-    func remove(_ entries: [HistoryEntry], completion: ((Int) -> Void)? = nil) {
+    func remove(_ entries: [HistoryEntry], completion: ((Int, Int) -> Void)? = nil) {
         var seen = Set<String>()
         let urls = entries.compactMap { entry -> URL? in
             let url = entry.fileURL.standardizedFileURL
@@ -508,23 +522,12 @@ final class HistoryManager {
         }
 
         queue.async {
-            let fm = FileManager.default
-            var removedCount = 0
-            var removedURLs: [URL] = []
-            for url in urls {
-                do {
-                    try fm.removeItem(at: url)
-                    removedCount += 1
-                    removedURLs.append(url)
-                } catch {
-                    continue
-                }
-            }
-            self.removeCopiedEntryPromotions(for: removedURLs)
+            let result = Self.removeUnfavoritedEntries(urls)
+            self.removeCopiedEntryPromotions(for: result.removed)
             self.invalidateEntriesCache()
             DispatchQueue.main.async {
                 NotificationCenter.default.post(name: .historyDidUpdate, object: nil)
-                completion?(removedCount)
+                completion?(result.removed.count, result.kept.count)
             }
         }
     }
@@ -559,19 +562,11 @@ final class HistoryManager {
         )
     }
 
-    @discardableResult
-    private func removeAllEntries() -> [URL] {
-        let fm = FileManager.default
-        let decision = Self.partitionEntriesForRemoval(storedHistoryFileURLs())
-        for url in decision.remove {
-            try? fm.removeItem(at: url)
-        }
-        return decision.kept
+    private func removeAllEntries() -> (removed: [URL], kept: [URL]) {
+        Self.removeUnfavoritedEntries(storedHistoryFileURLs())
     }
 
-    /// Favorites survive the bulk "delete all history" action, while explicit
-    /// selected-item deletion and disabling a history cache keep their existing
-    /// destructive semantics.
+    /// Favorites survive bulk deletion, selected-item deletion, and cache disabling.
     static func partitionEntriesForRemoval(_ candidates: [URL]) -> (remove: [URL], kept: [URL]) {
         var remove: [URL] = []
         var kept: [URL] = []
@@ -583,6 +578,22 @@ final class HistoryManager {
             }
         }
         return (remove, kept)
+    }
+
+    @discardableResult
+    static func removeUnfavoritedEntries(_ candidates: [URL]) -> (removed: [URL], kept: [URL]) {
+        let decision = partitionEntriesForRemoval(candidates)
+        let fm = FileManager.default
+        var removed: [URL] = []
+        for url in decision.remove {
+            do {
+                try fm.removeItem(at: url)
+                removed.append(url)
+            } catch {
+                continue
+            }
+        }
+        return (removed, decision.kept)
     }
 
     private func invalidateEntriesCache() {
@@ -668,10 +679,15 @@ final class HistoryManager {
     }
 
     private func removeStoredHistoryEntries(withExtensions extensions: Set<String>) {
-        let fm = FileManager.default
-        for url in storedHistoryFileURLs() where extensions.contains(url.pathExtension.lowercased()) {
-            try? fm.removeItem(at: url)
-        }
+        Self.removeStoredHistoryEntries(storedHistoryFileURLs(), withExtensions: extensions)
+    }
+
+    @discardableResult
+    static func removeStoredHistoryEntries(_ candidates: [URL],
+                                           withExtensions extensions: Set<String>)
+        -> (removed: [URL], kept: [URL]) {
+        let matching = candidates.filter { extensions.contains($0.pathExtension.lowercased()) }
+        return removeUnfavoritedEntries(matching)
     }
 
     private func storedHistoryFileURLs() -> [URL] {

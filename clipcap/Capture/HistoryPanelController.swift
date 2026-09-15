@@ -1635,15 +1635,20 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
                     clearSelection()
                     return
                 }
-                HistoryManager.shared.remove(entriesToDelete) { removedCount in
-                    guard removedCount > 0 else { return }
-                    ToastWindow.show(message: L10n.historyPanelDeletedSelected(removedCount))
+                HistoryManager.shared.remove(entriesToDelete) { removedCount, skippedCount in
+                    if skippedCount > 0 {
+                        ToastWindow.show(message: L10n.historyDeletedSkippingFavorites(
+                            removed: removedCount, skipped: skippedCount))
+                    } else if removedCount > 0 {
+                        ToastWindow.show(message: L10n.historyPanelDeletedSelected(removedCount))
+                    }
                 }
                 clearSelection()
             } else {
-                HistoryManager.shared.clearAll { keptCount in
-                    if keptCount > 0 {
-                        ToastWindow.show(message: L10n.historyClearedKeptFavorites(keptCount))
+                HistoryManager.shared.clearAll { removedCount, skippedCount in
+                    if skippedCount > 0 {
+                        ToastWindow.show(message: L10n.historyDeletedSkippingFavorites(
+                            removed: removedCount, skipped: skippedCount))
                     } else {
                         ToastWindow.show(message: L10n.historyCleared)
                     }
@@ -3746,10 +3751,17 @@ private final class HistoryPanelTileView: NSView, NSDraggingSource {
         )
         textPreviewLabel.frame = imageView.frame
         overlayLabel.frame = imageView.frame
+        let selectionSize = selectionBadgeView.intrinsicContentSize
+        selectionBadgeView.frame = NSRect(
+            x: imageView.frame.maxX - selectionSize.width + 5,
+            y: imageView.frame.minY - 5,
+            width: selectionSize.width,
+            height: selectionSize.height
+        )
         let pathButtonSize: CGFloat = 28
         pathCopyButton.frame = NSRect(
-            x: imageView.frame.minX + 7,
-            y: imageView.frame.minY + 7,
+            x: bounds.width - selectionBadgeView.frame.midX - pathButtonSize / 2,
+            y: selectionBadgeView.frame.midY - pathButtonSize / 2,
             width: pathButtonSize,
             height: pathButtonSize
         )
@@ -3763,13 +3775,6 @@ private final class HistoryPanelTileView: NSView, NSDraggingSource {
                 height: badgeSize.height
             )
         }
-        let selectionSize = selectionBadgeView.intrinsicContentSize
-        selectionBadgeView.frame = NSRect(
-            x: imageView.frame.maxX - selectionSize.width + 5,
-            y: imageView.frame.minY - 5,
-            width: selectionSize.width,
-            height: selectionSize.height
-        )
         let favoriteSize = favoriteButton.intrinsicContentSize
         favoriteButton.frame = NSRect(
             x: selectionBadgeView.frame.midX - favoriteSize.width / 2,
@@ -4285,12 +4290,6 @@ private final class HistoryPanelPathCopyButton: NSButton {
         imagePosition = .imageOnly
         imageScaling = .scaleProportionallyDown
         setButtonType(.momentaryChange)
-        wantsLayer = true
-        layer?.cornerRadius = 7
-        layer?.cornerCurve = .continuous
-        layer?.backgroundColor = NSColor.black.withAlphaComponent(0.64).cgColor
-        layer?.borderColor = NSColor.white.withAlphaComponent(0.22).cgColor
-        layer?.borderWidth = 1
 
         let configuration = NSImage.SymbolConfiguration(pointSize: 13, weight: .semibold)
         image = NSImage(systemSymbolName: "doc.on.clipboard", accessibilityDescription: nil)?

@@ -149,8 +149,7 @@
 "historyPanelItemFavorited" = "Added to favorites";
 "historyPanelItemUnfavorited" = "Removed from favorites";
 "historyPanelFavoriteFailed" = "Could not change favorite";
-"historyClearedKeptFavoriteOne" = "History cleared, %d favorite kept";
-"historyClearedKeptFavorites" = "History cleared, %d favorites kept";
+"historyDeletedSkippingFavorites" = "Items deleted: %d, favorites skipped: %d";
 "historyPanelFilterAll" = "All";
 "historyPanelFilterScreenshots" = "Images";
 "historyPanelFilterGIF" = "GIF";
