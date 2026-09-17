@@ -65,6 +65,8 @@ final class SettingsView: NSView {
     private var historyCacheValueLabel: NSTextField?
     private var clipboardTextHistoryLimitSlider: NSSlider?
     private var clipboardTextHistoryLimitValueLabel: NSTextField?
+    private var historyNotchTriggerLabel: NSTextField?
+    private var historyNotchTriggerPopup: NSPopUpButton?
     private var autoRevealSwitch: NSSwitch?
     private var savePathValueLabel: NSTextField?
     private var screenshotQualitySavePopup: NSPopUpButton?
@@ -404,6 +406,8 @@ final class SettingsView: NSView {
             to: history
         )
         addFullWidth(makeClipboardTextHistoryLimitSliderRow(), to: history)
+        addFullWidth(rowDivider(), to: history)
+        addFullWidth(makeHistoryNotchTriggerRow(), to: history)
         addCard(historyCard, to: stack)
 
         addCard(makeScreenshotQualityCard(), to: stack)
@@ -882,6 +886,43 @@ final class SettingsView: NSView {
         addFullWidth(header, to: stack)
         addFullWidth(slider, to: stack)
         return stack
+    }
+
+    private func makeHistoryNotchTriggerRow() -> NSView {
+        let row = NSStackView()
+        row.orientation = .horizontal
+        row.alignment = .centerY
+        row.spacing = 10
+        row.translatesAutoresizingMaskIntoConstraints = false
+
+        let label = primaryLabel(L10n.historyNotchTriggerLabel)
+        historyNotchTriggerLabel = label
+        row.addArrangedSubview(label)
+        row.addArrangedSubview(flexSpacer())
+
+        let popup = NSPopUpButton(frame: .zero, pullsDown: false)
+        popup.controlSize = .small
+        popup.font = NSFont.systemFont(ofSize: 12)
+        popup.addItems(withTitles: Defaults.HistoryNotchTriggerMode.allCases.map(\.localizedTitle))
+        popup.setAccessibilityLabel(L10n.historyNotchTriggerLabel)
+        popup.target = self
+        popup.action = #selector(historyNotchTriggerChanged(_:))
+        popup.translatesAutoresizingMaskIntoConstraints = false
+        popup.widthAnchor.constraint(greaterThanOrEqualToConstant: 140).isActive = true
+        historyNotchTriggerPopup = popup
+        row.addArrangedSubview(popup)
+
+        refreshHistoryNotchTriggerControls()
+        return row
+    }
+
+    private func refreshHistoryNotchTriggerControls() {
+        let enabled = Defaults.isHistoryCacheAvailable && Defaults.historyPanelNotchEnabled
+        historyNotchTriggerPopup?.isEnabled = enabled
+        historyNotchTriggerPopup?.selectItem(
+            at: Defaults.HistoryNotchTriggerMode.allCases.firstIndex(of: Defaults.historyNotchTriggerMode) ?? 0
+        )
+        historyNotchTriggerLabel?.textColor = NSColor.white.withAlphaComponent(enabled ? 0.94 : 0.4)
     }
 
     private func makeSavePathRow() -> NSView {
@@ -1424,11 +1465,19 @@ final class SettingsView: NSView {
     @objc private func historyCacheToggled(_ sender: NSSwitch) {
         Defaults.historyCacheEnabled = sender.state == .on
         historyCacheSlider?.isEnabled = Defaults.historyCacheEnabled
+        refreshHistoryNotchTriggerControls()
     }
 
     @objc private func clipboardTextCacheToggled(_ sender: NSSwitch) {
         Defaults.clipboardTextCacheEnabled = sender.state == .on
         clipboardTextHistoryLimitSlider?.isEnabled = Defaults.clipboardTextCacheEnabled
+        refreshHistoryNotchTriggerControls()
+    }
+
+    @objc private func historyNotchTriggerChanged(_ sender: NSPopUpButton) {
+        let modes = Defaults.HistoryNotchTriggerMode.allCases
+        guard modes.indices.contains(sender.indexOfSelectedItem) else { return }
+        Defaults.historyNotchTriggerMode = modes[sender.indexOfSelectedItem]
     }
 
     @objc private func historyLimitChanged(_ sender: NSSlider) {

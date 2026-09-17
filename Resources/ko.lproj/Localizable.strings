@@ -20,6 +20,9 @@
 "historyPanelDialogModeHint" = "메뉴 또는 단축키로 가로 미리보기 패널 열기";
 "historyPanelNotchMode" = "노치";
 "historyPanelNotchModeHint" = "상단 노치에 마우스를 올리면 펼쳐지고 벗어나면 자동으로 숨김";
+"historyNotchTriggerLabel" = "노치 활성화 방식";
+"historyNotchTriggerHover" = "마우스를 올려 열기";
+"historyNotchTriggerClick" = "클릭하여 열기";
 "windowShadowToggleLabel" = "창 캡처 그림자";
 "windowShadowToggleHint" = "창을 선택해 캡처할 때 모서리를 둥글게 하고 macOS 스타일 그림자를 추가합니다";
 "windowShadowSizeLabel" = "그림자 크기";

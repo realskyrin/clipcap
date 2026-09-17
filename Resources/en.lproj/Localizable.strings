@@ -20,6 +20,9 @@
 "historyPanelDialogModeHint" = "Open a horizontal preview panel from the menu or shortcut";
 "historyPanelNotchMode" = "Notch";
 "historyPanelNotchModeHint" = "Hover near the top notch to expand, leave to hide";
+"historyNotchTriggerLabel" = "Notch activation";
+"historyNotchTriggerHover" = "Open on hover";
+"historyNotchTriggerClick" = "Open on click";
 "windowShadowToggleLabel" = "Window Capture Shadow";
 "windowShadowToggleHint" = "Round the corners of window captures and add a macOS-style drop shadow";
 "windowShadowSizeLabel" = "Shadow Size";

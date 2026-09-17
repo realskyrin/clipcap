@@ -20,6 +20,9 @@
 "historyPanelDialogModeHint" = "メニューまたはショートカットから横スクロールのプレビューパネルを開きます";
 "historyPanelNotchMode" = "ノッチ";
 "historyPanelNotchModeHint" = "上部ノッチにマウスを入れると展開し、離れると自動で隠れます";
+"historyNotchTriggerLabel" = "ノッチの起動方法";
+"historyNotchTriggerHover" = "ホバーで開く";
+"historyNotchTriggerClick" = "クリックで開く";
 "windowShadowToggleLabel" = "ウインドウ撮影の影";
 "windowShadowToggleHint" = "ウインドウを選んで撮影すると角を丸め、macOS 風のドロップシャドウを追加します";
 "windowShadowSizeLabel" = "影のサイズ";

@@ -20,6 +20,9 @@
 "historyPanelDialogModeHint" = "透過選單或快捷鍵開啟橫向預覽面板";
 "historyPanelNotchMode" = "瀏海";
 "historyPanelNotchModeHint" = "滑鼠進入螢幕頂部瀏海自動展開，移出後自動收起";
+"historyNotchTriggerLabel" = "瀏海觸發方式";
+"historyNotchTriggerHover" = "滑鼠懸停開啟";
+"historyNotchTriggerClick" = "滑鼠點擊開啟";
 "windowShadowToggleLabel" = "視窗截圖陰影";
 "windowShadowToggleHint" = "擷取視窗時裁出圓角，並加上 macOS 風格的陰影";
 "windowShadowSizeLabel" = "陰影大小";

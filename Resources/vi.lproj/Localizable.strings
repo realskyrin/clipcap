@@ -20,6 +20,9 @@
 "historyPanelDialogModeHint" = "Mở bảng xem trước ngang từ menu hoặc phím tắt";
 "historyPanelNotchMode" = "Tai thỏ";
 "historyPanelNotchModeHint" = "Di chuột vào tai thỏ trên cùng để mở rộng, rời khỏi để ẩn";
+"historyNotchTriggerLabel" = "Cách mở tại vùng khuyết";
+"historyNotchTriggerHover" = "Mở khi di chuột qua";
+"historyNotchTriggerClick" = "Mở khi nhấp chuột";
 "windowShadowToggleLabel" = "Đổ bóng khi chụp cửa sổ";
 "windowShadowToggleHint" = "Bo góc ảnh chụp cửa sổ và thêm bóng đổ kiểu macOS";
 "windowShadowSizeLabel" = "Kích thước bóng";

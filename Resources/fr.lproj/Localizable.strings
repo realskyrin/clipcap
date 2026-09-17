@@ -20,6 +20,9 @@
 "historyPanelDialogModeHint" = "Ouvre un panneau d'aperçus horizontaux depuis le menu ou le raccourci";
 "historyPanelNotchMode" = "Encoche";
 "historyPanelNotchModeHint" = "Survolez l'encoche en haut pour développer, quittez pour masquer";
+"historyNotchTriggerLabel" = "Activation de l’encoche";
+"historyNotchTriggerHover" = "Ouvrir au survol";
+"historyNotchTriggerClick" = "Ouvrir au clic";
 "windowShadowToggleLabel" = "Ombre des captures de fenêtre";
 "windowShadowToggleHint" = "Arrondit les coins des captures de fenêtre et ajoute une ombre portée façon macOS";
 "windowShadowSizeLabel" = "Taille de l'ombre";

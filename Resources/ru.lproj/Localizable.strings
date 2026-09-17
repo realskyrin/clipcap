@@ -20,6 +20,9 @@
 "historyPanelDialogModeHint" = "Открывает горизонтальную панель предпросмотра из меню или по сочетанию";
 "historyPanelNotchMode" = "Вырез";
 "historyPanelNotchModeHint" = "Наведение на верхний вырез раскрывает панель, выход скрывает";
+"historyNotchTriggerLabel" = "Активация выреза";
+"historyNotchTriggerHover" = "Открывать при наведении";
+"historyNotchTriggerClick" = "Открывать по нажатию";
 "windowShadowToggleLabel" = "Тень при снимке окна";
 "windowShadowToggleHint" = "Скругляет углы снимков окон и добавляет тень в стиле macOS";
 "windowShadowSizeLabel" = "Размер тени";
