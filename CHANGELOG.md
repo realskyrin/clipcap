@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [1.8.31] - 2026-09-17
+
+### Added
+
+- Added click activation mode for the history notch (31a333c)
+
 ## [1.8.30] - 2026-09-15
 
 ### Fixed
