@@ -8,8 +8,8 @@
 "launchAtLogin" = "Запускать при входе";
 "pinAcrossSpaces" = "Показывать закрепления на всех рабочих столах";
 "pinAcrossSpacesHint" = "Новые закрепленные изображения появляются на каждом рабочем столе и полноэкранном Space";
-"historyCacheToggleLabel" = "Кэшировать изображения";
-"historyCacheToggleHint" = "Сохраняет недавние изображения и выбранные цвета для быстрого повторного копирования из строки меню";
+"historyCacheToggleLabel" = "Кэшировать изображения и медиа";
+"historyCacheToggleHint" = "Сохраняет недавние изображения, GIF, видео и выбранные цвета для быстрого повторного использования из истории";
 "clipboardTextCacheToggleLabel" = "Кэшировать текст буфера обмена";
 "clipboardTextCacheToggleHint" = "Сохраняет скопированный текст в истории для быстрого повторного использования";
 "clipboardTextHistoryLimitLabel" = "Лимит истории текста";
@@ -154,7 +154,7 @@
 "historyPanelFavoriteFailed" = "Не удалось изменить избранное";
 "historyDeletedSkippingFavorites" = "Удалено объектов: %d, избранных пропущено: %d";
 "historyPanelFilterAll" = "Все";
-"historyPanelFilterScreenshots" = "Снимки";
+"historyPanelFilterScreenshots" = "Изображения";
 "historyPanelFilterGIF" = "GIF";
 "historyPanelFilterColors" = "Цвета";
 "historyPanelFilterText" = "Текст";
@@ -170,7 +170,7 @@
 "historyPreviewQRCodeTitle" = "QR-код текста";
 "historyPanelCopyHint" = "Нажмите для копирования";
 "historyPanelCopyDragHint" = "Нажмите для копирования · перетащите в приложение";
-"historyPanelCopyImagePath" = "Копировать путь к изображению";
+"historyPanelCopyImagePath" = "Копировать путь к файлу";
 "historyPanelEmpty" = "История пуста";
 
 /* Cursor chip */
@@ -182,9 +182,9 @@
 
 /* Toast */
 "copiedToClipboard" = "Скопировано в буфер обмена";
-"historyImagePathCopied" = "Путь к изображению скопирован в буфер обмена";
-"copyPathHistoryRequired" = "Включите историю изображений перед копированием пути";
-"historyImagePathCopyFailed" = "Не удалось добавить изображение в историю или скопировать его путь";
+"historyImagePathCopied" = "Путь к файлу скопирован в буфер обмена";
+"copyPathHistoryRequired" = "Включите историю изображений и медиа перед копированием пути к файлу";
+"historyImagePathCopyFailed" = "Не удалось добавить файл в историю или скопировать его путь";
 "mergedLongScreenshot" = "Длинный снимок объединён";
 "cropLongScreenshotHint" = "Перетащите верхний/нижний край для обрезки — нажмите Enter или ✓";
 "scrollCaptureHint" = "Нажмите любую клавишу, чтобы остановить прокрутку";
@@ -273,8 +273,12 @@
 "settingsTabPermissions" = "Разрешения";
 "settingsTabAbout" = "О программе";
 "settingsTabToolbar" = "Панель инструментов";
+"settingsGeneralCapture" = "Снимки и закрепление";
+"settingsGeneralRecording" = "Запись";
+"settingsGeneralHistory" = "История";
+"settingsGeneralFiles" = "Файлы и вывод";
 "settingsNoPermissionsNeeded" = "Разрешения не нужны";
-"settingsSubtitleGeneral" = "Буфер обмена, файлы, история и сохранение";
+"settingsSubtitleGeneral" = "Язык приложения и параметры запуска";
 "settingsSubtitleShortcuts" = "Локальные сочетания редактора без глобального мониторинга";
 "settingsSubtitleToolbar" = "Настройка инструментов разметки в редакторе";
 "settingsSubtitleAbout" = "Идентичность продукта и ссылки проекта";
@@ -292,8 +296,8 @@
 "toolbarSettingsApply" = "Применить";
 
 /* About pane */
-"aboutTagline" = "Легкая версия capcap, без разрешений, только разметка и сжатие изображений, полная версия на github.com/realskyrin/capcap";
-"aboutDescription" = "Без разрешений, для разметки и сжатия изображений";
+"aboutTagline" = "Облегчённый помощник capcap для разметки изображений, истории и конвертации записей без разрешений на запись экрана и универсальный доступ, полная версия на github.com/realskyrin/capcap";
+"aboutDescription" = "Разметка, сжатие, история и конвертация записей без разрешений на запись экрана и универсальный доступ";
 "aboutRepositoriesTitle" = "Репозитории";
 "aboutVersion" = "Версия %@";
 "aboutLicense" = "Лицензия";
@@ -427,7 +431,7 @@
 
 /* Save paths */
 "savePathTitle" = "Пути сохранения";
-"savePathSubtitle" = "Изображения сохраняются сюда без запроса папки назначения";
+"savePathSubtitle" = "Изображения сохраняются сюда напрямую, а результат обработки записей — в подпапку Recordings";
 "autoRevealSavedFilesLabel" = "Показать в Finder";
 "autoRevealSavedFilesHint" = "Выбирать сохранённое изображение в Finder после успешного сохранения";
 "screenshotSavePathLabel" = "Путь для изображений";
@@ -439,8 +443,8 @@
 "openImage" = "Открыть изображение";
 "openImageNoImage" = "Скопируйте изображение в буфер обмена или выберите файл изображения";
 
-"systemScreenshotAutoOpenLabel" = "Автоматически открывать системные снимки";
-"systemScreenshotAutoOpenHint" = "Открывает новые снимки в ClipCap и удаляет исходные файлы из отдельной папки после загрузки без разрешений на запись экрана и универсальный доступ";
+"systemScreenshotAutoOpenLabel" = "Импортировать системные снимки и записи";
+"systemScreenshotAutoOpenHint" = "Импортирует новые снимки и записи, удаляет исходники снимков после загрузки и сохраняет оригиналы записей без разрешений на запись экрана и универсальный доступ";
 "systemScreenshotFolderLabel" = "Папка системных снимков";
 "systemScreenshotFolderConfigured" = "Расположение системных снимков настроено";
 "systemScreenshotFolderNeedsSetup" = "Перед созданием снимка выберите эту папку как системное место сохранения";
@@ -475,7 +479,7 @@
 "historyPanelShortcutSelectAll" = "Выбрать все видимые объекты";
 "historyPanelShortcutCancel" = "Закрыть поиск или сбросить текущее состояние";
 "historyPanelShortcutCopyItem" = "Копировать объект";
-"historyPanelShortcutDragItem" = "Перетащить изображение или видео в другое приложение";
+"historyPanelShortcutDragItem" = "Перетащить медиафайл в другое приложение";
 "historyPanelShortcutOpenPreview" = "Открыть просмотр объекта под указателем";
 "historyPanelShortcutBrowsePreview" = "Предыдущий или следующий объект";
 "historyPanelShortcutClosePreview" = "Закрыть просмотр";
@@ -566,5 +570,5 @@
 "recordingSaved" = "Запись сохранена";
 "recordingConversionFailed" = "Ошибка преобразования, оригинал сохранён";
 "recordingOpenSystem" = "Открыть системный инструмент снимков и записи";
-"recordingSystemHint" = "Включите импорт выше и сохраните запись системного инструмента в отслеживаемую папку\nОригиналы сохраняются, результат помещается в Recordings внутри папки снимков\nПриоритет HEVC, GIF без звука с частотой 12 кадров/с и размером до 1280 пикселей";
+"recordingSystemHint" = "Включите импорт системных снимков и записей в разделе Снимки и закрепление, затем сохраните запись системного инструмента в отслеживаемую папку\nОригиналы сохраняются, результат помещается в Recordings внутри папки изображений\nПриоритет HEVC, GIF без звука с частотой 12 кадров/с и размером до 1280 пикселей";
 "recordingProcessing" = "Обработка записи";

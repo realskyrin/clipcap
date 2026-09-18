@@ -8,8 +8,8 @@
 "launchAtLogin" = "Mở khi đăng nhập";
 "pinAcrossSpaces" = "Hiển thị ghim trên mọi màn hình nền";
 "pinAcrossSpacesHint" = "Ảnh ghim mới xuất hiện trên mọi màn hình nền và Space toàn màn hình";
-"historyCacheToggleLabel" = "Lưu ảnh vào bộ nhớ";
-"historyCacheToggleHint" = "Lưu ảnh gần đây và màu đã chọn để sao chép lại nhanh từ thanh menu";
+"historyCacheToggleLabel" = "Lưu ảnh và nội dung đa phương tiện";
+"historyCacheToggleHint" = "Lưu ảnh, GIF, video và màu đã chọn gần đây để tái sử dụng nhanh từ lịch sử";
 "clipboardTextCacheToggleLabel" = "Lưu văn bản bảng nhớ tạm";
 "clipboardTextCacheToggleHint" = "Lưu văn bản đã sao chép vào lịch sử để nhanh chóng sử dụng lại";
 "clipboardTextHistoryLimitLabel" = "Giới hạn lịch sử văn bản";
@@ -154,7 +154,7 @@
 "historyPanelFavoriteFailed" = "Không thể thay đổi mục yêu thích";
 "historyDeletedSkippingFavorites" = "Đã xóa %d mục, bỏ qua %d mục yêu thích";
 "historyPanelFilterAll" = "Tất cả";
-"historyPanelFilterScreenshots" = "Ảnh chụp";
+"historyPanelFilterScreenshots" = "Hình ảnh";
 "historyPanelFilterGIF" = "GIF";
 "historyPanelFilterColors" = "Màu";
 "historyPanelFilterText" = "Văn bản";
@@ -170,7 +170,7 @@
 "historyPreviewQRCodeTitle" = "Mã QR văn bản";
 "historyPanelCopyHint" = "Nhấp để sao chép";
 "historyPanelCopyDragHint" = "Nhấp để sao chép · kéo vào ứng dụng";
-"historyPanelCopyImagePath" = "Sao chép đường dẫn ảnh";
+"historyPanelCopyImagePath" = "Sao chép đường dẫn tệp";
 "historyPanelEmpty" = "Chưa có lịch sử";
 
 /* Cursor chip */
@@ -182,9 +182,9 @@
 
 /* Toast */
 "copiedToClipboard" = "Đã sao chép vào clipboard";
-"historyImagePathCopied" = "Đã sao chép đường dẫn ảnh vào clipboard";
-"copyPathHistoryRequired" = "Hãy bật lịch sử ảnh trước khi sao chép đường dẫn";
-"historyImagePathCopyFailed" = "Không thể thêm ảnh vào lịch sử hoặc sao chép đường dẫn";
+"historyImagePathCopied" = "Đã sao chép đường dẫn tệp vào clipboard";
+"copyPathHistoryRequired" = "Hãy bật lịch sử ảnh và phương tiện trước khi sao chép đường dẫn tệp";
+"historyImagePathCopyFailed" = "Không thể thêm tệp vào lịch sử hoặc sao chép đường dẫn";
 "mergedLongScreenshot" = "Đã ghép ảnh chụp dài";
 "cropLongScreenshotHint" = "Kéo cạnh trên/dưới để cắt — nhấn Enter hoặc bấm ✓";
 "scrollCaptureHint" = "Nhấn phím bất kỳ để kết thúc cuộn";
@@ -273,8 +273,12 @@
 "settingsTabPermissions" = "Quyền";
 "settingsTabAbout" = "Giới thiệu";
 "settingsTabToolbar" = "Thanh công cụ";
+"settingsGeneralCapture" = "Chụp và ghim";
+"settingsGeneralRecording" = "Ghi hình";
+"settingsGeneralHistory" = "Lịch sử";
+"settingsGeneralFiles" = "Tệp và đầu ra";
 "settingsNoPermissionsNeeded" = "Không cần quyền";
-"settingsSubtitleGeneral" = "Clipboard, tệp, lịch sử và lưu ảnh";
+"settingsSubtitleGeneral" = "Ngôn ngữ ứng dụng và hành vi khởi động";
 "settingsSubtitleShortcuts" = "Phím tắt trình chỉnh sửa không cần theo dõi toàn cục";
 "settingsSubtitleToolbar" = "Sắp xếp công cụ chú thích trong trình chỉnh sửa";
 "settingsSubtitleAbout" = "Danh tính sản phẩm và liên kết dự án";
@@ -292,8 +296,8 @@
 "toolbarSettingsApply" = "Áp dụng";
 
 /* About pane */
-"aboutTagline" = "Phiên bản light của capcap, không cần quyền, chỉ hỗ trợ chú thích và nén ảnh, bản đầy đủ tại github.com/realskyrin/capcap";
-"aboutDescription" = "Không cần quyền, tập trung vào chú thích và nén ảnh";
+"aboutTagline" = "Trợ lý capcap gọn nhẹ cho chú thích ảnh, lịch sử và chuyển đổi bản ghi mà không cần quyền Ghi màn hình hoặc Trợ năng, bản đầy đủ tại github.com/realskyrin/capcap";
+"aboutDescription" = "Chú thích, nén, lịch sử và chuyển đổi bản ghi mà không cần quyền Ghi màn hình hoặc Trợ năng";
 "aboutRepositoriesTitle" = "Kho mã nguồn";
 "aboutVersion" = "Phiên bản %@";
 "aboutLicense" = "Giấy phép";
@@ -427,7 +431,7 @@
 
 /* Save paths */
 "savePathTitle" = "Đường dẫn lưu";
-"savePathSubtitle" = "Ảnh được lưu tại đây mà không hỏi vị trí đích";
+"savePathSubtitle" = "Ảnh được lưu trực tiếp tại đây và đầu ra bản ghi nằm trong thư mục con Recordings";
 "autoRevealSavedFilesLabel" = "Hiển thị trong Finder";
 "autoRevealSavedFilesHint" = "Chọn ảnh đã lưu trong Finder sau khi lưu thành công";
 "screenshotSavePathLabel" = "Đường dẫn lưu ảnh";
@@ -439,8 +443,8 @@
 "openImage" = "Mở ảnh";
 "openImageNoImage" = "Sao chép ảnh vào bảng nhớ tạm hoặc chọn một tệp ảnh";
 
-"systemScreenshotAutoOpenLabel" = "Tự động mở ảnh chụp màn hình hệ thống";
-"systemScreenshotAutoOpenHint" = "Mở ảnh chụp mới trong ClipCap rồi xóa từng tệp nguồn khỏi thư mục riêng sau khi tải mà không cần quyền Ghi màn hình hoặc Trợ năng";
+"systemScreenshotAutoOpenLabel" = "Nhập ảnh chụp và bản ghi hệ thống";
+"systemScreenshotAutoOpenHint" = "Nhập ảnh chụp và bản ghi mới, xóa nguồn ảnh chụp sau khi tải nhưng giữ bản ghi gốc mà không cần quyền Ghi màn hình hoặc Trợ năng";
 "systemScreenshotFolderLabel" = "Thư mục ảnh chụp màn hình hệ thống";
 "systemScreenshotFolderConfigured" = "Vị trí ảnh chụp màn hình hệ thống đã sẵn sàng";
 "systemScreenshotFolderNeedsSetup" = "Đặt vị trí lưu ảnh chụp màn hình hệ thống thành thư mục này trước khi chụp";
@@ -475,8 +479,8 @@
 "historyPanelShortcutSelectAll" = "Chọn tất cả mục đang hiển thị";
 "historyPanelShortcutCancel" = "Thoát tìm kiếm hoặc xóa trạng thái hiện tại";
 "historyPanelShortcutCopyItem" = "Sao chép mục";
-"historyPanelShortcutDragItem" = "Kéo ảnh hoặc video sang ứng dụng khác";
-"historyPanelShortcutOpenPreview" = "Xem trước ảnh hoặc văn bản đang trỏ";
+"historyPanelShortcutDragItem" = "Kéo phương tiện sang ứng dụng khác";
+"historyPanelShortcutOpenPreview" = "Xem trước mục đang trỏ";
 "historyPanelShortcutBrowsePreview" = "Xem mục trước hoặc sau";
 "historyPanelShortcutClosePreview" = "Đóng bản xem trước";
 "historyPanelShortcutCopyPreview" = "Sao chép nội dung xem trước";
@@ -566,5 +570,5 @@
 "recordingSaved" = "Đã lưu bản ghi";
 "recordingConversionFailed" = "Chuyển đổi thất bại, đã giữ bản gốc";
 "recordingOpenSystem" = "Mở công cụ chụp và ghi của hệ thống";
-"recordingSystemHint" = "Bật nhập ảnh hệ thống ở trên, rồi ghi và lưu vào thư mục theo dõi bằng công cụ hệ thống\nGiữ nguyên bản gốc, lưu kết quả vào Recordings trong thư mục ảnh chụp\nƯu tiên HEVC, GIF không có âm thanh với 12 khung hình/giây và cạnh tối đa 1280 pixel";
+"recordingSystemHint" = "Bật nhập ảnh chụp và bản ghi hệ thống trong Chụp và ghim, rồi ghi và lưu vào thư mục theo dõi bằng công cụ hệ thống\nGiữ nguyên bản gốc, lưu kết quả vào Recordings trong thư mục ảnh\nƯu tiên HEVC, GIF không có âm thanh với 12 khung hình/giây và cạnh tối đa 1280 pixel";
 "recordingProcessing" = "Đang xử lý bản ghi";

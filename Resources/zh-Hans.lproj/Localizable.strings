@@ -8,8 +8,8 @@
 "launchAtLogin" = "开机自动启动";
 "pinAcrossSpaces" = "贴图跨桌面显示";
 "pinAcrossSpacesHint" = "开启后新贴图会出现在所有桌面与全屏空间";
-"historyCacheToggleLabel" = "缓存图片";
-"historyCacheToggleHint" = "保存最近图片和取色结果，便于从菜单栏快速再次复制";
+"historyCacheToggleLabel" = "缓存图片与媒体";
+"historyCacheToggleHint" = "保存最近图片、GIF、视频和取色结果，便于从历史记录快速复用";
 "clipboardTextCacheToggleLabel" = "缓存剪贴板文本";
 "clipboardTextCacheToggleHint" = "将复制的文本保存到历史记录，便于从历史记录快速复用";
 "clipboardTextHistoryLimitLabel" = "文本历史数量";
@@ -154,7 +154,7 @@
 "historyPanelFavoriteFailed" = "无法更改收藏";
 "historyDeletedSkippingFavorites" = "已删除 %d 个项目，跳过 %d 个收藏";
 "historyPanelFilterAll" = "全部";
-"historyPanelFilterScreenshots" = "截图";
+"historyPanelFilterScreenshots" = "图片";
 "historyPanelFilterGIF" = "GIF";
 "historyPanelFilterColors" = "颜色";
 "historyPanelFilterText" = "文本";
@@ -170,7 +170,7 @@
 "historyPreviewQRCodeTitle" = "文本二维码";
 "historyPanelCopyHint" = "点击复制";
 "historyPanelCopyDragHint" = "点击复制 · 拖拽到应用";
-"historyPanelCopyImagePath" = "复制图片路径";
+"historyPanelCopyImagePath" = "复制文件路径";
 "historyPanelEmpty" = "暂无历史";
 
 /* Cursor chip */
@@ -182,9 +182,9 @@
 
 /* Toast */
 "copiedToClipboard" = "已添加到剪贴板";
-"historyImagePathCopied" = "已复制图片路径到剪贴板";
-"copyPathHistoryRequired" = "请先开启图片历史记录再复制路径";
-"historyImagePathCopyFailed" = "无法把图片加入历史记录并复制路径";
+"historyImagePathCopied" = "已复制文件路径到剪贴板";
+"copyPathHistoryRequired" = "请先开启图片与媒体历史记录再复制文件路径";
+"historyImagePathCopyFailed" = "无法把文件加入历史记录并复制路径";
 "mergedLongScreenshot" = "已合并长截图";
 "cropLongScreenshotHint" = "拖动上下边裁剪长图，回车或点对勾确认";
 "scrollCaptureHint" = "按任意键结束滚动";
@@ -273,8 +273,12 @@
 "settingsTabPermissions" = "权限";
 "settingsTabAbout" = "关于";
 "settingsTabToolbar" = "工具栏";
+"settingsGeneralCapture" = "截图与贴图";
+"settingsGeneralRecording" = "录制";
+"settingsGeneralHistory" = "历史记录";
+"settingsGeneralFiles" = "文件与输出";
 "settingsNoPermissionsNeeded" = "无需权限";
-"settingsSubtitleGeneral" = "剪贴板、文件、历史和保存行为";
+"settingsSubtitleGeneral" = "应用语言与启动行为";
 "settingsSubtitleShortcuts" = "无需全局监听的编辑器快捷键";
 "settingsSubtitleToolbar" = "排列编辑器中显示的标注工具";
 "settingsSubtitleAbout" = "产品身份和项目链接";
@@ -292,8 +296,8 @@
 "toolbarSettingsApply" = "应用";
 
 /* About pane */
-"aboutTagline" = "capcap 的 light 版本，无需任何权限，仅支持标注与图片压缩，完整版见 github.com/realskyrin/capcap";
-"aboutDescription" = "无需任何权限，专注图片标注与压缩";
+"aboutTagline" = "capcap 的轻量伴侣，无需录屏或辅助功能权限，支持图片标注、历史记录与录屏转换，完整版见 github.com/realskyrin/capcap";
+"aboutDescription" = "无需录屏或辅助功能权限，支持图片标注、压缩、历史记录与录屏转换";
 "aboutRepositoriesTitle" = "仓库地址";
 "aboutVersion" = "版本 %@";
 "aboutLicense" = "开源协议";
@@ -427,7 +431,7 @@
 
 /* Save paths */
 "savePathTitle" = "保存路径";
-"savePathSubtitle" = "图片会直接保存到这个路径，不再询问保存位置";
+"savePathSubtitle" = "图片直接保存到此路径，录屏输出保存到其中的 Recordings 文件夹";
 "autoRevealSavedFilesLabel" = "在 Finder 中显示";
 "autoRevealSavedFilesHint" = "保存成功后，在 Finder 中选中刚保存的图片";
 "screenshotSavePathLabel" = "图片保存路径";
@@ -439,8 +443,8 @@
 "openImage" = "打开图片";
 "openImageNoImage" = "复制图片到剪贴板，或选择一个图片文件";
 
-"systemScreenshotAutoOpenLabel" = "自动打开系统截图";
-"systemScreenshotAutoOpenHint" = "将新截图自动交给 ClipCap 编辑，载入后从专用文件夹删除源文件，无需录屏或辅助功能权限";
+"systemScreenshotAutoOpenLabel" = "接收系统截图与录屏";
+"systemScreenshotAutoOpenHint" = "自动接收新的系统截图与录屏；截图载入后删除专用目录中的源文件，录屏原文件保留，无需录屏或辅助功能权限";
 "systemScreenshotFolderLabel" = "系统截图文件夹";
 "systemScreenshotFolderConfigured" = "系统截图存储位置已配置";
 "systemScreenshotFolderNeedsSetup" = "截图前请将系统截图存储位置设为此文件夹";
@@ -475,8 +479,8 @@
 "historyPanelShortcutSelectAll" = "全选当前结果";
 "historyPanelShortcutCancel" = "退出搜索或清除当前状态";
 "historyPanelShortcutCopyItem" = "复制项目";
-"historyPanelShortcutDragItem" = "拖拽图片或视频到其他应用";
-"historyPanelShortcutOpenPreview" = "预览悬停的图片或文本";
+"historyPanelShortcutDragItem" = "拖拽媒体到其他应用";
+"historyPanelShortcutOpenPreview" = "预览悬停项目";
 "historyPanelShortcutBrowsePreview" = "切换上一个或下一个预览";
 "historyPanelShortcutClosePreview" = "关闭预览";
 "historyPanelShortcutCopyPreview" = "复制预览内容";
@@ -566,5 +570,5 @@
 "recordingSaved" = "录制已保存";
 "recordingConversionFailed" = "转换失败，原视频已保留";
 "recordingOpenSystem" = "打开系统截图与录制";
-"recordingSystemHint" = "启用上方系统截图接收后，在系统工具中选择录制，保存到同一监听目录后自动处理\n原文件保留，输出保存到截图保存路径下的 Recordings 文件夹\n压缩优先使用 HEVC，GIF 为无声动画，最长边 1280 像素，每秒 12 帧";
+"recordingSystemHint" = "先在“截图与贴图”中启用系统截图与录屏接收，再在系统工具中选择录制并保存到监听文件夹\n原文件保留，输出保存到图片保存路径下的 Recordings 文件夹\n压缩优先使用 HEVC，GIF 为无声动画，最长边 1280 像素，每秒 12 帧";
 "recordingProcessing" = "正在处理录制";

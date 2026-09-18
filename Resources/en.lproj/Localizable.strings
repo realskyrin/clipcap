@@ -8,8 +8,8 @@
 "launchAtLogin" = "Launch at Login";
 "pinAcrossSpaces" = "Show Pins Across Desktops";
 "pinAcrossSpacesHint" = "New pinned images appear on every desktop and full-screen Space";
-"historyCacheToggleLabel" = "Cache Images";
-"historyCacheToggleHint" = "Store recent images and picked colors for quick reuse from the menu bar";
+"historyCacheToggleLabel" = "Cache images and media";
+"historyCacheToggleHint" = "Store recent images, GIFs, videos, and picked colors for quick reuse from history";
 "clipboardTextCacheToggleLabel" = "Cache Clipboard Text";
 "clipboardTextCacheToggleHint" = "Store copied text in history for quick reuse";
 "clipboardTextHistoryLimitLabel" = "Text History Limit";
@@ -170,7 +170,7 @@
 "historyPreviewQRCodeTitle" = "Text QR Code";
 "historyPanelCopyHint" = "Click to copy";
 "historyPanelCopyDragHint" = "Click to copy · drag into an app";
-"historyPanelCopyImagePath" = "Copy image path";
+"historyPanelCopyImagePath" = "Copy file path";
 "historyPanelEmpty" = "No history yet";
 
 /* Cursor chip */
@@ -182,9 +182,9 @@
 
 /* Toast */
 "copiedToClipboard" = "Copied to clipboard";
-"historyImagePathCopied" = "Copied image path to clipboard";
-"copyPathHistoryRequired" = "Enable image history before copying its path";
-"historyImagePathCopyFailed" = "Could not add the image to history or copy its path";
+"historyImagePathCopied" = "Copied file path to clipboard";
+"copyPathHistoryRequired" = "Enable image and media history before copying the file path";
+"historyImagePathCopyFailed" = "Could not add the file to history or copy its path";
 "mergedLongScreenshot" = "Long image merged";
 "cropLongScreenshotHint" = "Drag the top/bottom edges to crop — press Enter or tap ✓";
 "scrollCaptureHint" = "Press any key to finish scrolling";
@@ -273,8 +273,12 @@
 "settingsTabPermissions" = "Permissions";
 "settingsTabAbout" = "About";
 "settingsTabToolbar" = "Toolbar";
+"settingsGeneralCapture" = "Capture & Pin";
+"settingsGeneralRecording" = "Recording";
+"settingsGeneralHistory" = "History";
+"settingsGeneralFiles" = "Files & Output";
 "settingsNoPermissionsNeeded" = "No permissions needed";
-"settingsSubtitleGeneral" = "Clipboard, files, history, and save behavior";
+"settingsSubtitleGeneral" = "App language and startup behavior";
 "settingsSubtitleShortcuts" = "Local editor shortcuts without global monitoring";
 "settingsSubtitleToolbar" = "Arrange the annotation tools shown in the editor";
 "settingsSubtitleAbout" = "Product identity and project links";
@@ -292,8 +296,8 @@
 "toolbarSettingsApply" = "Apply";
 
 /* About pane */
-"aboutTagline" = "The light version of capcap, no permissions needed, annotation and image compression only, full version at github.com/realskyrin/capcap";
-"aboutDescription" = "No permissions needed, focused on image annotation and compression";
+"aboutTagline" = "A lightweight capcap companion for image annotation, history, and recording conversion without Screen Recording or Accessibility access, full version at github.com/realskyrin/capcap";
+"aboutDescription" = "Image annotation, compression, history, and recording conversion without Screen Recording or Accessibility access";
 "aboutRepositoriesTitle" = "Repositories";
 "aboutVersion" = "Version %@";
 "aboutLicense" = "License";
@@ -427,7 +431,7 @@
 
 /* Save paths */
 "savePathTitle" = "Save paths";
-"savePathSubtitle" = "Images save here without asking for a destination";
+"savePathSubtitle" = "Images save here directly and recording output goes to the Recordings subfolder";
 "autoRevealSavedFilesLabel" = "Show in Finder";
 "autoRevealSavedFilesHint" = "Select the saved image in Finder after a successful save";
 "screenshotSavePathLabel" = "Image save path";
@@ -439,8 +443,8 @@
 "openImage" = "Open Image";
 "openImageNoImage" = "Copy an image to the clipboard or choose an image file";
 
-"systemScreenshotAutoOpenLabel" = "Automatically open system screenshots";
-"systemScreenshotAutoOpenHint" = "Opens new screenshots in ClipCap, then removes each source file from the dedicated folder after loading without Screen Recording or Accessibility access";
+"systemScreenshotAutoOpenLabel" = "Import system screenshots and recordings";
+"systemScreenshotAutoOpenHint" = "Imports new screenshots and recordings; screenshot sources are removed from the dedicated folder after loading while recording originals are preserved, without Screen Recording or Accessibility access";
 "systemScreenshotFolderLabel" = "System screenshot folder";
 "systemScreenshotFolderConfigured" = "The system screenshot location is ready";
 "systemScreenshotFolderNeedsSetup" = "Set the system screenshot save location to this folder before taking a screenshot";
@@ -475,8 +479,8 @@
 "historyPanelShortcutSelectAll" = "Select all visible items";
 "historyPanelShortcutCancel" = "Exit search or clear current state";
 "historyPanelShortcutCopyItem" = "Copy item";
-"historyPanelShortcutDragItem" = "Drag image or video to another app";
-"historyPanelShortcutOpenPreview" = "Preview hovered image or text";
+"historyPanelShortcutDragItem" = "Drag media to another app";
+"historyPanelShortcutOpenPreview" = "Preview hovered item";
 "historyPanelShortcutBrowsePreview" = "Browse previous or next preview";
 "historyPanelShortcutClosePreview" = "Close preview";
 "historyPanelShortcutCopyPreview" = "Copy preview content";
@@ -566,5 +570,5 @@
 "recordingSaved" = "Recording saved";
 "recordingConversionFailed" = "Conversion failed, original preserved";
 "recordingOpenSystem" = "Open system screenshot and recording";
-"recordingSystemHint" = "Enable system screenshot import above, select recording in the system tool and save to the monitored folder\nOriginals are preserved and output is saved in Recordings under the screenshot save folder\nCompression prefers HEVC, GIF is silent at 12 fps with a maximum dimension of 1280 pixels";
+"recordingSystemHint" = "Enable system screenshot and recording import in Capture & Pin, then select recording in the system tool and save to the monitored folder\nOriginals are preserved and output is saved in Recordings under the image save folder\nCompression prefers HEVC, GIF is silent at 12 fps with a maximum dimension of 1280 pixels";
 "recordingProcessing" = "Processing recording";

@@ -30,6 +30,23 @@ final class HistoryRetentionPolicyTests: XCTestCase {
         XCTAssertTrue(FileManager.default.fileExists(atPath: text.path))
     }
 
+    func testMediaLimitIncludesImagesAnimationsVideosAndColors() throws {
+        let image = try makeFile(name: "image.png", contents: Data([0x01]), age: 60)
+        let animation = try makeFile(name: "animation.gif", contents: Data([0x02]), age: 50)
+        let movie = try makeFile(name: "movie.mov", contents: Data([0x03]), age: 40)
+        let video = try makeFile(name: "video.mp4", contents: Data([0x04]), age: 30)
+        let alternateVideo = try makeFile(name: "alternate.m4v", contents: Data([0x05]), age: 20)
+        let color = try makeFile(name: "picked.color", contents: Data("#123456".utf8), age: 10)
+
+        XCTAssertEqual(HistoryRetentionPolicy.pruneMedia(in: directoryURL, limit: 2), 4)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: image.path))
+        XCTAssertFalse(FileManager.default.fileExists(atPath: animation.path))
+        XCTAssertFalse(FileManager.default.fileExists(atPath: movie.path))
+        XCTAssertFalse(FileManager.default.fileExists(atPath: video.path))
+        XCTAssertTrue(FileManager.default.fileExists(atPath: alternateVideo.path))
+        XCTAssertTrue(FileManager.default.fileExists(atPath: color.path))
+    }
+
     func testTextLimitDoesNotConsumeOrDeleteMediaEntries() throws {
         let image = try makeFile(name: "image.png", contents: Data([0x01]), age: 30)
         let oldestText = try makeFile(name: "old.txt", contents: Data("old".utf8), age: 20)

@@ -8,8 +8,8 @@
 "launchAtLogin" = "ログイン時に起動";
 "pinAcrossSpaces" = "ピン画像をすべてのデスクトップに表示";
 "pinAcrossSpacesHint" = "オンにすると新しいピン画像がすべてのデスクトップとフルスクリーン操作スペースに表示されます";
-"historyCacheToggleLabel" = "画像をキャッシュ";
-"historyCacheToggleHint" = "最近の画像と取得した色を保存し、メニューバーからすばやく再コピーできます";
+"historyCacheToggleLabel" = "画像とメディアをキャッシュ";
+"historyCacheToggleHint" = "最近の画像、GIF、動画、取得した色を保存し、履歴からすばやく再利用できます";
 "clipboardTextCacheToggleLabel" = "クリップボードのテキストをキャッシュ";
 "clipboardTextCacheToggleHint" = "コピーしたテキストを履歴に保存してすばやく再利用できます";
 "clipboardTextHistoryLimitLabel" = "テキスト履歴の上限";
@@ -154,7 +154,7 @@
 "historyPanelFavoriteFailed" = "お気に入りを変更できません";
 "historyDeletedSkippingFavorites" = "項目を%d件削除、お気に入りを%d件スキップ";
 "historyPanelFilterAll" = "すべて";
-"historyPanelFilterScreenshots" = "スクリーンショット";
+"historyPanelFilterScreenshots" = "画像";
 "historyPanelFilterGIF" = "GIF";
 "historyPanelFilterColors" = "カラー";
 "historyPanelFilterText" = "テキスト";
@@ -170,7 +170,7 @@
 "historyPreviewQRCodeTitle" = "テキストのQRコード";
 "historyPanelCopyHint" = "クリックでコピー";
 "historyPanelCopyDragHint" = "クリックでコピー · アプリへドラッグ";
-"historyPanelCopyImagePath" = "画像のパスをコピー";
+"historyPanelCopyImagePath" = "ファイルのパスをコピー";
 "historyPanelEmpty" = "履歴がありません";
 
 /* Cursor chip */
@@ -182,9 +182,9 @@
 
 /* Toast */
 "copiedToClipboard" = "クリップボードにコピーしました";
-"historyImagePathCopied" = "画像のパスをクリップボードにコピーしました";
-"copyPathHistoryRequired" = "パスをコピーするには画像履歴を有効にしてください";
-"historyImagePathCopyFailed" = "画像を履歴に追加またはパスをコピーできませんでした";
+"historyImagePathCopied" = "ファイルのパスをクリップボードにコピーしました";
+"copyPathHistoryRequired" = "ファイルのパスをコピーするには画像とメディアの履歴を有効にしてください";
+"historyImagePathCopyFailed" = "ファイルを履歴に追加またはパスをコピーできませんでした";
 "mergedLongScreenshot" = "長いスクリーンショットを結合しました";
 "cropLongScreenshotHint" = "上下の端をドラッグしてトリミング — Enter キーまたは ✓ をタップ";
 "scrollCaptureHint" = "任意のキーでスクロールを終了";
@@ -273,8 +273,12 @@
 "settingsTabPermissions" = "権限";
 "settingsTabAbout" = "情報";
 "settingsTabToolbar" = "ツールバー";
+"settingsGeneralCapture" = "撮影とピン留め";
+"settingsGeneralRecording" = "録画";
+"settingsGeneralHistory" = "履歴";
+"settingsGeneralFiles" = "ファイルと出力";
 "settingsNoPermissionsNeeded" = "権限は不要";
-"settingsSubtitleGeneral" = "クリップボード、ファイル、履歴、保存動作";
+"settingsSubtitleGeneral" = "アプリの言語と起動設定";
 "settingsSubtitleShortcuts" = "グローバル監視を使わないエディターショートカット";
 "settingsSubtitleToolbar" = "エディターに表示する注釈ツールを並べ替え";
 "settingsSubtitleAbout" = "製品情報とプロジェクトリンク";
@@ -292,8 +296,8 @@
 "toolbarSettingsApply" = "適用";
 
 /* About pane */
-"aboutTagline" = "capcap の light バージョン、権限不要で画像注釈と圧縮のみ対応、完全版は github.com/realskyrin/capcap";
-"aboutDescription" = "権限不要で画像注釈と圧縮に集中";
+"aboutTagline" = "画面収録やアクセシビリティ権限なしで画像注釈、履歴、録画変換に対応する軽量な capcap コンパニオン、完全版は github.com/realskyrin/capcap";
+"aboutDescription" = "画面収録やアクセシビリティ権限なしで画像注釈、圧縮、履歴、録画変換に対応";
 "aboutRepositoriesTitle" = "リポジトリ";
 "aboutVersion" = "バージョン %@";
 "aboutLicense" = "ライセンス";
@@ -427,7 +431,7 @@
 
 /* Save paths */
 "savePathTitle" = "保存先";
-"savePathSubtitle" = "画像は保存先を確認せず、ここへ保存されます";
+"savePathSubtitle" = "画像はここへ直接保存され、録画の出力は Recordings サブフォルダに保存されます";
 "autoRevealSavedFilesLabel" = "Finder に表示";
 "autoRevealSavedFilesHint" = "保存に成功した画像を Finder で選択します";
 "screenshotSavePathLabel" = "画像の保存先";
@@ -439,8 +443,8 @@
 "openImage" = "画像を開く";
 "openImageNoImage" = "画像をクリップボードにコピーするか画像ファイルを選択してください";
 
-"systemScreenshotAutoOpenLabel" = "システムスクリーンショットを自動で開く";
-"systemScreenshotAutoOpenHint" = "新しいスクリーンショットを ClipCap で開き、読み込み後に専用フォルダの元ファイルを削除します。画面収録やアクセシビリティ権限は不要です";
+"systemScreenshotAutoOpenLabel" = "システムのスクリーンショットと録画を取り込む";
+"systemScreenshotAutoOpenHint" = "新しいスクリーンショットと録画を取り込み、読み込み後にスクリーンショットの元ファイルを削除し、録画の元ファイルは保持します。画面収録やアクセシビリティ権限は不要です";
 "systemScreenshotFolderLabel" = "システムスクリーンショットフォルダ";
 "systemScreenshotFolderConfigured" = "システムスクリーンショットの保存先は設定済み";
 "systemScreenshotFolderNeedsSetup" = "撮影前にシステムスクリーンショットの保存先をこのフォルダに設定してください";
@@ -475,8 +479,8 @@
 "historyPanelShortcutSelectAll" = "表示中の項目をすべて選択";
 "historyPanelShortcutCancel" = "検索を終了または現在の状態を解除";
 "historyPanelShortcutCopyItem" = "項目をコピー";
-"historyPanelShortcutDragItem" = "画像または動画を別のアプリへドラッグ";
-"historyPanelShortcutOpenPreview" = "ホバー中の画像またはテキストをプレビュー";
+"historyPanelShortcutDragItem" = "メディアを別のアプリへドラッグ";
+"historyPanelShortcutOpenPreview" = "ホバー中の項目をプレビュー";
 "historyPanelShortcutBrowsePreview" = "前後のプレビューを表示";
 "historyPanelShortcutClosePreview" = "プレビューを閉じる";
 "historyPanelShortcutCopyPreview" = "プレビュー内容をコピー";
@@ -566,5 +570,5 @@
 "recordingSaved" = "録画を保存しました";
 "recordingConversionFailed" = "変換に失敗しました 元の動画は保持されています";
 "recordingOpenSystem" = "システムのスクリーンショットと録画を開く";
-"recordingSystemHint" = "上のシステム画像取り込みを有効にして、システムツールで録画を監視フォルダに保存します\n元のファイルは保持され、出力は画像保存先の Recordings フォルダに保存されます\n圧縮は HEVC 優先、GIF は無音で毎秒12フレーム、最大辺1280ピクセル";
+"recordingSystemHint" = "撮影とピン留めでシステムのスクリーンショットと録画の取り込みを有効にし、システムツールで録画を監視フォルダに保存します\n元のファイルは保持され、出力は画像保存先の Recordings フォルダに保存されます\n圧縮は HEVC 優先、GIF は無音で毎秒12フレーム、最大辺1280ピクセル";
 "recordingProcessing" = "録画を処理中";

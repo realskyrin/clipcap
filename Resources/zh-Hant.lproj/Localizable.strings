@@ -8,8 +8,8 @@
 "launchAtLogin" = "登入時啟動";
 "pinAcrossSpaces" = "貼圖跨桌面顯示";
 "pinAcrossSpacesHint" = "開啟後新貼圖會出現在所有桌面與全螢幕空間";
-"historyCacheToggleLabel" = "快取圖片";
-"historyCacheToggleHint" = "保存最近圖片和取色結果，方便從選單列快速再次複製";
+"historyCacheToggleLabel" = "快取圖片與媒體";
+"historyCacheToggleHint" = "保存最近圖片、GIF、影片和取色結果，方便從歷史記錄快速重複使用";
 "clipboardTextCacheToggleLabel" = "快取剪貼簿文字";
 "clipboardTextCacheToggleHint" = "將複製的文字保存到歷史記錄，方便從歷史記錄快速重複使用";
 "clipboardTextHistoryLimitLabel" = "文字歷史數量";
@@ -154,7 +154,7 @@
 "historyPanelFavoriteFailed" = "無法更改收藏";
 "historyDeletedSkippingFavorites" = "已刪除 %d 個項目，跳過 %d 個收藏";
 "historyPanelFilterAll" = "全部";
-"historyPanelFilterScreenshots" = "截圖";
+"historyPanelFilterScreenshots" = "圖片";
 "historyPanelFilterGIF" = "GIF";
 "historyPanelFilterColors" = "顏色";
 "historyPanelFilterText" = "文字";
@@ -170,7 +170,7 @@
 "historyPreviewQRCodeTitle" = "文字二維碼";
 "historyPanelCopyHint" = "點選複製";
 "historyPanelCopyDragHint" = "點選複製 · 拖曳到應用";
-"historyPanelCopyImagePath" = "複製圖片路徑";
+"historyPanelCopyImagePath" = "複製檔案路徑";
 "historyPanelEmpty" = "尚無歷史";
 
 /* Cursor chip */
@@ -182,9 +182,9 @@
 
 /* Toast */
 "copiedToClipboard" = "已複製到剪貼簿";
-"historyImagePathCopied" = "已複製圖片路徑到剪貼簿";
-"copyPathHistoryRequired" = "請先開啟圖片歷史記錄再複製路徑";
-"historyImagePathCopyFailed" = "無法將圖片加入歷史記錄並複製路徑";
+"historyImagePathCopied" = "已複製檔案路徑到剪貼簿";
+"copyPathHistoryRequired" = "請先開啟圖片與媒體歷史記錄再複製檔案路徑";
+"historyImagePathCopyFailed" = "無法將檔案加入歷史記錄並複製路徑";
 "mergedLongScreenshot" = "已合併長截圖";
 "cropLongScreenshotHint" = "拖曳上下邊緣裁切長截圖，按 Enter 或點一下 ✓ 確認";
 "scrollCaptureHint" = "按任意鍵結束捲動";
@@ -273,8 +273,12 @@
 "settingsTabPermissions" = "權限";
 "settingsTabAbout" = "關於";
 "settingsTabToolbar" = "工具列";
+"settingsGeneralCapture" = "截圖與貼圖";
+"settingsGeneralRecording" = "錄製";
+"settingsGeneralHistory" = "歷史記錄";
+"settingsGeneralFiles" = "檔案與輸出";
 "settingsNoPermissionsNeeded" = "無需權限";
-"settingsSubtitleGeneral" = "剪貼簿、檔案、歷史和儲存行為";
+"settingsSubtitleGeneral" = "App 語言與啟動行為";
 "settingsSubtitleShortcuts" = "無需全域監聽的編輯器快捷鍵";
 "settingsSubtitleToolbar" = "排列編輯器中顯示的標註工具";
 "settingsSubtitleAbout" = "產品身份和專案連結";
@@ -292,8 +296,8 @@
 "toolbarSettingsApply" = "套用";
 
 /* About pane */
-"aboutTagline" = "capcap 的 light 版本，無需任何權限，僅支援標註與圖片壓縮，完整版見 github.com/realskyrin/capcap";
-"aboutDescription" = "不需要任何權限，主打圖片標註與壓縮";
+"aboutTagline" = "capcap 的輕量伴侶，無需螢幕錄製或輔助使用權限，支援圖片標註、歷史記錄與錄影轉換，完整版見 github.com/realskyrin/capcap";
+"aboutDescription" = "無需螢幕錄製或輔助使用權限，支援圖片標註、壓縮、歷史記錄與錄影轉換";
 "aboutRepositoriesTitle" = "倉庫地址";
 "aboutVersion" = "版本 %@";
 "aboutLicense" = "授權條款";
@@ -427,7 +431,7 @@
 
 /* Save paths */
 "savePathTitle" = "儲存路徑";
-"savePathSubtitle" = "圖片會直接儲存到這個路徑，不再詢問儲存位置";
+"savePathSubtitle" = "圖片直接儲存到此路徑，錄影輸出儲存到其中的 Recordings 資料夾";
 "autoRevealSavedFilesLabel" = "在 Finder 中顯示";
 "autoRevealSavedFilesHint" = "儲存成功後，在 Finder 中選取剛儲存的圖片";
 "screenshotSavePathLabel" = "圖片儲存路徑";
@@ -439,8 +443,8 @@
 "openImage" = "開啟圖片";
 "openImageNoImage" = "複製圖片到剪貼簿，或選擇一個圖片檔案";
 
-"systemScreenshotAutoOpenLabel" = "自動開啟系統截圖";
-"systemScreenshotAutoOpenHint" = "將新截圖自動交給 ClipCap 編輯，載入後從專用資料夾刪除來源檔案，無需螢幕錄製或輔助使用權限";
+"systemScreenshotAutoOpenLabel" = "接收系統截圖與錄影";
+"systemScreenshotAutoOpenHint" = "自動接收新的系統截圖與錄影；截圖載入後刪除專用資料夾中的來源檔案，錄影原始檔保留，無需螢幕錄製或輔助使用權限";
 "systemScreenshotFolderLabel" = "系統截圖資料夾";
 "systemScreenshotFolderConfigured" = "系統截圖儲存位置已設定";
 "systemScreenshotFolderNeedsSetup" = "截圖前請將系統截圖儲存位置設為此資料夾";
@@ -475,8 +479,8 @@
 "historyPanelShortcutSelectAll" = "全選目前結果";
 "historyPanelShortcutCancel" = "離開搜尋或清除目前狀態";
 "historyPanelShortcutCopyItem" = "複製項目";
-"historyPanelShortcutDragItem" = "拖曳圖片或影片到其他 App";
-"historyPanelShortcutOpenPreview" = "預覽游標停留的圖片或文字";
+"historyPanelShortcutDragItem" = "拖曳媒體到其他 App";
+"historyPanelShortcutOpenPreview" = "預覽游標停留的項目";
 "historyPanelShortcutBrowsePreview" = "切換上一個或下一個預覽";
 "historyPanelShortcutClosePreview" = "關閉預覽";
 "historyPanelShortcutCopyPreview" = "複製預覽內容";
@@ -566,5 +570,5 @@
 "recordingSaved" = "錄製已儲存";
 "recordingConversionFailed" = "轉換失敗，原影片已保留";
 "recordingOpenSystem" = "開啟系統截圖與錄製";
-"recordingSystemHint" = "啟用上方系統截圖接收後，在系統工具中選擇錄製並儲存到相同監聽目錄\n保留原檔，輸出儲存於截圖路徑下的 Recordings 資料夾\n壓縮優先使用 HEVC，GIF 為無聲動畫，最長邊 1280 像素，每秒 12 幀";
+"recordingSystemHint" = "先在「截圖與貼圖」中啟用系統截圖與錄影接收，再在系統工具中選擇錄製並儲存到監聽資料夾\n保留原檔，輸出儲存於圖片路徑下的 Recordings 資料夾\n壓縮優先使用 HEVC，GIF 為無聲動畫，最長邊 1280 像素，每秒 12 幀";
 "recordingProcessing" = "正在處理錄製";

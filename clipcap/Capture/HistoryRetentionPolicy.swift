@@ -1,7 +1,7 @@
 import Foundation
 
 enum HistoryRetentionPolicy {
-    static let mediaExtensions: Set<String> = ["png", "gif", "color"]
+    static let mediaExtensions: Set<String> = ["png", "gif", "mov", "mp4", "m4v", "color"]
     static let maximumTextEntryBytes = 1 * 1024 * 1024
     static let maximumTextHistoryBytes = 20 * 1024 * 1024
 

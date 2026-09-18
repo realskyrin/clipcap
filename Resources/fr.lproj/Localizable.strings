@@ -8,8 +8,8 @@
 "launchAtLogin" = "Lancer à la connexion";
 "pinAcrossSpaces" = "Afficher les épingles sur tous les bureaux";
 "pinAcrossSpacesHint" = "Les nouvelles images épinglées apparaissent sur chaque bureau et espace plein écran";
-"historyCacheToggleLabel" = "Mettre les images en cache";
-"historyCacheToggleHint" = "Enregistre les images récentes et les couleurs prélevées pour les recopier depuis la barre de menus";
+"historyCacheToggleLabel" = "Mettre les images et médias en cache";
+"historyCacheToggleHint" = "Enregistre les images, GIF, vidéos et couleurs prélevées récentes pour les réutiliser rapidement depuis l’historique";
 "clipboardTextCacheToggleLabel" = "Mettre le texte du presse-papiers en cache";
 "clipboardTextCacheToggleHint" = "Enregistre le texte copié dans l’historique pour le réutiliser rapidement";
 "clipboardTextHistoryLimitLabel" = "Limite de l’historique du texte";
@@ -154,7 +154,7 @@
 "historyPanelFavoriteFailed" = "Impossible de modifier les favoris";
 "historyDeletedSkippingFavorites" = "Éléments supprimés : %d, favoris ignorés : %d";
 "historyPanelFilterAll" = "Tout";
-"historyPanelFilterScreenshots" = "Captures";
+"historyPanelFilterScreenshots" = "Images";
 "historyPanelFilterGIF" = "GIF";
 "historyPanelFilterColors" = "Couleurs";
 "historyPanelFilterText" = "Texte";
@@ -170,7 +170,7 @@
 "historyPreviewQRCodeTitle" = "Code QR du texte";
 "historyPanelCopyHint" = "Cliquez pour copier";
 "historyPanelCopyDragHint" = "Cliquez pour copier · faites glisser vers une app";
-"historyPanelCopyImagePath" = "Copier le chemin de l’image";
+"historyPanelCopyImagePath" = "Copier le chemin du fichier";
 "historyPanelEmpty" = "Aucun historique";
 
 /* Cursor chip */
@@ -182,9 +182,9 @@
 
 /* Toast */
 "copiedToClipboard" = "Copié dans le presse-papiers";
-"historyImagePathCopied" = "Chemin de l’image copié dans le presse-papiers";
-"copyPathHistoryRequired" = "Activez l’historique des images avant de copier leur chemin";
-"historyImagePathCopyFailed" = "Impossible d’ajouter l’image à l’historique ou de copier son chemin";
+"historyImagePathCopied" = "Chemin du fichier copié dans le presse-papiers";
+"copyPathHistoryRequired" = "Activez l’historique des images et médias avant de copier le chemin du fichier";
+"historyImagePathCopyFailed" = "Impossible d’ajouter le fichier à l’historique ou de copier son chemin";
 "mergedLongScreenshot" = "Capture longue fusionnée";
 "cropLongScreenshotHint" = "Faites glisser les bords haut/bas pour rogner — appuyez sur Entrée ou touchez ✓";
 "scrollCaptureHint" = "Appuyez sur n'importe quelle touche pour arrêter le défilement";
@@ -273,8 +273,12 @@
 "settingsTabPermissions" = "Autorisations";
 "settingsTabAbout" = "À propos";
 "settingsTabToolbar" = "Barre d'outils";
+"settingsGeneralCapture" = "Capture et épingles";
+"settingsGeneralRecording" = "Enregistrement";
+"settingsGeneralHistory" = "Historique";
+"settingsGeneralFiles" = "Fichiers et sortie";
 "settingsNoPermissionsNeeded" = "Aucune autorisation requise";
-"settingsSubtitleGeneral" = "Presse-papiers, fichiers, historique et enregistrement";
+"settingsSubtitleGeneral" = "Langue de l’app et comportement au démarrage";
 "settingsSubtitleShortcuts" = "Raccourcis d'éditeur sans surveillance globale";
 "settingsSubtitleToolbar" = "Organiser les outils d'annotation de l'éditeur";
 "settingsSubtitleAbout" = "Identité produit et liens du projet";
@@ -292,8 +296,8 @@
 "toolbarSettingsApply" = "Appliquer";
 
 /* About pane */
-"aboutTagline" = "La version light de capcap, sans autorisation, annotation et compression d'images uniquement, version complète sur github.com/realskyrin/capcap";
-"aboutDescription" = "Aucune autorisation requise, axé sur l'annotation et la compression d'images";
+"aboutTagline" = "Un compagnon léger de capcap pour l’annotation d’images, l’historique et la conversion d’enregistrements sans accès Enregistrement de l’écran ni Accessibilité, version complète sur github.com/realskyrin/capcap";
+"aboutDescription" = "Annotation, compression, historique et conversion d’enregistrements sans accès Enregistrement de l’écran ni Accessibilité";
 "aboutRepositoriesTitle" = "Dépôts";
 "aboutVersion" = "Version %@";
 "aboutLicense" = "Licence";
@@ -427,7 +431,7 @@
 
 /* Save paths */
 "savePathTitle" = "Emplacements d'enregistrement";
-"savePathSubtitle" = "Les images sont sauvegardées ici sans demander de destination";
+"savePathSubtitle" = "Les images sont enregistrées ici directement et les enregistrements convertis dans le sous-dossier Recordings";
 "autoRevealSavedFilesLabel" = "Afficher dans le Finder";
 "autoRevealSavedFilesHint" = "Sélectionner l image sauvegardée dans Finder après une sauvegarde réussie";
 "screenshotSavePathLabel" = "Chemin des images";
@@ -439,8 +443,8 @@
 "openImage" = "Ouvrir une image";
 "openImageNoImage" = "Copiez une image dans le presse-papiers ou choisissez un fichier image";
 
-"systemScreenshotAutoOpenLabel" = "Ouvrir automatiquement les captures système";
-"systemScreenshotAutoOpenHint" = "Ouvre les nouvelles captures dans ClipCap, puis supprime chaque fichier source du dossier dédié après le chargement, sans accès Enregistrement de l’écran ni Accessibilité";
+"systemScreenshotAutoOpenLabel" = "Importer les captures et enregistrements système";
+"systemScreenshotAutoOpenHint" = "Importe les nouvelles captures et les nouveaux enregistrements, supprime les sources des captures après chargement et conserve les enregistrements originaux, sans accès Enregistrement de l’écran ni Accessibilité";
 "systemScreenshotFolderLabel" = "Dossier des captures système";
 "systemScreenshotFolderConfigured" = "L’emplacement des captures système est prêt";
 "systemScreenshotFolderNeedsSetup" = "Définissez ce dossier comme emplacement des captures système avant de faire une capture";
@@ -475,8 +479,8 @@
 "historyPanelShortcutSelectAll" = "Sélectionner tous les éléments visibles";
 "historyPanelShortcutCancel" = "Quitter la recherche ou effacer l’état actuel";
 "historyPanelShortcutCopyItem" = "Copier l’élément";
-"historyPanelShortcutDragItem" = "Glisser l’image ou la vidéo vers une autre app";
-"historyPanelShortcutOpenPreview" = "Prévisualiser l’image ou le texte survolé";
+"historyPanelShortcutDragItem" = "Glisser le média vers une autre app";
+"historyPanelShortcutOpenPreview" = "Prévisualiser l’élément survolé";
 "historyPanelShortcutBrowsePreview" = "Parcourir l’aperçu précédent ou suivant";
 "historyPanelShortcutClosePreview" = "Fermer l’aperçu";
 "historyPanelShortcutCopyPreview" = "Copier le contenu de l’aperçu";
@@ -566,5 +570,5 @@
 "recordingSaved" = "Enregistrement sauvegardé";
 "recordingConversionFailed" = "Échec de conversion, original conservé";
 "recordingOpenSystem" = "Ouvrir l’outil système de capture";
-"recordingSystemHint" = "Activez l’importation ci-dessus, puis enregistrez avec l’outil système dans le dossier surveillé\nLes originaux sont conservés et les résultats sont placés dans Recordings sous le dossier des captures\nCompression HEVC prioritaire, GIF muet à 12 images/s et 1280 pixels maximum";
+"recordingSystemHint" = "Activez l’importation des captures et enregistrements dans Capture et épingles, puis enregistrez avec l’outil système dans le dossier surveillé\nLes originaux sont conservés et les résultats sont placés dans Recordings sous le dossier des images\nCompression HEVC prioritaire, GIF muet à 12 images/s et 1280 pixels maximum";
 "recordingProcessing" = "Traitement de l’enregistrement";

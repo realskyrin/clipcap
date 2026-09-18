@@ -8,8 +8,8 @@
 "launchAtLogin" = "로그인 시 실행";
 "pinAcrossSpaces" = "고정 이미지를 모든 데스크톱에 표시";
 "pinAcrossSpacesHint" = "켜면 새 고정 이미지가 모든 데스크톱과 전체 화면 Space에 표시됩니다";
-"historyCacheToggleLabel" = "이미지 캐시";
-"historyCacheToggleHint" = "최근 이미지와 선택한 색상을 저장해 메뉴 막대에서 빠르게 다시 복사할 수 있습니다";
+"historyCacheToggleLabel" = "이미지 및 미디어 캐시";
+"historyCacheToggleHint" = "최근 이미지, GIF, 동영상, 선택한 색상을 저장해 기록에서 빠르게 다시 사용할 수 있습니다";
 "clipboardTextCacheToggleLabel" = "클립보드 텍스트 캐시";
 "clipboardTextCacheToggleHint" = "복사한 텍스트를 기록에 저장해 빠르게 재사용할 수 있습니다";
 "clipboardTextHistoryLimitLabel" = "텍스트 기록 한도";
@@ -154,7 +154,7 @@
 "historyPanelFavoriteFailed" = "즐겨찾기를 변경할 수 없습니다";
 "historyDeletedSkippingFavorites" = "항목 %d개 삭제, 즐겨찾기 %d개 건너뜀";
 "historyPanelFilterAll" = "전체";
-"historyPanelFilterScreenshots" = "스크린샷";
+"historyPanelFilterScreenshots" = "이미지";
 "historyPanelFilterGIF" = "GIF";
 "historyPanelFilterColors" = "색상";
 "historyPanelFilterText" = "텍스트";
@@ -170,7 +170,7 @@
 "historyPreviewQRCodeTitle" = "텍스트 QR 코드";
 "historyPanelCopyHint" = "클릭해 복사";
 "historyPanelCopyDragHint" = "클릭해 복사 · 앱으로 드래그";
-"historyPanelCopyImagePath" = "이미지 경로 복사";
+"historyPanelCopyImagePath" = "파일 경로 복사";
 "historyPanelEmpty" = "기록 없음";
 
 /* Cursor chip */
@@ -182,9 +182,9 @@
 
 /* Toast */
 "copiedToClipboard" = "클립보드에 복사됨";
-"historyImagePathCopied" = "이미지 경로를 클립보드에 복사했습니다";
-"copyPathHistoryRequired" = "경로를 복사하려면 이미지 기록을 활성화하세요";
-"historyImagePathCopyFailed" = "이미지를 기록에 추가하거나 경로를 복사할 수 없습니다";
+"historyImagePathCopied" = "파일 경로를 클립보드에 복사했습니다";
+"copyPathHistoryRequired" = "파일 경로를 복사하려면 이미지 및 미디어 기록을 활성화하세요";
+"historyImagePathCopyFailed" = "파일을 기록에 추가하거나 경로를 복사할 수 없습니다";
 "mergedLongScreenshot" = "긴 스크린샷이 병합됨";
 "cropLongScreenshotHint" = "위/아래 가장자리를 드래그해 자르기 — Enter 키 또는 ✓ 탭";
 "scrollCaptureHint" = "아무 키나 눌러 스크롤 종료";
@@ -273,8 +273,12 @@
 "settingsTabPermissions" = "권한";
 "settingsTabAbout" = "정보";
 "settingsTabToolbar" = "도구 모음";
+"settingsGeneralCapture" = "캡처 및 고정";
+"settingsGeneralRecording" = "녹화";
+"settingsGeneralHistory" = "기록";
+"settingsGeneralFiles" = "파일 및 출력";
 "settingsNoPermissionsNeeded" = "권한 필요 없음";
-"settingsSubtitleGeneral" = "클립보드, 파일, 기록, 저장 동작";
+"settingsSubtitleGeneral" = "앱 언어 및 시작 동작";
 "settingsSubtitleShortcuts" = "전역 감시 없는 편집기 단축키";
 "settingsSubtitleToolbar" = "편집기에 표시할 주석 도구 정렬";
 "settingsSubtitleAbout" = "제품 정보와 프로젝트 링크";
@@ -292,8 +296,8 @@
 "toolbarSettingsApply" = "적용";
 
 /* About pane */
-"aboutTagline" = "capcap의 light 버전, 권한 없이 이미지 주석과 압축만 지원, 전체 버전은 github.com/realskyrin/capcap";
-"aboutDescription" = "권한 없이 이미지 주석과 압축에 집중";
+"aboutTagline" = "화면 기록 또는 손쉬운 사용 권한 없이 이미지 주석, 기록, 녹화 변환을 지원하는 가벼운 capcap 도우미, 전체 버전은 github.com/realskyrin/capcap";
+"aboutDescription" = "화면 기록 또는 손쉬운 사용 권한 없이 이미지 주석, 압축, 기록, 녹화 변환 지원";
 "aboutRepositoriesTitle" = "저장소";
 "aboutVersion" = "버전 %@";
 "aboutLicense" = "라이선스";
@@ -427,7 +431,7 @@
 
 /* Save paths */
 "savePathTitle" = "저장 경로";
-"savePathSubtitle" = "이미지는 저장 위치를 묻지 않고 여기에 저장됩니다";
+"savePathSubtitle" = "이미지는 여기에 직접 저장되고 녹화 출력은 Recordings 하위 폴더에 저장됩니다";
 "autoRevealSavedFilesLabel" = "Finder에 표시";
 "autoRevealSavedFilesHint" = "저장 성공 후 Finder에서 저장된 이미지를 선택합니다";
 "screenshotSavePathLabel" = "이미지 저장 경로";
@@ -439,8 +443,8 @@
 "openImage" = "이미지 열기";
 "openImageNoImage" = "클립보드에 이미지를 복사하거나 이미지 파일을 선택하세요";
 
-"systemScreenshotAutoOpenLabel" = "시스템 스크린샷 자동 열기";
-"systemScreenshotAutoOpenHint" = "새 스크린샷을 ClipCap에서 열고 로드 후 전용 폴더의 원본 파일을 삭제하며 화면 기록 또는 손쉬운 사용 권한이 필요하지 않습니다";
+"systemScreenshotAutoOpenLabel" = "시스템 스크린샷 및 녹화 가져오기";
+"systemScreenshotAutoOpenHint" = "새 스크린샷과 녹화를 가져오고 로드 후 스크린샷 원본은 전용 폴더에서 삭제하며 녹화 원본은 보존합니다. 화면 기록 또는 손쉬운 사용 권한이 필요하지 않습니다";
 "systemScreenshotFolderLabel" = "시스템 스크린샷 폴더";
 "systemScreenshotFolderConfigured" = "시스템 스크린샷 저장 위치가 준비됨";
 "systemScreenshotFolderNeedsSetup" = "스크린샷을 찍기 전에 시스템 저장 위치를 이 폴더로 설정하세요";
@@ -475,8 +479,8 @@
 "historyPanelShortcutSelectAll" = "표시된 항목 모두 선택";
 "historyPanelShortcutCancel" = "검색 종료 또는 현재 상태 해제";
 "historyPanelShortcutCopyItem" = "항목 복사";
-"historyPanelShortcutDragItem" = "이미지나 동영상을 다른 앱으로 드래그";
-"historyPanelShortcutOpenPreview" = "가리킨 이미지나 텍스트 미리보기";
+"historyPanelShortcutDragItem" = "미디어를 다른 앱으로 드래그";
+"historyPanelShortcutOpenPreview" = "가리킨 항목 미리보기";
 "historyPanelShortcutBrowsePreview" = "이전 또는 다음 미리보기 보기";
 "historyPanelShortcutClosePreview" = "미리보기 닫기";
 "historyPanelShortcutCopyPreview" = "미리보기 내용 복사";
@@ -566,5 +570,5 @@
 "recordingSaved" = "녹화 저장됨";
 "recordingConversionFailed" = "변환 실패, 원본 유지됨";
 "recordingOpenSystem" = "시스템 스크린샷 및 녹화 열기";
-"recordingSystemHint" = "위의 시스템 캡처 가져오기를 켜고 시스템 도구에서 녹화하여 감시 폴더에 저장하세요\n원본은 유지되며 결과는 스크린샷 저장 경로의 Recordings 폴더에 저장됩니다\nHEVC 압축 우선, GIF는 무음이며 초당 12프레임 및 최대 1280픽셀";
+"recordingSystemHint" = "캡처 및 고정에서 시스템 스크린샷과 녹화 가져오기를 켠 다음 시스템 도구로 녹화하여 감시 폴더에 저장하세요\n원본은 유지되며 결과는 이미지 저장 경로의 Recordings 폴더에 저장됩니다\nHEVC 압축 우선, GIF는 무음이며 초당 12프레임 및 최대 1280픽셀";
 "recordingProcessing" = "녹화 처리 중";
