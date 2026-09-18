@@ -569,3 +569,13 @@
 "recordingConversionFailed" = "変換に失敗しました 元の動画は保持されています";
 "recordingSystemHint" = "一般でシステムのスクリーンショットと録画の取り込みを有効にし、システムツールで録画を監視フォルダに保存します\n元のファイルは保持され、出力は画像保存先の Recordings フォルダに保存されます\n圧縮は HEVC 優先、GIF は無音で毎秒12フレーム、最大辺1280ピクセル";
 "recordingProcessing" = "録画を処理中";
+
+// Debug log
+"debugLogTitle" = "デバッグログ";
+"debugLogDescription" = "検索内容を含めず検索とフォーカスの診断情報を記録";
+"debugLogCopy" = "ログをコピー";
+"debugLogClear" = "ログを消去";
+"debugLogEmpty" = "ログは空です";
+"debugLogCopied" = "ログをコピーしました";
+"debugLogCleared" = "ログを消去しました";
+"debugLogFailed" = "ログへのアクセスまたはコピーに失敗しました";

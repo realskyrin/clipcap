@@ -575,7 +575,56 @@ final class SettingsView: NSView {
         addFullWidth(source, to: infoInner)
 
         addCard(infoCard, to: stack)
+        let debugCard = CardView()
+        let debugStack = verticalInnerStack()
+        debugCard.embed(debugStack)
+        addFullWidth(switchRow(title: L10n.debugLogTitle, subtitle: L10n.debugLogDescription,
+                              isOn: DebugLog.isEnabled, action: #selector(debugLogToggled), capture: { _ in }), to: debugStack)
+        let pathLabel = secondaryLabel(DebugLog.url.path, wrapping: true)
+        pathLabel.isSelectable = true
+        addFullWidth(pathLabel, to: debugStack)
+        let actions = NSStackView(views: [
+            NSButton(title: L10n.debugLogCopy, target: self, action: #selector(copyDebugLog)),
+            NSButton(title: L10n.debugLogClear, target: self, action: #selector(clearDebugLog))
+        ])
+        actions.spacing = 12
+        debugStack.addArrangedSubview(actions)
+        let status = secondaryLabel("", wrapping: true)
+        debugLogStatus = status
+        addFullWidth(status, to: debugStack)
+        addCard(debugCard, to: stack)
         return wrapPane(stack)
+    }
+
+    private var debugLogStatus: NSTextField?
+
+    @objc private func debugLogToggled(_ sender: NSSwitch) {
+        DebugLog.isEnabled = sender.state == .on
+        debugLogStatus?.stringValue = ""
+    }
+
+    @objc private func copyDebugLog() {
+        do {
+            let contents = try DebugLog.contents()
+            guard !contents.isEmpty else {
+                debugLogStatus?.stringValue = L10n.debugLogEmpty
+                return
+            }
+            NSPasteboard.general.clearContents()
+            let copied = NSPasteboard.general.setString(contents, forType: .string)
+            debugLogStatus?.stringValue = copied ? L10n.debugLogCopied : L10n.debugLogFailed
+        } catch {
+            debugLogStatus?.stringValue = L10n.debugLogFailed
+        }
+    }
+
+    @objc private func clearDebugLog() {
+        do {
+            try DebugLog.clear()
+            debugLogStatus?.stringValue = L10n.debugLogCleared
+        } catch {
+            debugLogStatus?.stringValue = L10n.debugLogFailed
+        }
     }
 
     private func appVersionDisplayString() -> String {

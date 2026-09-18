@@ -569,3 +569,13 @@
 "recordingConversionFailed" = "Chuyển đổi thất bại, đã giữ bản gốc";
 "recordingSystemHint" = "Bật nhập ảnh chụp và bản ghi hệ thống trong Chung, rồi ghi và lưu vào thư mục theo dõi bằng công cụ hệ thống\nGiữ nguyên bản gốc, lưu kết quả vào Recordings trong thư mục ảnh\nƯu tiên HEVC, GIF không có âm thanh với 12 khung hình/giây và cạnh tối đa 1280 pixel";
 "recordingProcessing" = "Đang xử lý bản ghi";
+
+// Debug log
+"debugLogTitle" = "Nhật ký gỡ lỗi";
+"debugLogDescription" = "Ghi chẩn đoán tìm kiếm và tiêu điểm mà không ghi nội dung tìm kiếm";
+"debugLogCopy" = "Sao chép nhật ký";
+"debugLogClear" = "Xóa nhật ký";
+"debugLogEmpty" = "Nhật ký trống";
+"debugLogCopied" = "Đã sao chép nhật ký";
+"debugLogCleared" = "Đã xóa nhật ký";
+"debugLogFailed" = "Không thể truy cập hoặc sao chép nhật ký";

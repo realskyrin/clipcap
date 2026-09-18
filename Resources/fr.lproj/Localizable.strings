@@ -569,3 +569,13 @@
 "recordingConversionFailed" = "Échec de conversion, original conservé";
 "recordingSystemHint" = "Activez l’importation des captures et enregistrements dans Général, puis enregistrez avec l’outil système dans le dossier surveillé\nLes originaux sont conservés et les résultats sont placés dans Recordings sous le dossier des images\nCompression HEVC prioritaire, GIF muet à 12 images/s et 1280 pixels maximum";
 "recordingProcessing" = "Traitement de l’enregistrement";
+
+// Debug log
+"debugLogTitle" = "Journal de débogage";
+"debugLogDescription" = "Enregistrer les diagnostics de recherche et de focus sans le texte recherché";
+"debugLogCopy" = "Copier le journal";
+"debugLogClear" = "Vider le journal";
+"debugLogEmpty" = "Le journal est vide";
+"debugLogCopied" = "Journal copié";
+"debugLogCleared" = "Journal vidé";
+"debugLogFailed" = "Impossible de lire ou copier le journal";

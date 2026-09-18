@@ -569,3 +569,13 @@
 "recordingConversionFailed" = "轉換失敗，原影片已保留";
 "recordingSystemHint" = "先在「一般」中啟用系統截圖與錄影接收，再在系統工具中選擇錄製並儲存到監聽資料夾\n保留原檔，輸出儲存於圖片路徑下的 Recordings 資料夾\n壓縮優先使用 HEVC，GIF 為無聲動畫，最長邊 1280 像素，每秒 12 幀";
 "recordingProcessing" = "正在處理錄製";
+
+// Debug log
+"debugLogTitle" = "Debug 日誌";
+"debugLogDescription" = "記錄搜尋和焦點診斷資訊，不記錄搜尋內容";
+"debugLogCopy" = "複製日誌";
+"debugLogClear" = "清理日誌";
+"debugLogEmpty" = "日誌為空";
+"debugLogCopied" = "日誌已複製";
+"debugLogCleared" = "日誌已清理";
+"debugLogFailed" = "無法存取或複製日誌";

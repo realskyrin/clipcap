@@ -569,3 +569,13 @@
 "recordingConversionFailed" = "Conversion failed, original preserved";
 "recordingSystemHint" = "Enable system screenshot and recording import in General, then select recording in the system tool and save to the monitored folder\nOriginals are preserved and output is saved in Recordings under the image save folder\nCompression prefers HEVC, GIF is silent at 12 fps with a maximum dimension of 1280 pixels";
 "recordingProcessing" = "Processing recording";
+
+// Debug log
+"debugLogTitle" = "Debug log";
+"debugLogDescription" = "Record search and focus diagnostics without search text";
+"debugLogCopy" = "Copy log";
+"debugLogClear" = "Clear log";
+"debugLogEmpty" = "Log is empty";
+"debugLogCopied" = "Log copied";
+"debugLogCleared" = "Log cleared";
+"debugLogFailed" = "Unable to access or copy log";

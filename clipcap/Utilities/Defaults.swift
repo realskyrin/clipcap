@@ -504,6 +504,15 @@ enum L10n {
     }
     static var editorShortcutReserved: String { s("editorShortcutReserved") }
 
+    static var debugLogTitle: String { s("debugLogTitle") }
+    static var debugLogDescription: String { s("debugLogDescription") }
+    static var debugLogCopy: String { s("debugLogCopy") }
+    static var debugLogClear: String { s("debugLogClear") }
+    static var debugLogEmpty: String { s("debugLogEmpty") }
+    static var debugLogCopied: String { s("debugLogCopied") }
+    static var debugLogCleared: String { s("debugLogCleared") }
+    static var debugLogFailed: String { s("debugLogFailed") }
+
     // About pane
     static var aboutTagline: String { s("aboutTagline") }
     static var aboutDescription: String { s("aboutDescription") }

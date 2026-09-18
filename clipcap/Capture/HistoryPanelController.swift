@@ -223,6 +223,33 @@ final class HistoryPanelController {
 }
 
 private final class HistoryFloatingPanel: NSPanel {
+    override func makeFirstResponder(_ responder: NSResponder?) -> Bool {
+        DebugLog.record("history.focus.request", detail: "target=\(responder.map { String(describing: type(of: $0)) } ?? "nil") \(DebugLog.focusState(self))")
+        let accepted = super.makeFirstResponder(responder)
+        DebugLog.record("history.focus.result", detail: "accepted=\(accepted) \(DebugLog.focusState(self))")
+        return accepted
+    }
+
+    override func sendEvent(_ event: NSEvent) {
+        if event.type == .keyDown {
+            DebugLog.record("history.key.dispatch", detail: DebugLog.focusState(self))
+        }
+        super.sendEvent(event)
+        if event.type == .keyDown {
+            DebugLog.record("history.key.completed", detail: DebugLog.focusState(self))
+        }
+    }
+
+    override func becomeKey() {
+        super.becomeKey()
+        DebugLog.record("history.window.becameKey", detail: DebugLog.focusState(self))
+    }
+
+    override func resignKey() {
+        DebugLog.record("history.window.resignKey", detail: DebugLog.focusState(self))
+        super.resignKey()
+    }
+
     override var canBecomeKey: Bool { true }
     override var canBecomeMain: Bool { false }
 }
@@ -1436,7 +1463,12 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
         selectFilter(orderedFilters[(currentIndex + offset) % orderedFilters.count])
     }
 
+    private func logSearch(_ event: String, detail: String = "") {
+        DebugLog.record("history.search.\(event)", detail: "mode=\(isSearchMode) inputActive=\(isSearchInputActive) length=\(searchQuery.count) generation=\(searchGeneration) \(detail) \(DebugLog.focusState(window))")
+    }
+
     private func beginSearchMode() {
+        logSearch("begin")
         guard isActive else { return }
 
         setShortcutGuideVisible(false)
@@ -1466,6 +1498,7 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
     }
 
     private func endSearchMode(animated: Bool, updateResults: Bool = true) {
+        logSearch("end")
         guard isSearchMode else { return }
         isSearchMode = false
         setSearchInputActive(false)
@@ -1484,6 +1517,7 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
     }
 
     private func searchTextDidChange(_ query: String) {
+        logSearch("textChanged", detail: "newLength=\(query.count)")
         guard isSearchMode else { return }
         searchQuery = query
         updateEmptyLabel()
@@ -1512,12 +1546,14 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
     }
 
     private func focusSearchInput() {
+        logSearch("focusInput")
         guard isSearchMode else { return }
         setSearchInputActive(true)
         searchField.focus()
     }
 
     private func setSearchInputActive(_ active: Bool) {
+        logSearch("inputStateRequested", detail: "requested=\(active)")
         let nextValue = isSearchMode && active
         guard isSearchInputActive != nextValue else { return }
         isSearchInputActive = nextValue
@@ -1555,7 +1591,7 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
         searchMouseMovementMonitor = NSEvent.addLocalMonitorForEvents(
             matching: [.mouseMoved, .leftMouseDragged, .rightMouseDragged, .otherMouseDragged]
         ) { [weak self] event in
-            self?.transitionSearchInputToResults()
+            self?.transitionSearchInputToResults(reason: "mouseEvent.\(event.type.rawValue)")
             return event
         }
 
@@ -1566,7 +1602,7 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
                   let origin = self.searchMouseOrigin else { return }
             let current = NSEvent.mouseLocation
             guard hypot(current.x - origin.x, current.y - origin.y) >= 0.5 else { return }
-            self.transitionSearchInputToResults()
+            self.transitionSearchInputToResults(reason: "positionTimer distance=\(hypot(current.x - origin.x, current.y - origin.y))")
         }
         RunLoop.main.add(timer, forMode: .common)
         searchMouseTrackingTimer = timer
@@ -1582,7 +1618,8 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
         searchMouseOrigin = nil
     }
 
-    private func transitionSearchInputToResults() {
+    private func transitionSearchInputToResults(reason: String) {
+        logSearch("transitionToResults", detail: reason)
         guard isSearchMode, isSearchInputActive,
               window?.makeFirstResponder(self) == true else { return }
         setSearchInputActive(false)
@@ -1764,6 +1801,7 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
     }
 
     private func applySelectedFilter(resetScrollPosition: Bool) {
+        logSearch("filter.begin")
         searchApplyWorkItem?.cancel()
         searchApplyWorkItem = nil
         searchGeneration += 1
@@ -1807,6 +1845,8 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
     }
 
     private func applyEntries(_ entries: [HistoryEntry], hasAnyEntries: Bool) {
+        logSearch("results.beforeReload", detail: "count=\(entries.count)")
+        defer { logSearch("results.afterReload") }
         previewWarmGeneration += 1
         clearActiveHoverTile()
         visibleEntries = entries
@@ -1826,6 +1866,7 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
         updateContentVisibility()
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
+            self.logSearch("results.deferredLayout")
             self.loadNextPageIfNeeded()
             self.syncHoverStateWithCurrentMouse()
             self.updatePreviewLoading(initial: true)
@@ -2167,6 +2208,7 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
             guard let self else { return event }
             guard event.window === self.window else { return event }
 
+            self.logSearch("key.localMonitor")
             let modifiers = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
             let shortcutModifiers = modifiers.intersection([.command, .control, .option, .shift])
             if self.isActive,
@@ -3314,14 +3356,17 @@ private final class HistoryPanelSearchField: NSView, NSTextFieldDelegate {
     }
 
     func controlTextDidBeginEditing(_ obj: Notification) {
+        DebugLog.record("history.editor.begin", detail: DebugLog.focusState(window))
         onEditingStateChanged?(true)
     }
 
     func controlTextDidChange(_ obj: Notification) {
+        DebugLog.record("history.editor.change", detail: "length=\(textField.stringValue.count) \(DebugLog.focusState(window))")
         onTextChanged?(textField.stringValue)
     }
 
     func controlTextDidEndEditing(_ obj: Notification) {
+        DebugLog.record("history.editor.end", detail: "movement=\(obj.userInfo?["NSTextMovement"] ?? "unknown") \(DebugLog.focusState(window))")
         onEditingStateChanged?(false)
     }
 
