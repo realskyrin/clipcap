@@ -19,7 +19,7 @@
 "historyPanelDialogMode" = "弹窗";
 "historyPanelDialogModeHint" = "通过菜单或快捷键打开横向预览面板";
 "historyPanelNotchMode" = "刘海";
-"historyPanelNotchModeHint" = "鼠标进入屏幕顶部刘海自动展开，移出后自动收起";
+"historyPanelNotchModeHint" = "悬停或点击屏幕顶部刘海展开，移出后自动收起";
 "historyNotchTriggerLabel" = "刘海触发方式";
 "historyNotchTriggerHover" = "鼠标悬停打开";
 "historyNotchTriggerClick" = "鼠标点击打开";

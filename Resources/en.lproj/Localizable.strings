@@ -19,7 +19,7 @@
 "historyPanelDialogMode" = "Dialog";
 "historyPanelDialogModeHint" = "Open a horizontal preview panel from the menu or shortcut";
 "historyPanelNotchMode" = "Notch";
-"historyPanelNotchModeHint" = "Hover near the top notch to expand, leave to hide";
+"historyPanelNotchModeHint" = "Open at the top notch by hovering or clicking, leave to hide";
 "historyNotchTriggerLabel" = "Notch activation";
 "historyNotchTriggerHover" = "Open on hover";
 "historyNotchTriggerClick" = "Open on click";

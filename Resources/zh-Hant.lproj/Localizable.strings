@@ -19,7 +19,7 @@
 "historyPanelDialogMode" = "彈窗";
 "historyPanelDialogModeHint" = "透過選單或快捷鍵開啟橫向預覽面板";
 "historyPanelNotchMode" = "瀏海";
-"historyPanelNotchModeHint" = "滑鼠進入螢幕頂部瀏海自動展開，移出後自動收起";
+"historyPanelNotchModeHint" = "懸停或點擊螢幕頂部瀏海展開，移出後自動收起";
 "historyNotchTriggerLabel" = "瀏海觸發方式";
 "historyNotchTriggerHover" = "滑鼠懸停開啟";
 "historyNotchTriggerClick" = "滑鼠點擊開啟";

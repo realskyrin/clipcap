@@ -19,7 +19,7 @@
 "historyPanelDialogMode" = "Dialogue";
 "historyPanelDialogModeHint" = "Ouvre un panneau d'aperçus horizontaux depuis le menu ou le raccourci";
 "historyPanelNotchMode" = "Encoche";
-"historyPanelNotchModeHint" = "Survolez l'encoche en haut pour développer, quittez pour masquer";
+"historyPanelNotchModeHint" = "Ouvrez l’encoche en haut au survol ou au clic, quittez pour masquer";
 "historyNotchTriggerLabel" = "Activation de l’encoche";
 "historyNotchTriggerHover" = "Ouvrir au survol";
 "historyNotchTriggerClick" = "Ouvrir au clic";
