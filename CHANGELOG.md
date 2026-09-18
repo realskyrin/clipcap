@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [1.8.33] - 2026-09-18
+
+### Added
+
+- Added debug logging for history search and focus diagnostics (ee8ef0e)
+
 ## [1.8.32] - 2026-09-18
 
 ### Added
