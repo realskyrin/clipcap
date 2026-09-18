@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [1.8.34] - 2026-09-18
+
+### Fixed
+
+- Fixed the search input exit threshold for cursor rounding (d65b2f1)
+
 ## [1.8.33] - 2026-09-18
 
 ### Added
