@@ -13,6 +13,14 @@ private enum HistoryPanelLayout {
     static let searchHiddenOffset: CGFloat = searchFieldWidth + 20
 }
 
+enum HistorySearchPointerPolicy {
+    // Cursor warping can be rounded in scaled display coordinates. A sub-point
+    // discrepancy is not user intent to leave the field editor.
+    static func shouldLeaveInput(origin: NSPoint, current: NSPoint) -> Bool {
+        hypot(current.x - origin.x, current.y - origin.y) >= 2
+    }
+}
+
 enum HistoryPanelDismissalPolicy {
     static func shouldDismissAutomatically(isLocked: Bool) -> Bool { !isLocked }
 }
@@ -1581,7 +1589,11 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
         guard CGWarpMouseCursorPosition(cursorPoint) == .success else {
             return NSEvent.mouseLocation
         }
-        return screenPoint
+        // Compare subsequent samples with the actual cursor position, not the
+        // requested fractional destination (the reported failure differed by 0.56 pt).
+        let actualPosition = NSEvent.mouseLocation
+        logSearch("cursorWarp", detail: "roundingDistance=\(hypot(actualPosition.x - screenPoint.x, actualPosition.y - screenPoint.y))")
+        return actualPosition
     }
 
     private func startSearchMouseMovementTracking(origin: NSPoint) {
@@ -1591,21 +1603,22 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
         searchMouseMovementMonitor = NSEvent.addLocalMonitorForEvents(
             matching: [.mouseMoved, .leftMouseDragged, .rightMouseDragged, .otherMouseDragged]
         ) { [weak self] event in
-            self?.transitionSearchInputToResults(reason: "mouseEvent.\(event.type.rawValue)")
+            self?.checkSearchPointerMovement(reason: "mouseEvent.\(event.type.rawValue)")
             return event
         }
 
         let timer = Timer(timeInterval: 1.0 / 60.0, repeats: true) { [weak self] _ in
-            guard let self,
-                  self.isSearchMode,
-                  self.isSearchInputActive,
-                  let origin = self.searchMouseOrigin else { return }
-            let current = NSEvent.mouseLocation
-            guard hypot(current.x - origin.x, current.y - origin.y) >= 0.5 else { return }
-            self.transitionSearchInputToResults(reason: "positionTimer distance=\(hypot(current.x - origin.x, current.y - origin.y))")
+            self?.checkSearchPointerMovement(reason: "positionTimer")
         }
         RunLoop.main.add(timer, forMode: .common)
         searchMouseTrackingTimer = timer
+    }
+
+    private func checkSearchPointerMovement(reason: String) {
+        guard isSearchMode, isSearchInputActive, let origin = searchMouseOrigin else { return }
+        let current = NSEvent.mouseLocation
+        guard HistorySearchPointerPolicy.shouldLeaveInput(origin: origin, current: current) else { return }
+        transitionSearchInputToResults(reason: "\(reason) distance=\(hypot(current.x - origin.x, current.y - origin.y))")
     }
 
     private func stopSearchMouseMovementTracking() {
