@@ -3807,10 +3807,10 @@ private final class HistoryPanelTileView: NSView, NSDraggingSource {
         )
         if !badgeView.isHidden {
             let badgeSize = badgeView.intrinsicContentSize
-            let selectionOffset: CGFloat = selectionBadgeView.isHidden ? 0 : 20
             badgeView.frame = NSRect(
-                x: imageView.frame.maxX - badgeSize.width - 7,
-                y: imageView.frame.minY + 7 + selectionOffset,
+                x: imageView.frame.minX - HistoryItemCornerControlMetrics.horizontalPreviewOverlap,
+                y: imageView.frame.maxY - badgeSize.height
+                    + HistoryItemCornerControlMetrics.favoritePreviewOverlap,
                 width: badgeSize.width,
                 height: badgeSize.height
             )
