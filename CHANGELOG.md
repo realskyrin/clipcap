@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+## [1.8.32] - 2026-09-18
+
+### Added
+
+- Added system recording import and video history support (51497e3)
+- Added a second leader handle to text callouts (ecb9250)
+
+### Changed
+
+- Aligned history media badges with preview corners (a3a6282)
+- Improved history panel mode settings UI (32945fb)
+- Updated localized copy for media history and recording import (69c3ad9)
+
 ## [1.8.31] - 2026-09-17
 
 ### Added
