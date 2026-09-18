@@ -121,7 +121,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                   self.systemScreenshotMonitorGeneration == generation,
                   Defaults.systemScreenshotAutoOpenEnabled
             else { return }
-            self.enqueueSystemScreenshot(url)
+            if RecordingImport.isVideo(url) {
+                RecordingImport.shared.enqueue(url)
+            } else if url.pathExtension.lowercased() == "gif" {
+                HistoryManager.shared.addFile(url)
+            } else {
+                self.enqueueSystemScreenshot(url)
+            }
         }
         systemScreenshotDirectoryMonitor = monitor
         monitor.start()

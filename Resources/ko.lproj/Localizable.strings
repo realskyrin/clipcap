@@ -555,3 +555,16 @@
 "reminderSoundRepeat" = "벨소리 반복 횟수";
 "reminderStopSound" = "벨소리 중지";
 "reminderSoundLoopHint" = "반복 재생하려면 clipcap을 실행해 두세요 알림을 클릭하면 멈춥니다";
+
+"historyPanelFilterVideos" = "동영상";
+"recordingFormatTitle" = "녹화 형식";
+"recordingManual" = "매번 선택";
+"recordingCompressionTitle" = "동영상 압축";
+"recordingOriginal" = "원본";
+"recordingCompressed" = "압축";
+"recordingKeepOriginal" = "원본 유지";
+"recordingSaved" = "녹화 저장됨";
+"recordingConversionFailed" = "변환 실패, 원본 유지됨";
+"recordingOpenSystem" = "시스템 스크린샷 및 녹화 열기";
+"recordingSystemHint" = "위의 시스템 캡처 가져오기를 켜고 시스템 도구에서 녹화하여 감시 폴더에 저장하세요\n원본은 유지되며 결과는 스크린샷 저장 경로의 Recordings 폴더에 저장됩니다\nHEVC 압축 우선, GIF는 무음이며 초당 12프레임 및 최대 1280픽셀";
+"recordingProcessing" = "녹화 처리 중";

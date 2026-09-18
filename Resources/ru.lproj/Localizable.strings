@@ -555,3 +555,16 @@
 "reminderSoundRepeat" = "Повторы звука";
 "reminderStopSound" = "Остановить звук";
 "reminderSoundLoopHint" = "Для повтора оставьте clipcap открытым Нажмите уведомление для остановки";
+
+"historyPanelFilterVideos" = "Видео";
+"recordingFormatTitle" = "Формат записи";
+"recordingManual" = "Выбирать вручную";
+"recordingCompressionTitle" = "Сжатие видео";
+"recordingOriginal" = "Оригинал";
+"recordingCompressed" = "Сжатое";
+"recordingKeepOriginal" = "Сохранить оригинал";
+"recordingSaved" = "Запись сохранена";
+"recordingConversionFailed" = "Ошибка преобразования, оригинал сохранён";
+"recordingOpenSystem" = "Открыть системный инструмент снимков и записи";
+"recordingSystemHint" = "Включите импорт выше и сохраните запись системного инструмента в отслеживаемую папку\nОригиналы сохраняются, результат помещается в Recordings внутри папки снимков\nПриоритет HEVC, GIF без звука с частотой 12 кадров/с и размером до 1280 пикселей";
+"recordingProcessing" = "Обработка записи";

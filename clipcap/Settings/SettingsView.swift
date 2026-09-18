@@ -386,6 +386,7 @@ final class SettingsView: NSView {
         addCard(togglesCard, to: stack)
 
         addCard(makeSystemScreenshotAutoOpenCard(), to: stack)
+        addCard(makeRecordingCard(), to: stack)
 
         let historyCard = CardView()
         let history = NSStackView()
@@ -958,6 +959,43 @@ final class SettingsView: NSView {
         reveal.setContentHuggingPriority(.required, for: .horizontal)
         return row
     }
+
+    private func makeRecordingCard() -> NSView {
+        let card = CardView()
+        let stack = NSStackView()
+        stack.orientation = .vertical
+        stack.alignment = .leading
+        stack.spacing = 12
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        card.addSubview(stack)
+        pin(stack, to: card, insets: NSEdgeInsets(top: 12, left: 14, bottom: 12, right: 14))
+        for (key, labels, action, selected) in [
+            ("recordingFormatTitle", [Localizer.string("recordingManual"), "MP4", "GIF"], #selector(recordingFormatChanged(_:)), ["manual", "mp4", "gif"].firstIndex(of: RecordingImport.format) ?? 0),
+            ("recordingCompressionTitle", [Localizer.string("recordingOriginal"), Localizer.string("recordingCompressed")], #selector(recordingCompressionChanged(_:)), RecordingImport.compress ? 1 : 0)
+        ] {
+            let row = NSStackView()
+            row.orientation = .horizontal
+            row.addArrangedSubview(primaryLabel(Localizer.string(key)))
+            row.addArrangedSubview(flexSpacer())
+            let popup = NSPopUpButton()
+            popup.addItems(withTitles: labels)
+            popup.selectItem(at: selected)
+            popup.target = self
+            popup.action = action
+            row.addArrangedSubview(popup)
+            addFullWidth(row, to: stack)
+        }
+        addFullWidth(secondaryLabel(Localizer.string("recordingSystemHint"), wrapping: true), to: stack)
+        addFullWidth(makeButton(title: Localizer.string("recordingOpenSystem"), action: #selector(openSystemRecording)), to: stack)
+        return card
+    }
+    @objc private func recordingFormatChanged(_ sender: NSPopUpButton) {
+        RecordingImport.format = ["manual", "mp4", "gif"][sender.indexOfSelectedItem]
+    }
+    @objc private func recordingCompressionChanged(_ sender: NSPopUpButton) {
+        RecordingImport.compress = sender.indexOfSelectedItem == 1
+    }
+    @objc private func openSystemRecording() { SystemScreenshotAutoOpen.openScreenshotTool() }
 
     private func makeScreenshotQualityCard() -> NSView {
         let card = CardView()

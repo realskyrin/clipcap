@@ -555,3 +555,16 @@
 "reminderSoundRepeat" = "Sound repetitions";
 "reminderStopSound" = "Stop sound";
 "reminderSoundLoopHint" = "Keep clipcap running for loops and click the notification to stop";
+
+"historyPanelFilterVideos" = "Videos";
+"recordingFormatTitle" = "Recording format";
+"recordingManual" = "Ask each time";
+"recordingCompressionTitle" = "Video compression";
+"recordingOriginal" = "Original";
+"recordingCompressed" = "Compressed";
+"recordingKeepOriginal" = "Keep original";
+"recordingSaved" = "Recording saved";
+"recordingConversionFailed" = "Conversion failed, original preserved";
+"recordingOpenSystem" = "Open system screenshot and recording";
+"recordingSystemHint" = "Enable system screenshot import above, select recording in the system tool and save to the monitored folder\nOriginals are preserved and output is saved in Recordings under the screenshot save folder\nCompression prefers HEVC, GIF is silent at 12 fps with a maximum dimension of 1280 pixels";
+"recordingProcessing" = "Processing recording";

@@ -555,3 +555,16 @@
 "reminderSoundRepeat" = "Répétitions du son";
 "reminderStopSound" = "Arrêter le son";
 "reminderSoundLoopHint" = "Gardez clipcap ouvert pour les boucles et cliquez sur la notification pour arrêter";
+
+"historyPanelFilterVideos" = "Vidéos";
+"recordingFormatTitle" = "Format d’enregistrement";
+"recordingManual" = "Choisir à chaque fois";
+"recordingCompressionTitle" = "Compression vidéo";
+"recordingOriginal" = "Original";
+"recordingCompressed" = "Compressé";
+"recordingKeepOriginal" = "Conserver l’original";
+"recordingSaved" = "Enregistrement sauvegardé";
+"recordingConversionFailed" = "Échec de conversion, original conservé";
+"recordingOpenSystem" = "Ouvrir l’outil système de capture";
+"recordingSystemHint" = "Activez l’importation ci-dessus, puis enregistrez avec l’outil système dans le dossier surveillé\nLes originaux sont conservés et les résultats sont placés dans Recordings sous le dossier des captures\nCompression HEVC prioritaire, GIF muet à 12 images/s et 1280 pixels maximum";
+"recordingProcessing" = "Traitement de l’enregistrement";

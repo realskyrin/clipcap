@@ -555,3 +555,16 @@
 "reminderSoundRepeat" = "鈴聲循環次數";
 "reminderStopSound" = "停止鈴聲";
 "reminderSoundLoopHint" = "循環鈴聲需要保持 clipcap 運行，點擊提醒通知可停止";
+
+"historyPanelFilterVideos" = "影片";
+"recordingFormatTitle" = "錄製格式";
+"recordingManual" = "手動選擇";
+"recordingCompressionTitle" = "影片壓縮";
+"recordingOriginal" = "原影片";
+"recordingCompressed" = "壓縮";
+"recordingKeepOriginal" = "保留原影片";
+"recordingSaved" = "錄製已儲存";
+"recordingConversionFailed" = "轉換失敗，原影片已保留";
+"recordingOpenSystem" = "開啟系統截圖與錄製";
+"recordingSystemHint" = "啟用上方系統截圖接收後，在系統工具中選擇錄製並儲存到相同監聽目錄\n保留原檔，輸出儲存於截圖路徑下的 Recordings 資料夾\n壓縮優先使用 HEVC，GIF 為無聲動畫，最長邊 1280 像素，每秒 12 幀";
+"recordingProcessing" = "正在處理錄製";

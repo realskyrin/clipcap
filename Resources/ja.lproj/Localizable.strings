@@ -555,3 +555,16 @@
 "reminderSoundRepeat" = "サウンドの繰り返し回数";
 "reminderStopSound" = "サウンドを停止";
 "reminderSoundLoopHint" = "繰り返し再生には clipcap の起動が必要です 通知をクリックすると停止します";
+
+"historyPanelFilterVideos" = "動画";
+"recordingFormatTitle" = "録画形式";
+"recordingManual" = "毎回選択";
+"recordingCompressionTitle" = "動画圧縮";
+"recordingOriginal" = "元の動画";
+"recordingCompressed" = "圧縮";
+"recordingKeepOriginal" = "元の動画を保持";
+"recordingSaved" = "録画を保存しました";
+"recordingConversionFailed" = "変換に失敗しました 元の動画は保持されています";
+"recordingOpenSystem" = "システムのスクリーンショットと録画を開く";
+"recordingSystemHint" = "上のシステム画像取り込みを有効にして、システムツールで録画を監視フォルダに保存します\n元のファイルは保持され、出力は画像保存先の Recordings フォルダに保存されます\n圧縮は HEVC 優先、GIF は無音で毎秒12フレーム、最大辺1280ピクセル";
+"recordingProcessing" = "録画を処理中";

@@ -2,7 +2,7 @@
 
 macOS menu bar image annotation tool. Pure AppKit, Swift Package Manager, no third-party dependencies.
 
-clipcap does not directly capture or record the screen, does not listen to global keyboard events, and must not request Screen Recording or Accessibility permissions. Users provide images through macOS system screenshots copied to the clipboard, file open, drag and drop, Open With, or other explicit file input.
+clipcap uses the macOS Screenshot app for system-managed screenshots and recordings, monitors the user-configured output directory, and imports completed files for preview and conversion. clipcap does not directly capture or record the screen, does not listen to global keyboard events, and must not request Screen Recording or Accessibility permissions. Users provide images through macOS system screenshots copied to the clipboard, file open, drag and drop, Open With, or other explicit file input.
 
 ## Build & Verification
 
@@ -38,7 +38,10 @@ This script builds `build/clipcap.app`, kills any running instance, installs `/A
 - No SwiftUI — this project uses AppKit exclusively with programmatic UI
 - No storyboards or XIBs
 - Minimum deployment target: macOS 14.0
-- Do not add screen capture, screen recording, global keyboard monitoring, Finder Automation, or permission-onboarding flows
+- Do not add direct screen capture or recording APIs, global keyboard monitoring, Finder Automation, or permission-onboarding flows
+- System Screenshot app launch and output-directory monitoring are allowed for screenshots and recordings without Screen Recording or Accessibility permissions
+- Preserve original system recordings; process only stable, playable files and write converted output outside the monitored directory to avoid loops
+- Video/GIF import, playback, MP4/GIF conversion, and optional video compression use system frameworks
 - All newly added user-facing copy must not end with punctuation. Punctuation inside the sentence is fine, but the final character of every visible string, tooltip, alert, toast, menu item, placeholder, and localized value must not be punctuation
 
 ## Packaging

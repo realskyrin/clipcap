@@ -1,4 +1,5 @@
 import AppKit
+import AVKit
 import Carbon
 import ImageIO
 
@@ -996,6 +997,7 @@ enum HistoryPanelFilter: CaseIterable, Equatable {
     case favorites
     case screenshots
     case gif
+    case videos
     case colors
     case text
 
@@ -1004,6 +1006,7 @@ enum HistoryPanelFilter: CaseIterable, Equatable {
         case .all: return L10n.historyPanelFilterAll
         case .favorites: return L10n.historyPanelFavorite
         case .screenshots: return L10n.historyPanelFilterScreenshots
+        case .videos: return Localizer.string("historyPanelFilterVideos")
         case .gif: return L10n.historyPanelFilterGIF
         case .colors: return L10n.historyPanelFilterColors
         case .text: return L10n.historyPanelFilterText
@@ -1013,7 +1016,7 @@ enum HistoryPanelFilter: CaseIterable, Equatable {
     var symbolName: String? {
         switch self {
         case .favorites: return "star.fill"
-        case .all, .screenshots, .gif, .colors, .text: return nil
+        case .all, .screenshots, .gif, .videos, .colors, .text: return nil
         }
     }
 
@@ -1025,7 +1028,7 @@ enum HistoryPanelFilter: CaseIterable, Equatable {
             return .colors
         case .text:
             return .text
-        case .screenshots, .gif:
+        case .screenshots, .gif, .videos:
             return nil
         }
     }
@@ -1038,7 +1041,7 @@ enum HistoryPanelFilter: CaseIterable, Equatable {
             return L10n.historyPanelSearchColors
         case .text:
             return L10n.historyPanelSearchText
-        case .screenshots, .gif:
+        case .screenshots, .gif, .videos:
             return nil
         }
     }
@@ -2345,7 +2348,7 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
     }
 
     private static func availableFilters(for entries: [HistoryEntry]) -> Set<HistoryPanelFilter> {
-        var filters: Set<HistoryPanelFilter> = [.all]
+        var filters: Set<HistoryPanelFilter> = [.all, .videos, .gif]
         for filter in HistoryPanelFilter.allCases where filter != .all {
             if filter == .favorites {
                 if HistoryFavoritePolicy.shouldShowFilter(for: entries) {
@@ -2366,7 +2369,9 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
             return HistoryManager.isFavorite(url: entry.fileURL)
         case .screenshots:
             guard case .image = entry.kind else { return false }
-            return entry.fileURL.pathExtension.lowercased() != "gif"
+            return entry.fileURL.pathExtension.lowercased() != "gif" && !RecordingImport.isVideo(entry.fileURL)
+        case .videos:
+            return RecordingImport.isVideo(entry.fileURL)
         case .gif:
             guard case .image = entry.kind else { return false }
             return entry.fileURL.pathExtension.lowercased() == "gif"
@@ -3987,7 +3992,7 @@ private final class HistoryPanelTileView: NSView, NSDraggingSource {
             configureImagePlaceholder()
             let label = entry.fileURL.pathExtension.lowercased() == "gif"
                 ? L10n.historyPanelFilterGIF
-                : L10n.historyPanelFilterScreenshots
+                : (RecordingImport.isVideo(entry.fileURL) ? Localizer.string("historyPanelFilterVideos") : L10n.historyPanelFilterScreenshots)
             metaLabel.stringValue = Self.metadata(label: label, date: entry.createdAt)
         case .color(let hex):
             configureColorPreview(hex: hex)
@@ -4475,6 +4480,7 @@ private final class HistoryPreviewWindowController: NSWindowController, NSWindow
     private let onEdit: (HistoryEntry) -> Void
     private let contentKind: ContentKind
     private let imageView = NSImageView()
+    private let videoView = AVPlayerView()
     private let textScrollView = NSScrollView()
     private let textView = NSTextView()
     private let titlebarFilenameContainer = NSView()
@@ -4546,6 +4552,8 @@ private final class HistoryPreviewWindowController: NSWindowController, NSWindow
     }
 
     override func close() {
+        videoView.player?.pause()
+        videoView.player = nil
         stopPreviewKeyMonitoring()
         stopActionHoverTracking()
         tooltipController.close()
@@ -4554,6 +4562,8 @@ private final class HistoryPreviewWindowController: NSWindowController, NSWindow
     }
 
     func windowWillClose(_ notification: Notification) {
+        videoView.player?.pause()
+        videoView.player = nil
         stopPreviewKeyMonitoring()
         stopActionHoverTracking()
         tooltipController.close()
@@ -4571,6 +4581,10 @@ private final class HistoryPreviewWindowController: NSWindowController, NSWindow
         imageView.frame = content.bounds
         imageView.autoresizingMask = [.width, .height]
         content.addSubview(imageView)
+        videoView.frame = content.bounds
+        videoView.autoresizingMask = [.width, .height]
+        videoView.isHidden = true
+        content.addSubview(videoView)
 
         textScrollView.drawsBackground = false
         textScrollView.hasVerticalScroller = true
@@ -4714,6 +4728,14 @@ private final class HistoryPreviewWindowController: NSWindowController, NSWindow
     }
 
     private func loadCurrentContent() {
+        videoView.player?.pause()
+        videoView.player = nil
+        videoView.isHidden = true
+        let isVideo = RecordingImport.isVideo(currentEntry.fileURL)
+        for button in actionButtons where button.action == #selector(editCurrent) || button.action == #selector(pinCurrent) {
+            button.isEnabled = !isVideo
+            button.isHidden = isVideo
+        }
         loadGeneration += 1
         let generation = loadGeneration
         titlebarPositionLabel.stringValue = "\(currentIndex + 1) / \(entries.count)"
@@ -4740,6 +4762,13 @@ private final class HistoryPreviewWindowController: NSWindowController, NSWindow
         window?.title = url.lastPathComponent
         titlebarFilenameLabel.stringValue = url.lastPathComponent
         titlebarFilenameLabel.toolTip = url.lastPathComponent
+        if RecordingImport.isVideo(url) {
+            imageView.isHidden = true
+            videoView.isHidden = false
+            videoView.player = AVPlayer(url: url)
+            videoView.player?.play()
+            return
+        }
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             let image = NSImage(contentsOf: url)
             DispatchQueue.main.async {
@@ -4818,6 +4847,7 @@ private final class HistoryPreviewWindowController: NSWindowController, NSWindow
     }
 
     private static func pixelSize(for url: URL) -> NSSize {
+        if RecordingImport.isVideo(url) { return NSSize(width: 960, height: 540) }
         guard let source = CGImageSourceCreateWithURL(url as CFURL, nil),
               let properties = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [CFString: Any],
               let width = properties[kCGImagePropertyPixelWidth] as? NSNumber,
@@ -4932,12 +4962,14 @@ private final class HistoryPreviewWindowController: NSWindowController, NSWindow
     }
 
     @objc private func editCurrent() {
+        guard !RecordingImport.isVideo(currentEntry.fileURL) else { return }
         let entry = currentEntry
         close()
         onEdit(entry)
     }
 
     @objc private func pinCurrent() {
+        guard !RecordingImport.isVideo(currentEntry.fileURL) else { return }
         guard let image = NSImage(contentsOf: currentEntry.fileURL) else { return }
         close()
         PinLauncher.pin(image: image)
@@ -4996,6 +5028,12 @@ private enum HistoryPanelEntryActions {
         case .image:
             if case .imageAbsolutePath = mode {
                 return copyImagePaths([entry])
+            }
+            if RecordingImport.isVideo(entry.fileURL) {
+                NSPasteboard.general.clearContents()
+                guard NSPasteboard.general.writeObjects([entry.fileURL as NSURL]) else { return false }
+                ToastWindow.show(message: L10n.copiedToClipboard)
+                return recordSuccessfulCopy(of: entry)
             }
             guard let image = NSImage(contentsOf: entry.fileURL) else { return false }
             ClipboardManager.copyToClipboard(image: image)

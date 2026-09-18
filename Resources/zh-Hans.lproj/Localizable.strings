@@ -555,3 +555,16 @@
 "reminderSoundRepeat" = "铃声循环次数";
 "reminderStopSound" = "停止铃声";
 "reminderSoundLoopHint" = "循环铃声需要保持 clipcap 运行，点击提醒通知可停止";
+
+"historyPanelFilterVideos" = "视频";
+"recordingFormatTitle" = "录制格式";
+"recordingManual" = "手动选择";
+"recordingCompressionTitle" = "视频压缩";
+"recordingOriginal" = "原视频";
+"recordingCompressed" = "压缩";
+"recordingKeepOriginal" = "保留原视频";
+"recordingSaved" = "录制已保存";
+"recordingConversionFailed" = "转换失败，原视频已保留";
+"recordingOpenSystem" = "打开系统截图与录制";
+"recordingSystemHint" = "启用上方系统截图接收后，在系统工具中选择录制，保存到同一监听目录后自动处理\n原文件保留，输出保存到截图保存路径下的 Recordings 文件夹\n压缩优先使用 HEVC，GIF 为无声动画，最长边 1280 像素，每秒 12 帧";
+"recordingProcessing" = "正在处理录制";

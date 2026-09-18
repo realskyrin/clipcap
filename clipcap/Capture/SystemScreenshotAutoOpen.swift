@@ -1,4 +1,5 @@
 import AppKit
+import AVFoundation
 import Darwin
 import Foundation
 import ImageIO
@@ -546,7 +547,7 @@ final class SystemScreenshotDirectoryMonitor {
             )
         }
         pendingWorkItems[identity] = workItem
-        queue.asyncAfter(deadline: .now() + settleDelay, execute: workItem)
+        queue.asyncAfter(deadline: .now() + (RecordingImport.isVideo(snapshot.url) ? max(2, settleDelay) : settleDelay), execute: workItem)
     }
 
     private func probe(identity: String, url: URL, expectedVersion: FileVersion) {
@@ -635,7 +636,7 @@ final class SystemScreenshotDirectoryMonitor {
     }
 
     private func isSupportedImage(url: URL, contentType: UTType?) -> Bool {
-        if contentType?.conforms(to: .image) == true {
+        if RecordingImport.isVideo(url) || contentType?.conforms(to: .image) == true {
             return true
         }
         let supportedExtensions: Set<String> = [
@@ -645,6 +646,11 @@ final class SystemScreenshotDirectoryMonitor {
     }
 
     private func isCompleteImage(at url: URL) -> Bool {
+        if RecordingImport.isVideo(url) {
+            let asset = AVURLAsset(url: url)
+            return asset.isPlayable && asset.duration.seconds.isFinite && asset.duration.seconds > 0
+                && !asset.tracks(withMediaType: .video).isEmpty
+        }
         guard let source = CGImageSourceCreateWithURL(url as CFURL, nil),
               CGImageSourceGetCount(source) > 0,
               CGImageSourceGetStatusAtIndex(source, 0) == .statusComplete

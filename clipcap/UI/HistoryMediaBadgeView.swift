@@ -2,8 +2,10 @@ import AppKit
 
 enum HistoryMediaBadgeKind {
     case gif
+    case video
 
     init?(entry: HistoryEntry) {
+        if RecordingImport.isVideo(entry.fileURL) { self = .video; return }
         switch entry.kind {
         case .image where entry.fileURL.pathExtension.lowercased() == "gif":
             self = .gif
@@ -15,6 +17,7 @@ enum HistoryMediaBadgeKind {
     var title: String {
         switch self {
         case .gif: return "GIF"
+        case .video: return Localizer.string("historyPanelFilterVideos")
         }
     }
 }

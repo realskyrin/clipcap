@@ -1,6 +1,7 @@
 import AppKit
 
 enum HistoryEntryKind {
+    // File-backed visual media, including still images, GIF and video
     case image
     case color(hex: String)
     case text(HistoryTextContent)
@@ -143,7 +144,7 @@ final class HistoryManager {
         )
 
         if !Defaults.historyCacheEnabled {
-            removeStoredHistoryEntries(withExtensions: ["png", "gif", "color"])
+            removeStoredHistoryEntries(withExtensions: ["png", "gif", "mov", "mp4", "m4v", "color"])
         }
         if !Defaults.clipboardTextCacheEnabled {
             removeStoredHistoryEntries(withExtensions: ["txt"])
@@ -190,7 +191,7 @@ final class HistoryManager {
         queue.async { [weak self] in
             guard let self else { return }
             if !Defaults.historyCacheEnabled {
-                self.removeStoredHistoryEntries(withExtensions: ["png", "gif", "color"])
+                self.removeStoredHistoryEntries(withExtensions: ["png", "gif", "mov", "mp4", "m4v", "color"])
             }
             self.invalidateEntriesCache()
             DispatchQueue.main.async {
@@ -293,11 +294,11 @@ final class HistoryManager {
     func addFile(_ sourceURL: URL) {
         guard Defaults.historyCacheEnabled else { return }
         let ext = sourceURL.pathExtension.lowercased()
-        guard ext == "gif" else { return }
+        guard ["gif", "mov", "mp4", "m4v"].contains(ext) else { return }
         queue.async { [weak self] in
             guard let self else { return }
             guard Defaults.historyCacheEnabled else { return }
-            let name = Self.filenameFormatter.string(from: Date()) + "." + ext
+            let name = Self.filenameFormatter.string(from: Date()) + "-" + UUID().uuidString + "." + ext
             let url = self.directoryURL.appendingPathComponent(name)
             let fm = FileManager.default
             do {
@@ -405,19 +406,19 @@ final class HistoryManager {
     private func loadCachedEntries() -> [HistoryEntry] {
         var allowedExtensions = Set<String>()
         if Defaults.historyCacheEnabled {
-            allowedExtensions.formUnion(["png", "gif", "color"])
+            allowedExtensions.formUnion(["png", "gif", "mov", "mp4", "m4v", "color"])
         }
         if Defaults.clipboardTextCacheEnabled {
             allowedExtensions.insert("txt")
         }
         return entries(in: directoryURL, allowedExtensions: allowedExtensions,
-                       supportedExtensions: ["png", "gif", "color", "txt"])
+                       supportedExtensions: ["png", "gif", "mov", "mp4", "m4v", "color", "txt"])
     }
 
     private func loadEntryCount() -> Int {
         var allowedExtensions = Set<String>()
         if Defaults.historyCacheEnabled {
-            allowedExtensions.formUnion(["png", "gif", "color"])
+            allowedExtensions.formUnion(["png", "gif", "mov", "mp4", "m4v", "color"])
         }
         if Defaults.clipboardTextCacheEnabled {
             allowedExtensions.insert("txt")
@@ -431,7 +432,7 @@ final class HistoryManager {
         var identities = Set<String>()
         for url in urls where Self.shouldIncludeEntry(url,
                                                       allowedExtensions: allowedExtensions,
-                                                      supportedExtensions: ["png", "gif", "color", "txt"]) {
+                                                      supportedExtensions: ["png", "gif", "mov", "mp4", "m4v", "color", "txt"]) {
             let values = try? url.resourceValues(forKeys: [.fileSizeKey, .isRegularFileKey])
             guard values?.isRegularFile != false, (values?.fileSize ?? 0) > 0 else { continue }
             identities.insert(Self.fileIdentity(for: url))
@@ -458,7 +459,7 @@ final class HistoryManager {
             guard values?.isRegularFile != false else { return nil }
             let date = values?.contentModificationDate ?? .distantPast
             switch ext {
-            case "png", "gif":
+            case "png", "gif", "mov", "mp4", "m4v":
                 return HistoryEntry(fileURL: url, createdAt: date, kind: .image)
             case "color":
                 guard let hex = try? String(contentsOf: url, encoding: .utf8) else { return nil }
@@ -701,7 +702,7 @@ final class HistoryManager {
         }
         return urls.filter { url in
             switch url.pathExtension.lowercased() {
-            case "png", "gif", "color", "txt":
+            case "png", "gif", "mov", "mp4", "m4v", "color", "txt":
                 return true
             default:
                 return false

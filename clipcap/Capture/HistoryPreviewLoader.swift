@@ -1,5 +1,6 @@
 import AppKit
 import ImageIO
+import AVFoundation
 
 struct HistoryImagePreview {
     let cgImage: CGImage?
@@ -12,6 +13,13 @@ struct HistoryImagePreview {
     }
 
     static func load(url: URL, pixelSize: Int) -> HistoryImagePreview {
+        if RecordingImport.isVideo(url) {
+            let generator = AVAssetImageGenerator(asset: AVURLAsset(url: url))
+            generator.appliesPreferredTrackTransform = true
+            generator.maximumSize = CGSize(width: pixelSize, height: pixelSize)
+            let image = try? generator.copyCGImage(at: .zero, actualTime: nil)
+            return HistoryImagePreview(cgImage: image, pixelWidth: image?.width ?? 0, pixelHeight: image?.height ?? 0)
+        }
         guard let source = CGImageSourceCreateWithURL(url as CFURL, nil) else {
             return HistoryImagePreview(cgImage: nil, pixelWidth: 0, pixelHeight: 0)
         }
