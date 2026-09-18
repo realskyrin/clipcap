@@ -294,7 +294,7 @@
 "toolbarSettingsApply" = "应用";
 
 /* About pane */
-"aboutTagline" = "capcap 的轻量伴侣，无需录屏或辅助功能权限，支持图片标注、历史记录与录屏转换，完整版见 github.com/realskyrin/capcap";
+"aboutTagline" = "capcap 的轻量版本，无需录屏或辅助功能权限，支持图片标注、历史记录与录屏转换，完整版见 github.com/realskyrin/capcap";
 "aboutDescription" = "无需录屏或辅助功能权限，支持图片标注、压缩、历史记录与录屏转换";
 "aboutRepositoriesTitle" = "仓库地址";
 "aboutVersion" = "版本 %@";
@@ -579,3 +579,7 @@
 "debugLogCopied" = "日志已复制";
 "debugLogCleared" = "日志已清理";
 "debugLogFailed" = "无法访问或复制日志";
+
+"reminderOnce" = "一次性";
+
+"historyPreviewTextSaveFailed" = "文本保存失败，请重试";

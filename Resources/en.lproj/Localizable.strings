@@ -579,3 +579,7 @@
 "debugLogCopied" = "Log copied";
 "debugLogCleared" = "Log cleared";
 "debugLogFailed" = "Unable to access or copy log";
+
+"reminderOnce" = "Once";
+
+"historyPreviewTextSaveFailed" = "Unable to save text, please try again";

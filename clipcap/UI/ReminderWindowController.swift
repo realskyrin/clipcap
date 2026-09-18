@@ -68,6 +68,7 @@ final class ReminderWindowController: NSWindowController, NSTableViewDataSource,
     private let editor = NSStackView()
     private let empty = NSTextField(labelWithString: "")
     private let time = NSDatePicker()
+    private var timeWidth: NSLayoutConstraint?
     private let frequency = NSSegmentedControl()
     private var weekdayButtons: [NSButton] = []
     private let message = NSTextView()
@@ -83,17 +84,29 @@ final class ReminderWindowController: NSWindowController, NSTableViewDataSource,
     private var revision = 0
 
     init(entries initialEntries: [ReminderEntry] = []) {
-        let window = ReminderWindow(contentRect: NSRect(x: 0, y: 0, width: 900, height: 580), styleMask: [.titled, .closable, .miniaturizable, .resizable], backing: .buffered, defer: false)
-        window.minSize = NSSize(width: 820, height: 550)
+        let window = ReminderWindow(contentRect: NSRect(x: 0, y: 0, width: 960, height: 580), styleMask: [.titled, .closable, .miniaturizable, .resizable], backing: .buffered, defer: false)
+        window.minSize = NSSize(width: 900, height: 550)
         window.isReleasedWhenClosed = false
         super.init(window: window)
         window.delegate = self
+        NotificationCenter.default.addObserver(self, selector: #selector(remindersCompleted(_:)),
+                                               name: ReminderController.completedNotification, object: nil)
         build()
         entries = initialEntries
         selectedID = entries.first?.id
         refresh()
         loadEditor()
     }
+    @objc private func remindersCompleted(_ notification: Notification) {
+        guard let ids = notification.userInfo?["ids"] as? [String] else { return }
+        entries.removeAll { ids.contains($0.id) && $0.settings.isCompleted(at: Date()) }
+        if !entries.contains(where: { $0.id == selectedID }) {
+            selectedID = entries.first?.id
+            loadEditor()
+        }
+        refresh()
+    }
+
     required init?(coder: NSCoder) { fatalError() }
     private func text(_ key: String) -> String { Localizer.string(key) }
     private func label(_ key: String, size: CGFloat = 13, bold: Bool = false) -> NSTextField {
@@ -149,7 +162,7 @@ final class ReminderWindowController: NSWindowController, NSTableViewDataSource,
         detail.translatesAutoresizingMaskIntoConstraints = false
         root.addSubview(detail)
         NSLayoutConstraint.activate([
-            sidebar.leadingAnchor.constraint(equalTo: root.leadingAnchor), sidebar.topAnchor.constraint(equalTo: root.topAnchor), sidebar.bottomAnchor.constraint(equalTo: root.bottomAnchor), sidebar.widthAnchor.constraint(equalToConstant: 310),
+            sidebar.leadingAnchor.constraint(equalTo: root.leadingAnchor), sidebar.topAnchor.constraint(equalTo: root.topAnchor), sidebar.bottomAnchor.constraint(equalTo: root.bottomAnchor), sidebar.widthAnchor.constraint(equalToConstant: 280),
             divider.leadingAnchor.constraint(equalTo: sidebar.trailingAnchor), divider.widthAnchor.constraint(equalToConstant: 1), divider.topAnchor.constraint(equalTo: root.topAnchor), divider.bottomAnchor.constraint(equalTo: root.bottomAnchor),
             detail.leadingAnchor.constraint(equalTo: divider.trailingAnchor), detail.trailingAnchor.constraint(equalTo: root.trailingAnchor), detail.topAnchor.constraint(equalTo: root.topAnchor), detail.bottomAnchor.constraint(equalTo: root.bottomAnchor)
         ])
@@ -199,9 +212,14 @@ final class ReminderWindowController: NSWindowController, NSTableViewDataSource,
         editor.addArrangedSubview(subtitle)
         time.datePickerStyle = .textFieldAndStepper
         time.datePickerElements = .hourMinute
+        time.font = .systemFont(ofSize: 14)
+        time.setContentCompressionResistancePriority(.required, for: .horizontal)
+        timeWidth = time.widthAnchor.constraint(equalToConstant: time.cell!.cellSize.width + 8)
+        timeWidth?.isActive = true
         time.target = self
         time.action = #selector(fieldsChanged)
-        frequency.segmentCount = 3
+        frequency.segmentCount = 4
+        frequency.setLabel(text("reminderOnce"), forSegment: 3)
         frequency.setLabel(text("reminderDaily"), forSegment: 0)
         frequency.setLabel(text("reminderWeekdaysShort"), forSegment: 1)
         frequency.setLabel(text("reminderWeekend"), forSegment: 2)
@@ -289,7 +307,7 @@ final class ReminderWindowController: NSWindowController, NSTableViewDataSource,
         table.reloadData()
         if let index = entries.firstIndex(where: { $0.id == selectedID }) { table.selectRowIndexes(IndexSet(integer: index), byExtendingSelection: false) }
         count.stringValue = String(format: text("reminderCount"), entries.count)
-        activeCount.stringValue = String(format: text("reminderActiveCount"), entries.filter { $0.settings.enabled }.count)
+        activeCount.stringValue = String(format: text("reminderActiveCount"), entries.filter { $0.settings.isScheduled }.count)
         loading = false
     }
     func tableView(_ tableView: NSTableView, rowViewForRow row: Int) -> NSTableRowView? {
@@ -309,13 +327,18 @@ final class ReminderWindowController: NSWindowController, NSTableViewDataSource,
         summary.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         let toggle = ReminderToggle(frame: .zero)
         toggle.controlSize = .small
-        toggle.state = value.enabled ? .on : .off
+        toggle.state = value.isScheduled ? .on : .off
         toggle.setAccessibilityLabel(text("reminderEnabled"))
         toggle.handler = { [weak self] enabled in
             guard let self, let index = self.entries.firstIndex(where: { $0.id == entry.id }) else { return }
             self.entries[index].settings.enabled = enabled
+            if enabled, let date = self.entries[index].settings.oneTimeDate, date <= Date() {
+                let value = self.entries[index].settings
+                self.entries[index].settings.oneTimeDate = Calendar.current.nextDate(after: Date(), matching: DateComponents(hour: value.hour, minute: value.minute), matchingPolicy: .nextTime)
+            }
             self.enqueue(self.entries[index])
             self.refresh()
+            self.loadEditor()
         }
         let delete = ReminderActionButton(title: "") { [weak self] in self?.delete(entry.id) }
         delete.image = NSImage(systemSymbolName: "trash", accessibilityDescription: text("reminderDelete"))
@@ -354,7 +377,9 @@ final class ReminderWindowController: NSWindowController, NSTableViewDataSource,
         editor.isHidden = entry == nil
         empty.isHidden = entry != nil
         guard let value = entry?.settings else { return }
-        time.dateValue = Calendar.current.date(bySettingHour: value.hour, minute: value.minute, second: 0, of: Date()) ?? Date()
+        time.datePickerElements = value.repeats ? .hourMinute : [.yearMonthDay, .hourMinute]
+        time.dateValue = value.oneTimeDate ?? Calendar.current.date(bySettingHour: value.hour, minute: value.minute, second: 0, of: Date()) ?? Date()
+        timeWidth?.constant = (time.cell?.cellSize.width ?? time.intrinsicContentSize.width) + 8
         updateRepeatControls(value)
         message.string = value.message
         soundRepeats.selectItem(at: value.playbackCount == 0 ? 10 : value.playbackCount - 1)
@@ -368,6 +393,9 @@ final class ReminderWindowController: NSWindowController, NSTableViewDataSource,
         guard !loading, let index = entries.firstIndex(where: { $0.id == selectedID }) else { return }
         entries[index].settings.hour = Calendar.current.component(.hour, from: time.dateValue)
         entries[index].settings.minute = Calendar.current.component(.minute, from: time.dateValue)
+        if !entries[index].settings.repeats {
+            entries[index].settings.oneTimeDate = Calendar.current.dateInterval(of: .minute, for: time.dateValue)?.start ?? time.dateValue
+        }
         entries[index].settings.message = message.string
         entries[index].settings.sound = sound.selectedItem?.representedObject as? String ?? ""
         entries[index].settings.soundRepeatCount = soundRepeats.selectedItem?.representedObject as? Int ?? 1
@@ -376,6 +404,9 @@ final class ReminderWindowController: NSWindowController, NSTableViewDataSource,
         refresh()
     }
     private func repeatSummary(_ value: ReminderSettings) -> String {
+        if let date = value.oneTimeDate {
+            return text("reminderOnce") + " · " + DateFormatter.localizedString(from: date, dateStyle: .short, timeStyle: .none)
+        }
         if let preset = value.repeatPreset {
             return text(["reminderDaily", "reminderWeekdaysShort", "reminderWeekend"][preset])
         }
@@ -383,21 +414,34 @@ final class ReminderWindowController: NSWindowController, NSTableViewDataSource,
         return days.isEmpty ? text("reminderNoDays") : days.map { text("reminderDay\($0)") }.joined(separator: " ")
     }
     private func updateRepeatControls(_ value: ReminderSettings) {
-        for index in 0..<3 { frequency.setSelected(value.repeatPreset == index, forSegment: index) }
+        for index in 0..<4 { frequency.setSelected((value.repeats ? value.repeatPreset : 3) == index, forSegment: index) }
         for button in weekdayButtons {
+            button.isEnabled = value.repeats
             button.state = value.selectedWeekdays.contains(button.tag) ? .on : .off
         }
     }
     @objc private func presetChanged() {
         guard !loading, let index = entries.firstIndex(where: { $0.id == selectedID }),
-              (0..<3).contains(frequency.selectedSegment) else { return }
-        entries[index].settings.selectedWeekdays = ReminderSettings.repeatPresets[frequency.selectedSegment]
+              (0..<4).contains(frequency.selectedSegment) else { return }
+        if frequency.selectedSegment == 3 {
+            let value = entries[index].settings
+            let date = Calendar.current.nextDate(after: Date(), matching: DateComponents(hour: value.hour, minute: value.minute), matchingPolicy: .nextTime) ?? Date()
+            entries[index].settings.oneTimeDate = date
+            time.dateValue = date
+            time.datePickerElements = [.yearMonthDay, .hourMinute]
+        } else {
+            entries[index].settings.oneTimeDate = nil
+            entries[index].settings.selectedWeekdays = ReminderSettings.repeatPresets[frequency.selectedSegment]
+            time.datePickerElements = .hourMinute
+        }
+        timeWidth?.constant = (time.cell?.cellSize.width ?? time.intrinsicContentSize.width) + 8
         updateRepeatControls(entries[index].settings)
         fieldsChanged()
     }
     @objc private func weekdayChanged(_ sender: NSButton) {
         guard !loading, let index = entries.firstIndex(where: { $0.id == selectedID }) else { return }
         entries[index].settings.selectedWeekdays = Set(weekdayButtons.filter { $0.state == .on }.map(\.tag))
+        timeWidth?.constant = (time.cell?.cellSize.width ?? time.intrinsicContentSize.width) + 8
         updateRepeatControls(entries[index].settings)
         fieldsChanged()
     }

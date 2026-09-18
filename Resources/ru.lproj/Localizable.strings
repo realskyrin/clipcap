@@ -579,3 +579,7 @@
 "debugLogCopied" = "Журнал скопирован";
 "debugLogCleared" = "Журнал очищен";
 "debugLogFailed" = "Не удалось прочитать или скопировать журнал";
+
+"reminderOnce" = "Один раз";
+
+"historyPreviewTextSaveFailed" = "Не удалось сохранить текст, попробуйте ещё раз";

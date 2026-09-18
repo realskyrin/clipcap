@@ -579,3 +579,7 @@
 "debugLogCopied" = "ログをコピーしました";
 "debugLogCleared" = "ログを消去しました";
 "debugLogFailed" = "ログへのアクセスまたはコピーに失敗しました";
+
+"reminderOnce" = "1回のみ";
+
+"historyPreviewTextSaveFailed" = "テキストを保存できませんでした、再試行してください";

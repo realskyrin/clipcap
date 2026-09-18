@@ -579,3 +579,7 @@
 "debugLogCopied" = "로그 복사됨";
 "debugLogCleared" = "로그 삭제됨";
 "debugLogFailed" = "로그 접근 또는 복사 실패";
+
+"reminderOnce" = "한 번";
+
+"historyPreviewTextSaveFailed" = "텍스트를 저장하지 못했습니다, 다시 시도해 주세요";

@@ -6,6 +6,10 @@ struct ReminderSettings: Codable, Equatable {
     var weekdaysOnly = false
     // Missing in older saved reminders, which retain their original repeat mode
     var weekdays: Set<Int>?
+    var oneTimeDate: Date?
+    var repeats: Bool { oneTimeDate == nil }
+    func isCompleted(at now: Date) -> Bool { enabled && (oneTimeDate.map { $0 <= now } ?? false) }
+    var isScheduled: Bool { enabled && (oneTimeDate.map { $0 > Date() } ?? true) }
     static let repeatPresets: [Set<Int>] = [Set(1...7), Set(2...6), [1, 7]]
     var selectedWeekdays: Set<Int> {
         get { weekdays ?? Self.repeatPresets[weekdaysOnly ? 1 : 0] }
@@ -20,14 +24,19 @@ struct ReminderSettings: Codable, Equatable {
     var playbackCount: Int { min(10, max(0, soundRepeatCount ?? 1)) }
 
     func isDue(after start: Date, through end: Date, calendar: Calendar = .current) -> Bool {
-        enabled && dates.contains { components in
+        guard enabled else { return false }
+        if let date = oneTimeDate { return date > start && date <= end }
+        return dates.contains { components in
             guard let next = calendar.nextDate(after: start, matching: components, matchingPolicy: .nextTime) else { return false }
             return next <= end
         }
     }
 
     var dates: [DateComponents] {
-        (selectedWeekdays == Self.repeatPresets[0] ? [nil] : selectedWeekdays.sorted().map { Optional($0) }).map { weekday in
+        if let date = oneTimeDate {
+            return [Calendar.current.dateComponents([.calendar, .timeZone, .year, .month, .day, .hour, .minute, .second], from: date)]
+        }
+        return (selectedWeekdays == Self.repeatPresets[0] ? [nil] : selectedWeekdays.sorted().map { Optional($0) }).map { weekday in
             var components = DateComponents()
             components.hour = hour
             components.minute = minute
@@ -61,6 +70,7 @@ struct ReminderEntry: Codable, Equatable, Identifiable {
 
 final class ReminderController: NSObject, UNUserNotificationCenterDelegate {
     static let shared = ReminderController()
+    static let completedNotification = Notification.Name("clipcap.remindersCompleted")
     private let center = UNUserNotificationCenter.current()
     private let prefix = "clipcap.reminder."
     private var soundTimer: Timer?
@@ -109,6 +119,17 @@ final class ReminderController: NSObject, UNUserNotificationCenterDelegate {
             player.play(filename: entry.settings.sound, count: entry.settings.playbackCount, message: entry.settings.message)
         }
         ringing = ringing.filter { $0.value.isPlaying }
+        let saved = entries
+        let completed = saved.filter { $0.settings.isCompleted(at: now) }
+        guard !completed.isEmpty else { return }
+        do {
+            // Keep delivered notifications and ongoing sound available for click handling
+            try persist(saved.filter { !$0.settings.isCompleted(at: now) })
+            NotificationCenter.default.post(name: Self.completedNotification, object: nil,
+                                            userInfo: ["ids": completed.map(\.id)])
+        } catch {
+            NSLog("Could not remove completed reminders: %@", error.localizedDescription)
+        }
     }
 
     @MainActor func save(_ entry: ReminderEntry) async throws {
@@ -122,7 +143,7 @@ final class ReminderController: NSObject, UNUserNotificationCenterDelegate {
         let old = await center.pendingNotificationRequests().filter { entry.owns($0.identifier) }
         var added: [String] = []
         do {
-            if value.enabled {
+            if value.enabled && (value.oneTimeDate.map { $0 > Date() } ?? true) {
                 let content = UNMutableNotificationContent()
                 content.title = Localizer.string("reminderTitle")
                 content.body = value.message
@@ -137,14 +158,14 @@ final class ReminderController: NSObject, UNUserNotificationCenterDelegate {
                 }
                 for date in value.dates {
                     let id = prefix + (entry.id == "legacy" ? "" : entry.id + ".") + UUID().uuidString
-                    try await center.add(UNNotificationRequest(identifier: id, content: content, trigger: UNCalendarNotificationTrigger(dateMatching: date, repeats: true)))
+                    try await center.add(UNNotificationRequest(identifier: id, content: content, trigger: UNCalendarNotificationTrigger(dateMatching: date, repeats: value.repeats)))
                     added.append(id)
                 }
             }
             var updated = entries
             if let index = updated.firstIndex(where: { $0.id == entry.id }) { updated[index] = entry }
             else { updated.append(entry) }
-            try persist(updated)
+            try persist(updated.filter { !$0.settings.isCompleted(at: Date()) })
             ringing.removeValue(forKey: entry.id)?.stop()
             center.removePendingNotificationRequests(withIdentifiers: old.map(\.identifier))
         } catch {
@@ -159,12 +180,28 @@ final class ReminderController: NSObject, UNUserNotificationCenterDelegate {
 
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         Task { @MainActor in
-            for entry in entries where entry.owns(response.notification.request.identifier) {
-                stoppedThrough[entry.id] = Date()
-                ringing.removeValue(forKey: entry.id)?.stop()
+            let identifier = response.notification.request.identifier
+            let owners = Set(entries.filter { $0.owns(identifier) }.map(\.id))
+                .union(ringing.keys.filter { ReminderEntry(id: $0).owns(identifier) })
+            for id in owners {
+                stoppedThrough[id] = Date()
+                ringing.removeValue(forKey: id)?.stop()
+            }
+            if response.actionIdentifier == UNNotificationDefaultActionIdentifier,
+               response.notification.request.identifier.hasPrefix(prefix),
+               let url = Self.firstWebLink(in: response.notification.request.content.body) {
+                NSWorkspace.shared.open(url)
             }
             completionHandler()
         }
+    }
+
+    static func firstWebLink(in message: String) -> URL? {
+        guard let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue) else { return nil }
+        return detector.matches(in: message, range: NSRange(message.startIndex..., in: message))
+            .compactMap(\.url).first { url in
+                ["http", "https"].contains(url.scheme?.lowercased() ?? "") && url.host != nil
+            }
     }
 
     enum ReminderError: LocalizedError {

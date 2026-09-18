@@ -579,3 +579,7 @@
 "debugLogCopied" = "Journal copié";
 "debugLogCleared" = "Journal vidé";
 "debugLogFailed" = "Impossible de lire ou copier le journal";
+
+"reminderOnce" = "Une fois";
+
+"historyPreviewTextSaveFailed" = "Impossible d’enregistrer le texte, veuillez réessayer";

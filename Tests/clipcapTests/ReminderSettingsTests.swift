@@ -3,6 +3,44 @@ import UserNotifications
 @testable import clipcap
 
 final class ReminderSettingsTests: XCTestCase {
+    func testOnlyEnabledOneTimeRemindersExpire() {
+        let now = Date()
+        var settings = ReminderSettings()
+        settings.enabled = true
+        XCTAssertFalse(settings.isCompleted(at: now))
+        settings.oneTimeDate = now.addingTimeInterval(1)
+        XCTAssertFalse(settings.isCompleted(at: now))
+        settings.oneTimeDate = now
+        XCTAssertTrue(settings.isCompleted(at: now))
+        settings.oneTimeDate = now.addingTimeInterval(-3600)
+        XCTAssertTrue(settings.isCompleted(at: now))
+        settings.enabled = false
+        XCTAssertFalse(settings.isCompleted(at: now))
+    }
+
+    func testOneTimeScheduleRoundTripAndNoReplay() throws {
+        var settings = ReminderSettings()
+        settings.enabled = true
+        let date = Date(timeIntervalSince1970: 2_000_000_000)
+        settings.oneTimeDate = date
+        XCTAssertFalse(settings.repeats)
+        XCTAssertEqual(settings.dates.count, 1)
+        XCTAssertEqual(Calendar.current.date(from: settings.dates[0]), date)
+        XCTAssertTrue(settings.isDue(after: date.addingTimeInterval(-1), through: date))
+        XCTAssertFalse(settings.isDue(after: date, through: date.addingTimeInterval(86400)))
+        XCTAssertFalse(settings.isDue(after: date.addingTimeInterval(86400 - 1), through: date.addingTimeInterval(86400)))
+        XCTAssertEqual(try JSONDecoder().decode(ReminderSettings.self, from: JSONEncoder().encode(settings)), settings)
+        XCTAssertFalse(UNCalendarNotificationTrigger(dateMatching: settings.dates[0], repeats: settings.repeats).repeats)
+    }
+
+    func testWebLinksSelectFirstWebsiteAndIgnoreOtherSchemes() {
+        XCTAssertEqual(ReminderController.firstWebLink(in: "打开 https://example.com/a?q=1 然后 https://example.org")?.absoluteString, "https://example.com/a?q=1")
+        XCTAssertEqual(ReminderController.firstWebLink(in: "📌 [文档](https://example.com/docs)")?.absoluteString, "https://example.com/docs")
+        XCTAssertNil(ReminderController.firstWebLink(in: "没有链接"))
+        XCTAssertNil(ReminderController.firstWebLink(in: "mailto:hello@example.com file:///tmp/test"))
+        XCTAssertEqual(ReminderController.firstWebLink(in: "hello@example.com https://example.org")?.host, "example.org")
+    }
+
     func testSoundRepeatCountCompatibilityAndRoundTrip() throws {
         var settings = ReminderSettings()
         XCTAssertEqual(settings.playbackCount, 1)
@@ -52,6 +90,7 @@ final class ReminderSettingsTests: XCTestCase {
             {"enabled":false,"weekdaysOnly":\(weekdaysOnly),"hour":9,"minute":0,"message":"","sound":"Glass.aiff"}
             """
             let settings = try JSONDecoder().decode(ReminderSettings.self, from: Data(json.utf8))
+            XCTAssertTrue(settings.repeats)
             XCTAssertEqual(settings.selectedWeekdays, ReminderSettings.repeatPresets[weekdaysOnly ? 1 : 0])
         }
     }

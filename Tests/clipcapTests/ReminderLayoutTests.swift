@@ -23,6 +23,29 @@ final class ReminderLayoutTests: XCTestCase {
         }
     }
 
+    @MainActor func testOneTimeEditorShowsDateAndDisablesWeekdays() throws {
+        _ = NSApplication.shared
+        var entry = ReminderEntry()
+        entry.settings.oneTimeDate = Date().addingTimeInterval(3600)
+        let controller = ReminderWindowController(entries: [entry])
+        let root = try XCTUnwrap(controller.window?.contentView)
+        func descendants(_ view: NSView) -> [NSView] { view.subviews.flatMap { [$0] + descendants($0) } }
+        let controls = descendants(root)
+        let presets = try XCTUnwrap(controls.compactMap { $0 as? NSSegmentedControl }.first)
+        XCTAssertTrue(presets.isSelected(forSegment: 3))
+        let picker = try XCTUnwrap(controls.compactMap { $0 as? NSDatePicker }.first)
+        XCTAssertTrue(picker.datePickerElements.contains(.yearMonthDay))
+        XCTAssertEqual(picker.dateValue, entry.settings.oneTimeDate)
+        root.layoutSubtreeIfNeeded()
+        let contentWidth = try XCTUnwrap(picker.cell).cellSize.width
+        XCTAssertGreaterThanOrEqual(picker.frame.width, contentWidth)
+        XCTAssertLessThanOrEqual(picker.frame.width, contentWidth + 16)
+        XCTAssertTrue(root.bounds.contains(picker.convert(picker.bounds, to: root)))
+        for chip in controls.compactMap({ $0 as? NSButton }).filter({ (1...7).contains($0.tag) }) {
+            XCTAssertFalse(chip.isEnabled)
+        }
+    }
+
     @MainActor func testEditorGroupsHaveUsableHeightAndFitWindow() throws {
         _ = NSApplication.shared
         var entry = ReminderEntry()

@@ -579,3 +579,7 @@
 "debugLogCopied" = "日誌已複製";
 "debugLogCleared" = "日誌已清理";
 "debugLogFailed" = "無法存取或複製日誌";
+
+"reminderOnce" = "一次性";
+
+"historyPreviewTextSaveFailed" = "文字儲存失敗，請重試";

@@ -305,6 +305,7 @@ enum L10n {
     static var historyPanelSearchText: String { s("historyPanelSearchText") }
     static var historyPanelClearSearch: String { s("historyPanelClearSearch") }
     static var historyPanelSearchNoResults: String { s("historyPanelSearchNoResults") }
+    static var historyPreviewTextSaveFailed: String { s("historyPreviewTextSaveFailed") }
     static var historyPreviewCopyText: String { s("historyPreviewCopyText") }
     static var historyPreviewConvertToQRCode: String { s("historyPreviewConvertToQRCode") }
     static var historyPreviewQRCodeTooLong: String { s("historyPreviewQRCodeTooLong") }

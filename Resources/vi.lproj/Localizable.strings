@@ -579,3 +579,7 @@
 "debugLogCopied" = "Đã sao chép nhật ký";
 "debugLogCleared" = "Đã xóa nhật ký";
 "debugLogFailed" = "Không thể truy cập hoặc sao chép nhật ký";
+
+"reminderOnce" = "Một lần";
+
+"historyPreviewTextSaveFailed" = "Không thể lưu văn bản, vui lòng thử lại";
