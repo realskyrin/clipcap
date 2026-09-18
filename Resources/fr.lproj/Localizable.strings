@@ -273,12 +273,10 @@
 "settingsTabPermissions" = "Autorisations";
 "settingsTabAbout" = "À propos";
 "settingsTabToolbar" = "Barre d'outils";
-"settingsGeneralCapture" = "Capture et épingles";
-"settingsGeneralRecording" = "Enregistrement";
 "settingsGeneralHistory" = "Historique";
 "settingsGeneralFiles" = "Fichiers et sortie";
 "settingsNoPermissionsNeeded" = "Aucune autorisation requise";
-"settingsSubtitleGeneral" = "Langue de l’app et comportement au démarrage";
+"settingsSubtitleGeneral" = "App, épingles et captures système";
 "settingsSubtitleShortcuts" = "Raccourcis d'éditeur sans surveillance globale";
 "settingsSubtitleToolbar" = "Organiser les outils d'annotation de l'éditeur";
 "settingsSubtitleAbout" = "Identité produit et liens du projet";
@@ -569,6 +567,5 @@
 "recordingKeepOriginal" = "Conserver l’original";
 "recordingSaved" = "Enregistrement sauvegardé";
 "recordingConversionFailed" = "Échec de conversion, original conservé";
-"recordingOpenSystem" = "Ouvrir l’outil système de capture";
-"recordingSystemHint" = "Activez l’importation des captures et enregistrements dans Capture et épingles, puis enregistrez avec l’outil système dans le dossier surveillé\nLes originaux sont conservés et les résultats sont placés dans Recordings sous le dossier des images\nCompression HEVC prioritaire, GIF muet à 12 images/s et 1280 pixels maximum";
+"recordingSystemHint" = "Activez l’importation des captures et enregistrements dans Général, puis enregistrez avec l’outil système dans le dossier surveillé\nLes originaux sont conservés et les résultats sont placés dans Recordings sous le dossier des images\nCompression HEVC prioritaire, GIF muet à 12 images/s et 1280 pixels maximum";
 "recordingProcessing" = "Traitement de l’enregistrement";

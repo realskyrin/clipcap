@@ -465,8 +465,6 @@ enum L10n {
     static var settingsTabPermissions: String { s("settingsTabPermissions") }
     static var settingsTabAbout: String { s("settingsTabAbout") }
     static var settingsTabToolbar: String { s("settingsTabToolbar") }
-    static var settingsGeneralCapture: String { s("settingsGeneralCapture") }
-    static var settingsGeneralRecording: String { s("settingsGeneralRecording") }
     static var settingsGeneralHistory: String { s("settingsGeneralHistory") }
     static var settingsGeneralFiles: String { s("settingsGeneralFiles") }
     static var settingsNoPermissionsNeeded: String { s("settingsNoPermissionsNeeded") }

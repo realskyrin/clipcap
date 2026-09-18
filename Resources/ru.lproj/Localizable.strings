@@ -273,12 +273,10 @@
 "settingsTabPermissions" = "Разрешения";
 "settingsTabAbout" = "О программе";
 "settingsTabToolbar" = "Панель инструментов";
-"settingsGeneralCapture" = "Снимки и закрепление";
-"settingsGeneralRecording" = "Запись";
 "settingsGeneralHistory" = "История";
 "settingsGeneralFiles" = "Файлы и вывод";
 "settingsNoPermissionsNeeded" = "Разрешения не нужны";
-"settingsSubtitleGeneral" = "Язык приложения и параметры запуска";
+"settingsSubtitleGeneral" = "Приложение, закрепление и системные снимки";
 "settingsSubtitleShortcuts" = "Локальные сочетания редактора без глобального мониторинга";
 "settingsSubtitleToolbar" = "Настройка инструментов разметки в редакторе";
 "settingsSubtitleAbout" = "Идентичность продукта и ссылки проекта";
@@ -569,6 +567,5 @@
 "recordingKeepOriginal" = "Сохранить оригинал";
 "recordingSaved" = "Запись сохранена";
 "recordingConversionFailed" = "Ошибка преобразования, оригинал сохранён";
-"recordingOpenSystem" = "Открыть системный инструмент снимков и записи";
-"recordingSystemHint" = "Включите импорт системных снимков и записей в разделе Снимки и закрепление, затем сохраните запись системного инструмента в отслеживаемую папку\nОригиналы сохраняются, результат помещается в Recordings внутри папки изображений\nПриоритет HEVC, GIF без звука с частотой 12 кадров/с и размером до 1280 пикселей";
+"recordingSystemHint" = "Включите импорт системных снимков и записей в разделе Основные, затем сохраните запись системного инструмента в отслеживаемую папку\nОригиналы сохраняются, результат помещается в Recordings внутри папки изображений\nПриоритет HEVC, GIF без звука с частотой 12 кадров/с и размером до 1280 пикселей";
 "recordingProcessing" = "Обработка записи";

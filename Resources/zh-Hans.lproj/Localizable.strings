@@ -273,12 +273,10 @@
 "settingsTabPermissions" = "权限";
 "settingsTabAbout" = "关于";
 "settingsTabToolbar" = "工具栏";
-"settingsGeneralCapture" = "截图与贴图";
-"settingsGeneralRecording" = "录制";
 "settingsGeneralHistory" = "历史记录";
 "settingsGeneralFiles" = "文件与输出";
 "settingsNoPermissionsNeeded" = "无需权限";
-"settingsSubtitleGeneral" = "应用语言与启动行为";
+"settingsSubtitleGeneral" = "应用、贴图与系统截图行为";
 "settingsSubtitleShortcuts" = "无需全局监听的编辑器快捷键";
 "settingsSubtitleToolbar" = "排列编辑器中显示的标注工具";
 "settingsSubtitleAbout" = "产品身份和项目链接";
@@ -569,6 +567,5 @@
 "recordingKeepOriginal" = "保留原视频";
 "recordingSaved" = "录制已保存";
 "recordingConversionFailed" = "转换失败，原视频已保留";
-"recordingOpenSystem" = "打开系统截图与录制";
-"recordingSystemHint" = "先在“截图与贴图”中启用系统截图与录屏接收，再在系统工具中选择录制并保存到监听文件夹\n原文件保留，输出保存到图片保存路径下的 Recordings 文件夹\n压缩优先使用 HEVC，GIF 为无声动画，最长边 1280 像素，每秒 12 帧";
+"recordingSystemHint" = "先在“通用”中启用系统截图与录屏接收，再在系统工具中选择录制并保存到监听文件夹\n原文件保留，输出保存到图片保存路径下的 Recordings 文件夹\n压缩优先使用 HEVC，GIF 为无声动画，最长边 1280 像素，每秒 12 帧";
 "recordingProcessing" = "正在处理录制";

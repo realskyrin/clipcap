@@ -273,12 +273,10 @@
 "settingsTabPermissions" = "권한";
 "settingsTabAbout" = "정보";
 "settingsTabToolbar" = "도구 모음";
-"settingsGeneralCapture" = "캡처 및 고정";
-"settingsGeneralRecording" = "녹화";
 "settingsGeneralHistory" = "기록";
 "settingsGeneralFiles" = "파일 및 출력";
 "settingsNoPermissionsNeeded" = "권한 필요 없음";
-"settingsSubtitleGeneral" = "앱 언어 및 시작 동작";
+"settingsSubtitleGeneral" = "앱, 고정 및 시스템 캡처 동작";
 "settingsSubtitleShortcuts" = "전역 감시 없는 편집기 단축키";
 "settingsSubtitleToolbar" = "편집기에 표시할 주석 도구 정렬";
 "settingsSubtitleAbout" = "제품 정보와 프로젝트 링크";
@@ -569,6 +567,5 @@
 "recordingKeepOriginal" = "원본 유지";
 "recordingSaved" = "녹화 저장됨";
 "recordingConversionFailed" = "변환 실패, 원본 유지됨";
-"recordingOpenSystem" = "시스템 스크린샷 및 녹화 열기";
-"recordingSystemHint" = "캡처 및 고정에서 시스템 스크린샷과 녹화 가져오기를 켠 다음 시스템 도구로 녹화하여 감시 폴더에 저장하세요\n원본은 유지되며 결과는 이미지 저장 경로의 Recordings 폴더에 저장됩니다\nHEVC 압축 우선, GIF는 무음이며 초당 12프레임 및 최대 1280픽셀";
+"recordingSystemHint" = "일반에서 시스템 스크린샷과 녹화 가져오기를 켠 다음 시스템 도구로 녹화하여 감시 폴더에 저장하세요\n원본은 유지되며 결과는 이미지 저장 경로의 Recordings 폴더에 저장됩니다\nHEVC 압축 우선, GIF는 무음이며 초당 12프레임 및 최대 1280픽셀";
 "recordingProcessing" = "녹화 처리 중";

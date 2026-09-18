@@ -273,12 +273,10 @@
 "settingsTabPermissions" = "Quyền";
 "settingsTabAbout" = "Giới thiệu";
 "settingsTabToolbar" = "Thanh công cụ";
-"settingsGeneralCapture" = "Chụp và ghim";
-"settingsGeneralRecording" = "Ghi hình";
 "settingsGeneralHistory" = "Lịch sử";
 "settingsGeneralFiles" = "Tệp và đầu ra";
 "settingsNoPermissionsNeeded" = "Không cần quyền";
-"settingsSubtitleGeneral" = "Ngôn ngữ ứng dụng và hành vi khởi động";
+"settingsSubtitleGeneral" = "Ứng dụng, ghim và chụp hệ thống";
 "settingsSubtitleShortcuts" = "Phím tắt trình chỉnh sửa không cần theo dõi toàn cục";
 "settingsSubtitleToolbar" = "Sắp xếp công cụ chú thích trong trình chỉnh sửa";
 "settingsSubtitleAbout" = "Danh tính sản phẩm và liên kết dự án";
@@ -569,6 +567,5 @@
 "recordingKeepOriginal" = "Giữ bản gốc";
 "recordingSaved" = "Đã lưu bản ghi";
 "recordingConversionFailed" = "Chuyển đổi thất bại, đã giữ bản gốc";
-"recordingOpenSystem" = "Mở công cụ chụp và ghi của hệ thống";
-"recordingSystemHint" = "Bật nhập ảnh chụp và bản ghi hệ thống trong Chụp và ghim, rồi ghi và lưu vào thư mục theo dõi bằng công cụ hệ thống\nGiữ nguyên bản gốc, lưu kết quả vào Recordings trong thư mục ảnh\nƯu tiên HEVC, GIF không có âm thanh với 12 khung hình/giây và cạnh tối đa 1280 pixel";
+"recordingSystemHint" = "Bật nhập ảnh chụp và bản ghi hệ thống trong Chung, rồi ghi và lưu vào thư mục theo dõi bằng công cụ hệ thống\nGiữ nguyên bản gốc, lưu kết quả vào Recordings trong thư mục ảnh\nƯu tiên HEVC, GIF không có âm thanh với 12 khung hình/giây và cạnh tối đa 1280 pixel";
 "recordingProcessing" = "Đang xử lý bản ghi";

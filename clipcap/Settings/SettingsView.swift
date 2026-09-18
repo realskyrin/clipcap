@@ -4,8 +4,6 @@ enum SettingsTab: CaseIterable {
     case general
     case shortcuts
     case toolbar
-    case capture
-    case recording
     case history
     case files
     case about
@@ -15,8 +13,6 @@ enum SettingsTab: CaseIterable {
         case .general: return L10n.settingsTabGeneral
         case .shortcuts: return L10n.settingsTabShortcuts
         case .toolbar: return L10n.settingsTabToolbar
-        case .capture: return L10n.settingsGeneralCapture
-        case .recording: return L10n.settingsGeneralRecording
         case .history: return L10n.settingsGeneralHistory
         case .files: return L10n.settingsGeneralFiles
         case .about: return L10n.settingsTabAbout
@@ -28,8 +24,6 @@ enum SettingsTab: CaseIterable {
         case .general: return "gearshape.fill"
         case .shortcuts: return "keyboard.fill"
         case .toolbar: return "slider.horizontal.3"
-        case .capture: return "crop"
-        case .recording: return "record.circle"
         case .history: return "clock"
         case .files: return "doc"
         case .about: return "info.circle.fill"
@@ -39,10 +33,8 @@ enum SettingsTab: CaseIterable {
     var iconTint: NSColor {
         switch self {
         case .general: return NSColor(calibratedRed: 0.62, green: 0.66, blue: 0.72, alpha: 1.0)
-        case .shortcuts, .capture:
-            return NSColor(calibratedRed: 0.36, green: 0.66, blue: 0.98, alpha: 1.0)
-        case .toolbar, .recording:
-            return NSColor(calibratedRed: 0.95, green: 0.54, blue: 0.62, alpha: 1.0)
+        case .shortcuts: return NSColor(calibratedRed: 0.36, green: 0.66, blue: 0.98, alpha: 1.0)
+        case .toolbar: return NSColor(calibratedRed: 0.95, green: 0.54, blue: 0.62, alpha: 1.0)
         case .files:
             return NSColor(calibratedRed: 0.38, green: 0.80, blue: 0.78, alpha: 1.0)
         case .about, .history:
@@ -215,7 +207,7 @@ final class SettingsView: NSView {
         sidebarPanel.addSubview(sidebarStack)
 
         for tab in SettingsTab.allCases {
-            if tab == .capture {
+            if tab == .history {
                 let separator = NSView()
                 separator.wantsLayer = true
                 separator.layer?.backgroundColor = NSColor.white.withAlphaComponent(0.10).cgColor
@@ -327,10 +319,6 @@ final class SettingsView: NSView {
             let toolbarPane = ToolbarSettingsPane()
             activeToolbarPane = toolbarPane
             pane = toolbarPane
-        case .capture:
-            pane = makeCapturePane()
-        case .recording:
-            pane = makeRecordingPane()
         case .history:
             pane = makeHistoryPane()
         case .files:
@@ -412,32 +400,14 @@ final class SettingsView: NSView {
             switchRow(title: L10n.launchAtLogin, subtitle: nil, isOn: LaunchAtLogin.isEnabled, action: #selector(launchAtLoginToggled(_:))) { self.launchAtLoginSwitch = $0 },
             to: toggles
         )
-        addCard(togglesCard, to: stack)
-
-        return wrapPane(stack)
-    }
-
-    private func makeCapturePane() -> NSView {
-        let stack = paneStack()
-
-        let pinCard = CardView()
-        let pinStack = verticalInnerStack()
-        pinCard.addSubview(pinStack)
-        pin(pinStack, to: pinCard, insets: NSEdgeInsets(top: 6, left: 14, bottom: 6, right: 14))
+        addFullWidth(rowDivider(), to: toggles)
         addFullWidth(
             switchRow(title: L10n.pinAcrossSpaces, subtitle: L10n.pinAcrossSpacesHint, isOn: Defaults.pinAcrossSpaces, action: #selector(pinAcrossSpacesToggled(_:))) { self.pinAcrossSpacesSwitch = $0 },
-            to: pinStack
+            to: toggles
         )
-        addCard(pinCard, to: stack)
+        addCard(togglesCard, to: stack)
 
         addCard(makeSystemScreenshotAutoOpenCard(), to: stack)
-
-        return wrapPane(stack)
-    }
-
-    private func makeRecordingPane() -> NSView {
-        let stack = paneStack()
-        addCard(makeRecordingCard(), to: stack)
 
         return wrapPane(stack)
     }
@@ -505,6 +475,7 @@ final class SettingsView: NSView {
         addFullWidth(rowDivider(), to: savePath)
         addFullWidth(makeSavePathRow(), to: savePath)
         addCard(savePathCard, to: stack)
+        addCard(makeRecordingCard(), to: stack)
 
         return wrapPane(stack)
     }
@@ -1049,7 +1020,6 @@ final class SettingsView: NSView {
             addFullWidth(row, to: stack)
         }
         addFullWidth(secondaryLabel(Localizer.string("recordingSystemHint"), wrapping: true), to: stack)
-        addFullWidth(makeButton(title: Localizer.string("recordingOpenSystem"), action: #selector(openSystemRecording)), to: stack)
         return card
     }
     @objc private func recordingFormatChanged(_ sender: NSPopUpButton) {
@@ -1058,8 +1028,6 @@ final class SettingsView: NSView {
     @objc private func recordingCompressionChanged(_ sender: NSPopUpButton) {
         RecordingImport.compress = sender.indexOfSelectedItem == 1
     }
-    @objc private func openSystemRecording() { SystemScreenshotAutoOpen.openScreenshotTool() }
-
     private func makeScreenshotQualityCard() -> NSView {
         let card = CardView()
         let stack = NSStackView()

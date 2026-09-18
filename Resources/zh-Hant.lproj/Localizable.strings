@@ -273,12 +273,10 @@
 "settingsTabPermissions" = "權限";
 "settingsTabAbout" = "關於";
 "settingsTabToolbar" = "工具列";
-"settingsGeneralCapture" = "截圖與貼圖";
-"settingsGeneralRecording" = "錄製";
 "settingsGeneralHistory" = "歷史記錄";
 "settingsGeneralFiles" = "檔案與輸出";
 "settingsNoPermissionsNeeded" = "無需權限";
-"settingsSubtitleGeneral" = "App 語言與啟動行為";
+"settingsSubtitleGeneral" = "App、貼圖與系統截圖行為";
 "settingsSubtitleShortcuts" = "無需全域監聽的編輯器快捷鍵";
 "settingsSubtitleToolbar" = "排列編輯器中顯示的標註工具";
 "settingsSubtitleAbout" = "產品身份和專案連結";
@@ -569,6 +567,5 @@
 "recordingKeepOriginal" = "保留原影片";
 "recordingSaved" = "錄製已儲存";
 "recordingConversionFailed" = "轉換失敗，原影片已保留";
-"recordingOpenSystem" = "開啟系統截圖與錄製";
-"recordingSystemHint" = "先在「截圖與貼圖」中啟用系統截圖與錄影接收，再在系統工具中選擇錄製並儲存到監聽資料夾\n保留原檔，輸出儲存於圖片路徑下的 Recordings 資料夾\n壓縮優先使用 HEVC，GIF 為無聲動畫，最長邊 1280 像素，每秒 12 幀";
+"recordingSystemHint" = "先在「一般」中啟用系統截圖與錄影接收，再在系統工具中選擇錄製並儲存到監聽資料夾\n保留原檔，輸出儲存於圖片路徑下的 Recordings 資料夾\n壓縮優先使用 HEVC，GIF 為無聲動畫，最長邊 1280 像素，每秒 12 幀";
 "recordingProcessing" = "正在處理錄製";

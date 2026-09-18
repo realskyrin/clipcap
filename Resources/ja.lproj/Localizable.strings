@@ -273,12 +273,10 @@
 "settingsTabPermissions" = "権限";
 "settingsTabAbout" = "情報";
 "settingsTabToolbar" = "ツールバー";
-"settingsGeneralCapture" = "撮影とピン留め";
-"settingsGeneralRecording" = "録画";
 "settingsGeneralHistory" = "履歴";
 "settingsGeneralFiles" = "ファイルと出力";
 "settingsNoPermissionsNeeded" = "権限は不要";
-"settingsSubtitleGeneral" = "アプリの言語と起動設定";
+"settingsSubtitleGeneral" = "アプリ、ピン留め、システム撮影の設定";
 "settingsSubtitleShortcuts" = "グローバル監視を使わないエディターショートカット";
 "settingsSubtitleToolbar" = "エディターに表示する注釈ツールを並べ替え";
 "settingsSubtitleAbout" = "製品情報とプロジェクトリンク";
@@ -569,6 +567,5 @@
 "recordingKeepOriginal" = "元の動画を保持";
 "recordingSaved" = "録画を保存しました";
 "recordingConversionFailed" = "変換に失敗しました 元の動画は保持されています";
-"recordingOpenSystem" = "システムのスクリーンショットと録画を開く";
-"recordingSystemHint" = "撮影とピン留めでシステムのスクリーンショットと録画の取り込みを有効にし、システムツールで録画を監視フォルダに保存します\n元のファイルは保持され、出力は画像保存先の Recordings フォルダに保存されます\n圧縮は HEVC 優先、GIF は無音で毎秒12フレーム、最大辺1280ピクセル";
+"recordingSystemHint" = "一般でシステムのスクリーンショットと録画の取り込みを有効にし、システムツールで録画を監視フォルダに保存します\n元のファイルは保持され、出力は画像保存先の Recordings フォルダに保存されます\n圧縮は HEVC 優先、GIF は無音で毎秒12フレーム、最大辺1280ピクセル";
 "recordingProcessing" = "録画を処理中";

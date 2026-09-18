@@ -273,12 +273,10 @@
 "settingsTabPermissions" = "Permissions";
 "settingsTabAbout" = "About";
 "settingsTabToolbar" = "Toolbar";
-"settingsGeneralCapture" = "Capture & Pin";
-"settingsGeneralRecording" = "Recording";
 "settingsGeneralHistory" = "History";
 "settingsGeneralFiles" = "Files & Output";
 "settingsNoPermissionsNeeded" = "No permissions needed";
-"settingsSubtitleGeneral" = "App language and startup behavior";
+"settingsSubtitleGeneral" = "App, pin, and system capture behavior";
 "settingsSubtitleShortcuts" = "Local editor shortcuts without global monitoring";
 "settingsSubtitleToolbar" = "Arrange the annotation tools shown in the editor";
 "settingsSubtitleAbout" = "Product identity and project links";
@@ -569,6 +567,5 @@
 "recordingKeepOriginal" = "Keep original";
 "recordingSaved" = "Recording saved";
 "recordingConversionFailed" = "Conversion failed, original preserved";
-"recordingOpenSystem" = "Open system screenshot and recording";
-"recordingSystemHint" = "Enable system screenshot and recording import in Capture & Pin, then select recording in the system tool and save to the monitored folder\nOriginals are preserved and output is saved in Recordings under the image save folder\nCompression prefers HEVC, GIF is silent at 12 fps with a maximum dimension of 1280 pixels";
+"recordingSystemHint" = "Enable system screenshot and recording import in General, then select recording in the system tool and save to the monitored folder\nOriginals are preserved and output is saved in Recordings under the image save folder\nCompression prefers HEVC, GIF is silent at 12 fps with a maximum dimension of 1280 pixels";
 "recordingProcessing" = "Processing recording";
