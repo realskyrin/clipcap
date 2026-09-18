@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [1.8.35] - 2026-09-18
+
+### Added
+
+- Added text editing to history previews and one-time reminder support (6964327)
+
 ## [1.8.34] - 2026-09-18
 
 ### Fixed
