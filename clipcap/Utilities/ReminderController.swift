@@ -57,6 +57,13 @@ struct ReminderEntry: Codable, Equatable, Identifiable {
         return id == "legacy" ? !suffix.contains(".") : suffix.hasPrefix(id + ".")
     }
 
+    static func orphanedNotificationIDs(_ identifiers: [String], entries: [ReminderEntry], now: Date) -> [String] {
+        let active = entries.filter { $0.settings.enabled && !$0.settings.isCompleted(at: now) }
+        return identifiers.filter { identifier in
+            identifier.hasPrefix("clipcap.reminder.") && !active.contains { $0.owns(identifier) }
+        }
+    }
+
     static func load(from defaults: UserDefaults) -> [ReminderEntry] {
         if let data = defaults.data(forKey: "scheduledReminders"),
            let entries = try? JSONDecoder().decode([ReminderEntry].self, from: data) { return entries }
@@ -68,11 +75,31 @@ struct ReminderEntry: Codable, Equatable, Identifiable {
     }
 }
 
+// Notification APIs suspend, so MainActor alone does not serialize schedule changes
+@MainActor
+final class ReminderOperationQueue {
+    private var pending: Task<Void, Error>?
+
+    @discardableResult
+    func enqueue(_ operation: @escaping @MainActor () async throws -> Void) -> Task<Void, Error> {
+        let previous = pending
+        let next = Task { @MainActor in
+            _ = await previous?.result
+            try await operation()
+        }
+        pending = next
+        return next
+    }
+
+    func finish() async { _ = await pending?.result }
+}
+
 final class ReminderController: NSObject, UNUserNotificationCenterDelegate {
     static let shared = ReminderController()
     static let completedNotification = Notification.Name("clipcap.remindersCompleted")
     private let center = UNUserNotificationCenter.current()
     private let prefix = "clipcap.reminder."
+    @MainActor private let operations = ReminderOperationQueue()
     private var soundTimer: Timer?
     private var lastSoundCheck = Date()
     private var stoppedThrough: [String: Date] = [:]
@@ -85,10 +112,16 @@ final class ReminderController: NSObject, UNUserNotificationCenterDelegate {
     }
 
     @MainActor func delete(_ entry: ReminderEntry) async throws {
-        let pending = await center.pendingNotificationRequests().filter { entry.owns($0.identifier) }
+        try await operations.enqueue { try await self.deleteImmediately(entry) }.value
+    }
+
+    @MainActor private func deleteImmediately(_ entry: ReminderEntry) async throws {
+        // Commit deletion first so startup can recover if the process is interrupted
         try persist(entries.filter { $0.id != entry.id })
+        let pending = await center.pendingNotificationRequests().filter { entry.owns($0.identifier) }
         ringing.removeValue(forKey: entry.id)?.stop()
         center.removePendingNotificationRequests(withIdentifiers: pending.map(\.identifier))
+        await removeOrphanedNotifications()
         let delivered = await center.deliveredNotifications().filter { entry.owns($0.request.identifier) }
         center.removeDeliveredNotifications(withIdentifiers: delivered.map { $0.request.identifier })
     }
@@ -100,10 +133,31 @@ final class ReminderController: NSObject, UNUserNotificationCenterDelegate {
     @MainActor func start() {
         center.delegate = self
         guard soundTimer == nil else { return }
+        operations.enqueue { await self.removeOrphanedNotifications() }
         lastSoundCheck = Date()
         soundTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
             Task { @MainActor in self?.checkSounds() }
         }
+    }
+
+    @MainActor func finishPendingOperations() async {
+        await operations.finish()
+        await removeOrphanedNotifications()
+    }
+
+    @MainActor private func removeOrphanedNotifications() async {
+        let pending = await center.pendingNotificationRequests()
+        let orphaned = ReminderEntry.orphanedNotificationIDs(pending.map(\.identifier), entries: entries, now: Date())
+        if !entries.contains(where: { $0.settings.isScheduled }) {
+            // This app schedules only reminder notifications. Cancel the entire app schedule
+            // when empty, including requests the service no longer returns during enumeration
+            center.removeAllPendingNotificationRequests()
+        } else {
+            center.removePendingNotificationRequests(withIdentifiers: orphaned)
+        }
+        // Query again after submitting cancellation before allowing normal termination
+        let remaining = await center.pendingNotificationRequests()
+        DebugLog.record("reminder.reconciled", detail: "removed=\(orphaned.count) remaining=\(remaining.filter { $0.identifier.hasPrefix(prefix) }.count)")
     }
 
     @MainActor private func checkSounds() {
@@ -133,6 +187,10 @@ final class ReminderController: NSObject, UNUserNotificationCenterDelegate {
     }
 
     @MainActor func save(_ entry: ReminderEntry) async throws {
+        try await operations.enqueue { try await self.saveImmediately(entry) }.value
+    }
+
+    @MainActor private func saveImmediately(_ entry: ReminderEntry) async throws {
         let value = entry.settings
         if value.enabled {
             guard try await center.requestAuthorization(options: [.alert, .sound]) else {

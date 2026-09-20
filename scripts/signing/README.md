@@ -35,3 +35,19 @@ Set these GitHub repo secrets (Settings → Secrets → Actions):
 
 Losing this `.p12` (or regenerating it) gives the app a new signing identity.
 Keep it backed up and reuse it for releases.
+
+## Local development identity
+
+`bundle.sh` requires a reusable signing identity. It no longer silently falls
+back to ad-hoc signing: ad-hoc designated requirements contain a changing code
+hash, so macOS may retain reminders under an old source that the rebuilt app
+cannot enumerate or cancel.
+
+Set `SIGN_IDENTITY` explicitly, or place the name or SHA-1 fingerprint of an
+installed code-signing identity in `scripts/signing/local-identity.txt` (ignored
+by Git). The environment variable takes precedence. Keep using the same identity
+across builds; replacing it can orphan existing schedules. CI/release signing
+continues to use its configured identity.
+
+`ALLOW_ADHOC_SIGNING=1` is an explicit opt-in for disposable builds that do not
+need persistent reminder identity. It is not the default.

@@ -29,6 +29,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         flushPendingOpenImageURLs()
     }
 
+    func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+        Task { @MainActor in
+            await ReminderWindowController.finishPendingChanges()
+            await ReminderController.shared.finishPendingOperations()
+            sender.reply(toApplicationShouldTerminate: true)
+        }
+        return .terminateLater
+    }
+
     func applicationWillTerminate(_ notification: Notification) {
         clipboardTextHistoryMonitor.stop()
         systemScreenshotDirectoryMonitor?.stop()

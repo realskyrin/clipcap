@@ -3,6 +3,55 @@ import UserNotifications
 @testable import clipcap
 
 final class ReminderSettingsTests: XCTestCase {
+    func testEmptyTaskListCancelsModernAndLegacySchedulesOnly() {
+        XCTAssertEqual(ReminderEntry.orphanedNotificationIDs([
+            "clipcap.reminder.deleted.generation", "clipcap.reminder.old-uuid", "unrelated.notification"
+        ], entries: [], now: Date()), ["clipcap.reminder.deleted.generation", "clipcap.reminder.old-uuid"])
+    }
+
+    func testReconciliationPreservesActiveSchedulesAndRemovesDisabledOrExpiredOnes() {
+        let now = Date()
+        var active = ReminderEntry(id: "active")
+        active.settings.enabled = true
+        let disabled = ReminderEntry(id: "disabled")
+        var expired = ReminderEntry(id: "expired")
+        expired.settings.enabled = true
+        expired.settings.oneTimeDate = now.addingTimeInterval(-1)
+        var legacy = ReminderEntry(id: "legacy")
+        legacy.settings.enabled = true
+        let identifiers = ["clipcap.reminder.active.generation", "clipcap.reminder.disabled.generation",
+                           "clipcap.reminder.expired.generation", "clipcap.reminder.old-uuid", "unrelated"]
+        XCTAssertEqual(ReminderEntry.orphanedNotificationIDs(identifiers, entries: [active, disabled, expired, legacy], now: now),
+                       ["clipcap.reminder.disabled.generation", "clipcap.reminder.expired.generation"])
+    }
+
+    @MainActor func testNotificationOperationsAndQuitWaitForSuspendedSaveEvenAfterFailure() async {
+        enum Failure: Error { case expected }
+        let queue = ReminderOperationQueue()
+        var events: [String] = []
+        var release: CheckedContinuation<Void, Never>?
+        let save = queue.enqueue {
+            events.append("save started")
+            await withCheckedContinuation { release = $0 }
+            events.append("save finished")
+            throw Failure.expected
+        }
+        let deletion = queue.enqueue { events.append("deleted") }
+        while release == nil { await Task.yield() }
+        XCTAssertEqual(events, ["save started"])
+        let quit = Task { @MainActor in
+            await queue.finish()
+            events.append("quit")
+        }
+        await Task.yield()
+        XCTAssertEqual(events, ["save started"])
+        release?.resume()
+        _ = await save.result
+        _ = await deletion.result
+        await quit.value
+        XCTAssertEqual(events, ["save started", "save finished", "deleted", "quit"])
+    }
+
     func testOnlyEnabledOneTimeRemindersExpire() {
         let now = Date()
         var settings = ReminderSettings()

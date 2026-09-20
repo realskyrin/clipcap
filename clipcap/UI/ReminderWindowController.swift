@@ -61,7 +61,16 @@ private final class ReminderToggle: NSSwitch {
 
 @MainActor
 final class ReminderWindowController: NSWindowController, NSTableViewDataSource, NSTableViewDelegate, NSTextViewDelegate, NSWindowDelegate {
-    static let shared = ReminderWindowController()
+    private static weak var existingInstance: ReminderWindowController?
+    static let shared: ReminderWindowController = {
+        let controller = ReminderWindowController()
+        existingInstance = controller
+        return controller
+    }()
+
+    @MainActor static func finishPendingChanges() async {
+        await existingInstance?.pending?.value
+    }
     private let table = NSTableView()
     private let count = NSTextField(labelWithString: "")
     private let activeCount = NSTextField(labelWithString: "")

@@ -121,8 +121,12 @@ done
 #     -k ~/Library/Keychains/login.keychain-db -P clipcap -T /usr/bin/codesign
 #
 # Override the identity with the SIGN_IDENTITY env var. If the cert isn't in the
-# keychain, fall back to ad-hoc signing.
+# keychain, fail rather than silently changing the notification source identity.
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+LOCAL_IDENTITY_FILE="$SCRIPT_DIR/signing/local-identity.txt"
+if [ -z "${SIGN_IDENTITY:-}" ] && [ -f "$LOCAL_IDENTITY_FILE" ]; then
+    SIGN_IDENTITY="$(cat "$LOCAL_IDENTITY_FILE")"
+fi
 SIGN_IDENTITY="${SIGN_IDENTITY:-clipcap Self-Signed}"
 sign_bundles() {
     local identity="$1"
@@ -135,9 +139,14 @@ sign_bundles() {
 if security find-identity -p codesigning 2>/dev/null | grep -qF "$SIGN_IDENTITY"; then
     echo "Signing with: $SIGN_IDENTITY"
     sign_bundles "$SIGN_IDENTITY"
-else
-    echo "warning: '$SIGN_IDENTITY' not found in keychain — falling back to ad-hoc signing." >&2
+elif [ "${ALLOW_ADHOC_SIGNING:-0}" = "1" ]; then
+    echo "warning: ad-hoc signing changes notification identity between builds; scheduled reminders may become unreachable" >&2
     sign_bundles -
+else
+    echo "error: stable signing identity '$SIGN_IDENTITY' not found in keychain" >&2
+    echo "Import the existing clipcap certificate or set SIGN_IDENTITY to a reusable code-signing identity" >&2
+    echo "See scripts/signing/README.md; refusing automatic ad-hoc fallback to preserve scheduled reminders" >&2
+    exit 1
 fi
 
 echo "✅ Built and signed $APP_DIR"
