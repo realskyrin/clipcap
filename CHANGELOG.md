@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [1.8.36] - 2026-09-21
+
+### Changed
+
+- Preserved reminder schedules across builds and shutdown (78f780d)
+
 ## [1.8.35] - 2026-09-18
 
 ### Added
