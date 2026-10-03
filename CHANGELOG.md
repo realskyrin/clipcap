@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+## [1.8.37] - 2026-10-03
+
+### Added
+
+- Added OCR actions to history previews (2b80e47)
+- Added Command-W support to close history previews (15f3731)
+
+### Fixed
+
+- Fixed history notch hover initialization (2b80e47)
+
 ## [1.8.36] - 2026-09-21
 
 ### Changed
