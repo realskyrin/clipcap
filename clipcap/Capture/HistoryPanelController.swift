@@ -749,6 +749,7 @@ private final class HistoryNotchRootView: NSView {
                 context.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
                 changes()
             } completionHandler: {
+                guard self.isExpanded == expanded else { return }
                 self.contentView.isHidden = !expanded
                 if expanded {
                     self.syncHoverStateWithCurrentMouse()
@@ -2123,10 +2124,15 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
     }
 
     func syncHoverStateWithCurrentMouse() {
-        guard let window, !isHidden, !isShowingShortcutGuide else {
+        guard isActive, let window, !isHidden, !isShowingShortcutGuide else {
             clearActiveHoverTile()
             return
         }
+
+        // The first expansion loads entries while the collection was hidden.
+        // Materialize its visible items before resolving the pointer target.
+        layoutSubtreeIfNeeded()
+        collectionView.layoutSubtreeIfNeeded()
 
         let windowPoint = window.convertPoint(fromScreen: NSEvent.mouseLocation)
         let contentPoint = convert(windowPoint, from: nil)
@@ -2374,15 +2380,21 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
 
     @objc private func scrollBoundsDidChange() {
         let currentOriginX = scrollView.contentView.bounds.origin.x
+        let didScrollHorizontally = currentOriginX != lastScrollOriginX
         let direction: PreviewPrefetchDirection = currentOriginX >= lastScrollOriginX ? .forward : .backward
         lastScrollOriginX = currentOriginX
-        suspendHoverUpdatesDuringScrolling()
+        // Initial layout and resizing also emit bounds changes. Only actual
+        // scrolling should suspend hover and the Space preview shortcut.
+        if didScrollHorizontally {
+            suspendHoverUpdatesDuringScrolling()
+        }
         loadNextPageIfNeeded()
         visibleCollectionTiles.forEach { $0.loadPreviewIfNeeded() }
         updatePreviewLoading(direction: direction)
     }
 
     private func suspendHoverUpdatesDuringScrolling() {
+        guard isActive else { return }
         if !isScrollingContent {
             isScrollingContent = true
             clearActiveHoverTile()
@@ -4491,11 +4503,19 @@ private final class HistoryPreviewTooltipController {
         }
         label.stringValue = text
         let textSize = label.intrinsicContentSize
-        let panelSize = NSSize(
-            width: ceil(textSize.width) + 20,
-            height: ceil(textSize.height) + 10
+        let glyphSize = text.size(withAttributes: [
+            .font: label.font ?? NSFont.systemFont(ofSize: 12, weight: .medium)
+        ])
+        // Leave room for text-field insets and the trailing glyph's edge,
+        // including fallback glyphs in mixed Chinese/Latin shortcut labels.
+        let labelSize = NSSize(
+            width: ceil(max(textSize.width, glyphSize.width)) + 4,
+            height: ceil(max(textSize.height, glyphSize.height))
         )
-        label.frame = NSRect(x: 10, y: 5, width: ceil(textSize.width), height: ceil(textSize.height))
+        let panelSize = NSSize(
+            width: labelSize.width + 20,
+            height: labelSize.height + 10
+        )
 
         let anchorRect = parentWindow.convertToScreen(anchorView.convert(anchorView.bounds, to: nil))
         let visibleFrame = screen.visibleFrame
@@ -4513,6 +4533,7 @@ private final class HistoryPreviewTooltipController {
 
         panel.level = NSWindow.Level(rawValue: parentWindow.level.rawValue + 1)
         panel.setFrame(NSRect(origin: origin, size: panelSize), display: true)
+        label.frame = NSRect(origin: NSPoint(x: 10, y: 5), size: labelSize)
         panel.orderFrontRegardless()
     }
 
@@ -4548,6 +4569,9 @@ private final class HistoryPreviewWindowController: NSWindowController, NSWindow
     private let titlebarActionStack = NSStackView()
     private let tooltipController = HistoryPreviewTooltipController()
     private var editButton: HistoryPreviewActionButton?
+    private var ocrButton: HistoryPreviewActionButton?
+    private var ocrPreviewView: OCRPreviewView?
+    private var ocrTask: Task<Void, Never>?
     private var isEditingText = false
     private var isTextLoaded = false
     private weak var hoveredActionButton: HistoryPreviewActionButton?
@@ -4615,6 +4639,7 @@ private final class HistoryPreviewWindowController: NSWindowController, NSWindow
 
     override func close() {
         guard saveTextBeforeClosing() else { return }
+        resetTextRecognition()
         videoView.player?.pause()
         videoView.player = nil
         stopPreviewKeyMonitoring()
@@ -4635,6 +4660,7 @@ private final class HistoryPreviewWindowController: NSWindowController, NSWindow
     }
 
     func windowWillClose(_ notification: Notification) {
+        resetTextRecognition()
         videoView.player?.pause()
         videoView.player = nil
         stopPreviewKeyMonitoring()
@@ -4724,6 +4750,7 @@ private final class HistoryPreviewWindowController: NSWindowController, NSWindow
         case .image:
             actions = [
                 ("pencil", L10n.imageMergeContinueEditing, "E", #selector(editCurrent)),
+                (ToolbarItemID.ocr.symbolName, L10n.tipOCR, "O", #selector(recognizeCurrent)),
                 ("doc.on.doc", L10n.tipConfirm, "C", #selector(copyCurrent)),
                 ("pin", L10n.tipPin, "P", #selector(pinCurrent)),
             ]
@@ -4754,6 +4781,9 @@ private final class HistoryPreviewWindowController: NSWindowController, NSWindow
             actionButtons.append(button)
             if action.3 == #selector(editCurrent) {
                 editButton = button
+            } else if action.3 == #selector(recognizeCurrent) {
+                ocrButton = button
+                button.isEnabled = false
             } else if action.3 == #selector(showQRCodeCurrent) {
                 qrCodeButton = button
             }
@@ -4770,6 +4800,16 @@ private final class HistoryPreviewWindowController: NSWindowController, NSWindow
     private func handleKeyDown(_ event: NSEvent) -> Bool {
         let blockingModifiers = event.modifierFlags.intersection([.command, .control, .option, .shift])
         guard window?.attachedSheet == nil, NSApp.modalWindow == nil else { return false }
+        if let ocrPreviewView, blockingModifiers == .command {
+            switch event.charactersIgnoringModifiers?.lowercased() {
+            case "a":
+                return ocrPreviewView.selectAllOverlayText() || ocrPreviewView.selectAllLiveText()
+            case "c":
+                return copyRecognizedSelection()
+            default:
+                break
+            }
+        }
         if blockingModifiers == .command,
            event.charactersIgnoringModifiers?.lowercased() == "w" {
             close()
@@ -4801,6 +4841,9 @@ private final class HistoryPreviewWindowController: NSWindowController, NSWindow
         case kVK_ANSI_P:
             guard contentKind == .image else { return false }
             pinCurrent()
+        case kVK_ANSI_O:
+            guard contentKind == .image else { return false }
+            recognizeCurrent()
         case kVK_ANSI_C:
             copyCurrent()
         case kVK_ANSI_T:
@@ -4823,11 +4866,12 @@ private final class HistoryPreviewWindowController: NSWindowController, NSWindow
     }
 
     private func loadCurrentContent() {
+        resetTextRecognition()
         videoView.player?.pause()
         videoView.player = nil
         videoView.isHidden = true
         let isVideo = RecordingImport.isVideo(currentEntry.fileURL)
-        for button in actionButtons where button.action == #selector(editCurrent) || button.action == #selector(pinCurrent) {
+        for button in actionButtons where button.action == #selector(editCurrent) || button.action == #selector(pinCurrent) || button.action == #selector(recognizeCurrent) {
             button.isEnabled = !isVideo
             button.isHidden = isVideo
         }
@@ -4856,6 +4900,7 @@ private final class HistoryPreviewWindowController: NSWindowController, NSWindow
         textScrollView.isHidden = true
         imageView.isHidden = false
         imageView.image = nil
+        ocrButton?.isEnabled = false
         window?.title = url.lastPathComponent
         titlebarFilenameLabel.stringValue = url.lastPathComponent
         titlebarFilenameLabel.toolTip = url.lastPathComponent
@@ -4872,6 +4917,7 @@ private final class HistoryPreviewWindowController: NSWindowController, NSWindow
                 guard let self, self.loadGeneration == generation else { return }
                 self.imageView.image = image
                 self.imageView.animates = url.pathExtension.lowercased() == "gif"
+                self.ocrButton?.isEnabled = image != nil
             }
         }
     }
@@ -5126,7 +5172,97 @@ private final class HistoryPreviewWindowController: NSWindowController, NSWindow
         PinLauncher.pin(image: image)
     }
 
+    @objc private func recognizeCurrent() {
+        guard contentKind == .image, ocrTask == nil else { return }
+        if ocrPreviewView != nil {
+            resetTextRecognition()
+            return
+        }
+        guard let image = imageView.image else { return }
+        let generation = loadGeneration
+        imageView.animates = false
+        updateOCRButton(isRecognizing: true)
+        ocrTask = Task { @MainActor [weak self] in
+            let lines = await OCRService.recognizeLines(image: image)
+            guard !Task.isCancelled else { return }
+            // Match the existing OCR panel: use geometric text selection first,
+            // with native Live Text as the fallback when no lines are found.
+            let analysis = lines.isEmpty ? await OCRService.analyzeText(image: image) : nil
+            guard !Task.isCancelled, let self, self.loadGeneration == generation else { return }
+            self.ocrTask = nil
+            guard !lines.isEmpty || analysis != nil,
+                  let content = self.window?.contentView else {
+                self.imageView.animates = self.currentEntry.fileURL.pathExtension.lowercased() == "gif"
+                self.updateOCRButton(isRecognizing: false)
+                ToastWindow.show(message: L10n.ocrNoText)
+                return
+            }
+            let preview = OCRPreviewView(image: image, showsChrome: false)
+            preview.translatesAutoresizingMaskIntoConstraints = true
+            preview.frame = content.bounds
+            preview.autoresizingMask = [.width, .height]
+            preview.showsLineBoxes = true
+            preview.lines = lines
+            preview.applyLiveTextAnalysis(analysis)
+            preview.onSelectText = { [weak self] _, lineIndices, isFinal in
+                guard isFinal else { return }
+                self?.copyRecognizedSelection(lineCount: lineIndices.count)
+            }
+            content.addSubview(preview)
+            self.ocrPreviewView = preview
+            self.imageView.isHidden = true
+            self.window?.makeFirstResponder(preview)
+            self.updateOCRButton(isRecognizing: false)
+        }
+    }
+
+    private func resetTextRecognition() {
+        ocrTask?.cancel()
+        ocrTask = nil
+        if let ocrPreviewView {
+            ocrPreviewView.removeFromSuperview()
+            self.ocrPreviewView = nil
+            imageView.isHidden = false
+            window?.makeFirstResponder(imageView)
+        }
+        if contentKind == .image {
+            imageView.animates = currentEntry.fileURL.pathExtension.lowercased() == "gif"
+        }
+        updateOCRButton(isRecognizing: false)
+    }
+
+    private func updateOCRButton(isRecognizing: Bool) {
+        guard let ocrButton else { return }
+        ocrButton.image = isRecognizing
+            ? NSImage(systemSymbolName: "hourglass", accessibilityDescription: L10n.ocrRecognizing)?
+                .withSymbolConfiguration(NSImage.SymbolConfiguration(pointSize: 13, weight: .medium))
+            : NSImage(systemSymbolName: ToolbarItemID.ocr.symbolName, accessibilityDescription: L10n.tipOCR)?
+                .withSymbolConfiguration(NSImage.SymbolConfiguration(pointSize: 13, weight: .medium))
+        ocrButton.isEnabled = !isRecognizing && imageView.image != nil
+        ocrButton.contentTintColor = ocrPreviewView != nil ? .systemGreen : .secondaryLabelColor
+        ocrButton.hoverTip = isRecognizing
+            ? L10n.ocrRecognizing
+            : Self.shortcutTooltip(L10n.tipOCR, key: "O")
+        ocrButton.setAccessibilityLabel(isRecognizing ? L10n.ocrRecognizing : L10n.tipOCR)
+        if hoveredActionButton === ocrButton {
+            tooltipController.show(ocrButton.hoverTip, relativeTo: ocrButton)
+        }
+    }
+
+    @discardableResult
+    private func copyRecognizedSelection(lineCount: Int? = nil) -> Bool {
+        guard let ocrPreviewView,
+              ocrPreviewView.copySelectedOverlayTextToClipboard()
+                || ocrPreviewView.copySelectedLiveTextToClipboard() else { return false }
+        ToastWindow.show(
+            message: lineCount == 1 ? L10n.ocrLineCopied : L10n.ocrCopied,
+            duration: 0.9
+        )
+        return true
+    }
+
     @objc private func copyCurrent() {
+        if copyRecognizedSelection() { return }
         guard HistoryPanelEntryActions.copy(currentEntry) else { return }
         close()
     }

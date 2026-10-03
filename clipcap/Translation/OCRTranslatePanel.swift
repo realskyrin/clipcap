@@ -35,7 +35,7 @@ private final class FlippedView: NSView {
 
 // MARK: - OCR image preview
 
-private final class OCRPreviewView: NSView, ImageAnalysisOverlayViewDelegate {
+final class OCRPreviewView: NSView, ImageAnalysisOverlayViewDelegate {
     private let image: NSImage
     private let imageView = NSImageView()
     private let lineOverlay: OCRLineSelectionOverlayView
@@ -55,18 +55,18 @@ private final class OCRPreviewView: NSView, ImageAnalysisOverlayViewDelegate {
     }
     var onLiveTextMenuVisibilityChange: ((Bool) -> Void)?
 
-    init(image: NSImage) {
+    init(image: NSImage, showsChrome: Bool = true) {
         self.image = image
         self.lineOverlay = OCRLineSelectionOverlayView(imageSize: image.size)
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
         wantsLayer = true
-        layer?.cornerRadius = 8
+        layer?.cornerRadius = showsChrome ? 8 : 0
         layer?.cornerCurve = .continuous
         layer?.masksToBounds = true
-        layer?.backgroundColor = NSColor.black.withAlphaComponent(0.26).cgColor
+        layer?.backgroundColor = showsChrome ? NSColor.black.withAlphaComponent(0.26).cgColor : nil
         layer?.borderColor = NSColor.white.withAlphaComponent(0.08).cgColor
-        layer?.borderWidth = 1
+        layer?.borderWidth = showsChrome ? 1 : 0
 
         imageView.image = image
         imageView.imageAlignment = .alignCenter
