@@ -2988,7 +2988,7 @@ private final class HistoryPanelShortcutGuideView: NSView {
             ],
             [
                 Item(shortcut: "←  →", description: L10n.historyPanelShortcutBrowsePreview),
-                Item(shortcut: "\(space) / Esc", description: L10n.historyPanelShortcutClosePreview),
+                Item(shortcut: "\(space) / Esc / ⌘W", description: L10n.historyPanelShortcutClosePreview),
                 Item(shortcut: "C", description: L10n.historyPanelShortcutCopyPreview),
             ],
             [
@@ -4770,6 +4770,11 @@ private final class HistoryPreviewWindowController: NSWindowController, NSWindow
     private func handleKeyDown(_ event: NSEvent) -> Bool {
         let blockingModifiers = event.modifierFlags.intersection([.command, .control, .option, .shift])
         guard window?.attachedSheet == nil, NSApp.modalWindow == nil else { return false }
+        if blockingModifiers == .command,
+           event.charactersIgnoringModifiers?.lowercased() == "w" {
+            close()
+            return true
+        }
         if isEditingText {
             if blockingModifiers == .command,
                event.charactersIgnoringModifiers?.lowercased() == "s" {
