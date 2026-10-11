@@ -15,6 +15,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var systemScreenshotDirectoryMonitor: SystemScreenshotDirectoryMonitor?
     private var systemScreenshotOpenQueue = SystemScreenshotOpenQueue()
     private var systemScreenshotMonitorGeneration = 0
+    private var isReadyToTerminate = false
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         false
@@ -30,12 +31,24 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+        guard !isReadyToTerminate else { return .terminateNow }
         Task { @MainActor in
-            await ReminderWindowController.finishPendingChanges()
-            await ReminderController.shared.finishPendingOperations()
+            await self.finishPendingChangesForTermination()
             sender.reply(toApplicationShouldTerminate: true)
         }
         return .terminateLater
+    }
+
+    @MainActor func finishPendingChangesForTermination() async {
+        await ReminderWindowController.finishPendingChanges()
+        await ReminderController.shared.finishPendingOperations()
+    }
+
+    @MainActor func terminateAfterSavingPendingChanges() {
+        // The updater has already saved while the main queue was free. Avoid
+        // terminateLater's nested event loop starving further MainActor work.
+        isReadyToTerminate = true
+        NSApp.terminate(nil)
     }
 
     func applicationWillTerminate(_ notification: Notification) {

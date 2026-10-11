@@ -4,9 +4,8 @@ import CryptoKit
 /// Downloads a clipcap release zip and installs it in place of the running app.
 ///
 /// The running `.app` bundle can't overwrite itself while it's open, so the
-/// final swap is handed to a detached `/bin/bash` helper: it waits for this
-/// process to exit, replaces the bundle, and relaunches. The caller must
-/// terminate the app immediately after `install` returns.
+/// final swap is handed to a detached `/bin/bash` helper after pending app
+/// changes have been saved. The caller must terminate immediately after handoff.
 final class UpdateInstaller: NSObject {
     static let shared = UpdateInstaller()
 
@@ -16,6 +15,23 @@ final class UpdateInstaller: NSObject {
         case unzipFailed
         case bundleNotFound
         case notWritable
+        case helperLaunchFailed
+    }
+
+    /// Owns the extracted bundle until handoff. A failed handoff leaves the
+    /// running app untouched and the caller can discard the staged files.
+    struct PreparedInstallation {
+        let newApp: URL
+        let oldApp: URL
+        let workDir: URL
+
+        func handOff() throws {
+            try UpdateInstaller.spawnSwapHelper(newApp: newApp.path, oldApp: oldApp.path)
+        }
+
+        func discard() {
+            try? FileManager.default.removeItem(at: workDir)
+        }
     }
 
     private var session: URLSession?
@@ -55,26 +71,23 @@ final class UpdateInstaller: NSObject {
     // MARK: - Install
 
     /// Verifies the checksum (when `expectedSHA256` is given), unzips the
-    /// release, and spawns the detached helper that swaps the bundle and
-    /// relaunches. Throws before spawning the helper if anything looks wrong,
-    /// so a failure always leaves the running app untouched.
+    /// release, and stages it for installation. The caller saves pending app
+    /// changes before handing it to the swap helper and terminating.
     ///
     /// `phase` is invoked synchronously on this thread as each step begins, so
     /// the UI can show "verifying / extracting / installing" in turn.
     static func install(zipAt zipURL: URL,
                          expectedSHA256: String?,
-                         phase: (InstallPhase) -> Void) throws {
+                         phase: (InstallPhase) -> Void) throws -> PreparedInstallation {
         let fm = FileManager.default
         // The downloaded zip is always disposable. The unpacked scratch dir is
-        // disposable too, *unless* the detached helper took ownership of it —
-        // it reads the new bundle from there after this process exits. So any
-        // failure before the hand-off cleans the scratch dir up here; a
-        // successful hand-off leaves it for the helper, which deletes it last.
+        // disposable too unless preparation succeeds, transferring ownership
+        // to the caller until the detached helper takes over.
         var scratchDir: URL?
-        var handedOff = false
+        var prepared = false
         defer {
             try? fm.removeItem(at: zipURL)
-            if let dir = scratchDir, !handedOff { try? fm.removeItem(at: dir) }
+            if let dir = scratchDir, !prepared { try? fm.removeItem(at: dir) }
         }
 
         // 1. Checksum — guards against a truncated or corrupted download.
@@ -114,9 +127,8 @@ final class UpdateInstaller: NSObject {
         let parent = oldApp.deletingLastPathComponent()
         guard fm.isWritableFile(atPath: parent.path) else { throw InstallError.notWritable }
 
-        // 5. Hand the swap off to a detached helper and let the caller quit.
-        spawnSwapHelper(newApp: newApp.path, oldApp: oldApp.path)
-        handedOff = true
+        prepared = true
+        return PreparedInstallation(newApp: newApp, oldApp: oldApp, workDir: workDir)
     }
 
     /// Deletes leftover update artifacts (`clipcap-update-*` zips and scratch
@@ -152,7 +164,7 @@ final class UpdateInstaller: NSObject {
     /// Launches a `/bin/bash` script that outlives this process: it waits for
     /// clipcap to quit, swaps the bundle (keeping a backup it restores on
     /// failure), and reopens the app.
-    private static func spawnSwapHelper(newApp: String, oldApp: String) {
+    private static func spawnSwapHelper(newApp: String, oldApp: String) throws {
         let pid = ProcessInfo.processInfo.processIdentifier
         let script = """
         NEW="$1"; OLD="$2"; PID="$3"
@@ -161,6 +173,11 @@ final class UpdateInstaller: NSObject {
           kill -0 "$PID" 2>/dev/null || break
           sleep 0.1
         done
+        # Never replace a bundle whose process is still running.
+        if kill -0 "$PID" 2>/dev/null; then
+          echo "Update aborted: clipcap did not exit in time" >&2
+          exit 1
+        fi
         BACKUP="${OLD}.clipcap-backup-${PID}"
         mv "$OLD" "$BACKUP" || exit 1
         if /usr/bin/ditto "$NEW" "$OLD"; then
@@ -177,7 +194,15 @@ final class UpdateInstaller: NSObject {
         let task = Process()
         task.executableURL = URL(fileURLWithPath: "/bin/bash")
         task.arguments = ["-c", script, "clipcap-updater", newApp, oldApp, String(pid)]
-        try? task.run()
+        task.standardInput = FileHandle.nullDevice
+        task.standardOutput = FileHandle.nullDevice
+        task.standardError = FileHandle.nullDevice
+        do {
+            try task.run()
+        } catch {
+            DiagnosticLog.log("update", "helper-launch-failed", metadata: ["error": error.localizedDescription])
+            throw InstallError.helperLaunchFailed
+        }
     }
 }
 

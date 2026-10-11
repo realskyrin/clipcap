@@ -240,7 +240,7 @@ final class UpdateChecker {
                         self.setState(.installing(version: version, phase: .verifying))
                         DispatchQueue.global(qos: .userInitiated).async {
                             do {
-                                try UpdateInstaller.install(
+                                let installation = try UpdateInstaller.install(
                                     zipAt: zipPath,
                                     expectedSHA256: expectedHash,
                                     phase: { phase in
@@ -248,7 +248,23 @@ final class UpdateChecker {
                                                                   phase: phase))
                                     }
                                 )
-                                DispatchQueue.main.async { NSApp.terminate(nil) }
+                                Task { @MainActor in
+                                    guard let delegate = NSApp.delegate as? AppDelegate else {
+                                        installation.discard()
+                                        fail()
+                                        return
+                                    }
+                                    // Save while the main queue is free, before
+                                    // starting the helper's exit deadline.
+                                    await delegate.finishPendingChangesForTermination()
+                                    do {
+                                        try installation.handOff()
+                                        delegate.terminateAfterSavingPendingChanges()
+                                    } catch {
+                                        installation.discard()
+                                        fail()
+                                    }
+                                }
                             } catch {
                                 DispatchQueue.main.async { fail() }
                             }
