@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [1.8.39] - 2026-10-11
+
+### Changed
+
+- Saved pending changes before handing off app updates (aeba444)
+
 ## [1.8.38] - 2026-10-11
 
 ### Changed
