@@ -36,19 +36,19 @@
 "shortcutCancel" = "キャンセル";
 "shortcutWaiting" = "キー入力待ち";
 "shortcutRestore" = "デフォルトに戻す";
-"selectedImagePinShortcutHeader" = "選択画像をピン留め";
+"selectedImagePinShortcutHeader" = "画像を選んでピン留め";
 "selectedImagePinShortcutDefaultDisplay" = "未設定";
-"selectedImagePinShortcutClear" = "選択画像ピン留めショートカットを消去";
+"selectedImagePinShortcutClear" = "画像選択とピン留めのショートカットを解除";
 "clipboardImagePinShortcutHeader" = "クリップボード画像をピン留め";
 "clipboardImagePinShortcutDefaultDisplay" = "未設定";
 "clipboardImagePinShortcutClear" = "クリップボード画像ピン留めショートカットを消去";
 "clipboardTextPinShortcutHeader" = "クリップボードテキストをピン留め";
 "clipboardTextPinShortcutDefaultDisplay" = "未設定";
 "clipboardTextPinShortcutClear" = "クリップボードテキストピン留めショートカットを消去";
-"selectedImagePinNoImage" = "Finder で選択中の画像がありません";
+"selectedImagePinNoImage" = "選択した画像を開けません";
 "clipboardImagePinNoImage" = "クリップボードにピン留めできる画像がありません";
 "clipboardTextPinNoText" = "クリップボードにテキストがありません";
-"pinFromFinderHint" = "Finder の画像をピン留めしました。X キーで閉じる";
+"pinFromFinderHint" = "画像をピン留めしました、X キーで閉じます";
 "pinFromClipboardHint" = "クリップボードの画像をピン留めしました。X キーで閉じる";
 "pinFromClipboardTextHint" = "クリップボードのテキストをピン留めしました。ダブルクリックで編集";
 "pinToolbarClose" = "ピン留め画像を閉じる";
@@ -58,8 +58,8 @@
 "pinToolbarEditText" = "テキストを編集";
 
 /* Image-edit shortcuts */
-"selectedImageEditShortcutHeader" = "選択画像を編集";
-"selectedImageEditShortcutHint" = "Finder で選択中の 1 枚の画像を直接編集します。デフォルトでは未設定です";
+"selectedImageEditShortcutHeader" = "画像を選んで編集";
+"selectedImageEditShortcutHint" = "ファイル選択画面で編集する画像を選択、初期設定では未割り当て";
 "selectedImageEditShortcutDefaultDisplay" = "未設定";
 "clipboardImageEditShortcutHeader" = "クリップボード画像を編集";
 "clipboardImageEditShortcutHint" = "現在クリップボードにある画像を直接編集します。デフォルトでは未設定です";
@@ -96,7 +96,7 @@
 /* Shortcut conflict */
 "shortcutConflictTitle" = "ショートカットは既に使用中です";
 "shortcutConflictScreenshot" = "このキーの組み合わせはスクリーンショットのショートカットで既に使用されています。別の組み合わせを選んでください";
-"shortcutConflictSelectedImagePin" = "このキーの組み合わせは選択画像をピン留めのショートカットで既に使用されています。別の組み合わせを選んでください";
+"shortcutConflictSelectedImagePin" = "このキーの組み合わせは画像の選択とピン留めに使用されています、別の組み合わせを選んでください";
 "shortcutConflictClipboardImagePin" = "このキーの組み合わせはクリップボード画像をピン留めのショートカットで既に使用されています。別の組み合わせを選んでください";
 "shortcutConflictClipboardTextPin" = "このキーの組み合わせはクリップボードテキストをピン留めのショートカットで既に使用されています。別の組み合わせを選んでください";
 "shortcutConflictClipboard" = "このキーの組み合わせはクリップボードへコピーのショートカットで既に使用されています。別の組み合わせを選んでください";
@@ -105,7 +105,7 @@
 "shortcutConflictPreviousHistoryImage" = "このキーの組み合わせは前の履歴スクリーンショットのショートカットで既に使用されています。別の組み合わせを選んでください";
 "shortcutConflictNextHistoryImage" = "このキーの組み合わせは次の履歴スクリーンショットのショートカットで既に使用されています。別の組み合わせを選んでください";
 "shortcutConflictHistoryPanel" = "このキーの組み合わせは履歴パネルのショートカットで既に使用されています。別の組み合わせを選んでください";
-"shortcutConflictSelectedImageEdit" = "このキーの組み合わせは選択画像を編集のショートカットで既に使用されています。別の組み合わせを選んでください";
+"shortcutConflictSelectedImageEdit" = "このキーの組み合わせは画像の選択と編集に使用されています、別の組み合わせを選んでください";
 "shortcutConflictClipboardImageEdit" = "このキーの組み合わせはクリップボード画像を編集のショートカットで既に使用されています。別の組み合わせを選んでください";
 "shortcutConflictTextRecognition" = "このキーの組み合わせは文字認識ショートカットで既に使用されています。別の組み合わせを選んでください";
 "shortcutConflictCopyImageText" = "このキーの組み合わせは画像内テキストをコピーのショートカットで既に使用されています。別の組み合わせを選んでください";
@@ -196,7 +196,7 @@
 "editSuspendedToast" = "編集を一時保存しました。次のスクリーンショット起動で続きから再開";
 "editSuspendedResumeToast" = "一時保存した編集を再開しました";
 "fullScreenScreenshotFailed" = "フルスクリーンショットに失敗しました";
-"selectedImageEditNoImage" = "Finder で画像が 1 枚選択されていません";
+"selectedImageEditNoImage" = "選択した画像を開けません";
 "clipboardImageEditNoImage" = "クリップボードに編集できる画像がありません";
 "screenshotSaved" = "スクリーンショットを %@ に保存しました";
 "screenshotSaveFailed" = "スクリーンショットの保存に失敗しました: %@";
@@ -256,7 +256,11 @@
 "shapeFillTranslucent" = "半透明の塗り";
 "shapeStyleStandard" = "標準スタイル";
 "shapeStyleRounded" = "角丸四角形スタイル";
-"shapeStyleHandDrawn" = "手描き角丸スタイル";
+"shapeStyleHandDrawn" = "手描きスタイル";
+"arrowStyleTapered" = "先細り矢印";
+"arrowStyleDoubleEnded" = "両矢印";
+"arrowStyleLine" = "線の矢印";
+"arrowStyleDotTail" = "丸付き矢印";
 "insertImageFromClipboard" = "クリップボードから";
 "insertImageFromFile" = "ファイルから";
 "insertImageChooseFile" = "画像を選択";
@@ -318,7 +322,7 @@
 "checkForUpdates" = "アップデートを確認";
 "updateChecking" = "確認中";
 "updateUpToDateStatus" = "最新です";
-"updateNewVersionStatus" = "新しいバージョン v%@";
+"updateNewVersionStatus" = "Release v%@ が利用可能";
 "updateFailedStatus" = "確認に失敗";
 "updateDownloadButton" = "ダウンロード";
 "updateRetryButton" = "再試行";
@@ -330,7 +334,7 @@
 /* Updates — menu bar */
 "checkForUpdatesMenu" = "アップデートを確認";
 "checkingForUpdatesMenu" = "アップデートを確認中";
-"updateAvailableMenu" = "新しいバージョン v%@ が利用可能";
+"updateAvailableMenu" = "Release v%@ が利用可能";
 "updateDownloadingMenu" = "アップデートをダウンロード中… %d%%";
 "updateInstallingMenu" = "アップデートをインストール中";
 "updateInstallFailedMenu" = "アップデートのインストールに失敗";
@@ -343,7 +347,7 @@
 "updateInstallingHUD" = "インストール中";
 
 /* Updates — manual check result alert */
-"updateAvailableTitle" = "バージョン v%@ が利用可能です";
+"updateAvailableTitle" = "Release v%@ が利用可能です";
 "updateAvailableBody" = "clipcap は最新バージョンをダウンロードしてインストールし、自動的に再起動します";
 "updateUpToDateTitle" = "最新の状態です";
 "updateUpToDateBody" = "clipcap v%@ が最新バージョンです";
@@ -583,3 +587,13 @@
 "reminderOnce" = "1回のみ";
 
 "historyPreviewTextSaveFailed" = "テキストを保存できませんでした、再試行してください";
+
+"mosaicBlur" = "ぼかし";
+"mosaicBlurAmount" = "ぼかしの強さ";
+"textFontDefaultHint" = "新しく作成するテキスト注釈に使うフォント";
+"textFontDefaultLabel" = "デフォルトのテキストフォント";
+"textFontLabel" = "フォント";
+"textFontSystemDefault" = "システム標準";
+"tipRotate" = "回転";
+"tipRotateLeft" = "左に90°回転";
+"tipRotateRight" = "右に90°回転";

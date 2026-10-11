@@ -36,19 +36,19 @@
 "shortcutCancel" = "Cancel";
 "shortcutWaiting" = "Press keys";
 "shortcutRestore" = "Restore Default";
-"selectedImagePinShortcutHeader" = "Pin Selected Image";
+"selectedImagePinShortcutHeader" = "Choose Images to Pin";
 "selectedImagePinShortcutDefaultDisplay" = "Not set";
-"selectedImagePinShortcutClear" = "Clear Pin Selected Image Shortcut";
+"selectedImagePinShortcutClear" = "Clear Choose Images to Pin Shortcut";
 "clipboardImagePinShortcutHeader" = "Pin Clipboard Image";
 "clipboardImagePinShortcutDefaultDisplay" = "Not set";
 "clipboardImagePinShortcutClear" = "Clear Pin Clipboard Image Shortcut";
 "clipboardTextPinShortcutHeader" = "Pin Clipboard Text";
 "clipboardTextPinShortcutDefaultDisplay" = "Not set";
 "clipboardTextPinShortcutClear" = "Clear Pin Clipboard Text Shortcut";
-"selectedImagePinNoImage" = "No Finder image selected";
+"selectedImagePinNoImage" = "Unable to open the selected images";
 "clipboardImagePinNoImage" = "No image on the clipboard";
 "clipboardTextPinNoText" = "No text on the clipboard";
-"pinFromFinderHint" = "Pinned Finder image, press X to close";
+"pinFromFinderHint" = "Images pinned, press X to close";
 "pinFromClipboardHint" = "Pinned clipboard image, press X to close";
 "pinFromClipboardTextHint" = "Pinned clipboard text, double-click to edit";
 "pinToolbarClose" = "Close pinned image";
@@ -58,8 +58,8 @@
 "pinToolbarEditText" = "Edit text";
 
 /* Image-edit shortcuts */
-"selectedImageEditShortcutHeader" = "Edit Selected Image";
-"selectedImageEditShortcutHint" = "Press it to edit the single image selected in Finder. Not set by default";
+"selectedImageEditShortcutHeader" = "Choose Image to Edit";
+"selectedImageEditShortcutHint" = "Open the file picker to choose an image to edit, not set by default";
 "selectedImageEditShortcutDefaultDisplay" = "Not set";
 "clipboardImageEditShortcutHeader" = "Edit Clipboard Image";
 "clipboardImageEditShortcutHint" = "Press it to edit the current image on the clipboard. Not set by default";
@@ -96,7 +96,7 @@
 /* Shortcut conflict */
 "shortcutConflictTitle" = "Shortcut Already in Use";
 "shortcutConflictScreenshot" = "This key combination is already used by the image shortcut. Please choose a different one";
-"shortcutConflictSelectedImagePin" = "This key combination is already used by the Pin Selected Image shortcut. Please choose a different one";
+"shortcutConflictSelectedImagePin" = "This key combination is already used by Choose Images to Pin, please choose another";
 "shortcutConflictClipboardImagePin" = "This key combination is already used by the Pin Clipboard Image shortcut. Please choose a different one";
 "shortcutConflictClipboardTextPin" = "This key combination is already used by the Pin Clipboard Text shortcut. Please choose a different one";
 "shortcutConflictClipboard" = "This key combination is already used by the Copy to Clipboard shortcut. Please choose a different one";
@@ -105,7 +105,7 @@
 "shortcutConflictPreviousHistoryImage" = "This key combination is already used by the Previous History Image shortcut. Please choose a different one";
 "shortcutConflictNextHistoryImage" = "This key combination is already used by the Next History Image shortcut. Please choose a different one";
 "shortcutConflictHistoryPanel" = "This key combination is already used by the History Panel shortcut. Please choose a different one";
-"shortcutConflictSelectedImageEdit" = "This key combination is already used by the Edit Selected Image shortcut. Please choose a different one";
+"shortcutConflictSelectedImageEdit" = "This key combination is already used by Choose Image to Edit, please choose another";
 "shortcutConflictClipboardImageEdit" = "This key combination is already used by the Edit Clipboard Image shortcut. Please choose a different one";
 "shortcutConflictTextRecognition" = "This key combination is already used by the Text Recognition shortcut. Please choose a different one";
 "shortcutConflictCopyImageText" = "This key combination is already used by the Copy Image Text shortcut. Please choose a different one";
@@ -196,7 +196,7 @@
 "editSuspendedToast" = "Edit suspended, trigger image again to continue";
 "editSuspendedResumeToast" = "Continuing your suspended edit";
 "fullScreenScreenshotFailed" = "Full-screen image failed";
-"selectedImageEditNoImage" = "No single Finder image selected";
+"selectedImageEditNoImage" = "Unable to open the selected image";
 "clipboardImageEditNoImage" = "No editable image on the clipboard";
 "screenshotSaved" = "Image saved to %@";
 "screenshotSaveFailed" = "Image save failed: %@";
@@ -256,7 +256,11 @@
 "shapeFillTranslucent" = "Translucent fill";
 "shapeStyleStandard" = "Default style";
 "shapeStyleRounded" = "Rounded rectangle style";
-"shapeStyleHandDrawn" = "Hand-drawn rounded style";
+"shapeStyleHandDrawn" = "Hand-drawn style";
+"arrowStyleTapered" = "Tapered arrow";
+"arrowStyleDoubleEnded" = "Double-headed arrow";
+"arrowStyleLine" = "Line arrow";
+"arrowStyleDotTail" = "Dot-tail arrow";
 "insertImageFromClipboard" = "From Clipboard";
 "insertImageFromFile" = "From File";
 "insertImageChooseFile" = "Choose Image";
@@ -318,7 +322,7 @@
 "checkForUpdates" = "Check for Updates";
 "updateChecking" = "Checking";
 "updateUpToDateStatus" = "Up to date";
-"updateNewVersionStatus" = "New version v%@";
+"updateNewVersionStatus" = "Release v%@ available";
 "updateFailedStatus" = "Check failed";
 "updateDownloadButton" = "Download";
 "updateRetryButton" = "Retry";
@@ -330,7 +334,7 @@
 /* Updates — menu bar */
 "checkForUpdatesMenu" = "Check for Updates";
 "checkingForUpdatesMenu" = "Checking for Updates";
-"updateAvailableMenu" = "New Version v%@ Available";
+"updateAvailableMenu" = "Release v%@ Available";
 "updateDownloadingMenu" = "Downloading Update… %d%%";
 "updateInstallingMenu" = "Installing Update";
 "updateInstallFailedMenu" = "Update Install Failed";
@@ -343,7 +347,7 @@
 "updateInstallingHUD" = "Installing";
 
 /* Updates — manual check result alert */
-"updateAvailableTitle" = "Version v%@ is available";
+"updateAvailableTitle" = "Release v%@ is available";
 "updateAvailableBody" = "clipcap will download and install the latest version, then relaunch automatically";
 "updateUpToDateTitle" = "You're up to date";
 "updateUpToDateBody" = "clipcap v%@ is the latest version";
@@ -583,3 +587,13 @@
 "reminderOnce" = "Once";
 
 "historyPreviewTextSaveFailed" = "Unable to save text, please try again";
+
+"mosaicBlur" = "Blur";
+"mosaicBlurAmount" = "Blur strength";
+"textFontDefaultHint" = "Font used by newly created text annotations";
+"textFontDefaultLabel" = "Default text font";
+"textFontLabel" = "Font";
+"textFontSystemDefault" = "System default";
+"tipRotate" = "Rotate";
+"tipRotateLeft" = "Rotate left 90°";
+"tipRotateRight" = "Rotate right 90°";

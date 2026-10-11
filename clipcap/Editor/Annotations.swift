@@ -668,12 +668,13 @@ private enum NumberArrowShape {
         unitY: CGFloat,
         length: CGFloat = headLength,
         width: CGFloat = headWidth,
+        strokeWidth: CGFloat = headStrokeWidth,
         in context: CGContext
     ) {
         context.saveGState()
         context.addPath(headPath(tip: tip, unitX: unitX, unitY: unitY, length: length, width: width))
         context.setLineJoin(.round)
-        context.setLineWidth(headStrokeWidth)
+        context.setLineWidth(strokeWidth)
         context.drawPath(using: .fillStroke)
         context.restoreGState()
     }
@@ -860,6 +861,17 @@ struct MosaicAnnotation: Annotation {
     let rect: NSRect
     let pixelatedImage: NSImage
     let blockSize: CGFloat
+    let style: MosaicStyle
+    let blurRadius: CGFloat
+
+    init(rect: NSRect, pixelatedImage: NSImage, blockSize: CGFloat,
+         style: MosaicStyle = .pixelate, blurRadius: CGFloat = 12) {
+        self.rect = rect
+        self.pixelatedImage = pixelatedImage
+        self.blockSize = blockSize
+        self.style = style
+        self.blurRadius = CGFloat(Defaults.normalizedMosaicBlurRadius(Double(blurRadius)))
+    }
 
     var boundingRect: NSRect { rect }
 
@@ -875,7 +887,9 @@ struct MosaicAnnotation: Annotation {
         MosaicAnnotation(
             rect: rect.offsetBy(dx: delta.x, dy: delta.y),
             pixelatedImage: pixelatedImage,
-            blockSize: blockSize
+            blockSize: blockSize,
+            style: style,
+            blurRadius: blurRadius
         )
     }
 }
@@ -2163,6 +2177,9 @@ struct TextAnnotation: Annotation {
     let origin: NSPoint
     let color: NSColor
     let fontSize: CGFloat
+    /// Font family name the glyphs are drawn with. `nil` keeps the historical
+    /// system bold face, so existing annotations render exactly as before.
+    var fontName: String? = nil
     var rotation: CGFloat = 0
     /// When true the glyphs get a black-or-white outline picked for maximum
     /// contrast against `color`, so the text reads against any background.
@@ -2195,8 +2212,31 @@ struct TextAnnotation: Annotation {
     /// covers the inner half, so the visible outline is roughly half of this.
     static let strokeWidthPercent: CGFloat = 6.0
 
+    /// Single resolution entry point for every place that needs the text
+    /// annotation's face — drawing, measuring, the live editor field and the
+    /// font-preview menus. `nil` (or a family that is no longer installed)
+    /// resolves to the system bold face the tool has always used. An installed
+    /// family prefers its bold variant and falls back to the regular one.
+    static func font(named fontName: String?, size: CGFloat) -> NSFont {
+        let fallback = NSFont.systemFont(ofSize: size, weight: .bold)
+        guard let family = fontName, !family.isEmpty else { return fallback }
+        let manager = NSFontManager.shared
+        if let bold = manager.font(withFamily: family, traits: .boldFontMask, weight: 9, size: size) {
+            return bold
+        }
+        if let regular = manager.font(withFamily: family, traits: [], weight: 5, size: size) {
+            return regular
+        }
+        return NSFont(name: family, size: size) ?? fallback
+    }
+
     static func font(forSize size: CGFloat) -> NSFont {
-        NSFont.systemFont(ofSize: size, weight: .bold)
+        font(named: nil, size: size)
+    }
+
+    /// The face this annotation actually renders with.
+    var resolvedFont: NSFont {
+        TextAnnotation.font(named: fontName, size: fontSize)
     }
 
     /// Light fills (white / yellow / green) get a black outline; every other
@@ -2274,7 +2314,7 @@ struct TextAnnotation: Annotation {
     /// trailing-caret padding + line leading (which made the box look skewed
     /// toward bottom-left of the text).
     var textBounds: NSRect {
-        let font = TextAnnotation.font(forSize: fontSize)
+        let font = resolvedFont
         let attrs: [NSAttributedString.Key: Any] = [.font: font]
         let lines = TextAnnotation.lines(for: text)
         let lineHeight = TextAnnotation.lineHeight(for: font)
@@ -2297,7 +2337,7 @@ struct TextAnnotation: Annotation {
     }
 
     var textBlockRect: NSRect {
-        let font = TextAnnotation.font(forSize: fontSize)
+        let font = resolvedFont
         let attrs: [NSAttributedString.Key: Any] = [.font: font]
         let lines = TextAnnotation.lines(for: text)
         let measuredWidth = lines
@@ -2384,7 +2424,7 @@ struct TextAnnotation: Annotation {
     }
 
     func draw(in context: CGContext, bounds: NSRect) {
-        let font = TextAnnotation.font(forSize: fontSize)
+        let font = resolvedFont
         let lines = TextAnnotation.lines(for: text)
         let lineHeight = TextAnnotation.lineHeight(for: font)
         NSGraphicsContext.saveGraphicsState()
@@ -2784,6 +2824,7 @@ struct TextAnnotation: Annotation {
             origin: NSPoint(x: origin.x + delta.x, y: origin.y + delta.y),
             color: color,
             fontSize: fontSize,
+            fontName: fontName,
             rotation: rotation,
             hasStroke: hasStroke,
             hasCallout: hasCallout,
@@ -2800,6 +2841,7 @@ struct TextAnnotation: Annotation {
             origin: NSPoint(x: origin.x + delta.x, y: origin.y + delta.y),
             color: color,
             fontSize: fontSize,
+            fontName: fontName,
             rotation: rotation,
             hasStroke: hasStroke,
             hasCallout: hasCallout,
@@ -2824,6 +2866,7 @@ struct TextAnnotation: Annotation {
             origin: origin,
             color: color,
             fontSize: fontSize,
+            fontName: fontName,
             rotation: rotation,
             hasStroke: hasStroke,
             hasCallout: hasCallout,
@@ -2861,8 +2904,8 @@ struct TextAnnotation: Annotation {
     /// grow downward in canvas coords, so the origin shifts by the full text
     /// block height delta to keep the cap line steady.
     func withFontSize(_ fontSize: CGFloat) -> Annotation {
-        let oldFont = TextAnnotation.font(forSize: self.fontSize)
-        let newFont = TextAnnotation.font(forSize: fontSize)
+        let oldFont = TextAnnotation.font(named: fontName, size: self.fontSize)
+        let newFont = TextAnnotation.font(named: fontName, size: fontSize)
         let oldHeight = TextAnnotation.editorSize(for: text, font: oldFont).height
         let newHeight = TextAnnotation.editorSize(for: text, font: newFont).height
         let newOrigin = NSPoint(x: origin.x, y: origin.y + (oldHeight - newHeight))
@@ -2871,6 +2914,31 @@ struct TextAnnotation: Annotation {
             origin: newOrigin,
             color: color,
             fontSize: fontSize,
+            fontName: fontName,
+            rotation: rotation,
+            hasStroke: hasStroke,
+            hasCallout: hasCallout,
+            calloutTip: calloutTip,
+            secondCalloutTip: secondCalloutTip
+        )
+    }
+
+    /// Re-typeset in another family at the same point size. Like
+    /// `withFontSize`, the visual cap line stays anchored: fonts grow downward
+    /// in canvas coords, so the origin absorbs the line-height delta instead of
+    /// letting the text jump when the face changes.
+    func withFontName(_ fontName: String?) -> TextAnnotation {
+        let oldFont = TextAnnotation.font(named: self.fontName, size: fontSize)
+        let newFont = TextAnnotation.font(named: fontName, size: fontSize)
+        let oldHeight = TextAnnotation.editorSize(for: text, font: oldFont).height
+        let newHeight = TextAnnotation.editorSize(for: text, font: newFont).height
+        let newOrigin = NSPoint(x: origin.x, y: origin.y + (oldHeight - newHeight))
+        return TextAnnotation(
+            text: text,
+            origin: newOrigin,
+            color: color,
+            fontSize: fontSize,
+            fontName: fontName,
             rotation: rotation,
             hasStroke: hasStroke,
             hasCallout: hasCallout,
@@ -2896,11 +2964,41 @@ struct NumberAnnotation: Annotation {
     var controlPoint: NSPoint? = nil
     let number: Int
     let color: NSColor
+    let size: CGFloat
 
-    static let radius: CGFloat = 14
+    private static let baseRadius: CGFloat = 14
+    private static let baseFontSize: CGFloat = 14
+
+    init(
+        center: NSPoint,
+        tip: NSPoint? = nil,
+        controlPoint: NSPoint? = nil,
+        number: Int,
+        color: NSColor,
+        size: CGFloat = CGFloat(Defaults.numberSizeDefault)
+    ) {
+        self.center = center
+        self.tip = tip
+        self.controlPoint = controlPoint
+        self.number = number
+        self.color = color
+        self.size = min(max(size, CGFloat(Defaults.numberSizeMin)), CGFloat(Defaults.numberSizeMax))
+    }
+
+    private var scale: CGFloat {
+        size / CGFloat(Defaults.numberSizeDefault)
+    }
+
+    var radius: CGFloat { Self.baseRadius * scale }
     /// Below this distance from `center` we treat the tip as "no arrow" so
     /// the head won't sit on top of the badge glyph.
-    static let arrowMinDistance: CGFloat = NumberAnnotation.radius + 6
+    var arrowMinDistance: CGFloat { radius + 6 * scale }
+
+    static func arrowMinDistance(for size: CGFloat) -> CGFloat {
+        let clamped = min(max(size, CGFloat(Defaults.numberSizeMin)), CGFloat(Defaults.numberSizeMax))
+        let scale = clamped / CGFloat(Defaults.numberSizeDefault)
+        return baseRadius * scale + 6 * scale
+    }
 
     /// Black on light badges, white on dark — perceived-luminance threshold.
     static func contrastingTextColor(for color: NSColor) -> NSColor {
@@ -2911,15 +3009,15 @@ struct NumberAnnotation: Annotation {
 
     var hasArrow: Bool {
         guard let tip else { return false }
-        return hypot(tip.x - center.x, tip.y - center.y) >= NumberAnnotation.arrowMinDistance
+        return hypot(tip.x - center.x, tip.y - center.y) >= arrowMinDistance
     }
 
     var circleRect: NSRect {
         NSRect(
-            x: center.x - NumberAnnotation.radius,
-            y: center.y - NumberAnnotation.radius,
-            width: NumberAnnotation.radius * 2,
-            height: NumberAnnotation.radius * 2
+            x: center.x - radius,
+            y: center.y - radius,
+            width: radius * 2,
+            height: radius * 2
         )
     }
 
@@ -2955,7 +3053,7 @@ struct NumberAnnotation: Annotation {
         // circle — visually the arrow emerges from the badge's edge while
         // geometrically the bezier starts from the center).
         if hasArrow, let tip {
-            let shaftWidth = NumberArrowShape.shaftWidth
+            let shaftWidth = NumberArrowShape.shaftWidth * scale
             context.setStrokeColor(color.cgColor)
             context.setFillColor(color.cgColor)
             context.setLineWidth(shaftWidth)
@@ -2974,7 +3072,8 @@ struct NumberAnnotation: Annotation {
             if tlen > 0 {
                 let unitX = endTangent.dx / tlen
                 let unitY = endTangent.dy / tlen
-                let headLength = NumberArrowShape.headLength
+                let headLength = NumberArrowShape.headLength * scale
+                let headWidth = NumberArrowShape.headWidth * scale
                 let baseX = tip.x - unitX * headLength
                 let baseY = tip.y - unitY * headLength
 
@@ -2997,7 +3096,15 @@ struct NumberAnnotation: Annotation {
                     context.strokePath()
                 }
 
-                NumberArrowShape.drawHead(tip: tip, unitX: unitX, unitY: unitY, in: context)
+                NumberArrowShape.drawHead(
+                    tip: tip,
+                    unitX: unitX,
+                    unitY: unitY,
+                    length: headLength,
+                    width: headWidth,
+                    strokeWidth: NumberArrowShape.headStrokeWidth * scale,
+                    in: context
+                )
             }
         }
 
@@ -3011,7 +3118,7 @@ struct NumberAnnotation: Annotation {
         let text = "\(number)"
         let attrs: [NSAttributedString.Key: Any] = [
             .foregroundColor: NumberAnnotation.contrastingTextColor(for: color),
-            .font: NSFont.systemFont(ofSize: 14, weight: .bold)
+            .font: NSFont.systemFont(ofSize: Self.baseFontSize * scale, weight: .bold)
         ]
         let size = text.size(withAttributes: attrs)
         let textOrigin = NSPoint(
@@ -3027,7 +3134,7 @@ struct NumberAnnotation: Annotation {
         // Badge hit
         let dx = point.x - center.x
         let dy = point.y - center.y
-        let r = NumberAnnotation.radius
+        let r = radius
         if dx * dx + dy * dy <= r * r {
             return true
         }
@@ -3040,7 +3147,7 @@ struct NumberAnnotation: Annotation {
             } else {
                 line.addLine(to: tip)
             }
-            return strokedPathContains(line, point: point, lineWidth: 4)
+            return strokedPathContains(line, point: point, lineWidth: max(4, 4 * scale))
         }
         return false
     }
@@ -3051,7 +3158,8 @@ struct NumberAnnotation: Annotation {
             tip: tip.map { NSPoint(x: $0.x + delta.x, y: $0.y + delta.y) },
             controlPoint: controlPoint.map { NSPoint(x: $0.x + delta.x, y: $0.y + delta.y) },
             number: number,
-            color: color
+            color: color,
+            size: size
         )
     }
 
@@ -3082,11 +3190,30 @@ struct NumberAnnotation: Annotation {
             tip: tip,
             controlPoint: controlPoint,
             number: number,
-            color: color
+            color: color,
+            size: size
         )
     }
 
     func withColor(_ color: NSColor) -> Annotation {
-        NumberAnnotation(center: center, tip: tip, controlPoint: controlPoint, number: number, color: color)
+        NumberAnnotation(
+            center: center,
+            tip: tip,
+            controlPoint: controlPoint,
+            number: number,
+            color: color,
+            size: size
+        )
+    }
+
+    func withLineWidth(_ lineWidth: CGFloat) -> Annotation {
+        NumberAnnotation(
+            center: center,
+            tip: tip,
+            controlPoint: controlPoint,
+            number: number,
+            color: color,
+            size: lineWidth
+        )
     }
 }

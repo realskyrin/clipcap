@@ -36,19 +36,19 @@
 "shortcutCancel" = "Annuler";
 "shortcutWaiting" = "Appuyez sur des touches";
 "shortcutRestore" = "Réinitialiser";
-"selectedImagePinShortcutHeader" = "Épingler l'image sélectionnée";
+"selectedImagePinShortcutHeader" = "Choisir des images à épingler";
 "selectedImagePinShortcutDefaultDisplay" = "Non défini";
-"selectedImagePinShortcutClear" = "Effacer le raccourci d'épinglage de l'image sélectionnée";
+"selectedImagePinShortcutClear" = "Effacer le raccourci de sélection et épinglage";
 "clipboardImagePinShortcutHeader" = "Épingler l'image du presse-papiers";
 "clipboardImagePinShortcutDefaultDisplay" = "Non défini";
 "clipboardImagePinShortcutClear" = "Effacer le raccourci d'épinglage du presse-papiers";
 "clipboardTextPinShortcutHeader" = "Épingler le texte du presse-papiers";
 "clipboardTextPinShortcutDefaultDisplay" = "Non défini";
 "clipboardTextPinShortcutClear" = "Effacer le raccourci d'épinglage du texte du presse-papiers";
-"selectedImagePinNoImage" = "Aucune image Finder sélectionnée";
+"selectedImagePinNoImage" = "Impossible d’ouvrir les images choisies";
 "clipboardImagePinNoImage" = "Aucune image à épingler dans le presse-papiers";
 "clipboardTextPinNoText" = "Aucun texte dans le presse-papiers";
-"pinFromFinderHint" = "Image Finder épinglée, appuyez sur X pour fermer";
+"pinFromFinderHint" = "Images épinglées, appuyez sur X pour fermer";
 "pinFromClipboardHint" = "Image du presse-papiers épinglée, appuyez sur X pour fermer";
 "pinFromClipboardTextHint" = "Texte du presse-papiers épinglé, double-cliquez pour modifier";
 "pinToolbarClose" = "Fermer l'image épinglée";
@@ -58,8 +58,8 @@
 "pinToolbarEditText" = "Modifier le texte";
 
 /* Image-edit shortcuts */
-"selectedImageEditShortcutHeader" = "Modifier l'image sélectionnée";
-"selectedImageEditShortcutHint" = "Appuyez dessus pour modifier l'unique image sélectionnée dans le Finder. Non défini par défaut";
+"selectedImageEditShortcutHeader" = "Choisir une image à modifier";
+"selectedImageEditShortcutHint" = "Ouvrir le sélecteur pour choisir une image à modifier, aucun raccourci par défaut";
 "selectedImageEditShortcutDefaultDisplay" = "Non défini";
 "clipboardImageEditShortcutHeader" = "Modifier l'image du presse-papiers";
 "clipboardImageEditShortcutHint" = "Appuyez dessus pour modifier l'image actuellement dans le presse-papiers. Non défini par défaut";
@@ -96,7 +96,7 @@
 /* Shortcut conflict */
 "shortcutConflictTitle" = "Raccourci déjà utilisé";
 "shortcutConflictScreenshot" = "Cette combinaison de touches est déjà utilisée par le raccourci de capture d'écran. Veuillez en choisir une autre";
-"shortcutConflictSelectedImagePin" = "Cette combinaison de touches est déjà utilisée par le raccourci d'épinglage de l'image sélectionnée. Veuillez en choisir une autre";
+"shortcutConflictSelectedImagePin" = "Cette combinaison sert déjà à choisir et épingler des images, choisissez-en une autre";
 "shortcutConflictClipboardImagePin" = "Cette combinaison de touches est déjà utilisée par le raccourci d'épinglage de l'image du presse-papiers. Veuillez en choisir une autre";
 "shortcutConflictClipboardTextPin" = "Cette combinaison de touches est déjà utilisée par le raccourci d'épinglage du texte du presse-papiers. Veuillez en choisir une autre";
 "shortcutConflictClipboard" = "Cette combinaison de touches est déjà utilisée par le raccourci de copie dans le presse-papiers. Veuillez en choisir une autre";
@@ -105,7 +105,7 @@
 "shortcutConflictPreviousHistoryImage" = "Cette combinaison de touches est déjà utilisée par le raccourci Capture précédente de l'historique. Veuillez en choisir une autre";
 "shortcutConflictNextHistoryImage" = "Cette combinaison de touches est déjà utilisée par le raccourci Capture suivante de l'historique. Veuillez en choisir une autre";
 "shortcutConflictHistoryPanel" = "Cette combinaison de touches est déjà utilisée par le raccourci Panneau d'historique. Veuillez en choisir une autre";
-"shortcutConflictSelectedImageEdit" = "Cette combinaison de touches est déjà utilisée par le raccourci Modifier l'image sélectionnée. Veuillez en choisir une autre";
+"shortcutConflictSelectedImageEdit" = "Cette combinaison sert déjà à choisir et modifier une image, choisissez-en une autre";
 "shortcutConflictClipboardImageEdit" = "Cette combinaison de touches est déjà utilisée par le raccourci Modifier l'image du presse-papiers. Veuillez en choisir une autre";
 "shortcutConflictTextRecognition" = "Cette combinaison de touches est déjà utilisée par le raccourci Reconnaissance de texte. Veuillez en choisir une autre";
 "shortcutConflictCopyImageText" = "Cette combinaison de touches est déjà utilisée par le raccourci Copier le texte de l'image. Veuillez en choisir une autre";
@@ -196,7 +196,7 @@
 "editSuspendedToast" = "Édition suspendue, relancez une capture pour continuer";
 "editSuspendedResumeToast" = "Reprise de l'édition suspendue";
 "fullScreenScreenshotFailed" = "Échec de la capture plein écran";
-"selectedImageEditNoImage" = "Aucune image unique sélectionnée dans le Finder";
+"selectedImageEditNoImage" = "Impossible d’ouvrir l’image choisie";
 "clipboardImageEditNoImage" = "Aucune image modifiable dans le presse-papiers";
 "screenshotSaved" = "Capture enregistrée dans %@";
 "screenshotSaveFailed" = "Échec de l'enregistrement de la capture : %@";
@@ -256,7 +256,11 @@
 "shapeFillTranslucent" = "Remplissage translucide";
 "shapeStyleStandard" = "Style par défaut";
 "shapeStyleRounded" = "Rectangle arrondi";
-"shapeStyleHandDrawn" = "Style arrondi dessiné";
+"shapeStyleHandDrawn" = "Style dessiné à main levée";
+"arrowStyleTapered" = "Flèche effilée";
+"arrowStyleDoubleEnded" = "Flèche à deux pointes";
+"arrowStyleLine" = "Flèche linéaire";
+"arrowStyleDotTail" = "Flèche à base ronde";
 "insertImageFromClipboard" = "Depuis le presse-papiers";
 "insertImageFromFile" = "Depuis un fichier";
 "insertImageChooseFile" = "Choisir une image";
@@ -318,7 +322,7 @@
 "checkForUpdates" = "Rechercher des mises à jour";
 "updateChecking" = "Vérification";
 "updateUpToDateStatus" = "À jour";
-"updateNewVersionStatus" = "Nouvelle version v%@";
+"updateNewVersionStatus" = "Version Release v%@ disponible";
 "updateFailedStatus" = "Échec de la vérification";
 "updateDownloadButton" = "Télécharger";
 "updateRetryButton" = "Réessayer";
@@ -330,7 +334,7 @@
 /* Updates — menu bar */
 "checkForUpdatesMenu" = "Rechercher des mises à jour";
 "checkingForUpdatesMenu" = "Recherche de mises à jour";
-"updateAvailableMenu" = "Nouvelle version v%@ disponible";
+"updateAvailableMenu" = "Version Release v%@ disponible";
 "updateDownloadingMenu" = "Téléchargement de la mise à jour… %d%%";
 "updateInstallingMenu" = "Installation de la mise à jour";
 "updateInstallFailedMenu" = "Échec de l'installation de la mise à jour";
@@ -343,7 +347,7 @@
 "updateInstallingHUD" = "Installation";
 
 /* Updates — manual check result alert */
-"updateAvailableTitle" = "La version v%@ est disponible";
+"updateAvailableTitle" = "La version Release v%@ est disponible";
 "updateAvailableBody" = "clipcap va télécharger et installer la dernière version, puis redémarrer automatiquement";
 "updateUpToDateTitle" = "Vous êtes à jour";
 "updateUpToDateBody" = "clipcap v%@ est la dernière version";
@@ -583,3 +587,13 @@
 "reminderOnce" = "Une fois";
 
 "historyPreviewTextSaveFailed" = "Impossible d’enregistrer le texte, veuillez réessayer";
+
+"mosaicBlur" = "Flou";
+"mosaicBlurAmount" = "Intensité du flou";
+"textFontDefaultHint" = "Police utilisée par les nouvelles annotations de texte";
+"textFontDefaultLabel" = "Police de texte par défaut";
+"textFontLabel" = "Police";
+"textFontSystemDefault" = "Police système";
+"tipRotate" = "Rotation";
+"tipRotateLeft" = "Tourner de 90° à gauche";
+"tipRotateRight" = "Tourner de 90° à droite";

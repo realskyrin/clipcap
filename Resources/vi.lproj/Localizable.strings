@@ -36,19 +36,19 @@
 "shortcutCancel" = "Hủy";
 "shortcutWaiting" = "Nhấn phím";
 "shortcutRestore" = "Khôi phục mặc định";
-"selectedImagePinShortcutHeader" = "Ghim ảnh đã chọn";
+"selectedImagePinShortcutHeader" = "Chọn ảnh để ghim";
 "selectedImagePinShortcutDefaultDisplay" = "Chưa đặt";
-"selectedImagePinShortcutClear" = "Xóa phím tắt ghim ảnh đã chọn";
+"selectedImagePinShortcutClear" = "Xóa phím tắt chọn và ghim ảnh";
 "clipboardImagePinShortcutHeader" = "Ghim ảnh từ clipboard";
 "clipboardImagePinShortcutDefaultDisplay" = "Chưa đặt";
 "clipboardImagePinShortcutClear" = "Xóa phím tắt ghim ảnh từ clipboard";
 "clipboardTextPinShortcutHeader" = "Ghim văn bản từ clipboard";
 "clipboardTextPinShortcutDefaultDisplay" = "Chưa đặt";
 "clipboardTextPinShortcutClear" = "Xóa phím tắt ghim văn bản từ clipboard";
-"selectedImagePinNoImage" = "Chưa chọn ảnh trong Finder";
+"selectedImagePinNoImage" = "Không thể mở ảnh đã chọn";
 "clipboardImagePinNoImage" = "Không có ảnh trong clipboard";
 "clipboardTextPinNoText" = "Clipboard không có văn bản";
-"pinFromFinderHint" = "Đã ghim ảnh từ Finder, nhấn X để đóng";
+"pinFromFinderHint" = "Đã ghim ảnh, nhấn X để đóng";
 "pinFromClipboardHint" = "Đã ghim ảnh từ clipboard, nhấn X để đóng";
 "pinFromClipboardTextHint" = "Đã ghim văn bản từ clipboard, bấm đúp để sửa";
 "pinToolbarClose" = "Đóng ảnh đã ghim";
@@ -58,8 +58,8 @@
 "pinToolbarEditText" = "Sửa văn bản";
 
 /* Image-edit shortcuts */
-"selectedImageEditShortcutHeader" = "Chỉnh sửa ảnh đã chọn";
-"selectedImageEditShortcutHint" = "Nhấn để chỉnh sửa một ảnh đang được chọn trong Finder. Mặc định chưa đặt";
+"selectedImageEditShortcutHeader" = "Chọn ảnh để chỉnh sửa";
+"selectedImageEditShortcutHint" = "Mở hộp chọn tệp để chọn ảnh cần chỉnh sửa, mặc định chưa đặt phím tắt";
 "selectedImageEditShortcutDefaultDisplay" = "Chưa đặt";
 "clipboardImageEditShortcutHeader" = "Chỉnh sửa ảnh từ clipboard";
 "clipboardImageEditShortcutHint" = "Nhấn để chỉnh sửa ảnh hiện có trong clipboard. Mặc định chưa đặt";
@@ -96,7 +96,7 @@
 /* Shortcut conflict */
 "shortcutConflictTitle" = "Phím tắt đã được dùng";
 "shortcutConflictScreenshot" = "Tổ hợp phím này đã được dùng cho phím tắt chụp màn hình. Vui lòng chọn tổ hợp khác";
-"shortcutConflictSelectedImagePin" = "Tổ hợp phím này đã được dùng cho phím tắt ghim ảnh đã chọn. Vui lòng chọn tổ hợp khác";
+"shortcutConflictSelectedImagePin" = "Tổ hợp phím này đã dùng để chọn và ghim ảnh, vui lòng chọn tổ hợp khác";
 "shortcutConflictClipboardImagePin" = "Tổ hợp phím này đã được dùng cho phím tắt ghim ảnh từ clipboard. Vui lòng chọn tổ hợp khác";
 "shortcutConflictClipboardTextPin" = "Tổ hợp phím này đã được dùng cho phím tắt ghim văn bản từ clipboard. Vui lòng chọn tổ hợp khác";
 "shortcutConflictClipboard" = "Tổ hợp phím này đã được dùng cho phím tắt sao chép vào clipboard. Vui lòng chọn tổ hợp khác";
@@ -105,7 +105,7 @@
 "shortcutConflictPreviousHistoryImage" = "Tổ hợp phím này đã được dùng cho phím tắt ảnh chụp lịch sử trước. Vui lòng chọn tổ hợp khác";
 "shortcutConflictNextHistoryImage" = "Tổ hợp phím này đã được dùng cho phím tắt ảnh chụp lịch sử tiếp theo. Vui lòng chọn tổ hợp khác";
 "shortcutConflictHistoryPanel" = "Tổ hợp phím này đã được dùng cho phím tắt bảng lịch sử. Vui lòng chọn tổ hợp khác";
-"shortcutConflictSelectedImageEdit" = "Tổ hợp phím này đã được dùng cho phím tắt chỉnh sửa ảnh đã chọn. Vui lòng chọn tổ hợp khác";
+"shortcutConflictSelectedImageEdit" = "Tổ hợp phím này đã dùng để chọn và chỉnh sửa ảnh, vui lòng chọn tổ hợp khác";
 "shortcutConflictClipboardImageEdit" = "Tổ hợp phím này đã được dùng cho phím tắt chỉnh sửa ảnh từ clipboard. Vui lòng chọn tổ hợp khác";
 "shortcutConflictTextRecognition" = "Tổ hợp phím này đã được dùng cho phím tắt nhận dạng văn bản. Vui lòng chọn tổ hợp khác";
 "shortcutConflictCopyImageText" = "Tổ hợp phím này đã được dùng cho phím tắt sao chép chữ trong ảnh. Vui lòng chọn tổ hợp khác";
@@ -196,7 +196,7 @@
 "editSuspendedToast" = "Đã tạm lưu bản chỉnh sửa, kích hoạt chụp lại để tiếp tục";
 "editSuspendedResumeToast" = "Đang tiếp tục bản chỉnh sửa tạm lưu";
 "fullScreenScreenshotFailed" = "Chụp toàn màn hình thất bại";
-"selectedImageEditNoImage" = "Chưa chọn đúng một ảnh trong Finder";
+"selectedImageEditNoImage" = "Không thể mở ảnh đã chọn";
 "clipboardImageEditNoImage" = "Không có ảnh có thể chỉnh sửa trong clipboard";
 "screenshotSaved" = "Đã lưu ảnh chụp vào %@";
 "screenshotSaveFailed" = "Lưu ảnh chụp thất bại: %@";
@@ -256,7 +256,11 @@
 "shapeFillTranslucent" = "Tô bán trong suốt";
 "shapeStyleStandard" = "Kiểu mặc định";
 "shapeStyleRounded" = "Kiểu chữ nhật bo góc";
-"shapeStyleHandDrawn" = "Kiểu vẽ tay bo góc";
+"shapeStyleHandDrawn" = "Kiểu vẽ tay";
+"arrowStyleTapered" = "Mũi tên thuôn nhọn";
+"arrowStyleDoubleEnded" = "Mũi tên hai đầu";
+"arrowStyleLine" = "Mũi tên nét";
+"arrowStyleDotTail" = "Mũi tên đuôi chấm";
 "insertImageFromClipboard" = "Từ clipboard";
 "insertImageFromFile" = "Từ tệp";
 "insertImageChooseFile" = "Chọn ảnh";
@@ -318,7 +322,7 @@
 "checkForUpdates" = "Kiểm tra cập nhật";
 "updateChecking" = "Đang kiểm tra";
 "updateUpToDateStatus" = "Đã cập nhật";
-"updateNewVersionStatus" = "Phiên bản mới v%@";
+"updateNewVersionStatus" = "Có bản Release v%@";
 "updateFailedStatus" = "Kiểm tra thất bại";
 "updateDownloadButton" = "Tải xuống";
 "updateRetryButton" = "Thử lại";
@@ -330,7 +334,7 @@
 /* Updates — menu bar */
 "checkForUpdatesMenu" = "Kiểm tra cập nhật";
 "checkingForUpdatesMenu" = "Đang kiểm tra cập nhật";
-"updateAvailableMenu" = "Có phiên bản mới v%@";
+"updateAvailableMenu" = "Có bản Release v%@";
 "updateDownloadingMenu" = "Đang tải cập nhật… %d%%";
 "updateInstallingMenu" = "Đang cài đặt cập nhật";
 "updateInstallFailedMenu" = "Cài đặt cập nhật thất bại";
@@ -343,7 +347,7 @@
 "updateInstallingHUD" = "Đang cài đặt";
 
 /* Updates — manual check result alert */
-"updateAvailableTitle" = "Đã có phiên bản v%@";
+"updateAvailableTitle" = "Đã có bản Release v%@";
 "updateAvailableBody" = "clipcap sẽ tải xuống và cài đặt phiên bản mới nhất, rồi tự động mở lại";
 "updateUpToDateTitle" = "Bạn đang dùng bản mới nhất";
 "updateUpToDateBody" = "clipcap v%@ là phiên bản mới nhất";
@@ -583,3 +587,13 @@
 "reminderOnce" = "Một lần";
 
 "historyPreviewTextSaveFailed" = "Không thể lưu văn bản, vui lòng thử lại";
+
+"mosaicBlur" = "Làm mờ";
+"mosaicBlurAmount" = "Mức độ làm mờ";
+"textFontDefaultHint" = "Phông chữ dùng cho chú thích văn bản mới tạo";
+"textFontDefaultLabel" = "Phông chữ văn bản mặc định";
+"textFontLabel" = "Phông chữ";
+"textFontSystemDefault" = "Mặc định hệ thống";
+"tipRotate" = "Xoay";
+"tipRotateLeft" = "Xoay trái 90°";
+"tipRotateRight" = "Xoay phải 90°";

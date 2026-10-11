@@ -46,6 +46,9 @@ class EditCanvasView: NSView {
             if activeTool != .emoji {
                 emojiPreviewPoint = nil
             }
+            if activeTool != .marker {
+                updateMarkerPreview(at: nil)
+            }
             if activeTool != .rectangle && activeTool != .ellipse {
                 shapeRoughSeed = nil
             }
@@ -55,11 +58,43 @@ class EditCanvasView: NSView {
         }
     }
     private(set) var previewImage: NSImage?
+    private(set) var imageRotation: ImageRotation = .none
+    private(set) var presentationScale: CGFloat = 1
+    var onImageRotationChanged: (() -> Void)?
+
+    var orientedDisplaySize: NSSize {
+        imageRotation.orientedSize(NSSize(
+            width: bounds.width * presentationScale,
+            height: bounds.height * presentationScale
+        ))
+    }
+
+    /// Keep logical coordinates stable as a rotated image is fitted on screen.
+    /// AppKit applies this frame transform to subviews and event conversion too.
+    func setPresentationScale(_ scale: CGFloat) {
+        let logicalSize = bounds.size
+        presentationScale = scale
+        frameRotation = 0
+        setFrameSize(NSSize(width: logicalSize.width * scale, height: logicalSize.height * scale))
+        setBoundsSize(logicalSize)
+        frameRotation = imageRotation.degrees
+    }
+
+    func rotateImage(clockwise: Bool) {
+        commitActiveTextEditing()
+        cancelInFlightInteraction()
+        recordUndo()
+        imageRotation = imageRotation.turned(clockwise: clockwise)
+        onImageRotationChanged?()
+        needsDisplay = true
+        refreshCursorAtCurrentLocation()
+    }
 
     /// When non-nil, `draw(_:)` clips its drawing to a rounded rect of this
     /// radius. Used by the beautify flow so the canvas content shows with
     /// rounded corners matching the container's frame.
     var beautifyCornerRadius: CGFloat?
+    private let beautifyCornerMask = BeautifyRenderer.CornerMask()
 
     /// Fallback base image used during live drawing when `previewImage` is
     /// nil. The beautify flow sets this to a snapshot of the current screen
@@ -85,17 +120,37 @@ class EditCanvasView: NSView {
     /// Border style for newly drawn rectangles/ellipses.
     var currentShapeStrokeStyle: ShapeStrokeStyle = Defaults.lastShapeStrokeStyle
     var currentLineWidth: CGFloat = EditorStyleDefaults.standardLineWidth
+    var currentNumberSize: CGFloat = EditorStyleDefaults.numberSize
     var currentArrowStyle: ArrowStyle = Defaults.lastArrowStyle
     /// Base width for the marker brush. Drawn at `× MarkerAnnotation.brushScale`.
-    var currentMarkerLineWidth: CGFloat = EditorStyleDefaults.markerLineWidth
+    /// The hover indicator mirrors the resulting brush height, so a width
+    /// change from the sub-toolbar has to redraw it immediately.
+    var currentMarkerLineWidth: CGFloat = EditorStyleDefaults.markerLineWidth {
+        didSet {
+            guard currentMarkerLineWidth != oldValue else { return }
+            invalidateMarkerPreview(at: markerPreviewPoint, forLineWidth: oldValue)
+            invalidateMarkerPreview(at: markerPreviewPoint, forLineWidth: currentMarkerLineWidth)
+        }
+    }
     /// Marker uses a separate color slot so switching tools keeps the
     /// highlighter's yellow without overriding the pen's red, and vice-versa.
     var currentMarkerColor: NSColor = EditorStyleDefaults.markerColor
     var currentMosaicBlockSize: CGFloat = CGFloat(Defaults.mosaicBlockSize)
+    var currentMosaicStyle: MosaicStyle = Defaults.mosaicStyle
+    var currentMosaicBlurRadius: CGFloat = CGFloat(Defaults.mosaicBlurRadius)
     var currentFontSize: CGFloat = CGFloat(Defaults.lastTextFontSize) {
         didSet {
             guard let field = activeTextField else { return }
-            field.font = NSFont.systemFont(ofSize: currentFontSize, weight: .bold)
+            field.font = TextAnnotation.font(named: currentFontName, size: currentFontSize)
+            field.sizeToFitText()
+        }
+    }
+    /// Font family for new text annotations. nil = the system bold default.
+    var currentFontName: String? = Defaults.textFontName {
+        didSet {
+            guard currentFontName != oldValue, let field = activeTextField else { return }
+            field.annotationFontName = currentFontName
+            field.font = TextAnnotation.font(named: currentFontName, size: currentFontSize)
             field.sizeToFitText()
         }
     }
@@ -145,6 +200,10 @@ class EditCanvasView: NSView {
     /// one.
     private var pendingTextCreate: PendingTextCreate?
     private var emojiPreviewPoint: NSPoint?
+    /// Hover position of the highlighter footprint indicator. Screen-only: it
+    /// is painted in `draw(_:)` and never by `drawCommittedAnnotations`, so it
+    /// cannot leak into an exported or copied image.
+    private var markerPreviewPoint: NSPoint?
     private var hoveredAnnotationIndex: Int?
     /// Active eraser drag rectangle. Matching annotations are removed as
     /// soon as they intersect the rectangle.
@@ -261,7 +320,34 @@ class EditCanvasView: NSView {
         if let text = annotation as? TextAnnotation {
             return text.translatedBodyPreservingCalloutTip(by: delta)
         }
+        if let mosaic = annotation as? MosaicAnnotation {
+            return translatedMosaic(mosaic, by: delta)
+        }
         return annotation.translated(by: delta)
+    }
+
+    private func translatedMosaic(_ mosaic: MosaicAnnotation, by delta: NSPoint) -> Annotation {
+        let newRect = mosaic.rect.offsetBy(dx: delta.x, dy: delta.y)
+        guard
+            let baseImage = resolveBaseImageForEditing(),
+            let region = MosaicTool.createMosaicRegion(
+                rect: newRect,
+                imageSize: bounds.size,
+                baseImage: baseImage,
+                blockSize: mosaic.blockSize,
+                style: mosaic.style,
+                blurRadius: mosaic.blurRadius
+            )
+        else {
+            return mosaic.translated(by: delta)
+        }
+        return MosaicAnnotation(
+            rect: region.rect,
+            pixelatedImage: region.pixelatedImage,
+            blockSize: mosaic.blockSize,
+            style: mosaic.style,
+            blurRadius: mosaic.blurRadius
+        )
     }
 
     private struct PendingTextCreate {
@@ -404,6 +490,7 @@ class EditCanvasView: NSView {
             self?.beginTextEditing(
                 bottomLeft: annotation.origin,
                 fontSize: annotation.fontSize,
+                fontName: annotation.fontName,
                 color: annotation.color,
                 hasStroke: annotation.hasStroke,
                 hasCallout: annotation.hasCallout,
@@ -426,6 +513,9 @@ class EditCanvasView: NSView {
         fileprivate let undoStack: [EditorSnapshot]
         fileprivate let redoStack: [EditorSnapshot]
         fileprivate let previewImage: NSImage?
+        fileprivate let imageRotation: ImageRotation
+        fileprivate let canvasSize: NSSize
+        fileprivate let presentationScale: CGFloat
     }
 
     /// History snapshot. Annotations are value-typed (struct) so a plain
@@ -434,6 +524,7 @@ class EditCanvasView: NSView {
     fileprivate struct EditorSnapshot {
         let annotations: [Annotation]
         let numberCounter: Int
+        let imageRotation: ImageRotation
     }
 
     private var undoStack: [EditorSnapshot] = []
@@ -448,7 +539,7 @@ class EditCanvasView: NSView {
     private static let defaultPasteOffset = NSPoint(x: 12, y: -12)
 
     private func currentSnapshot() -> EditorSnapshot {
-        EditorSnapshot(annotations: annotations, numberCounter: numberCounter)
+        EditorSnapshot(annotations: annotations, numberCounter: numberCounter, imageRotation: imageRotation)
     }
 
     func restorableState() -> RestorableState {
@@ -460,16 +551,22 @@ class EditCanvasView: NSView {
             primarySelectedIndex: primarySelectedIndex,
             undoStack: undoStack,
             redoStack: redoStack,
-            previewImage: previewImage
+            previewImage: previewImage,
+            imageRotation: imageRotation,
+            canvasSize: bounds.size,
+            presentationScale: presentationScale
         )
     }
 
     func restoreState(_ state: RestorableState) {
         cancelInFlightInteraction()
         previewImage = state.previewImage
-        if let previewImage {
-            setFrameSize(previewImage.size)
-        }
+        frameRotation = 0
+        presentationScale = 1
+        setFrameSize(state.canvasSize)
+        setBoundsSize(state.canvasSize)
+        imageRotation = state.imageRotation
+        setPresentationScale(state.presentationScale)
         annotations = state.annotations
         numberCounter = state.numberCounter
         undoStack = state.undoStack
@@ -481,9 +578,12 @@ class EditCanvasView: NSView {
     }
 
     private func apply(_ snapshot: EditorSnapshot) {
+        let rotationChanged = imageRotation != snapshot.imageRotation
         annotations = snapshot.annotations
         numberCounter = snapshot.numberCounter
+        imageRotation = snapshot.imageRotation
         setSelectedIndexes(selectedIndexes, primary: primarySelectedIndex)
+        if rotationChanged { onImageRotationChanged?() }
     }
 
     /// Push current state onto the undo stack and clear the redo stack.
@@ -566,14 +666,16 @@ class EditCanvasView: NSView {
         let indexes = validSelectedIndexes
         guard
             activeTextField == nil,
-            let delta = EditCanvasView.selectionNudgeDelta(for: event),
+            let displayDelta = EditCanvasView.selectionNudgeDelta(for: event),
             !indexes.isEmpty
         else {
             return false
         }
+        let delta = imageRotation.documentDelta(fromDisplay: displayDelta)
         recordUndo()
         for idx in indexes {
-            annotations[idx] = annotations[idx].translated(by: delta)
+            let annotation = annotations[idx]
+            annotations[idx] = (annotation as? MosaicAnnotation).map { translatedMosaic($0, by: delta) } ?? annotation.translated(by: delta)
         }
         needsDisplay = true
         refreshCursorAtCurrentLocation()
@@ -629,7 +731,9 @@ class EditCanvasView: NSView {
             return false
         }
         let offset = pasteOffset(forPasting: sources)
-        let pasted = sources.map { $0.translated(by: offset) }
+        let pasted = sources.map { source in
+            (source as? MosaicAnnotation).map { translatedMosaic($0, by: offset) } ?? source.translated(by: offset)
+        }
         let firstNewIndex = annotations.count
         recordUndo()
         annotations.append(contentsOf: pasted)
@@ -797,17 +901,20 @@ class EditCanvasView: NSView {
         needsDisplay = true
     }
 
-    func mutateSelectedMosaicBlockSizeLive(_ blockSize: CGFloat) {
+    func mutateSelectedMosaicLive(style: MosaicStyle, blockSize: CGFloat, blurRadius: CGFloat) {
         guard let baseImage = resolveBaseImageForEditing() else { return }
         let imageSize = bounds.size
         mutateSelectedAnnotationLive { annotation in
             guard
                 let mosaic = annotation as? MosaicAnnotation,
+                mosaic.style != style || mosaic.blockSize != blockSize || mosaic.blurRadius != blurRadius,
                 let region = MosaicTool.createMosaicRegion(
                     rect: mosaic.rect,
                     imageSize: imageSize,
                     baseImage: baseImage,
-                    blockSize: blockSize
+                    blockSize: blockSize,
+                    style: style,
+                    blurRadius: blurRadius
                 )
             else {
                 return annotation
@@ -815,7 +922,9 @@ class EditCanvasView: NSView {
             return MosaicAnnotation(
                 rect: region.rect,
                 pixelatedImage: region.pixelatedImage,
-                blockSize: blockSize
+                blockSize: blockSize,
+                style: style,
+                blurRadius: blurRadius
             )
         }
     }
@@ -888,7 +997,8 @@ class EditCanvasView: NSView {
     private func annotationsEqualEnough(_ a: Annotation, _ b: Annotation) -> Bool {
         if let a = a as? TextAnnotation, let b = b as? TextAnnotation {
             return a.text == b.text && a.origin == b.origin
-                && a.fontSize == b.fontSize && a.rotation == b.rotation
+                && a.fontSize == b.fontSize && a.fontName == b.fontName
+                && a.rotation == b.rotation
                 && a.color == b.color && a.hasStroke == b.hasStroke
                 && a.hasCallout == b.hasCallout
                 && a.calloutTip == b.calloutTip
@@ -926,10 +1036,11 @@ class EditCanvasView: NSView {
         if let a = a as? NumberAnnotation, let b = b as? NumberAnnotation {
             return a.center == b.center && a.tip == b.tip
                 && a.controlPoint == b.controlPoint && a.number == b.number
-                && a.color == b.color
+                && a.color == b.color && a.size == b.size
         }
         if let a = a as? MosaicAnnotation, let b = b as? MosaicAnnotation {
             return a.rect == b.rect && a.blockSize == b.blockSize
+                && a.style == b.style && a.blurRadius == b.blurRadius
         }
         if let a = a as? MagnifierAnnotation, let b = b as? MagnifierAnnotation {
             return a.center == b.center && a.radius == b.radius
@@ -950,6 +1061,7 @@ class EditCanvasView: NSView {
 
     override func mouseDown(with event: NSEvent) {
         let point = convert(event.locationInWindow, from: nil)
+        defer { updateMarkerPreview(at: point) }
         setHoveredAnnotationIndex(nil)
         let isShiftSelecting = event.modifierFlags
             .intersection(.deviceIndependentFlagsMask)
@@ -1084,6 +1196,7 @@ class EditCanvasView: NSView {
 
         case .marker:
             currentMarkerPoints = [point]
+            updateMarkerPreview(at: point)
 
         case .rectangle, .ellipse:
             shapeStart = point
@@ -1114,6 +1227,8 @@ class EditCanvasView: NSView {
     override func mouseDragged(with event: NSEvent) {
         let point = convert(event.locationInWindow, from: nil)
         setHoveredAnnotationIndex(nil)
+        // Keep the footprint under the brush tip while painting.
+        updateMarkerPreview(at: point)
 
         if let state = handleDragState {
             // First mutation of the handle drag — commit the pre-drag snapshot
@@ -1238,7 +1353,7 @@ class EditCanvasView: NSView {
                 pending.current.x - pending.start.x,
                 pending.current.y - pending.start.y
             )
-            let tip: NSPoint? = dragDist >= NumberAnnotation.arrowMinDistance
+            let tip: NSPoint? = dragDist >= NumberAnnotation.arrowMinDistance(for: currentNumberSize)
                 ? pending.current
                 : nil
             recordUndo()
@@ -1246,7 +1361,8 @@ class EditCanvasView: NSView {
                 center: pending.start,
                 tip: tip,
                 number: numberCounter,
-                color: currentColor
+                color: currentColor,
+                size: currentNumberSize
             ))
             numberCounter += 1
             needsDisplay = true
@@ -1269,8 +1385,13 @@ class EditCanvasView: NSView {
                         : nil
                 }()
                 beginTextEditing(
-                    bottomLeft: newTextOrigin(forClickAt: pending.start, fontSize: currentFontSize),
+                    bottomLeft: newTextOrigin(
+                        forClickAt: pending.start,
+                        fontSize: currentFontSize,
+                        fontName: currentFontName
+                    ),
                     fontSize: currentFontSize,
+                    fontName: currentFontName,
                     color: currentColor,
                     hasStroke: currentTextStroke,
                     hasCallout: currentTextCallout,
@@ -1317,13 +1438,17 @@ class EditCanvasView: NSView {
                        rect: rect,
                        imageSize: bounds.size,
                        baseImage: baseImage,
-                       blockSize: currentMosaicBlockSize
+                       blockSize: currentMosaicBlockSize,
+                       style: currentMosaicStyle,
+                       blurRadius: currentMosaicBlurRadius
                    ) {
                     recordUndo()
                     annotations.append(MosaicAnnotation(
                         rect: region.rect,
                         pixelatedImage: region.pixelatedImage,
-                        blockSize: currentMosaicBlockSize
+                        blockSize: currentMosaicBlockSize,
+                        style: currentMosaicStyle,
+                        blurRadius: currentMosaicBlurRadius
                     ))
                 }
             }
@@ -1455,14 +1580,7 @@ class EditCanvasView: NSView {
         let didClip: Bool
         if let radius = beautifyCornerRadius {
             context.saveGState()
-            let clipPath = CGPath(
-                roundedRect: bounds,
-                cornerWidth: radius,
-                cornerHeight: radius,
-                transform: nil
-            )
-            context.addPath(clipPath)
-            context.clip()
+            beautifyCornerMask.clip(context, to: bounds, radius: radius)
             didClip = true
         } else {
             didClip = false
@@ -1611,7 +1729,8 @@ class EditCanvasView: NSView {
                 center: pending.start,
                 tip: tip,
                 number: numberCounter,
-                color: currentColor
+                color: currentColor,
+                size: currentNumberSize
             )
             preview.draw(in: context, bounds: bounds)
         }
@@ -1619,9 +1738,14 @@ class EditCanvasView: NSView {
         if let pending = pendingTextCreate, currentTextCallout {
             TextAnnotation(
                 text: "",
-                origin: newTextOrigin(forClickAt: pending.start, fontSize: currentFontSize),
+                origin: newTextOrigin(
+                    forClickAt: pending.start,
+                    fontSize: currentFontSize,
+                    fontName: currentFontName
+                ),
                 color: currentColor,
                 fontSize: currentFontSize,
+                fontName: currentFontName,
                 hasStroke: currentTextStroke,
                 hasCallout: true,
                 calloutTip: pending.current == pending.start ? nil : pending.current
@@ -1638,6 +1762,8 @@ class EditCanvasView: NSView {
             context.restoreGState()
         }
 
+        drawMarkerPreview()
+
         if didClip {
             context.restoreGState()
         }
@@ -1651,6 +1777,7 @@ class EditCanvasView: NSView {
             origin: field.annotationOrigin,
             color: field.annotationColor,
             fontSize: fontSize,
+            fontName: field.annotationFontName,
             rotation: field.rotation,
             hasStroke: field.hasStroke,
             hasCallout: field.hasCallout,
@@ -1744,6 +1871,7 @@ class EditCanvasView: NSView {
             innerImage = baseImage
         }
 
+        guard let orientedImage = imageRotation.render(innerImage) else { return nil }
         if let preset = beautifyPreset {
             let previewPadding = beautifyPadding ?? BeautifyRenderer.paddingSliderDefault
             let pad = BeautifyRenderer.outputPadding(
@@ -1752,7 +1880,7 @@ class EditCanvasView: NSView {
                 outputInnerSize: innerImage.size
             )
             let rendered = BeautifyRenderer.render(
-                innerImage: innerImage,
+                innerImage: orientedImage,
                 preset: preset,
                 padding: pad,
                 wallpaperImage: wallpaperImage,
@@ -1763,7 +1891,7 @@ class EditCanvasView: NSView {
             )
             return rendered
         }
-        return innerImage
+        return orientedImage
     }
 
     private static func makeCompositeBitmapRep(matching image: NSImage) -> NSBitmapImageRep? {
@@ -1793,7 +1921,10 @@ class EditCanvasView: NSView {
 
     func updateViewportSize(_ size: NSSize) {
         guard !hasPreviewImage else { return }
-        setFrameSize(size)
+        frameRotation = 0
+        setFrameSize(NSSize(width: size.width * presentationScale, height: size.height * presentationScale))
+        setBoundsSize(size)
+        frameRotation = imageRotation.degrees
         needsDisplay = true
     }
 
@@ -1804,10 +1935,24 @@ class EditCanvasView: NSView {
         from oldViewport: NSRect,
         to newViewport: NSRect
     ) {
-        let delta = NSPoint(
+        let displayDelta = NSPoint(
             x: oldViewport.minX - newViewport.minX,
             y: oldViewport.minY - newViewport.minY
         )
+        let localDelta = imageRotation.documentDelta(fromDisplay: displayDelta)
+        let delta = NSPoint(x: localDelta.x / presentationScale, y: localDelta.y / presentationScale)
+        translateAnnotationCoordinates(by: delta)
+    }
+
+    func preserveAnnotationImagePositions(from oldCrop: NSRect, to newCrop: NSRect) {
+        guard oldCrop.width > 0, oldCrop.height > 0 else { return }
+        translateAnnotationCoordinates(by: NSPoint(
+            x: (oldCrop.minX - newCrop.minX) * bounds.width / oldCrop.width,
+            y: (oldCrop.minY - newCrop.minY) * bounds.height / oldCrop.height
+        ))
+    }
+
+    private func translateAnnotationCoordinates(by delta: NSPoint) {
         guard delta != .zero else { return }
 
         activeTextField?.commit()
@@ -1819,7 +1964,8 @@ class EditCanvasView: NSView {
         func translatedSnapshot(_ snapshot: EditorSnapshot) -> EditorSnapshot {
             EditorSnapshot(
                 annotations: translatedAnnotations(snapshot.annotations),
-                numberCounter: snapshot.numberCounter
+                numberCounter: snapshot.numberCounter,
+                imageRotation: snapshot.imageRotation
             )
         }
 
@@ -1861,6 +2007,7 @@ class EditCanvasView: NSView {
         pendingNumberCreate = nil
         pendingTextCreate = nil
         emojiPreviewPoint = nil
+        markerPreviewPoint = nil
         hoveredAnnotationIndex = nil
         if eraserSelection?.didDelete != true {
             discardPendingUndo()
@@ -1978,8 +2125,8 @@ class EditCanvasView: NSView {
         activeTextField != nil
     }
 
-    private func newTextOrigin(forClickAt point: NSPoint, fontSize: CGFloat) -> NSPoint {
-        let font = TextAnnotation.font(forSize: fontSize)
+    private func newTextOrigin(forClickAt point: NSPoint, fontSize: CGFloat, fontName: String?) -> NSPoint {
+        let font = TextAnnotation.font(named: fontName, size: fontSize)
         return NSPoint(
             x: point.x,
             y: point.y - TextAnnotation.lineHeight(for: font)
@@ -1989,6 +2136,7 @@ class EditCanvasView: NSView {
     private func beginTextEditing(
         bottomLeft: NSPoint,
         fontSize: CGFloat,
+        fontName: String?,
         color: NSColor,
         hasStroke: Bool,
         hasCallout: Bool,
@@ -1998,7 +2146,7 @@ class EditCanvasView: NSView {
         rotation: CGFloat = 0,
         replacingIndex: Int? = nil
     ) {
-        let font = NSFont.systemFont(ofSize: fontSize, weight: .bold)
+        let font = TextAnnotation.font(named: fontName, size: fontSize)
         let lineHeight = TextAnnotation.lineHeight(for: font)
 
         // Capture the pre-edit state BEFORE we remove a re-edited annotation
@@ -2040,6 +2188,7 @@ class EditCanvasView: NSView {
 
         let field = EditableTextField(frame: fieldRect)
         field.font = font
+        field.annotationFontName = fontName
         field.annotationColor = color
         field.hasStroke = hasStroke
         field.hasCallout = hasCallout
@@ -2087,12 +2236,13 @@ class EditCanvasView: NSView {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         let wasReEdit = editingOriginalIndex != nil
         if !trimmed.isEmpty {
-            let font = field.font ?? NSFont.systemFont(ofSize: currentFontSize, weight: .bold)
+            let font = field.font ?? TextAnnotation.font(named: field.annotationFontName, size: currentFontSize)
             let newAnnotation = TextAnnotation(
                 text: text,
                 origin: field.annotationOrigin,
                 color: field.annotationColor,
                 fontSize: font.pointSize,
+                fontName: field.annotationFontName,
                 rotation: field.rotation,
                 hasStroke: field.hasStroke,
                 hasCallout: field.hasCallout,
@@ -2293,7 +2443,7 @@ class EditCanvasView: NSView {
         }
         return NSPoint(
             x: number.center.x,
-            y: number.center.y + NumberAnnotation.arrowMinDistance + 4
+            y: number.center.y + number.arrowMinDistance + 4
         )
     }
 
@@ -2368,7 +2518,7 @@ class EditCanvasView: NSView {
         let s = EditCanvasView.numberStepButtonSize
         let gap: CGFloat = 4          // spacing between the two buttons
         let dropBelow: CGFloat = 7    // clearance under the badge circle
-        let centerY = number.center.y - NumberAnnotation.radius - dropBelow - s / 2
+        let centerY = number.center.y - number.radius - dropBelow - s / 2
         let centerX = increment
             ? number.center.x + gap / 2 + s / 2
             : number.center.x - gap / 2 - s / 2
@@ -2947,7 +3097,7 @@ class EditCanvasView: NSView {
             // badge so the user can ditch the arrow without precisely
             // landing on the badge center.
             let dist = hypot(currentMouse.x - number.center.x, currentMouse.y - number.center.y)
-            if dist < NumberAnnotation.arrowMinDistance {
+            if dist < number.arrowMinDistance {
                 annotations[state.index] = number.withTip(nil)
             } else {
                 annotations[state.index] = number.withTip(currentMouse)
@@ -3046,7 +3196,7 @@ class EditCanvasView: NSView {
                     constraint: shiftIsDown ? .preserveAspectRatio : .none
                 )
                 guard newRect.width >= 4, newRect.height >= 4 else { return }
-                // Re-pixelate from the untouched base image so the mosaic
+                // Reapply the effect to the untouched base image so the mosaic
                 // always covers whatever content the new rect frames (rather
                 // than stretching the old pixels).
                 guard
@@ -3055,13 +3205,17 @@ class EditCanvasView: NSView {
                         rect: newRect,
                         imageSize: bounds.size,
                         baseImage: baseImage,
-                        blockSize: mosaic.blockSize
+                        blockSize: mosaic.blockSize,
+                        style: mosaic.style,
+                        blurRadius: mosaic.blurRadius
                     )
                 else { return }
                 annotations[state.index] = MosaicAnnotation(
                     rect: region.rect,
                     pixelatedImage: region.pixelatedImage,
-                    blockSize: mosaic.blockSize
+                    blockSize: mosaic.blockSize,
+                    style: mosaic.style,
+                    blurRadius: mosaic.blurRadius
                 )
             } else if let rect = state.original as? RectAnnotation {
                 let newRect = resizedRotatedRect(
@@ -3432,6 +3586,7 @@ class EditCanvasView: NSView {
         let point = convert(event.locationInWindow, from: nil)
         updateHoverHighlight(at: point)
         updateEmojiPreview(at: point)
+        updateMarkerPreview(at: point)
         updateCursor(at: point)
     }
 
@@ -3439,6 +3594,7 @@ class EditCanvasView: NSView {
         let point = convert(event.locationInWindow, from: nil)
         updateHoverHighlight(at: point)
         updateEmojiPreview(at: point)
+        updateMarkerPreview(at: point)
         updateCursor(at: point)
     }
 
@@ -3448,6 +3604,7 @@ class EditCanvasView: NSView {
             emojiPreviewPoint = nil
             needsDisplay = true
         }
+        updateMarkerPreview(at: nil)
         let point = convert(event.locationInWindow, from: nil)
         if hostSelectionView?.setResizeCursorIfNeeded(at: point, from: self) != true {
             // Let whatever's underneath manage its own cursor.
@@ -3470,10 +3627,96 @@ class EditCanvasView: NSView {
         }
     }
 
+    // MARK: - Marker footprint indicator
+
+    /// Indicator line weight. Drawn on the canvas, not as an `NSCursor`, so it
+    /// is immune to the system "pointer size" setting
+    /// (`com.apple.universalaccess mouseDriverCursorSize`) that scales cursor
+    /// images and would otherwise break the footprint's 1:1 match.
+    private static let markerIndicatorStrokeWidth: CGFloat = 1
+    /// Maximum indicator width. A thinner brush caps the width at its own
+    /// height so the capsule never claims more reach than the brush has.
+    private static let markerIndicatorMaxWidth: CGFloat = 8
+
+    /// Outer footprint of the indicator for a given brush width: exactly the
+    /// band the next stroke would paint, vertically.
+    private func markerIndicatorRect(centeredAt point: NSPoint, lineWidth: CGFloat) -> NSRect {
+        let brushHeight = lineWidth * MarkerAnnotation.brushScale
+        let width = min(EditCanvasView.markerIndicatorMaxWidth, brushHeight)
+        return NSRect(
+            x: point.x - width / 2,
+            y: point.y - brushHeight / 2,
+            width: width,
+            height: brushHeight
+        )
+    }
+
+    /// Invalidate just the indicator's footprint plus room for the glow, so a
+    /// mouse move never repaints the whole canvas.
+    private func invalidateMarkerPreview(at point: NSPoint?, forLineWidth lineWidth: CGFloat) {
+        guard let point else { return }
+        let outset = EditCanvasView.markerIndicatorStrokeWidth + 1
+        setNeedsDisplay(markerIndicatorRect(centeredAt: point, lineWidth: lineWidth)
+            .insetBy(dx: -outset, dy: -outset))
+    }
+
+    /// Move (or clear, with `nil`) the indicator, repainting only the union of
+    /// the old and new footprints.
+    private func updateMarkerPreview(at point: NSPoint?) {
+        var next = point
+        if activeTool != .marker { next = nil }
+        if let p = next, !bounds.contains(p) { next = nil }
+        if dragState != nil || handleDragState != nil || activeTextField != nil {
+            next = nil
+        }
+        // An ongoing stroke can cross existing marks. Before drawing starts,
+        // those same marks and their controls take priority over the brush.
+        if let p = next, currentMarkerPoints == nil,
+           hitTestSelectionAction(at: p) != nil
+            || hitTestSelectionHandle(at: p) != nil
+            || hitTestAnnotation(at: p) != nil {
+            next = nil
+        }
+        guard next != markerPreviewPoint else { return }
+        let previous = markerPreviewPoint
+        markerPreviewPoint = next
+        invalidateMarkerPreview(at: previous, forLineWidth: currentMarkerLineWidth)
+        invalidateMarkerPreview(at: next, forLineWidth: currentMarkerLineWidth)
+    }
+
+    /// Screen-only hover affordance: a hollow capsule whose height equals the
+    /// brush height, so the user can line the brush up with a row of text.
+    /// Interior stays transparent; the content underneath must stay readable.
+    private func drawMarkerPreview() {
+        guard activeTool == .marker, let markerPreviewPoint else { return }
+        let stroke = EditCanvasView.markerIndicatorStrokeWidth
+        let outer = markerIndicatorRect(centeredAt: markerPreviewPoint, lineWidth: currentMarkerLineWidth)
+        // Strokes are centred on the path, so inset by half the stroke width:
+        // the outline's OUTER edge then coincides with the brush footprint.
+        let rect = outer.insetBy(dx: stroke / 2, dy: stroke / 2)
+        guard rect.width > 0, rect.height > 0 else { return }
+        let radius = min(rect.width / 2, rect.height / 2)
+        let capsule = NSBezierPath(roundedRect: rect, xRadius: radius, yRadius: radius)
+
+        NSGraphicsContext.saveGraphicsState()
+        defer { NSGraphicsContext.restoreGraphicsState() }
+        // Faint white glow keeps the hairline legible over dark content
+        // without thickening the line itself. No fill: see-through interior.
+        NSColor.white.withAlphaComponent(0.55).setStroke()
+        capsule.lineWidth = stroke * 2
+        capsule.stroke()
+        NSColor(white: 0.30, alpha: 0.6).setStroke()
+        capsule.lineWidth = stroke
+        capsule.stroke()
+    }
+
     private func updateCursor(at point: NSPoint) {
         // The outer image crop frame keeps priority when canvas tracking owns
         // the same pointer location.
         if hostSelectionView?.setResizeCursorIfNeeded(at: point, from: self) == true {
+            if currentMarkerPoints == nil {
+                updateMarkerPreview(at: nil)
+            }
             return
         }
         // Don't fight the text field's I-beam while editing.
@@ -3530,10 +3773,14 @@ class EditCanvasView: NSView {
     /// cursor. Used after operations that change what's draggable (undo,
     /// commit, tool change) so the cursor doesn't lie until the next move.
     private func refreshCursorAtCurrentLocation() {
-        guard let window else { return }
+        guard let window else {
+            updateMarkerPreview(at: nil)
+            return
+        }
         let mouseInScreen = NSEvent.mouseLocation
         let mouseInWindow = window.convertPoint(fromScreen: mouseInScreen)
         let local = convert(mouseInWindow, from: nil)
+        updateMarkerPreview(at: local)
         guard bounds.contains(local) else {
             setHoveredAnnotationIndex(nil)
             return
@@ -3614,6 +3861,9 @@ final class EditableTextField: NSTextField, NSTextFieldDelegate {
     /// shows plain text; the outline is rendered on the committed
     /// `TextAnnotation`, which adds it without shifting the glyphs.
     var hasStroke: Bool = false
+    /// Font family carried through the edit session so the committed
+    /// annotation keeps the family the user picked, not just the point size.
+    var annotationFontName: String?
     var annotationColor: NSColor = EditorStyleDefaults.primaryColor {
         didSet {
             updateAppearanceForCurrentMode()

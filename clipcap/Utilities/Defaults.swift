@@ -392,6 +392,8 @@ enum L10n {
     static var tipMarker: String { s("tipMarker") }
     static var tipMosaic: String { s("tipMosaic") }
     static var mosaicGranularity: String { s("mosaicGranularity") }
+    static var mosaicBlur: String { s("mosaicBlur") }
+    static var mosaicBlurAmount: String { s("mosaicBlurAmount") }
     static var tipEraser: String { s("tipEraser") }
     static var tipMagnifier: String { s("tipMagnifier") }
     static var tipNumbered: String { s("tipNumbered") }
@@ -406,6 +408,9 @@ enum L10n {
     static var tipRedo: String { s("tipRedo") }
     static var tipMoveSelection: String { s("tipMoveSelection") }
     static var tipScrollCapture: String { s("tipScrollCapture") }
+    static var tipRotate: String { s("tipRotate") }
+    static var tipRotateLeft: String { s("tipRotateLeft") }
+    static var tipRotateRight: String { s("tipRotateRight") }
     static var tipBeautify: String { s("tipBeautify") }
     static var tipTranslate: String { s("tipTranslate") }
     static var translationTargetLanguage: String { s("translationTargetLanguage") }
@@ -439,6 +444,10 @@ enum L10n {
     // Text tool
     static var textStrokeEffect: String { s("textStrokeEffect") }
     static var textCalloutEffect: String { s("textCalloutEffect") }
+    static var textFontLabel: String { s("textFontLabel") }
+    static var textFontSystemDefault: String { s("textFontSystemDefault") }
+    static var textFontDefaultLabel: String { s("textFontDefaultLabel") }
+    static var textFontDefaultHint: String { s("textFontDefaultHint") }
 
     // Shape tool
     static var shapeFillEffect: String { s("shapeFillEffect") }
@@ -448,6 +457,10 @@ enum L10n {
     static var shapeStyleStandard: String { s("shapeStyleStandard") }
     static var shapeStyleRounded: String { s("shapeStyleRounded") }
     static var shapeStyleHandDrawn: String { s("shapeStyleHandDrawn") }
+    static var arrowStyleTapered: String { s("arrowStyleTapered") }
+    static var arrowStyleDoubleEnded: String { s("arrowStyleDoubleEnded") }
+    static var arrowStyleLine: String { s("arrowStyleLine") }
+    static var arrowStyleDotTail: String { s("arrowStyleDotTail") }
 
     // Insert tools
     static var insertImageFromClipboard: String { s("insertImageFromClipboard") }
@@ -1317,6 +1330,9 @@ struct Defaults {
     static let editorLineWidthMin: Double = 1
     static let editorLineWidthMax: Double = 16
     static let markerLineWidthMax: Double = 10
+    static let numberSizeMin: Double = 1
+    static let numberSizeDefault: Double = 5
+    static let numberSizeMax: Double = 25
 
     static var lastEditorColorHex: String? {
         get {
@@ -1340,6 +1356,18 @@ struct Defaults {
         }
         set {
             defaults.set(clampedEditorLineWidth(newValue), forKey: "lastEditorLineWidth")
+        }
+    }
+
+    static var lastNumberSize: Double {
+        get {
+            guard defaults.object(forKey: "lastNumberSize") != nil else {
+                return numberSizeDefault
+            }
+            return clampedNumberSize(defaults.double(forKey: "lastNumberSize"))
+        }
+        set {
+            defaults.set(clampedNumberSize(newValue), forKey: "lastNumberSize")
         }
     }
 
@@ -1382,6 +1410,26 @@ struct Defaults {
     static let mosaicBlockSizeMin: Double = 4
     static let mosaicBlockSizeMax: Double = 48
 
+    static var mosaicStyle: MosaicStyle {
+        get { MosaicStyle(rawValue: defaults.string(forKey: "mosaicStyle") ?? "") ?? .pixelate }
+        set { defaults.set(newValue.rawValue, forKey: "mosaicStyle") }
+    }
+
+    static let mosaicBlurRadiusMin: Double = 1
+    static let mosaicBlurRadiusMax: Double = 48
+
+    static var mosaicBlurRadius: Double {
+        get {
+            guard defaults.object(forKey: "mosaicBlurRadius") != nil else { return 12 }
+            return normalizedMosaicBlurRadius(defaults.double(forKey: "mosaicBlurRadius"))
+        }
+        set { defaults.set(normalizedMosaicBlurRadius(newValue), forKey: "mosaicBlurRadius") }
+    }
+
+    static func normalizedMosaicBlurRadius(_ value: Double) -> Double {
+        value.isFinite ? min(max(value, mosaicBlurRadiusMin), mosaicBlurRadiusMax) : 12
+    }
+
     static let textFontSizeMin: Double = 10
     static let textFontSizeMax: Double = 100
 
@@ -1395,6 +1443,27 @@ struct Defaults {
         }
         set {
             defaults.set(min(max(newValue, textFontSizeMin), textFontSizeMax), forKey: "lastTextFontSize")
+        }
+    }
+
+    /// Default font family for text annotations. Shared by the settings pane
+    /// and the editor's font picker (which also writes it, matching the
+    /// "remember last used" model of the other text-tool properties).
+    /// Normalized at the persistence boundary: a family that is no longer
+    /// installed reads back as nil, i.e. the system bold default.
+    static var textFontName: String? {
+        get {
+            guard let name = defaults.string(forKey: "textFontName"), !name.isEmpty else {
+                return nil
+            }
+            return FontCatalog.isInstalled(name) ? name : nil
+        }
+        set {
+            if let newValue, !newValue.isEmpty {
+                defaults.set(newValue, forKey: "textFontName")
+            } else {
+                defaults.removeObject(forKey: "textFontName")
+            }
         }
     }
 
@@ -1508,6 +1577,10 @@ struct Defaults {
 
     private static func clampedEditorLineWidth(_ width: Double) -> Double {
         min(max(width, editorLineWidthMin), editorLineWidthMax)
+    }
+
+    private static func clampedNumberSize(_ size: Double) -> Double {
+        min(max(size, numberSizeMin), numberSizeMax)
     }
 
     private static func clampedMarkerLineWidth(_ width: Double) -> Double {

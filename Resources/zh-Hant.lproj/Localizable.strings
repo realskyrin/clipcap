@@ -36,19 +36,19 @@
 "shortcutCancel" = "取消";
 "shortcutWaiting" = "請按下按鍵";
 "shortcutRestore" = "恢復預設";
-"selectedImagePinShortcutHeader" = "釘選所選圖片";
+"selectedImagePinShortcutHeader" = "選擇圖片並釘起";
 "selectedImagePinShortcutDefaultDisplay" = "未設定";
-"selectedImagePinShortcutClear" = "清除釘選所選圖片快捷鍵";
+"selectedImagePinShortcutClear" = "清除選擇圖片並釘起快捷鍵";
 "clipboardImagePinShortcutHeader" = "釘選剪貼簿圖片";
 "clipboardImagePinShortcutDefaultDisplay" = "未設定";
 "clipboardImagePinShortcutClear" = "清除釘選剪貼簿圖片快捷鍵";
 "clipboardTextPinShortcutHeader" = "釘選剪貼簿文字";
 "clipboardTextPinShortcutDefaultDisplay" = "未設定";
 "clipboardTextPinShortcutClear" = "清除釘選剪貼簿文字快捷鍵";
-"selectedImagePinNoImage" = "Finder 中沒有選取圖片";
+"selectedImagePinNoImage" = "無法開啟所選圖片";
 "clipboardImagePinNoImage" = "剪貼簿中沒有圖片";
 "clipboardTextPinNoText" = "剪貼簿中沒有文字";
-"pinFromFinderHint" = "已釘選 Finder 中的圖片，按 X 關閉";
+"pinFromFinderHint" = "已釘起圖片，按 X 關閉";
 "pinFromClipboardHint" = "已釘選剪貼簿圖片，按 X 關閉";
 "pinFromClipboardTextHint" = "已釘選剪貼簿文字，雙擊可編輯";
 "pinToolbarClose" = "關閉釘圖";
@@ -58,8 +58,8 @@
 "pinToolbarEditText" = "編輯文字";
 
 /* Image-edit shortcuts */
-"selectedImageEditShortcutHeader" = "編輯所選圖片";
-"selectedImageEditShortcutHint" = "按下後，直接編輯 Finder 中選取的單張圖片。預設未設定";
+"selectedImageEditShortcutHeader" = "選擇圖片並編輯";
+"selectedImageEditShortcutHint" = "按下後透過檔案選擇器選擇要編輯的圖片，預設未設定";
 "selectedImageEditShortcutDefaultDisplay" = "未設定";
 "clipboardImageEditShortcutHeader" = "編輯剪貼簿圖片";
 "clipboardImageEditShortcutHint" = "按下後，直接編輯目前剪貼簿中的圖片。預設未設定";
@@ -96,7 +96,7 @@
 /* Shortcut conflict */
 "shortcutConflictTitle" = "快捷鍵已被使用";
 "shortcutConflictScreenshot" = "這組按鍵已用於截圖快捷鍵。請選擇其他組合";
-"shortcutConflictSelectedImagePin" = "這組按鍵已用於釘選所選圖片快捷鍵。請選擇其他組合";
+"shortcutConflictSelectedImagePin" = "此組合鍵已用於選擇圖片並釘起，請選擇其他組合鍵";
 "shortcutConflictClipboardImagePin" = "這組按鍵已用於釘選剪貼簿圖片快捷鍵。請選擇其他組合";
 "shortcutConflictClipboardTextPin" = "這組按鍵已用於釘選剪貼簿文字快捷鍵，請選擇其他組合";
 "shortcutConflictClipboard" = "這組按鍵已用於複製到剪貼簿快捷鍵。請選擇其他組合";
@@ -105,7 +105,7 @@
 "shortcutConflictPreviousHistoryImage" = "這組按鍵已用於上一張歷史截圖快捷鍵。請選擇其他組合";
 "shortcutConflictNextHistoryImage" = "這組按鍵已用於下一張歷史截圖快捷鍵。請選擇其他組合";
 "shortcutConflictHistoryPanel" = "這組按鍵已用於歷史面板快捷鍵。請選擇其他組合";
-"shortcutConflictSelectedImageEdit" = "這組按鍵已用於編輯所選圖片快捷鍵。請選擇其他組合";
+"shortcutConflictSelectedImageEdit" = "此組合鍵已用於選擇圖片並編輯，請選擇其他組合鍵";
 "shortcutConflictClipboardImageEdit" = "這組按鍵已用於編輯剪貼簿圖片快捷鍵。請選擇其他組合";
 "shortcutConflictTextRecognition" = "這組按鍵已用於文字辨識快捷鍵。請選擇其他組合";
 "shortcutConflictCopyImageText" = "這組按鍵已用於複製圖中文字快捷鍵。請選擇其他組合";
@@ -196,7 +196,7 @@
 "editSuspendedToast" = "已暫存編輯，下次觸發截圖時繼續";
 "editSuspendedResumeToast" = "已恢復上次未完成的編輯";
 "fullScreenScreenshotFailed" = "截全螢幕失敗";
-"selectedImageEditNoImage" = "Finder 中沒有選取單張圖片";
+"selectedImageEditNoImage" = "無法開啟所選圖片";
 "clipboardImageEditNoImage" = "剪貼簿中沒有可編輯的圖片";
 "screenshotSaved" = "截圖已儲存到 %@";
 "screenshotSaveFailed" = "截圖儲存失敗：%@";
@@ -256,7 +256,11 @@
 "shapeFillTranslucent" = "半透明填充";
 "shapeStyleStandard" = "預設樣式";
 "shapeStyleRounded" = "圓角矩形";
-"shapeStyleHandDrawn" = "手繪圓角";
+"shapeStyleHandDrawn" = "手繪";
+"arrowStyleTapered" = "實心箭頭";
+"arrowStyleDoubleEnded" = "雙向箭頭";
+"arrowStyleLine" = "線條箭頭";
+"arrowStyleDotTail" = "圓點箭頭";
 "insertImageFromClipboard" = "從剪貼簿插入";
 "insertImageFromFile" = "從本機檔案插入";
 "insertImageChooseFile" = "選擇圖片";
@@ -318,7 +322,7 @@
 "checkForUpdates" = "檢查更新";
 "updateChecking" = "正在檢查";
 "updateUpToDateStatus" = "已是最新版本";
-"updateNewVersionStatus" = "有新版本 v%@";
+"updateNewVersionStatus" = "可更新至 Release v%@";
 "updateFailedStatus" = "檢查失敗";
 "updateDownloadButton" = "下載";
 "updateRetryButton" = "重試";
@@ -330,7 +334,7 @@
 /* Updates — menu bar */
 "checkForUpdatesMenu" = "檢查更新";
 "checkingForUpdatesMenu" = "正在檢查更新";
-"updateAvailableMenu" = "有新版本 v%@ 可用";
+"updateAvailableMenu" = "可更新至 Release v%@";
 "updateDownloadingMenu" = "正在下載更新… %d%%";
 "updateInstallingMenu" = "正在安裝更新";
 "updateInstallFailedMenu" = "更新安裝失敗";
@@ -343,7 +347,7 @@
 "updateInstallingHUD" = "正在安裝";
 
 /* Updates — manual check result alert */
-"updateAvailableTitle" = "版本 v%@ 已可使用";
+"updateAvailableTitle" = "可更新至 Release v%@";
 "updateAvailableBody" = "clipcap 會下載並安裝最新版本，完成後自動重新啟動";
 "updateUpToDateTitle" = "已是最新版本";
 "updateUpToDateBody" = "clipcap v%@ 已是最新版本";
@@ -583,3 +587,13 @@
 "reminderOnce" = "一次性";
 
 "historyPreviewTextSaveFailed" = "文字儲存失敗，請重試";
+
+"mosaicBlur" = "模糊";
+"mosaicBlurAmount" = "模糊程度";
+"textFontDefaultHint" = "新建文字標註使用的字體";
+"textFontDefaultLabel" = "預設文字字體";
+"textFontLabel" = "字體";
+"textFontSystemDefault" = "系統預設";
+"tipRotate" = "旋轉";
+"tipRotateLeft" = "向左旋轉 90°";
+"tipRotateRight" = "向右旋轉 90°";

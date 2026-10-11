@@ -67,6 +67,9 @@ final class SettingsView: NSView {
     private var selectedTab: SettingsTab = .general
     private var currentPane: NSView?
 
+    private var textFontTitleLabel: NSTextField?
+    private var textFontHintLabel: NSTextField?
+    private var textFontPopup: NSPopUpButton?
     private var languagePicker: NSPopUpButton?
     private var menuBarSwitch: NSSwitch?
     private var launchAtLoginSwitch: NSSwitch?
@@ -325,6 +328,7 @@ final class SettingsView: NSView {
 
     private func selectTab(_ tab: SettingsTab) {
         activeToolbarPane?.cancelShortcutRecording()
+        window?.makeFirstResponder(nil)
         selectedTab = tab
         detailTitleLabel.stringValue = tab.title
         tabButtons.values.forEach { $0.isSelectedTab = false }
@@ -429,9 +433,97 @@ final class SettingsView: NSView {
         )
         addCard(togglesCard, to: stack)
 
+        buildTextFontCard(into: stack)
         addCard(makeSystemScreenshotAutoOpenCard(), to: stack)
 
         return wrapPane(stack)
+    }
+
+    private func buildTextFontCard(into stack: NSStackView) {
+        let card = CardView()
+        let inner = verticalInnerStack()
+        card.addSubview(inner)
+        pin(inner, to: card, insets: NSEdgeInsets(top: 6, left: 14, bottom: 6, right: 14))
+
+        let row = NSView()
+        row.translatesAutoresizingMaskIntoConstraints = false
+
+        let textStack = NSStackView()
+        textStack.orientation = .vertical
+        textStack.alignment = .leading
+        textStack.spacing = 2
+        textStack.translatesAutoresizingMaskIntoConstraints = false
+
+        let titleLabel = primaryLabel(L10n.textFontDefaultLabel)
+        textFontTitleLabel = titleLabel
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        let hintLabel = secondaryLabel(L10n.textFontDefaultHint, wrapping: true)
+        textFontHintLabel = hintLabel
+        textStack.addArrangedSubview(titleLabel)
+        textStack.addArrangedSubview(hintLabel)
+
+        let popup = NSPopUpButton(frame: .zero, pullsDown: false)
+        popup.controlSize = .small
+        popup.font = NSFont.systemFont(ofSize: 12)
+        popup.target = self
+        popup.action = #selector(textFontChanged(_:))
+        popup.translatesAutoresizingMaskIntoConstraints = false
+        popup.widthAnchor.constraint(greaterThanOrEqualToConstant: 160).isActive = true
+        popup.setAccessibilityLabel(L10n.textFontDefaultLabel)
+        textFontPopup = popup
+        rebuildTextFontPopupItems()
+
+        row.addSubview(textStack)
+        row.addSubview(popup)
+        NSLayoutConstraint.activate([
+            textStack.leadingAnchor.constraint(equalTo: row.leadingAnchor),
+            textStack.topAnchor.constraint(equalTo: row.topAnchor, constant: 10),
+            textStack.bottomAnchor.constraint(equalTo: row.bottomAnchor, constant: -10),
+            textStack.trailingAnchor.constraint(lessThanOrEqualTo: popup.leadingAnchor, constant: -12),
+
+            popup.trailingAnchor.constraint(equalTo: row.trailingAnchor),
+            popup.centerYAnchor.constraint(equalTo: textStack.centerYAnchor),
+        ])
+
+        inner.addArrangedSubview(row)
+        row.widthAnchor.constraint(equalTo: inner.widthAnchor).isActive = true
+
+        stack.addArrangedSubview(card)
+        card.widthAnchor.constraint(equalTo: stack.widthAnchor).isActive = true
+    }
+
+    private func rebuildTextFontPopupItems() {
+        guard let popup = textFontPopup, let menu = popup.menu else { return }
+        popup.removeAllItems()
+        // Built as menu items rather than `addItem(withTitle:)`, which drops an
+        // existing item when two families share a localized display name.
+        menu.addItem(NSMenuItem(title: L10n.textFontSystemDefault, action: nil, keyEquivalent: ""))
+        menu.addItem(.separator())
+        for family in FontCatalog.families {
+            let item = NSMenuItem(
+                title: FontCatalog.displayName(for: family),
+                action: nil,
+                keyEquivalent: ""
+            )
+            item.representedObject = family
+            menu.addItem(item)
+        }
+        selectStoredTextFont()
+    }
+
+    private func selectStoredTextFont() {
+        guard let popup = textFontPopup else { return }
+        guard let family = Defaults.textFontName,
+              let index = FontCatalog.families.firstIndex(of: family) else {
+            popup.selectItem(at: 0)
+            return
+        }
+        // +2 skips the system-default item and the separator.
+        popup.selectItem(at: index + 2)
+    }
+
+    @objc private func textFontChanged(_ sender: NSPopUpButton) {
+        Defaults.textFontName = sender.selectedItem?.representedObject as? String
     }
 
     private func makeHistoryPane() -> NSView {
@@ -1789,7 +1881,10 @@ final class SettingsView: NSView {
                 NSWorkspace.shared.open(url)
             }
         default:
-            UpdateChecker.shared.check(manual: true)
+            UpdateChecker.shared.check(manual: true) { state in
+                guard UpdateChecker.isDebugBuild, case .available(let version) = state else { return }
+                StatusBarController.presentUpdateAvailableAlert(version: version)
+            }
         }
     }
 
@@ -2163,6 +2258,7 @@ private final class TabButton: NSControl {
     private let iconChip = NSView()
     private let iconView = NSImageView()
     private let label = NSTextField(labelWithString: "")
+    private var isHovered = false
     private var trackingAreaRef: NSTrackingArea?
 
     var isSelectedTab: Bool = false {
@@ -2215,6 +2311,9 @@ private final class TabButton: NSControl {
             label.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -12),
         ])
 
+        setAccessibilityElement(true)
+        setAccessibilityRole(.button)
+        setAccessibilityLabel(tab.title)
         updateAppearance()
     }
 
@@ -2224,6 +2323,7 @@ private final class TabButton: NSControl {
 
     func refreshTitle() {
         label.stringValue = tab.title
+        setAccessibilityLabel(tab.title)
     }
 
     override func updateTrackingAreas() {
@@ -2241,22 +2341,33 @@ private final class TabButton: NSControl {
     }
 
     override func mouseEntered(with event: NSEvent) {
-        if !isSelectedTab {
-            layer?.backgroundColor = NSColor.white.withAlphaComponent(0.05).cgColor
-        }
+        isHovered = true
+        updateAppearance()
     }
 
     override func mouseExited(with event: NSEvent) {
-        if !isSelectedTab {
-            layer?.backgroundColor = NSColor.clear.cgColor
-        }
+        isHovered = false
+        updateAppearance()
     }
 
     override func mouseDown(with event: NSEvent) {
         sendAction(action, to: target)
     }
 
-    override var acceptsFirstResponder: Bool { true }
+    override var acceptsFirstResponder: Bool { isEnabled }
+
+    override func accessibilityPerformPress() -> Bool {
+        guard isEnabled else { return false }
+        return sendAction(action, to: target)
+    }
+
+    override func keyDown(with event: NSEvent) {
+        if event.keyCode == kVK_Space || event.keyCode == kVK_Return {
+            _ = accessibilityPerformPress()
+        } else {
+            super.keyDown(with: event)
+        }
+    }
 
     private func updateAppearance() {
         if isSelectedTab {
@@ -2268,7 +2379,7 @@ private final class TabButton: NSControl {
             iconChip.layer?.borderColor = NSColor.white.withAlphaComponent(0.30).cgColor
             iconView.contentTintColor = .white
         } else {
-            layer?.backgroundColor = NSColor.clear.cgColor
+            layer?.backgroundColor = (isHovered ? NSColor.white.withAlphaComponent(0.05) : NSColor.clear).cgColor
             layer?.borderWidth = 0
             label.textColor = NSColor.white.withAlphaComponent(0.82)
             iconChip.layer?.backgroundColor = NSColor.white.withAlphaComponent(0.06).cgColor

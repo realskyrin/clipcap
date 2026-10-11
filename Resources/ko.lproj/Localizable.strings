@@ -36,19 +36,19 @@
 "shortcutCancel" = "취소";
 "shortcutWaiting" = "키 입력 대기 중";
 "shortcutRestore" = "기본값 복원";
-"selectedImagePinShortcutHeader" = "선택 이미지 고정";
+"selectedImagePinShortcutHeader" = "이미지 선택 후 고정";
 "selectedImagePinShortcutDefaultDisplay" = "설정 안 됨";
-"selectedImagePinShortcutClear" = "선택 이미지 고정 단축키 지우기";
+"selectedImagePinShortcutClear" = "이미지 선택 후 고정 단축키 지우기";
 "clipboardImagePinShortcutHeader" = "클립보드 이미지 고정";
 "clipboardImagePinShortcutDefaultDisplay" = "설정 안 됨";
 "clipboardImagePinShortcutClear" = "클립보드 이미지 고정 단축키 지우기";
 "clipboardTextPinShortcutHeader" = "클립보드 텍스트 고정";
 "clipboardTextPinShortcutDefaultDisplay" = "설정 안 됨";
 "clipboardTextPinShortcutClear" = "클립보드 텍스트 고정 단축키 지우기";
-"selectedImagePinNoImage" = "Finder에서 선택한 이미지가 없습니다";
+"selectedImagePinNoImage" = "선택한 이미지를 열 수 없습니다";
 "clipboardImagePinNoImage" = "클립보드에 고정할 이미지가 없습니다";
 "clipboardTextPinNoText" = "클립보드에 텍스트가 없습니다";
-"pinFromFinderHint" = "Finder 이미지를 고정했습니다. X 키를 눌러 닫기";
+"pinFromFinderHint" = "이미지 고정됨, X 키로 닫기";
 "pinFromClipboardHint" = "클립보드 이미지를 고정했습니다. X 키를 눌러 닫기";
 "pinFromClipboardTextHint" = "클립보드 텍스트를 고정했습니다. 더블 클릭하여 편집";
 "pinToolbarClose" = "고정 이미지 닫기";
@@ -58,8 +58,8 @@
 "pinToolbarEditText" = "텍스트 편집";
 
 /* Image-edit shortcuts */
-"selectedImageEditShortcutHeader" = "선택 이미지 편집";
-"selectedImageEditShortcutHint" = "Finder에서 선택한 단일 이미지를 바로 편집합니다. 기본값은 설정되어 있지 않습니다";
+"selectedImageEditShortcutHeader" = "이미지 선택 후 편집";
+"selectedImageEditShortcutHint" = "파일 선택기에서 편집할 이미지를 선택, 기본값은 미설정";
 "selectedImageEditShortcutDefaultDisplay" = "설정 안 됨";
 "clipboardImageEditShortcutHeader" = "클립보드 이미지 편집";
 "clipboardImageEditShortcutHint" = "현재 클립보드에 있는 이미지를 바로 편집합니다. 기본값은 설정되어 있지 않습니다";
@@ -96,7 +96,7 @@
 /* Shortcut conflict */
 "shortcutConflictTitle" = "단축키가 이미 사용 중입니다";
 "shortcutConflictScreenshot" = "이 키 조합은 이미 스크린샷 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
-"shortcutConflictSelectedImagePin" = "이 키 조합은 이미 선택 이미지 고정 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
+"shortcutConflictSelectedImagePin" = "이 키 조합은 이미지 선택 후 고정에 사용 중입니다, 다른 조합을 선택하세요";
 "shortcutConflictClipboardImagePin" = "이 키 조합은 이미 클립보드 이미지 고정 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
 "shortcutConflictClipboardTextPin" = "이 키 조합은 이미 클립보드 텍스트 고정 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
 "shortcutConflictClipboard" = "이 키 조합은 이미 클립보드에 복사 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
@@ -105,7 +105,7 @@
 "shortcutConflictPreviousHistoryImage" = "이 키 조합은 이미 이전 기록 스크린샷 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
 "shortcutConflictNextHistoryImage" = "이 키 조합은 이미 다음 기록 스크린샷 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
 "shortcutConflictHistoryPanel" = "이 키 조합은 이미 기록 패널 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
-"shortcutConflictSelectedImageEdit" = "이 키 조합은 이미 선택 이미지 편집 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
+"shortcutConflictSelectedImageEdit" = "이 키 조합은 이미지 선택 후 편집에 사용 중입니다, 다른 조합을 선택하세요";
 "shortcutConflictClipboardImageEdit" = "이 키 조합은 이미 클립보드 이미지 편집 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
 "shortcutConflictTextRecognition" = "이 키 조합은 이미 문자 인식 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
 "shortcutConflictCopyImageText" = "이 키 조합은 이미 이미지 텍스트 복사 단축키에 사용되고 있습니다. 다른 조합을 선택하세요";
@@ -196,7 +196,7 @@
 "editSuspendedToast" = "편집이 임시 저장됨, 다음 스크린샷 실행 시 계속";
 "editSuspendedResumeToast" = "임시 저장한 편집을 이어서 진행";
 "fullScreenScreenshotFailed" = "전체 화면 스크린샷 실패";
-"selectedImageEditNoImage" = "Finder에서 단일 이미지가 선택되지 않았습니다";
+"selectedImageEditNoImage" = "선택한 이미지를 열 수 없습니다";
 "clipboardImageEditNoImage" = "클립보드에 편집할 이미지가 없습니다";
 "screenshotSaved" = "스크린샷이 %@에 저장되었습니다";
 "screenshotSaveFailed" = "스크린샷 저장 실패: %@";
@@ -256,7 +256,11 @@
 "shapeFillTranslucent" = "반투명 채우기";
 "shapeStyleStandard" = "기본 스타일";
 "shapeStyleRounded" = "둥근 사각형 스타일";
-"shapeStyleHandDrawn" = "손그림 둥근 스타일";
+"shapeStyleHandDrawn" = "손그림 스타일";
+"arrowStyleTapered" = "테이퍼 화살표";
+"arrowStyleDoubleEnded" = "양방향 화살표";
+"arrowStyleLine" = "선 화살표";
+"arrowStyleDotTail" = "원형 꼬리 화살표";
 "insertImageFromClipboard" = "클립보드에서";
 "insertImageFromFile" = "파일에서";
 "insertImageChooseFile" = "이미지 선택";
@@ -318,7 +322,7 @@
 "checkForUpdates" = "업데이트 확인";
 "updateChecking" = "확인 중";
 "updateUpToDateStatus" = "최신 버전";
-"updateNewVersionStatus" = "새 버전 v%@";
+"updateNewVersionStatus" = "Release v%@ 사용 가능";
 "updateFailedStatus" = "확인 실패";
 "updateDownloadButton" = "다운로드";
 "updateRetryButton" = "다시 시도";
@@ -330,7 +334,7 @@
 /* Updates — menu bar */
 "checkForUpdatesMenu" = "업데이트 확인";
 "checkingForUpdatesMenu" = "업데이트 확인 중";
-"updateAvailableMenu" = "새 버전 v%@ 사용 가능";
+"updateAvailableMenu" = "Release v%@ 사용 가능";
 "updateDownloadingMenu" = "업데이트 다운로드 중… %d%%";
 "updateInstallingMenu" = "업데이트 설치 중";
 "updateInstallFailedMenu" = "업데이트 설치 실패";
@@ -343,7 +347,7 @@
 "updateInstallingHUD" = "설치 중";
 
 /* Updates — manual check result alert */
-"updateAvailableTitle" = "버전 v%@ 사용 가능";
+"updateAvailableTitle" = "Release v%@ 사용 가능";
 "updateAvailableBody" = "clipcap이 최신 버전을 다운로드하고 설치한 후 자동으로 다시 시작합니다";
 "updateUpToDateTitle" = "최신 상태입니다";
 "updateUpToDateBody" = "clipcap v%@ 가 최신 버전입니다";
@@ -583,3 +587,13 @@
 "reminderOnce" = "한 번";
 
 "historyPreviewTextSaveFailed" = "텍스트를 저장하지 못했습니다, 다시 시도해 주세요";
+
+"mosaicBlur" = "흐림";
+"mosaicBlurAmount" = "흐림 강도";
+"textFontDefaultHint" = "새로 만드는 텍스트 주석에 사용할 글꼴";
+"textFontDefaultLabel" = "기본 텍스트 글꼴";
+"textFontLabel" = "글꼴";
+"textFontSystemDefault" = "시스템 기본값";
+"tipRotate" = "회전";
+"tipRotateLeft" = "왼쪽으로 90° 회전";
+"tipRotateRight" = "오른쪽으로 90° 회전";

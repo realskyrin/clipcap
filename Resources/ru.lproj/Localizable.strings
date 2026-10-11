@@ -36,19 +36,19 @@
 "shortcutCancel" = "Отмена";
 "shortcutWaiting" = "Нажмите клавиши";
 "shortcutRestore" = "Сбросить";
-"selectedImagePinShortcutHeader" = "Закрепить выбранное изображение";
+"selectedImagePinShortcutHeader" = "Выбрать изображения для закрепления";
 "selectedImagePinShortcutDefaultDisplay" = "Не задано";
-"selectedImagePinShortcutClear" = "Очистить сочетание закрепления выбранного изображения";
+"selectedImagePinShortcutClear" = "Удалить сочетание выбора и закрепления";
 "clipboardImagePinShortcutHeader" = "Закрепить изображение из буфера";
 "clipboardImagePinShortcutDefaultDisplay" = "Не задано";
 "clipboardImagePinShortcutClear" = "Очистить сочетание закрепления изображения из буфера";
 "clipboardTextPinShortcutHeader" = "Закрепить текст из буфера";
 "clipboardTextPinShortcutDefaultDisplay" = "Не задано";
 "clipboardTextPinShortcutClear" = "Очистить сочетание закрепления текста из буфера";
-"selectedImagePinNoImage" = "В Finder не выбрано изображение";
+"selectedImagePinNoImage" = "Не удалось открыть выбранные изображения";
 "clipboardImagePinNoImage" = "В буфере нет изображения для закрепления";
 "clipboardTextPinNoText" = "В буфере нет текста";
-"pinFromFinderHint" = "Изображение Finder закреплено, нажмите X, чтобы закрыть";
+"pinFromFinderHint" = "Изображения закреплены, нажмите X для закрытия";
 "pinFromClipboardHint" = "Изображение из буфера закреплено, нажмите X, чтобы закрыть";
 "pinFromClipboardTextHint" = "Текст из буфера закреплен, дважды щелкните для редактирования";
 "pinToolbarClose" = "Закрыть закрепленное изображение";
@@ -58,8 +58,8 @@
 "pinToolbarEditText" = "Редактировать текст";
 
 /* Image-edit shortcuts */
-"selectedImageEditShortcutHeader" = "Редактировать выбранное изображение";
-"selectedImageEditShortcutHint" = "Нажмите, чтобы сразу редактировать одно изображение, выбранное в Finder. По умолчанию не задано";
+"selectedImageEditShortcutHeader" = "Выбрать изображение для редактирования";
+"selectedImageEditShortcutHint" = "Открыть диалог выбора изображения для редактирования, по умолчанию не назначено";
 "selectedImageEditShortcutDefaultDisplay" = "Не задано";
 "clipboardImageEditShortcutHeader" = "Редактировать изображение из буфера";
 "clipboardImageEditShortcutHint" = "Нажмите, чтобы сразу редактировать текущее изображение в буфере обмена. По умолчанию не задано";
@@ -96,7 +96,7 @@
 /* Shortcut conflict */
 "shortcutConflictTitle" = "Сочетание уже используется";
 "shortcutConflictScreenshot" = "Это сочетание клавиш уже назначено для снимка экрана. Выберите другое";
-"shortcutConflictSelectedImagePin" = "Это сочетание клавиш уже назначено для закрепления выбранного изображения. Выберите другое";
+"shortcutConflictSelectedImagePin" = "Это сочетание уже используется для выбора и закрепления изображений, выберите другое";
 "shortcutConflictClipboardImagePin" = "Это сочетание клавиш уже назначено для закрепления изображения из буфера. Выберите другое";
 "shortcutConflictClipboardTextPin" = "Это сочетание клавиш уже назначено для закрепления текста из буфера. Выберите другое";
 "shortcutConflictClipboard" = "Это сочетание клавиш уже назначено для копирования в буфер обмена. Выберите другое";
@@ -105,7 +105,7 @@
 "shortcutConflictPreviousHistoryImage" = "Это сочетание клавиш уже назначено для предыдущего снимка из истории. Выберите другое";
 "shortcutConflictNextHistoryImage" = "Это сочетание клавиш уже назначено для следующего снимка из истории. Выберите другое";
 "shortcutConflictHistoryPanel" = "Это сочетание клавиш уже назначено для панели истории. Выберите другое";
-"shortcutConflictSelectedImageEdit" = "Это сочетание клавиш уже назначено для редактирования выбранного изображения. Выберите другое";
+"shortcutConflictSelectedImageEdit" = "Это сочетание уже используется для выбора и редактирования изображения, выберите другое";
 "shortcutConflictClipboardImageEdit" = "Это сочетание клавиш уже назначено для редактирования изображения из буфера. Выберите другое";
 "shortcutConflictTextRecognition" = "Это сочетание клавиш уже назначено для распознавания текста. Выберите другое";
 "shortcutConflictCopyImageText" = "Это сочетание клавиш уже назначено для копирования текста с изображения. Выберите другое";
@@ -196,7 +196,7 @@
 "editSuspendedToast" = "Правка отложена, запустите снимок ещё раз для продолжения";
 "editSuspendedResumeToast" = "Продолжаем отложенную правку";
 "fullScreenScreenshotFailed" = "Не удалось сделать снимок всего экрана";
-"selectedImageEditNoImage" = "В Finder не выбрано одно изображение";
+"selectedImageEditNoImage" = "Не удалось открыть выбранное изображение";
 "clipboardImageEditNoImage" = "В буфере обмена нет изображения для редактирования";
 "screenshotSaved" = "Снимок сохранён в %@";
 "screenshotSaveFailed" = "Не удалось сохранить снимок: %@";
@@ -256,7 +256,11 @@
 "shapeFillTranslucent" = "Полупрозрачная заливка";
 "shapeStyleStandard" = "Обычный стиль";
 "shapeStyleRounded" = "Скруглённый прямоугольник";
-"shapeStyleHandDrawn" = "Рисованный скруглённый стиль";
+"shapeStyleHandDrawn" = "Рисованный стиль";
+"arrowStyleTapered" = "Сужающаяся стрелка";
+"arrowStyleDoubleEnded" = "Двусторонняя стрелка";
+"arrowStyleLine" = "Линейная стрелка";
+"arrowStyleDotTail" = "Стрелка с точкой у основания";
 "insertImageFromClipboard" = "Из буфера обмена";
 "insertImageFromFile" = "Из файла";
 "insertImageChooseFile" = "Выбрать изображение";
@@ -318,7 +322,7 @@
 "checkForUpdates" = "Проверить обновления";
 "updateChecking" = "Проверка";
 "updateUpToDateStatus" = "Установлена последняя версия";
-"updateNewVersionStatus" = "Новая версия v%@";
+"updateNewVersionStatus" = "Доступна версия Release v%@";
 "updateFailedStatus" = "Не удалось проверить";
 "updateDownloadButton" = "Загрузить";
 "updateRetryButton" = "Повторить";
@@ -330,7 +334,7 @@
 /* Updates — menu bar */
 "checkForUpdatesMenu" = "Проверить обновления";
 "checkingForUpdatesMenu" = "Проверка обновлений";
-"updateAvailableMenu" = "Доступна новая версия v%@";
+"updateAvailableMenu" = "Доступна версия Release v%@";
 "updateDownloadingMenu" = "Загрузка обновления… %d%%";
 "updateInstallingMenu" = "Установка обновления";
 "updateInstallFailedMenu" = "Не удалось установить обновление";
@@ -343,7 +347,7 @@
 "updateInstallingHUD" = "Установка";
 
 /* Updates — manual check result alert */
-"updateAvailableTitle" = "Доступна версия v%@";
+"updateAvailableTitle" = "Доступна версия Release v%@";
 "updateAvailableBody" = "clipcap загрузит и установит последнюю версию, затем автоматически перезапустится";
 "updateUpToDateTitle" = "У вас последняя версия";
 "updateUpToDateBody" = "clipcap v%@ — это последняя версия";
@@ -583,3 +587,13 @@
 "reminderOnce" = "Один раз";
 
 "historyPreviewTextSaveFailed" = "Не удалось сохранить текст, попробуйте ещё раз";
+
+"mosaicBlur" = "Размытие";
+"mosaicBlurAmount" = "Степень размытия";
+"textFontDefaultHint" = "Шрифт для новых текстовых аннотаций";
+"textFontDefaultLabel" = "Шрифт текста по умолчанию";
+"textFontLabel" = "Шрифт";
+"textFontSystemDefault" = "Системный по умолчанию";
+"tipRotate" = "Поворот";
+"tipRotateLeft" = "Повернуть на 90° влево";
+"tipRotateRight" = "Повернуть на 90° вправо";

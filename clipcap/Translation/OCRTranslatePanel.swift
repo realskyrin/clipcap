@@ -133,6 +133,11 @@ final class OCRPreviewView: NSView, ImageAnalysisOverlayViewDelegate {
         lineOverlay.copySelectedTextToClipboard()
     }
 
+    func clearTextSelection() {
+        lineOverlay.clearSelection()
+        liveTextOverlay?.selectedRanges = []
+    }
+
     func selectAllLiveText() -> Bool {
         guard let liveTextOverlay,
               !liveTextOverlay.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
@@ -407,10 +412,14 @@ final class OCRLineSelectionOverlayView: NSView {
         lines.contains { !$0.tokens.isEmpty }
     }
 
-    private func clearSelection() {
+    func clearSelection() {
         selectedTokenRefs.removeAll()
         selectedLineIndices.removeAll()
         selectedText = ""
+        selectionStartPoint = nil
+        selectionStartTokenRef = nil
+        selectionStartLineIndex = nil
+        needsDisplay = true
     }
 
     private func selectionIndices(
@@ -741,7 +750,7 @@ private final class PanelPinButton: NSButton {
 
 /// Floating dialog shown after text recognition.
 /// It stays centered near the top of the target screen.
-final class OCRTranslatePanel: NSPanel {
+final class OCRTranslatePanel: NSPanel, NSTextViewDelegate {
     private static var current: OCRTranslatePanel?
     private static let topMargin: CGFloat = 24
 
@@ -777,6 +786,8 @@ final class OCRTranslatePanel: NSPanel {
     private var translateButton: NSButton?
     private var targetLanguagePopup: NSPopUpButton?
     private var isDismissed = false
+    private var ocrTask: Task<Void, Never>?
+    private var liveTextTask: Task<Void, Never>?
     private var ocrReady = false
     private var isPinned = false {
         didSet { pinButton?.setPinned(isPinned) }
@@ -979,7 +990,8 @@ final class OCRTranslatePanel: NSPanel {
         inner.addArrangedSubview(header)
         header.widthAnchor.constraint(equalTo: inner.widthAnchor).isActive = true
 
-        let (scroll, textView) = makeTextScroll(editable: true, height: 116)
+        let (scroll, textView) = makeTextScroll(editable: false, height: 116)
+        textView.delegate = self
         textView.string = L10n.ocrRecognizing
         textView.textColor = NSColor.white.withAlphaComponent(0.4)
         ocrTextView = textView
@@ -1084,53 +1096,35 @@ final class OCRTranslatePanel: NSPanel {
     // MARK: OCR
 
     private func runOCR() {
-        logOCR("panel-run-task-created")
-        Task { @MainActor in
-            let started = CFAbsoluteTimeGetCurrent()
-            var usedLiveText = false
-            self.logOCR("panel-run-begin")
-            async let liveTextAnalysis = OCRService.analyzeText(
-                image: self.screenshot,
-                diagnosticID: self.diagnosticID,
-                source: "panel.text-recognition.live-text"
-            )
-            async let recognizedLines = OCRService.recognizeLines(
-                image: self.screenshot,
-                diagnosticID: self.diagnosticID,
-                source: "panel.text-recognition.vision-lines"
-            )
-            let lines = await recognizedLines
-            self.logOCR(
-                "panel-vision-lines-awaited",
-                metadata: Self.lineMetadata(lines)
-            )
-            if let analysis = await liveTextAnalysis {
-                let transcript = analysis.transcript.trimmingCharacters(in: .whitespacesAndNewlines)
-                if !transcript.isEmpty {
-                    usedLiveText = true
-                    self.applyOCRResult(text: transcript, lines: lines, liveTextAnalysis: analysis)
-                } else {
-                    self.applyOCRResult(text: Self.text(from: lines), lines: lines, liveTextAnalysis: nil)
-                }
-            } else {
-                self.applyOCRResult(text: Self.text(from: lines), lines: lines, liveTextAnalysis: nil)
-            }
-
-            guard !self.isDismissed else { return }
+        ocrTask?.cancel()
+        liveTextTask?.cancel()
+        let screenshot = screenshot
+        let diagnosticID = diagnosticID
+        ocrTask = Task { @MainActor [weak self] in
+            let lines = await OCRService.recognizeLines(image: screenshot, diagnosticID: diagnosticID)
+            guard !Task.isCancelled else { return }
+            let analysis = lines.isEmpty ? await OCRService.analyzeText(image: screenshot, diagnosticID: diagnosticID) : nil
+            guard !Task.isCancelled, let self, !self.isDismissed else { return }
+            self.ocrTask = nil
+            let text = lines.isEmpty ? analysis?.transcript.trimmingCharacters(in: .whitespacesAndNewlines) ?? "" : Self.text(from: lines)
+            self.applyOCRResult(text: text, lines: lines, liveTextAnalysis: analysis)
             self.ocrReady = true
-            self.translateButton?.isEnabled = !self.recognizedText.isEmpty
-            self.logOCR(
-                "panel-run-ocr-ready",
-                metadata: [
-                    "durationMs": Self.durationMS(since: started),
-                    "recognizedCharacters": self.recognizedText.count,
-                    "usedLiveText": usedLiveText,
-                ].merging(Self.lineMetadata(self.recognizedLines)) { _, new in new }
-            )
-
+            self.translateButton?.isEnabled = !text.isEmpty
             self.finishTextRecognition()
             if self.translateAfterOCR { self.translateTapped() }
             self.refreshHeight()
+            if !lines.isEmpty { self.startLiveTextAnalysis() }
+        }
+    }
+
+    private func startLiveTextAnalysis() {
+        let screenshot = screenshot
+        let diagnosticID = diagnosticID
+        liveTextTask = Task { @MainActor [weak self] in
+            let analysis = await OCRService.analyzeText(image: screenshot, diagnosticID: diagnosticID)
+            guard !Task.isCancelled, let self, !self.isDismissed else { return }
+            self.liveTextTask = nil
+            self.previewView.applyLiveTextAnalysis(analysis)
         }
     }
 
@@ -1175,6 +1169,7 @@ final class OCRTranslatePanel: NSPanel {
         guard let textView = ocrTextView, let copyButton = ocrCopyButton else { return }
         if recognizedText.isEmpty {
             logOCR("panel-finish-text-recognition-empty")
+            textView.isEditable = false
             textView.string = L10n.ocrNoText
             textView.textColor = NSColor.white.withAlphaComponent(0.4)
             copyButton.isEnabled = false
@@ -1183,10 +1178,20 @@ final class OCRTranslatePanel: NSPanel {
                 "panel-finish-text-recognition-success",
                 metadata: ["recognizedCharacters": recognizedText.count]
             )
+            textView.isEditable = true
             textView.string = recognizedText
             textView.textColor = NSColor.white.withAlphaComponent(0.9)
             copyButton.isEnabled = true
         }
+    }
+
+    func textDidChange(_ notification: Notification) {
+        guard let textView = notification.object as? NSTextView, textView === ocrTextView else { return }
+        recognizedText = textView.string
+        previewView.clearTextSelection()
+        let hasText = !recognizedText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        ocrCopyButton?.isEnabled = hasText
+        translateButton?.isEnabled = hasText
     }
 
     private func selectOCRText(_ text: String, lineIndices: [Int], copyWhenFinal: Bool) {
@@ -1414,6 +1419,10 @@ final class OCRTranslatePanel: NSPanel {
     }
 
     func dismiss() {
+        ocrTask?.cancel()
+        ocrTask = nil
+        liveTextTask?.cancel()
+        liveTextTask = nil
         isDismissed = true
         translationGeneration += 1
         translationTask?.cancel()
@@ -1517,7 +1526,7 @@ func pin(_ child: NSView, to parent: NSView, inset: CGFloat) {
 
 /// A bordered scroll view wrapping a `PanelTextView` of fixed height.
 func makeTextScroll(editable: Bool, height: CGFloat) -> (NSScrollView, PanelTextView) {
-    let scroll = NSScrollView()
+    let scroll = OCRTextScrollView()
     scroll.translatesAutoresizingMaskIntoConstraints = false
     scroll.hasVerticalScroller = false
     scroll.hasHorizontalScroller = false
@@ -1542,7 +1551,10 @@ func makeTextScroll(editable: Bool, height: CGFloat) -> (NSScrollView, PanelText
     textView.isVerticallyResizable = true
     textView.isHorizontallyResizable = false
     textView.autoresizingMask = [.width]
+    textView.minSize = NSSize(width: 0, height: height)
+    textView.maxSize = NSSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
     textView.textContainer?.widthTracksTextView = true
+    textView.textContainer?.heightTracksTextView = false
     textView.textContainer?.containerSize = NSSize(width: 0, height: CGFloat.greatestFiniteMagnitude)
     scroll.documentView = textView
     return (scroll, textView)
@@ -1553,5 +1565,22 @@ func flashButton(_ button: NSButton, to confirm: String, restore: String) {
     button.title = confirm
     DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) { [weak button] in
         button?.title = restore
+    }
+}
+
+private final class OCRTextScrollView: NSScrollView {
+    override func tile() {
+        super.tile()
+        guard let textView = documentView as? NSTextView,
+              let container = textView.textContainer else { return }
+        let width = contentView.bounds.width
+        guard width > 0 else { return }
+        if abs(textView.frame.width - width) > 0.5 {
+            textView.setFrameSize(NSSize(width: width, height: max(textView.frame.height, contentSize.height)))
+        }
+        let textWidth = max(width - textView.textContainerInset.width * 2, 1)
+        if abs(container.containerSize.width - textWidth) > 0.5 {
+            container.containerSize = NSSize(width: textWidth, height: CGFloat.greatestFiniteMagnitude)
+        }
     }
 }

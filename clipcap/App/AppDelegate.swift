@@ -236,15 +236,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func handleSelectedImageEditTrigger() {
-        guard overlayController == nil else { return }
-        if resumeSuspendedEditIfAvailable() {
-            return
-        }
-        guard let controller = launchSelectedImageEdit() else {
-            ToastWindow.show(message: L10n.selectedImageEditNoImage)
-            return
-        }
-        overlayController = controller
+        openImagePanel()
     }
 
     func handleClipboardImageEditTrigger() {
@@ -340,23 +332,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         overlayController = controller
         return true
-    }
-
-    private func launchSelectedImageEdit() -> OverlayWindowController? {
-        let focusRestorer = SourceAppFocusRestorer.captureFrontmostApplication()
-        guard let url = FinderSelection.currentImageFileURL() else { return nil }
-        return ImageEditLauncher.launch(
-            sourceURL: url,
-            onRequestFocusReturn: {
-                focusRestorer.restore()
-            },
-            onSuspend: { [weak self] draft in
-                self?.handleEditSuspension(draft)
-            },
-            onComplete: { [weak self] finalImage in
-                self?.handleEditCompletion(finalImage)
-            }
-        )
     }
 
     private func launchClipboardImageEdit() -> OverlayWindowController? {

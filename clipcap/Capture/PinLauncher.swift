@@ -1,10 +1,10 @@
 import AppKit
 
 /// Where a pinned image was loaded from — drives the X-key "close and clear
-/// source" behavior so a stale Finder selection or clipboard image won't keep
+/// source" behavior so a stale clipboard image won't keep
 /// re-pinning on the next hotkey press.
 enum PinSource {
-    case finder
+    case file
     case clipboard
     case clipboardText
 }
@@ -49,8 +49,8 @@ final class PinWindow: NSWindow {
 
     private func clearSource() {
         switch pinSource {
-        case .finder:
-            FinderSelection.clearSelection()
+        case .file:
+            break // Explicit file input has no external selection to clear
         case .clipboard, .clipboardText:
             ClipboardImageSource.clear()
         case nil:
@@ -65,18 +65,27 @@ enum PinLauncher {
     private static let stackOffset = NSSize(width: 28, height: -28)
     private static let maxDistinctStackOffsets = 8
 
-    /// Pins images currently selected in Finder. This shortcut is intentionally
-    /// source-specific: it does not fall back to the clipboard.
+    /// Ask for explicit image files so pinning never needs Finder Automation.
     @discardableResult
     static func pinSelectedImagesIfAvailable() -> Bool {
-        let finderImages = FinderSelection.currentImageFileURLs().compactMap(loadImage)
-        guard !finderImages.isEmpty else {
-            ToastWindow.show(message: L10n.selectedImagePinNoImage)
-            return false
+        let panel = NSOpenPanel()
+        panel.title = L10n.selectedImagePinShortcutHeader
+        panel.prompt = L10n.tipPin
+        panel.canChooseFiles = true
+        panel.canChooseDirectories = false
+        panel.allowsMultipleSelection = true
+        panel.allowedContentTypes = [.image]
+        NSApp.activate(ignoringOtherApps: true)
+        panel.begin { response in
+            guard response == .OK else { return }
+            let images = panel.urls.compactMap(loadImage)
+            guard !images.isEmpty else {
+                ToastWindow.show(message: L10n.selectedImagePinNoImage)
+                return
+            }
+            pin(images: images, source: .file)
+            ToastWindow.show(message: L10n.pinFromFinderHint)
         }
-
-        pin(images: finderImages, source: .finder)
-        ToastWindow.show(message: L10n.pinFromFinderHint)
         return true
     }
 
@@ -368,8 +377,8 @@ enum PinLauncher {
 
     private static func debugSourceName(_ source: PinSource?) -> String {
         switch source {
-        case .finder:
-            return "finder"
+        case .file:
+            return "file"
         case .clipboard:
             return "clipboard"
         case .clipboardText:
