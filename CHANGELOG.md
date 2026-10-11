@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [1.8.38] - 2026-10-11
+
+### Changed
+
+- Improved editor tools, settings, and image handling (3aad35a)
+
 ## [1.8.37] - 2026-10-03
 
 ### Added
