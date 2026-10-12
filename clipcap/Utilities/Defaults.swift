@@ -77,6 +77,13 @@ extension Notification.Name {
 /// key from the current language's `Localizable.strings`; the localized values
 /// live in `Resources/<lang>.lproj/Localizable.strings`.
 enum L10n {
+    static var audioDevices: String { s("audioDevices") }
+    static var audioOutput: String { s("audioOutput") }
+    static var audioInput: String { s("audioInput") }
+    static var audioNoDevices: String { s("audioNoDevices") }
+    static var audioDevicesUnavailable: String { s("audioDevicesUnavailable") }
+    static var audioDeviceSwitchFailed: String { s("audioDeviceSwitchFailed") }
+
     static var lang: AppLanguage { Defaults.language }
 
     private static func s(_ key: String) -> String { Localizer.string(key) }

@@ -597,3 +597,11 @@
 "tipRotate" = "Rotation";
 "tipRotateLeft" = "Tourner de 90° à gauche";
 "tipRotateRight" = "Tourner de 90° à droite";
+
+// Audio devices
+"audioDevices" = "Périphériques audio";
+"audioOutput" = "Sortie";
+"audioInput" = "Entrée";
+"audioNoDevices" = "Aucun périphérique disponible";
+"audioDevicesUnavailable" = "Impossible de charger les périphériques audio";
+"audioDeviceSwitchFailed" = "Impossible de changer de périphérique audio";

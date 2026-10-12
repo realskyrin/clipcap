@@ -597,3 +597,11 @@
 "tipRotate" = "Xoay";
 "tipRotateLeft" = "Xoay trái 90°";
 "tipRotateRight" = "Xoay phải 90°";
+
+// Audio devices
+"audioDevices" = "Thiết bị âm thanh";
+"audioOutput" = "Đầu ra";
+"audioInput" = "Đầu vào";
+"audioNoDevices" = "Không có thiết bị khả dụng";
+"audioDevicesUnavailable" = "Không thể tải thiết bị âm thanh";
+"audioDeviceSwitchFailed" = "Không thể chuyển thiết bị âm thanh";

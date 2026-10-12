@@ -597,3 +597,11 @@
 "tipRotate" = "旋轉";
 "tipRotateLeft" = "向左旋轉 90°";
 "tipRotateRight" = "向右旋轉 90°";
+
+// Audio devices
+"audioDevices" = "音訊裝置";
+"audioOutput" = "輸出";
+"audioInput" = "輸入";
+"audioNoDevices" = "沒有可用裝置";
+"audioDevicesUnavailable" = "無法讀取音訊裝置";
+"audioDeviceSwitchFailed" = "無法切換音訊裝置";

@@ -597,3 +597,11 @@
 "tipRotate" = "回転";
 "tipRotateLeft" = "左に90°回転";
 "tipRotateRight" = "右に90°回転";
+
+// Audio devices
+"audioDevices" = "オーディオデバイス";
+"audioOutput" = "出力";
+"audioInput" = "入力";
+"audioNoDevices" = "利用可能なデバイスがありません";
+"audioDevicesUnavailable" = "オーディオデバイスを読み込めません";
+"audioDeviceSwitchFailed" = "オーディオデバイスを切り替えられません";

@@ -597,3 +597,11 @@
 "tipRotate" = "旋转";
 "tipRotateLeft" = "向左旋转 90°";
 "tipRotateRight" = "向右旋转 90°";
+
+// Audio devices
+"audioDevices" = "音频设备";
+"audioOutput" = "输出";
+"audioInput" = "输入";
+"audioNoDevices" = "没有可用设备";
+"audioDevicesUnavailable" = "无法读取音频设备";
+"audioDeviceSwitchFailed" = "无法切换音频设备";

@@ -597,3 +597,11 @@
 "tipRotate" = "Rotate";
 "tipRotateLeft" = "Rotate left 90°";
 "tipRotateRight" = "Rotate right 90°";
+
+// Audio devices
+"audioDevices" = "Audio Devices";
+"audioOutput" = "Output";
+"audioInput" = "Input";
+"audioNoDevices" = "No available devices";
+"audioDevicesUnavailable" = "Unable to load audio devices";
+"audioDeviceSwitchFailed" = "Unable to switch audio device";

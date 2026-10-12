@@ -1,6 +1,7 @@
 import AppKit
 
 class StatusBarController: NSObject {
+    private let audioDeviceMenuController = AudioDeviceMenuController()
     private var statusItem: NSStatusItem
     private let onEditClipboardImage: () -> Void
     private let onOpenImage: () -> Void
@@ -82,6 +83,8 @@ class StatusBarController: NSObject {
         mergeItem.image = Self.menuIcon(systemName: "square.grid.2x2")
         HotkeyManager.applyImageMergeToMenuItem(mergeItem)
         menu.addItem(mergeItem)
+
+        menu.addItem(audioDeviceMenuController.makeMenuItem())
 
         let caffeinationItem = NSMenuItem(title: L10n.caffeinateMenu, action: nil, keyEquivalent: "")
         let caffeinationMenu = NSMenu(title: L10n.caffeinateMenu)

@@ -597,3 +597,11 @@
 "tipRotate" = "회전";
 "tipRotateLeft" = "왼쪽으로 90° 회전";
 "tipRotateRight" = "오른쪽으로 90° 회전";
+
+// Audio devices
+"audioDevices" = "오디오 기기";
+"audioOutput" = "출력";
+"audioInput" = "입력";
+"audioNoDevices" = "사용 가능한 기기 없음";
+"audioDevicesUnavailable" = "오디오 기기를 불러올 수 없음";
+"audioDeviceSwitchFailed" = "오디오 기기를 전환할 수 없음";
