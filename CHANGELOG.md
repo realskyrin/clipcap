@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [1.8.40] - 2026-10-12
+
+### Added
+
+- Added a localized audio device menu (c521290)
+
 ## [1.8.39] - 2026-10-11
 
 ### Changed
