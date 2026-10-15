@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [1.8.41] - 2026-10-15
+
+### Changed
+
+- Improved beautify rendering fidelity and added adjustable shadow size controls (8a00cad)
+
 ## [1.8.40] - 2026-10-12
 
 ### Added
