@@ -134,6 +134,42 @@ enum L10n {
     static var screenshotQualityCompressingSave: String { s("screenshotQualityCompressingSave") }
     static var screenshotQualityCompressingClipboard: String { s("screenshotQualityCompressingClipboard") }
     static var screenshotCompressionFailed: String { s("screenshotCompressionFailed") }
+    static var screenshotGuideAutomatic: String { s("screenshotGuideAutomatic") }
+    static var screenshotGuideCheck: String { s("screenshotGuideCheck") }
+    static var screenshotGuideAlreadyConfigured: String { s("screenshotGuideAlreadyConfigured") }
+    static var screenshotGuideManualIntro: String { s("screenshotGuideManualIntro") }
+    static var screenshotGuideTitle: String { s("screenshotGuideTitle") }
+    static var screenshotGuideStepWelcome: String { s("screenshotGuideStepWelcome") }
+    static var screenshotGuideStepFolder: String { s("screenshotGuideStepFolder") }
+    static var screenshotGuideStepReady: String { s("screenshotGuideStepReady") }
+    static var screenshotGuideWelcomeTitle: String { s("screenshotGuideWelcomeTitle") }
+    static var screenshotGuideWelcomeBody: String { s("screenshotGuideWelcomeBody") }
+    static var screenshotGuideFlow: String { s("screenshotGuideFlow") }
+    static var screenshotGuideWhy: String { s("screenshotGuideWhy") }
+    static var screenshotGuideFilePolicy: String { s("screenshotGuideFilePolicy") }
+    static var screenshotGuideBegin: String { s("screenshotGuideBegin") }
+    static var screenshotGuideFolderTitle: String { s("screenshotGuideFolderTitle") }
+    static var screenshotGuideFolderBody: String { s("screenshotGuideFolderBody") }
+    static var screenshotGuideFolderPending: String { s("screenshotGuideFolderPending") }
+    static var screenshotGuideSystemChange: String { s("screenshotGuideSystemChange") }
+    static var screenshotGuideManual: String { s("screenshotGuideManual") }
+    static var screenshotGuideManualSteps: String { s("screenshotGuideManualSteps") }
+    static var screenshotGuideCopyPath: String { s("screenshotGuideCopyPath") }
+    static var screenshotGuidePathCopied: String { s("screenshotGuidePathCopied") }
+    static var screenshotGuideConfigure: String { s("screenshotGuideConfigure") }
+    static var screenshotGuideContinue: String { s("screenshotGuideContinue") }
+    static var screenshotGuideReadyTitle: String { s("screenshotGuideReadyTitle") }
+    static var screenshotGuideReadyBody: String { s("screenshotGuideReadyBody") }
+    static var screenshotGuideShortcutHint: String { s("screenshotGuideShortcutHint") }
+    static var screenshotGuideRecordingHint: String { s("screenshotGuideRecordingHint") }
+    static var screenshotGuideThumbnailTitle: String { s("screenshotGuideThumbnailTitle") }
+    static var screenshotGuideThumbnailBody: String { s("screenshotGuideThumbnailBody") }
+    static var screenshotGuideTry: String { s("screenshotGuideTry") }
+    static var screenshotGuideReopen: String { s("screenshotGuideReopen") }
+    static var screenshotGuideFinish: String { s("screenshotGuideFinish") }
+    static var screenshotGuideBack: String { s("screenshotGuideBack") }
+    static var screenshotGuideLater: String { s("screenshotGuideLater") }
+
     static var systemScreenshotAutoOpenLabel: String { s("systemScreenshotAutoOpenLabel") }
     static var systemScreenshotAutoOpenHint: String { s("systemScreenshotAutoOpenHint") }
     static var systemScreenshotFolderLabel: String { s("systemScreenshotFolderLabel") }
@@ -1053,6 +1089,11 @@ struct Defaults {
                 NotificationCenter.default.post(name: .systemScreenshotAutoOpenDidChange, object: nil)
             }
         }
+    }
+
+    static var screenshotSetupGuidePresented: Bool {
+        get { defaults.bool(forKey: "screenshotSetupGuidePresented") }
+        set { defaults.set(newValue, forKey: "screenshotSetupGuidePresented") }
     }
 
     static var systemScreenshotLocationManaged: Bool {

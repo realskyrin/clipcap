@@ -28,6 +28,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         initializeApp()
         didInitializeApp = true
         flushPendingOpenImageURLs()
+        DispatchQueue.main.async { [weak self] in
+            guard let self, self.overlayController == nil else { return }
+            ScreenshotSetupWindowController.shared.showIfNeeded()
+        }
     }
 
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
@@ -483,6 +487,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         let workItem = DispatchWorkItem { [weak self] in
             guard let self, self.overlayController == nil else { return }
+            if ScreenshotSetupWindowController.shared.window?.isVisible == true {
+                ScreenshotSetupWindowController.shared.showGuide()
+                return
+            }
             self.openSettings()
         }
         pendingReopenSettingsWorkItem = workItem

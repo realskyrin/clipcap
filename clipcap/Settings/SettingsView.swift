@@ -133,6 +133,12 @@ final class SettingsView: NSView {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(refreshSystemScreenshotAutoOpenControls),
+            name: .systemScreenshotAutoOpenDidChange,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(refreshSystemScreenshotAutoOpenControls),
             name: NSApplication.didBecomeActiveNotification,
             object: nil
         )
@@ -1389,7 +1395,7 @@ final class SettingsView: NSView {
         folderText.addArrangedSubview(pathLabel)
 
         let setup = makeButton(
-            title: L10n.systemScreenshotSetup,
+            title: L10n.screenshotGuideTitle,
             action: #selector(configureSystemScreenshotAutoOpen)
         )
         systemScreenshotSetupButton = setup
@@ -1690,43 +1696,7 @@ final class SettingsView: NSView {
     }
 
     private func presentSystemScreenshotSetup() {
-        let alert = NSAlert()
-        alert.alertStyle = .informational
-        alert.messageText = L10n.systemScreenshotSetupTitle
-        alert.informativeText = L10n.systemScreenshotSetupMessage
-        alert.addButton(withTitle: L10n.systemScreenshotSetupAutomatic)
-        alert.addButton(withTitle: L10n.systemScreenshotSetupManual)
-        alert.addButton(withTitle: L10n.systemScreenshotSetupCancel)
-        beginAlert(alert) { [weak self] response in
-            guard let self else { return }
-            switch response {
-            case .alertFirstButtonReturn:
-                let wasAlreadyConfigured = SystemScreenshotLocationManager.shared.isTargetLocationActive
-                guard SystemScreenshotLocationManager.shared.configureAutomatically() else {
-                    self.presentSystemScreenshotConfigurationFailure()
-                    self.refreshSystemScreenshotAutoOpenControls()
-                    return
-                }
-                if !wasAlreadyConfigured {
-                    SystemScreenshotAutoOpen.refreshSystemScreenshotServices()
-                }
-                Defaults.systemScreenshotAutoOpenEnabled = true
-                self.refreshSystemScreenshotAutoOpenControls()
-            case .alertSecondButtonReturn:
-                guard SystemScreenshotAutoOpen.ensureDirectoryExists() else {
-                    self.presentSystemScreenshotConfigurationFailure()
-                    return
-                }
-                Defaults.systemScreenshotAutoOpenEnabled = true
-                SystemScreenshotAutoOpen.revealDirectory()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                    SystemScreenshotAutoOpen.openScreenshotTool()
-                }
-                self.refreshSystemScreenshotAutoOpenControls()
-            default:
-                self.refreshSystemScreenshotAutoOpenControls()
-            }
-        }
+        ScreenshotSetupWindowController.shared.showGuide()
     }
 
     private func presentSystemScreenshotDisableConfirmation() {
@@ -1759,15 +1729,6 @@ final class SettingsView: NSView {
             }
             self.refreshSystemScreenshotAutoOpenControls()
         }
-    }
-
-    private func presentSystemScreenshotConfigurationFailure() {
-        let alert = NSAlert()
-        alert.alertStyle = .warning
-        alert.messageText = L10n.systemScreenshotSetupFailedTitle
-        alert.informativeText = L10n.systemScreenshotSetupFailedMessage
-        alert.addButton(withTitle: L10n.systemScreenshotSetupCancel)
-        beginAlert(alert) { _ in }
     }
 
     private func presentSystemScreenshotRestoreFailure() {

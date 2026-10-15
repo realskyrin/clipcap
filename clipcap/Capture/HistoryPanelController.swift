@@ -169,8 +169,10 @@ final class HistoryPanelController {
         content.setActive(true)
 
         panel.contentView = chrome
+        panel.onSelectAll = { [weak content] in content?.selectAllEntries() ?? false }
         panel.orderFrontRegardless()
         panel.makeKey()
+        _ = panel.makeFirstResponder(content)
         dialogPanel = panel
         startDialogOutsideMonitoring(for: panel)
     }
@@ -231,6 +233,21 @@ final class HistoryPanelController {
 }
 
 private final class HistoryFloatingPanel: NSPanel {
+    var onSelectAll: (() -> Bool)?
+
+    override func performKeyEquivalent(with event: NSEvent) -> Bool {
+        let modifiers = event.modifierFlags.intersection([.command, .control, .option, .shift])
+        if event.keyCode == UInt16(kVK_ANSI_A), modifiers == .command,
+           !(firstResponder is NSTextView), onSelectAll?() == true {
+            return true
+        }
+        return super.performKeyEquivalent(with: event)
+    }
+
+    override func selectAll(_ sender: Any?) {
+        _ = onSelectAll?()
+    }
+
     override func makeFirstResponder(_ responder: NSResponder?) -> Bool {
         DebugLog.record("history.focus.request", detail: "target=\(responder.map { String(describing: type(of: $0)) } ?? "nil") \(DebugLog.focusState(self))")
         let accepted = super.makeFirstResponder(responder)
@@ -320,6 +337,7 @@ private final class HistoryNotchWindowController: NSWindowController {
         rootView.frame = NSRect(origin: .zero, size: frame.size)
         rootView.autoresizingMask = [.width, .height]
         panel.contentView = rootView
+        panel.onSelectAll = { [weak rootView] in rootView?.selectAllEntries() ?? false }
 
         super.init(window: panel)
         rootView.onRequestDismiss = { [weak self] in
@@ -731,6 +749,7 @@ private final class HistoryNotchRootView: NSView {
         if expanded {
             contentView.setActive(true)
             contentView.isHidden = false
+            _ = window?.makeFirstResponder(contentView)
         } else {
             contentView.setActive(false)
             contentView.resetTransientState(animated: animated)
@@ -767,6 +786,10 @@ private final class HistoryNotchRootView: NSView {
                 self?.syncHoverStateWithCurrentMouse()
             }
         }
+    }
+
+    func selectAllEntries() -> Bool {
+        contentView.selectAllEntries()
     }
 
     func syncHoverStateWithCurrentMouse() {
@@ -2045,6 +2068,21 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
         refreshTileSelectionStates()
     }
 
+    @discardableResult
+    func selectAllEntries() -> Bool {
+        guard isActive, !isShowingShortcutGuide, !isSearchInputActive,
+              !(window?.firstResponder is NSTextView) else { return false }
+        setDeleteConfirmation(false, animated: true)
+        selectedEntryIDs = visibleEntries.filter(isSelectable).map(entryID)
+        lastSelectionAnchorID = selectedEntryIDs.first
+        refreshTileSelectionStates()
+        return true
+    }
+
+    override func selectAll(_ sender: Any?) {
+        selectAllEntries()
+    }
+
     private func selectRange(from anchorID: String, to targetID: String) {
         guard let anchorIndex = visibleEntries.firstIndex(where: { entryID($0) == anchorID }),
               let targetIndex = visibleEntries.firstIndex(where: { entryID($0) == targetID }) else {
@@ -2253,6 +2291,10 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
                 }
                 return event
             }
+            if event.keyCode == UInt16(kVK_ANSI_A), shortcutModifiers == .command,
+               self.selectAllEntries() {
+                return nil
+            }
             if self.isSearchMode {
                 if event.keyCode == UInt16(kVK_Escape) {
                     self.endSearchMode(animated: true)
@@ -2288,19 +2330,6 @@ private final class HistoryPanelContentView: NSView, NSCollectionViewDataSource,
                 self.presentPreview(startingAt: hoveredEntry)
                 return nil
             }
-            let hasUnsupportedSelectAllModifier = !modifiers.intersection([.control, .option, .shift]).isEmpty
-            if event.keyCode == UInt16(kVK_ANSI_A),
-               modifiers.contains(.command),
-               !hasUnsupportedSelectAllModifier {
-                self.setDeleteConfirmation(false, animated: true)
-                self.selectedEntryIDs = self.visibleEntries
-                    .filter(self.isSelectable)
-                    .map(self.entryID)
-                self.lastSelectionAnchorID = self.selectedEntryIDs.first
-                self.refreshTileSelectionStates()
-                return nil
-            }
-
             if event.keyCode == UInt16(kVK_Escape) {
                 if self.isConfirmingDelete {
                     self.setDeleteConfirmation(false, animated: true)

@@ -117,6 +117,11 @@ class StatusBarController: NSObject {
         settingsItem.image = Self.menuIcon(systemName: "gearshape")
         menu.addItem(settingsItem)
 
+        let guideItem = NSMenuItem(title: L10n.screenshotGuideTitle, action: #selector(openScreenshotGuide), keyEquivalent: "")
+        guideItem.target = self
+        guideItem.image = Self.menuIcon(systemName: "sparkles")
+        menu.addItem(guideItem)
+
         menu.addItem(makeUpdateMenuItem())
 
         menu.addItem(NSMenuItem.separator())
@@ -176,6 +181,10 @@ class StatusBarController: NSObject {
 
     @objc private func openSettings() {
         onOpenSettings()
+    }
+
+    @objc private func openScreenshotGuide() {
+        ScreenshotSetupWindowController.shared.showGuide()
     }
 
     @objc private func openHistoryPanel() {
