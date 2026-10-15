@@ -54,6 +54,7 @@ final class SettingsView: NSView {
     var onMenuBarToggle: ((Bool) -> Void)?
     var onLaunch: (() -> Void)?
 
+    private var beautifyShadowSizeValueLabel: NSTextField?
     private let sidebarPanel = SidebarPanel()
     private let detailPanel = DetailPanel()
     private let sidebarStack = NSStackView()
@@ -433,10 +434,51 @@ final class SettingsView: NSView {
         )
         addCard(togglesCard, to: stack)
 
+        buildBeautifyShadowCard(into: stack)
         buildTextFontCard(into: stack)
         addCard(makeSystemScreenshotAutoOpenCard(), to: stack)
 
         return wrapPane(stack)
+    }
+
+    private func buildBeautifyShadowCard(into stack: NSStackView) {
+        let card = CardView()
+        let inner = cardStack(spacing: 10)
+        card.addSubview(inner)
+        pin(inner, to: card, insets: NSEdgeInsets(top: 14, left: 14, bottom: 14, right: 14))
+
+        let header = NSStackView()
+        header.orientation = .horizontal
+        header.alignment = .firstBaseline
+        header.spacing = 8
+        header.addArrangedSubview(primaryLabel(L10n.beautify))
+        header.addArrangedSubview(flexSpacer())
+        let valueLabel = primaryLabel("\(Int(Defaults.lastBeautifyShadowSize.rounded()))")
+        valueLabel.font = NSFont.monospacedDigitSystemFont(ofSize: 13, weight: .semibold)
+        header.addArrangedSubview(valueLabel)
+        addFullWidth(header, to: inner)
+        addFullWidth(primaryLabel(L10n.shadowSizeLabel), to: inner)
+
+        let slider = NSSlider(
+            value: Defaults.lastBeautifyShadowSize,
+            minValue: Double(BeautifyRenderer.shadowSizeMin),
+            maxValue: Double(BeautifyRenderer.shadowSizeMax),
+            target: self,
+            action: #selector(beautifyShadowSizeChanged(_:))
+        )
+        slider.controlSize = .small
+        slider.isContinuous = true
+        slider.toolTip = L10n.beautifyShadowSizeHint
+        slider.setAccessibilityLabel(L10n.shadowSizeLabel)
+        beautifyShadowSizeValueLabel = valueLabel
+        addFullWidth(slider, to: inner)
+        addFullWidth(secondaryLabel(L10n.beautifyShadowSizeHint, wrapping: true), to: inner)
+        addCard(card, to: stack)
+    }
+
+    @objc private func beautifyShadowSizeChanged(_ sender: NSSlider) {
+        Defaults.lastBeautifyShadowSize = sender.doubleValue
+        beautifyShadowSizeValueLabel?.stringValue = "\(Int(Defaults.lastBeautifyShadowSize.rounded()))"
     }
 
     private func buildTextFontCard(into stack: NSStackView) {

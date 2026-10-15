@@ -25,7 +25,7 @@
 "historyNotchTriggerClick" = "Открывать по нажатию";
 "windowShadowToggleLabel" = "Тень при снимке окна";
 "windowShadowToggleHint" = "Скругляет углы снимков окон и добавляет тень в стиле macOS";
-"windowShadowSizeLabel" = "Размер тени";
+"shadowSizeLabel" = "Размер падающей тени";
 "windowShadowSizeHint" = "Чем больше значение, тем мягче и шире тень — окно словно приподнято выше";
 
 /* Image shortcut */
@@ -247,7 +247,7 @@
 "beautifyPresetDeepPurple" = "Тёмно-фиолетовый";
 "beautifyPresetNeutralGray" = "Нейтральный серый";
 "beautifyPresetWallpaper" = "Обои";
-"beautifyShadowEffect" = "Тень";
+"beautifyShadowSizeHint" = "Изменяет только тень оформления, автоматически увеличивая отступы, чтобы она помещалась целиком";
 "textStrokeEffect" = "Обводка";
 "textCalloutEffect" = "Выноска";
 "shapeFillEffect" = "Заливка";

@@ -113,7 +113,7 @@ enum L10n {
     static var historyNotchTriggerClick: String { s("historyNotchTriggerClick") }
     static var windowShadowToggleLabel: String { s("windowShadowToggleLabel") }
     static var windowShadowToggleHint: String { s("windowShadowToggleHint") }
-    static var windowShadowSizeLabel: String { s("windowShadowSizeLabel") }
+    static var shadowSizeLabel: String { s("shadowSizeLabel") }
     static var windowShadowSizeHint: String { s("windowShadowSizeHint") }
     static var savePathTitle: String { s("savePathTitle") }
     static var savePathSubtitle: String { s("savePathSubtitle") }
@@ -446,7 +446,7 @@ enum L10n {
     static var beautifyPresetDeepPurple: String { s("beautifyPresetDeepPurple") }
     static var beautifyPresetNeutralGray: String { s("beautifyPresetNeutralGray") }
     static var beautifyPresetWallpaper: String { s("beautifyPresetWallpaper") }
-    static var beautifyShadowEffect: String { s("beautifyShadowEffect") }
+    static var beautifyShadowSizeHint: String { s("beautifyShadowSizeHint") }
 
     // Text tool
     static var textStrokeEffect: String { s("textStrokeEffect") }
@@ -1599,28 +1599,26 @@ struct Defaults {
         set { defaults.set(newValue, forKey: "lastBeautifyPresetID") }
     }
 
-    static var lastBeautifyPadding: Double {
+    static var lastBeautifyShadowSize: Double {
         get {
-            if defaults.object(forKey: "lastBeautifyPadding") == nil {
-                return 24
+            // Preserve the old slider position once, without sharing any state
+            // with the window-capture projection preferences.
+            if defaults.object(forKey: "lastBeautifyShadowSize") == nil {
+                let legacy = defaults.object(forKey: "lastBeautifyPadding") as? NSNumber
+                let size = BeautifyRenderer.normalizedShadowSize(
+                    CGFloat(legacy?.doubleValue ?? Double(BeautifyRenderer.shadowSizeDefault))
+                )
+                defaults.set(Double(size), forKey: "lastBeautifyShadowSize")
             }
-            let val = defaults.double(forKey: "lastBeautifyPadding")
-            return min(max(val, 0), 56)
+            return Double(BeautifyRenderer.normalizedShadowSize(
+                CGFloat(defaults.double(forKey: "lastBeautifyShadowSize"))
+            ))
         }
         set {
-            defaults.set(min(max(newValue, 0), 56), forKey: "lastBeautifyPadding")
-        }
-    }
-
-    static var lastBeautifyShadowEnabled: Bool {
-        get {
-            if defaults.object(forKey: "lastBeautifyShadowEnabled") == nil {
-                return true
-            }
-            return defaults.bool(forKey: "lastBeautifyShadowEnabled")
-        }
-        set {
-            defaults.set(newValue, forKey: "lastBeautifyShadowEnabled")
+            defaults.set(
+                Double(BeautifyRenderer.normalizedShadowSize(CGFloat(newValue))),
+                forKey: "lastBeautifyShadowSize"
+            )
         }
     }
 

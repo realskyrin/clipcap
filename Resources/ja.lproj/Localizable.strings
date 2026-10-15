@@ -25,7 +25,7 @@
 "historyNotchTriggerClick" = "クリックで開く";
 "windowShadowToggleLabel" = "ウインドウ撮影の影";
 "windowShadowToggleHint" = "ウインドウを選んで撮影すると角を丸め、macOS 風のドロップシャドウを追加します";
-"windowShadowSizeLabel" = "影のサイズ";
+"shadowSizeLabel" = "ドロップシャドウのサイズ";
 "windowShadowSizeHint" = "値を大きくするほど影が柔らかく広がり、ウインドウが高く浮いて見えます";
 
 /* Image shortcut */
@@ -247,7 +247,7 @@
 "beautifyPresetDeepPurple" = "ディープパープル";
 "beautifyPresetNeutralGray" = "ニュートラルグレー";
 "beautifyPresetWallpaper" = "壁紙";
-"beautifyShadowEffect" = "影効果";
+"beautifyShadowSizeHint" = "美化の影のみを調整し、影が収まるよう余白を自動で広げます";
 "textStrokeEffect" = "縁取り";
 "textCalloutEffect" = "吹き出し";
 "shapeFillEffect" = "塗りつぶし";

@@ -25,7 +25,7 @@
 "historyNotchTriggerClick" = "Ouvrir au clic";
 "windowShadowToggleLabel" = "Ombre des captures de fenêtre";
 "windowShadowToggleHint" = "Arrondit les coins des captures de fenêtre et ajoute une ombre portée façon macOS";
-"windowShadowSizeLabel" = "Taille de l'ombre";
+"shadowSizeLabel" = "Taille de l’ombre portée";
 "windowShadowSizeHint" = "Des valeurs élevées adoucissent et élargissent l'ombre : la fenêtre semble flotter plus haut";
 
 /* Image shortcut */
@@ -247,7 +247,7 @@
 "beautifyPresetDeepPurple" = "Violet profond";
 "beautifyPresetNeutralGray" = "Gris neutre";
 "beautifyPresetWallpaper" = "Fond d'écran";
-"beautifyShadowEffect" = "Ombre";
+"beautifyShadowSizeHint" = "Ajuste uniquement l’ombre de l’embellissement, avec des marges qui s’agrandissent automatiquement pour la contenir";
 "textStrokeEffect" = "Contour";
 "textCalloutEffect" = "Annotation";
 "shapeFillEffect" = "Remplir";

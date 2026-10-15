@@ -25,7 +25,7 @@
 "historyNotchTriggerClick" = "鼠标点击打开";
 "windowShadowToggleLabel" = "窗口截图阴影";
 "windowShadowToggleHint" = "点选窗口截图时自动裁出圆角，并加上 macOS 风格的投影";
-"windowShadowSizeLabel" = "阴影大小";
+"shadowSizeLabel" = "投影大小";
 "windowShadowSizeHint" = "数值越大投影越柔和、扩散越远，窗口看起来悬浮得越高";
 
 /* Image shortcut */
@@ -247,7 +247,7 @@
 "beautifyPresetDeepPurple" = "深邃紫";
 "beautifyPresetNeutralGray" = "中性灰";
 "beautifyPresetWallpaper" = "壁纸";
-"beautifyShadowEffect" = "阴影效果";
+"beautifyShadowSizeHint" = "仅调整美化投影，边距会随投影范围自动增加";
 "textStrokeEffect" = "描边";
 "textCalloutEffect" = "标注";
 "shapeFillEffect" = "填充";

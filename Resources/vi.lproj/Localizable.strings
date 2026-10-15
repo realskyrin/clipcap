@@ -25,7 +25,7 @@
 "historyNotchTriggerClick" = "Mở khi nhấp chuột";
 "windowShadowToggleLabel" = "Đổ bóng khi chụp cửa sổ";
 "windowShadowToggleHint" = "Bo góc ảnh chụp cửa sổ và thêm bóng đổ kiểu macOS";
-"windowShadowSizeLabel" = "Kích thước bóng";
+"shadowSizeLabel" = "Kích thước bóng đổ";
 "windowShadowSizeHint" = "Giá trị lớn hơn làm bóng mờ mềm hơn và lan rộng hơn, khiến cửa sổ trông nổi cao hơn";
 
 /* Image shortcut */
@@ -247,7 +247,7 @@
 "beautifyPresetDeepPurple" = "Tím đậm";
 "beautifyPresetNeutralGray" = "Xám trung tính";
 "beautifyPresetWallpaper" = "Hình nền";
-"beautifyShadowEffect" = "Hiệu ứng bóng";
+"beautifyShadowSizeHint" = "Chỉ điều chỉnh bóng của hiệu ứng làm đẹp, lề tự động tăng để chứa toàn bộ bóng";
 "textStrokeEffect" = "Viền chữ";
 "textCalloutEffect" = "Chú thích";
 "shapeFillEffect" = "Tô màu";
