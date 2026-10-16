@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [1.8.43] - 2026-10-16
+
+### Added
+
+- Added clipboard file history with Quick Look previews and keyboard navigation (5ea61a6)
+
 ## [1.8.42] - 2026-10-16
 
 ### Added
