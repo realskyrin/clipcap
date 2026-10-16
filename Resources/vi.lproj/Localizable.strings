@@ -10,9 +10,9 @@
 "pinAcrossSpacesHint" = "Ảnh ghim mới xuất hiện trên mọi màn hình nền và Space toàn màn hình";
 "historyCacheToggleLabel" = "Lưu ảnh và nội dung đa phương tiện";
 "historyCacheToggleHint" = "Lưu ảnh, GIF, video và màu đã chọn gần đây để tái sử dụng nhanh từ lịch sử";
-"clipboardTextCacheToggleLabel" = "Lưu văn bản bảng nhớ tạm";
-"clipboardTextCacheToggleHint" = "Lưu văn bản đã sao chép vào lịch sử để nhanh chóng sử dụng lại";
-"clipboardTextHistoryLimitLabel" = "Giới hạn lịch sử văn bản";
+"clipboardTextCacheToggleLabel" = "Ghi lại văn bản và tệp bảng nhớ tạm";
+"clipboardTextCacheToggleHint" = "Lưu văn bản và tham chiếu tệp nguồn mà không sao chép tệp";
+"clipboardTextHistoryLimitLabel" = "Giới hạn lịch sử văn bản / tệp";
 "historyCacheLabel" = "Giới hạn lịch sử hình ảnh và phương tiện";
 "historyPanelDisplayModeLabel" = "Cách hiển thị bảng lịch sử";
 "historyPanelDisplayModeHint" = "Chọn Hộp thoại hoặc tai thỏ để xem lịch sử";
@@ -158,7 +158,7 @@
 "historyPanelFilterGIF" = "GIF";
 "historyPanelFilterColors" = "Màu";
 "historyPanelFilterText" = "Văn bản";
-"historyPanelSearchColorsAndText" = "Tìm màu và văn bản";
+"historyPanelSearchColorsAndText" = "Tìm màu, văn bản và tệp";
 "historyPanelSearchColors" = "Tìm màu";
 "historyPanelSearchText" = "Tìm văn bản";
 "historyPanelClearSearch" = "Xóa tìm kiếm";
@@ -654,3 +654,16 @@
 "screenshotGuideVerifyHint" = "Bấm Thiết lập ảnh chụp hệ thống và làm theo hình, rồi quay lại bấm Xác minh ảnh chụp để chụp một vùng, tiếp tục sau khi clipcap mở ảnh";
 
 "screenshotGuideVerified" = "Đã nhận ảnh chụp thử, bạn có thể bắt đầu";
+
+// File history
+"historyPanelShortcutSwitchItem" = "Chuyển sang mục trước hoặc tiếp theo";
+"historyPanelFilterFiles" = "Tệp";
+"historyPanelFolder" = "Thư mục";
+"historyPanelSearchFiles" = "Tìm tên và đường dẫn tệp";
+"historyPanelSourceUnavailable" = "Tệp nguồn không khả dụng";
+"historyPanelSourceUnavailableHint" = "Một số tệp nguồn đã bị xóa, ngoại tuyến hoặc chưa tải xuống";
+"historyFilePreviewPrevious" = "Tệp trước";
+"historyFilePreviewNext" = "Tệp tiếp theo";
+"historyFilePreviewLoading" = "Đang tải bản xem trước";
+"historyFilePreviewRetry" = "Kiểm tra lại";
+"historyFilePreviewUnavailable" = "Không thể xem trước tệp này";

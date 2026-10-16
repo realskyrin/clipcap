@@ -10,9 +10,9 @@
 "pinAcrossSpacesHint" = "開啟後新貼圖會出現在所有桌面與全螢幕空間";
 "historyCacheToggleLabel" = "快取圖片與媒體";
 "historyCacheToggleHint" = "保存最近圖片、GIF、影片和取色結果，方便從歷史記錄快速重複使用";
-"clipboardTextCacheToggleLabel" = "快取剪貼簿文字";
-"clipboardTextCacheToggleHint" = "將複製的文字保存到歷史記錄，方便從歷史記錄快速重複使用";
-"clipboardTextHistoryLimitLabel" = "文字歷史數量";
+"clipboardTextCacheToggleLabel" = "記錄剪貼簿文字與檔案";
+"clipboardTextCacheToggleHint" = "儲存文字和來源檔案參照，不複製檔案副本";
+"clipboardTextHistoryLimitLabel" = "文字 / 檔案歷史數量";
 "historyCacheLabel" = "圖片與媒體歷史數量";
 "historyPanelDisplayModeLabel" = "歷史面板顯示方式";
 "historyPanelDisplayModeHint" = "選擇透過彈窗或瀏海查看歷史記錄";
@@ -158,7 +158,7 @@
 "historyPanelFilterGIF" = "GIF";
 "historyPanelFilterColors" = "顏色";
 "historyPanelFilterText" = "文字";
-"historyPanelSearchColorsAndText" = "搜尋顏色和文字";
+"historyPanelSearchColorsAndText" = "搜尋顏色、文字和檔案";
 "historyPanelSearchColors" = "搜尋顏色";
 "historyPanelSearchText" = "搜尋文字";
 "historyPanelClearSearch" = "清除搜尋";
@@ -654,3 +654,16 @@
 "screenshotGuideVerifyHint" = "點擊「設定系統截圖」依圖設定，返回後點擊「截圖驗證」並截取一個區域，clipcap 成功開啟後才能開始使用";
 
 "screenshotGuideVerified" = "已成功接收測試截圖，可以開始使用";
+
+// File history
+"historyPanelShortcutSwitchItem" = "切換上一個或下一個項目";
+"historyPanelFilterFiles" = "檔案";
+"historyPanelFolder" = "資料夾";
+"historyPanelSearchFiles" = "搜尋檔案名稱和路徑";
+"historyPanelSourceUnavailable" = "來源檔案無法使用";
+"historyPanelSourceUnavailableHint" = "部分來源檔案已刪除、離線或尚未下載";
+"historyFilePreviewPrevious" = "上一個檔案";
+"historyFilePreviewNext" = "下一個檔案";
+"historyFilePreviewLoading" = "正在載入預覽";
+"historyFilePreviewRetry" = "重新檢查";
+"historyFilePreviewUnavailable" = "無法預覽此檔案";

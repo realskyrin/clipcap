@@ -57,6 +57,7 @@ struct HistoryImagePreview {
 final class HistoryImagePreviewRequest {
     private let lock = NSLock()
     private var cancelled = false
+    private var cancellationHandlers: [() -> Void] = []
 
     var isCancelled: Bool {
         lock.lock()
@@ -66,8 +67,23 @@ final class HistoryImagePreviewRequest {
 
     func cancel() {
         lock.lock()
+        guard !cancelled else { lock.unlock(); return }
         cancelled = true
+        let handlers = cancellationHandlers
+        cancellationHandlers.removeAll()
         lock.unlock()
+        handlers.forEach { $0() }
+    }
+
+    func onCancel(_ handler: @escaping () -> Void) {
+        lock.lock()
+        if cancelled {
+            lock.unlock()
+            handler()
+        } else {
+            cancellationHandlers.append(handler)
+            lock.unlock()
+        }
     }
 }
 

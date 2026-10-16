@@ -10,9 +10,9 @@
 "pinAcrossSpacesHint" = "Les nouvelles images épinglées apparaissent sur chaque bureau et espace plein écran";
 "historyCacheToggleLabel" = "Mettre les images et médias en cache";
 "historyCacheToggleHint" = "Enregistre les images, GIF, vidéos et couleurs prélevées récentes pour les réutiliser rapidement depuis l’historique";
-"clipboardTextCacheToggleLabel" = "Mettre le texte du presse-papiers en cache";
-"clipboardTextCacheToggleHint" = "Enregistre le texte copié dans l’historique pour le réutiliser rapidement";
-"clipboardTextHistoryLimitLabel" = "Limite de l’historique du texte";
+"clipboardTextCacheToggleLabel" = "Enregistrer le texte et les fichiers du presse-papiers";
+"clipboardTextCacheToggleHint" = "Conserver le texte et les références aux fichiers sans les copier";
+"clipboardTextHistoryLimitLabel" = "Limite de l’historique texte / fichiers";
 "historyCacheLabel" = "Limite de l’historique des images et médias";
 "historyPanelDisplayModeLabel" = "Affichage du panneau d'historique";
 "historyPanelDisplayModeHint" = "Choisir Dialogue ou Encoche pour l'historique";
@@ -158,7 +158,7 @@
 "historyPanelFilterGIF" = "GIF";
 "historyPanelFilterColors" = "Couleurs";
 "historyPanelFilterText" = "Texte";
-"historyPanelSearchColorsAndText" = "Rechercher couleurs et texte";
+"historyPanelSearchColorsAndText" = "Rechercher couleurs, texte et fichiers";
 "historyPanelSearchColors" = "Rechercher des couleurs";
 "historyPanelSearchText" = "Rechercher du texte";
 "historyPanelClearSearch" = "Effacer la recherche";
@@ -654,3 +654,16 @@
 "screenshotGuideVerifyHint" = "Cliquez sur Configurer les captures système et suivez les images, puis revenez et cliquez sur Vérifier la capture pour capturer une zone, continuez après son ouverture dans clipcap";
 
 "screenshotGuideVerified" = "Capture de test reçue, vous pouvez commencer";
+
+// File history
+"historyPanelShortcutSwitchItem" = "Passer à l’élément précédent ou suivant";
+"historyPanelFilterFiles" = "Fichiers";
+"historyPanelFolder" = "Dossier";
+"historyPanelSearchFiles" = "Rechercher les noms et chemins de fichiers";
+"historyPanelSourceUnavailable" = "Source indisponible";
+"historyPanelSourceUnavailableHint" = "Certains fichiers sources sont supprimés, hors ligne ou non téléchargés";
+"historyFilePreviewPrevious" = "Fichier précédent";
+"historyFilePreviewNext" = "Fichier suivant";
+"historyFilePreviewLoading" = "Chargement de l’aperçu";
+"historyFilePreviewRetry" = "Vérifier à nouveau";
+"historyFilePreviewUnavailable" = "Aperçu indisponible pour ce fichier";

@@ -5,6 +5,7 @@ enum HistoryEntryKind {
     case image
     case color(hex: String)
     case text(HistoryTextContent)
+    case files(HistoryFileReferences)
 }
 
 final class HistoryTextContent {
@@ -112,6 +113,7 @@ final class HistoryManager {
     private var cachedEntries: [HistoryEntry]?
     private var cachedEntryCount: Int?
     private var copiedEntryPromotions: [String: Date]
+    private var fileReferenceGeneration = 0
 
     private init() {
         let fm = FileManager.default
@@ -154,7 +156,7 @@ final class HistoryManager {
             removeStoredHistoryEntries(withExtensions: ["png", "gif", "mov", "mp4", "m4v", "color"])
         }
         if !Defaults.clipboardTextCacheEnabled {
-            removeStoredHistoryEntries(withExtensions: ["txt"])
+            removeStoredHistoryEntries(withExtensions: ["txt", "fileref"])
         }
 
         queue.async { [weak self] in
@@ -187,6 +189,7 @@ final class HistoryManager {
         queue.async { [weak self] in
             guard let self else { return }
             self.pruneTextToLimits()
+            self.pruneFileReferencesToLimit()
             self.invalidateEntriesCache()
             DispatchQueue.main.async {
                 NotificationCenter.default.post(name: .historyDidUpdate, object: nil)
@@ -208,10 +211,13 @@ final class HistoryManager {
     }
 
     @objc private func clipboardTextCacheEnabledChanged() {
+        entriesCacheLock.lock()
+        fileReferenceGeneration += 1
+        entriesCacheLock.unlock()
         queue.async { [weak self] in
             guard let self else { return }
             if !Defaults.clipboardTextCacheEnabled {
-                self.removeStoredHistoryEntries(withExtensions: ["txt"])
+                self.removeStoredHistoryEntries(withExtensions: ["txt", "fileref"])
             }
             self.invalidateEntriesCache()
             DispatchQueue.main.async {
@@ -326,6 +332,52 @@ final class HistoryManager {
         }
     }
 
+    func addFileReferences(_ urls: [URL]) {
+        guard Defaults.clipboardTextCacheEnabled else { return }
+        var seen = Set<String>()
+        let sources = urls.filter { $0.isFileURL && seen.insert($0.standardizedFileURL.path).inserted }
+        guard !sources.isEmpty else { return }
+        entriesCacheLock.lock()
+        let generation = fileReferenceGeneration
+        entriesCacheLock.unlock()
+        let copiedAt = Date()
+        HistoryFileReferences.captureQueue.addOperation { [weak self] in
+            guard let self else { return }
+            self.entriesCacheLock.lock()
+            let isCurrent = generation == self.fileReferenceGeneration
+            self.entriesCacheLock.unlock()
+            guard isCurrent, Defaults.clipboardTextCacheEnabled else { return }
+            let references = sources.map { HistoryFileReferences.Reference(url: $0) }
+            guard let data = try? JSONEncoder().encode(references) else { return }
+            self.queue.async {
+                self.entriesCacheLock.lock()
+                let isCurrent = generation == self.fileReferenceGeneration
+                self.entriesCacheLock.unlock()
+                guard isCurrent, Defaults.clipboardTextCacheEnabled else { return }
+                let identity = Set(references.map(\.path))
+                let duplicates = self.loadCachedEntries().filter { entry in
+                    guard case .files(let files) = entry.kind else { return false }
+                    return Set(files.references.map(\.path)) == identity
+                }
+                if let favorite = duplicates.first(where: { Self.isFavorite(url: $0.fileURL) }) {
+                    // Preserve the favorite's manifest and xattrs, updating only its history date.
+                    try? FileManager.default.setAttributes([.modificationDate: copiedAt],
+                                                           ofItemAtPath: favorite.fileURL.path)
+                } else {
+                    let manifest = self.directoryURL.appendingPathComponent(UUID().uuidString + ".fileref")
+                    do { try data.write(to: manifest, options: .atomic) } catch { return }
+                    try? FileManager.default.setAttributes([.modificationDate: copiedAt], ofItemAtPath: manifest.path)
+                    for duplicate in duplicates { try? FileManager.default.removeItem(at: duplicate.fileURL) }
+                }
+                self.pruneFileReferencesToLimit()
+                self.invalidateEntriesCache()
+                DispatchQueue.main.async {
+                    NotificationCenter.default.post(name: .historyDidUpdate, object: nil)
+                }
+            }
+        }
+    }
+
     func entries() -> [HistoryEntry] {
         entriesCacheLock.lock()
         defer { entriesCacheLock.unlock() }
@@ -417,9 +469,10 @@ final class HistoryManager {
         }
         if Defaults.clipboardTextCacheEnabled {
             allowedExtensions.insert("txt")
+            allowedExtensions.insert("fileref")
         }
         return entries(in: directoryURL, allowedExtensions: allowedExtensions,
-                       supportedExtensions: ["png", "gif", "mov", "mp4", "m4v", "color", "txt"])
+                       supportedExtensions: ["png", "gif", "mov", "mp4", "m4v", "color", "txt", "fileref"])
     }
 
     private func loadEntryCount() -> Int {
@@ -429,6 +482,7 @@ final class HistoryManager {
         }
         if Defaults.clipboardTextCacheEnabled {
             allowedExtensions.insert("txt")
+            allowedExtensions.insert("fileref")
         }
         guard let urls = try? FileManager.default.contentsOfDirectory(
                 at: directoryURL,
@@ -439,7 +493,7 @@ final class HistoryManager {
         var identities = Set<String>()
         for url in urls where Self.shouldIncludeEntry(url,
                                                       allowedExtensions: allowedExtensions,
-                                                      supportedExtensions: ["png", "gif", "mov", "mp4", "m4v", "color", "txt"]) {
+                                                      supportedExtensions: ["png", "gif", "mov", "mp4", "m4v", "color", "txt", "fileref"]) {
             let values = try? url.resourceValues(forKeys: [.fileSizeKey, .isRegularFileKey])
             guard values?.isRegularFile != false, (values?.fileSize ?? 0) > 0 else { continue }
             identities.insert(Self.fileIdentity(for: url))
@@ -480,6 +534,9 @@ final class HistoryManager {
                     createdAt: date,
                     kind: .text(HistoryTextContent(fileURL: url))
                 )
+            case "fileref":
+                guard let files = HistoryFileReferences.load(from: url) else { return nil }
+                return HistoryEntry(fileURL: url, createdAt: date, kind: .files(files))
             default:
                 return nil
             }
@@ -509,6 +566,9 @@ final class HistoryManager {
     }
 
     func clearAll(completion: ((Int, Int) -> Void)? = nil) {
+        entriesCacheLock.lock()
+        fileReferenceGeneration += 1
+        entriesCacheLock.unlock()
         queue.async { [weak self] in
             guard let self = self else { return }
             let result = self.removeAllEntries()
@@ -548,6 +608,7 @@ final class HistoryManager {
         }
         if Defaults.clipboardTextCacheEnabled {
             removedCount += pruneTextToLimits()
+            removedCount += pruneFileReferencesToLimit()
         }
         return removedCount
     }
@@ -602,6 +663,11 @@ final class HistoryManager {
             }
         }
         return (removed, decision.kept)
+    }
+
+    @discardableResult
+    private func pruneFileReferencesToLimit() -> Int {
+        HistoryRetentionPolicy.pruneFileReferences(in: directoryURL, limit: Defaults.clipboardTextHistoryLimit)
     }
 
     private func invalidateEntriesCache() {
@@ -709,7 +775,7 @@ final class HistoryManager {
         }
         return urls.filter { url in
             switch url.pathExtension.lowercased() {
-            case "png", "gif", "mov", "mp4", "m4v", "color", "txt":
+            case "png", "gif", "mov", "mp4", "m4v", "color", "txt", "fileref":
                 return true
             default:
                 return false

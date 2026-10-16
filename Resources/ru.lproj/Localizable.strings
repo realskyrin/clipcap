@@ -10,9 +10,9 @@
 "pinAcrossSpacesHint" = "Новые закрепленные изображения появляются на каждом рабочем столе и полноэкранном Space";
 "historyCacheToggleLabel" = "Кэшировать изображения и медиа";
 "historyCacheToggleHint" = "Сохраняет недавние изображения, GIF, видео и выбранные цвета для быстрого повторного использования из истории";
-"clipboardTextCacheToggleLabel" = "Кэшировать текст буфера обмена";
-"clipboardTextCacheToggleHint" = "Сохраняет скопированный текст в истории для быстрого повторного использования";
-"clipboardTextHistoryLimitLabel" = "Лимит истории текста";
+"clipboardTextCacheToggleLabel" = "Записывать текст и файлы буфера обмена";
+"clipboardTextCacheToggleHint" = "Сохранять текст и ссылки на исходные файлы без копирования файлов";
+"clipboardTextHistoryLimitLabel" = "Лимит истории текста / файлов";
 "historyCacheLabel" = "Лимит истории изображений и медиа";
 "historyPanelDisplayModeLabel" = "Отображение панели истории";
 "historyPanelDisplayModeHint" = "Выберите диалог или вырез для истории";
@@ -158,7 +158,7 @@
 "historyPanelFilterGIF" = "GIF";
 "historyPanelFilterColors" = "Цвета";
 "historyPanelFilterText" = "Текст";
-"historyPanelSearchColorsAndText" = "Поиск по цветам и тексту";
+"historyPanelSearchColorsAndText" = "Поиск по цветам, тексту и файлам";
 "historyPanelSearchColors" = "Поиск по цветам";
 "historyPanelSearchText" = "Поиск по тексту";
 "historyPanelClearSearch" = "Очистить поиск";
@@ -654,3 +654,16 @@
 "screenshotGuideVerifyHint" = "Нажмите Настроить системные снимки и следуйте изображениям, затем вернитесь и нажмите Проверить снимок, выделите область и дождитесь открытия в clipcap";
 
 "screenshotGuideVerified" = "Тестовый снимок получен, можно начинать";
+
+// File history
+"historyPanelShortcutSwitchItem" = "Перейти к предыдущему или следующему элементу";
+"historyPanelFilterFiles" = "Файлы";
+"historyPanelFolder" = "Папка";
+"historyPanelSearchFiles" = "Поиск по именам и путям файлов";
+"historyPanelSourceUnavailable" = "Исходный файл недоступен";
+"historyPanelSourceUnavailableHint" = "Некоторые исходные файлы удалены, не подключены или не загружены";
+"historyFilePreviewPrevious" = "Предыдущий файл";
+"historyFilePreviewNext" = "Следующий файл";
+"historyFilePreviewLoading" = "Загрузка предпросмотра";
+"historyFilePreviewRetry" = "Проверить снова";
+"historyFilePreviewUnavailable" = "Предпросмотр этого файла недоступен";

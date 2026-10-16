@@ -350,6 +350,16 @@ enum L10n {
     static var historyPanelFilterGIF: String { s("historyPanelFilterGIF") }
     static var historyPanelFilterColors: String { s("historyPanelFilterColors") }
     static var historyPanelFilterText: String { s("historyPanelFilterText") }
+    static var historyPanelFilterFiles: String { s("historyPanelFilterFiles") }
+    static var historyPanelFolder: String { s("historyPanelFolder") }
+    static var historyPanelSearchFiles: String { s("historyPanelSearchFiles") }
+    static var historyPanelSourceUnavailable: String { s("historyPanelSourceUnavailable") }
+    static var historyPanelSourceUnavailableHint: String { s("historyPanelSourceUnavailableHint") }
+    static var historyFilePreviewPrevious: String { s("historyFilePreviewPrevious") }
+    static var historyFilePreviewNext: String { s("historyFilePreviewNext") }
+    static var historyFilePreviewLoading: String { s("historyFilePreviewLoading") }
+    static var historyFilePreviewRetry: String { s("historyFilePreviewRetry") }
+    static var historyFilePreviewUnavailable: String { s("historyFilePreviewUnavailable") }
     static var historyPanelSearchColorsAndText: String { s("historyPanelSearchColorsAndText") }
     static var historyPanelSearchColors: String { s("historyPanelSearchColors") }
     static var historyPanelSearchText: String { s("historyPanelSearchText") }
@@ -371,6 +381,7 @@ enum L10n {
     static var historyPanelShortcutKeySpace: String { s("historyPanelShortcutKeySpace") }
     static var historyPanelShortcutSearch: String { s("historyPanelShortcutSearch") }
     static var historyPanelShortcutSwitchFilter: String { s("historyPanelShortcutSwitchFilter") }
+    static var historyPanelShortcutSwitchItem: String { s("historyPanelShortcutSwitchItem") }
     static var historyPanelShortcutToggleSelection: String { s("historyPanelShortcutToggleSelection") }
     static var historyPanelShortcutRangeSelection: String { s("historyPanelShortcutRangeSelection") }
     static var historyPanelShortcutSelectAll: String { s("historyPanelShortcutSelectAll") }

@@ -10,9 +10,9 @@
 "pinAcrossSpacesHint" = "オンにすると新しいピン画像がすべてのデスクトップとフルスクリーン操作スペースに表示されます";
 "historyCacheToggleLabel" = "画像とメディアをキャッシュ";
 "historyCacheToggleHint" = "最近の画像、GIF、動画、取得した色を保存し、履歴からすばやく再利用できます";
-"clipboardTextCacheToggleLabel" = "クリップボードのテキストをキャッシュ";
-"clipboardTextCacheToggleHint" = "コピーしたテキストを履歴に保存してすばやく再利用できます";
-"clipboardTextHistoryLimitLabel" = "テキスト履歴の上限";
+"clipboardTextCacheToggleLabel" = "クリップボードのテキストとファイルを記録";
+"clipboardTextCacheToggleHint" = "ファイルを複製せずテキストと元ファイルへの参照を保存";
+"clipboardTextHistoryLimitLabel" = "テキスト / ファイル履歴の上限";
 "historyCacheLabel" = "画像とメディアの履歴上限";
 "historyPanelDisplayModeLabel" = "履歴パネルの表示方式";
 "historyPanelDisplayModeHint" = "ダイアログまたはノッチで履歴を表示";
@@ -158,7 +158,7 @@
 "historyPanelFilterGIF" = "GIF";
 "historyPanelFilterColors" = "カラー";
 "historyPanelFilterText" = "テキスト";
-"historyPanelSearchColorsAndText" = "色とテキストを検索";
+"historyPanelSearchColorsAndText" = "色、テキスト、ファイルを検索";
 "historyPanelSearchColors" = "色を検索";
 "historyPanelSearchText" = "テキストを検索";
 "historyPanelClearSearch" = "検索をクリア";
@@ -654,3 +654,16 @@
 "screenshotGuideVerifyHint" = "システムスクリーンショットを設定をクリックして画像の手順に従い、戻って確認ボタンで範囲を撮影し、clipcap で開くと開始できます";
 
 "screenshotGuideVerified" = "テスト画像を受信しました、開始できます";
+
+// File history
+"historyPanelShortcutSwitchItem" = "前または次の項目に切り替える";
+"historyPanelFilterFiles" = "ファイル";
+"historyPanelFolder" = "フォルダ";
+"historyPanelSearchFiles" = "ファイル名とパスを検索";
+"historyPanelSourceUnavailable" = "元のファイルを利用できません";
+"historyPanelSourceUnavailableHint" = "一部の元ファイルが削除済み、オフライン、または未ダウンロードです";
+"historyFilePreviewPrevious" = "前のファイル";
+"historyFilePreviewNext" = "次のファイル";
+"historyFilePreviewLoading" = "プレビューを読み込み中";
+"historyFilePreviewRetry" = "再確認";
+"historyFilePreviewUnavailable" = "このファイルはプレビューできません";

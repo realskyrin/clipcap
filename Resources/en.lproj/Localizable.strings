@@ -10,9 +10,9 @@
 "pinAcrossSpacesHint" = "New pinned images appear on every desktop and full-screen Space";
 "historyCacheToggleLabel" = "Cache images and media";
 "historyCacheToggleHint" = "Store recent images, GIFs, videos, and picked colors for quick reuse from history";
-"clipboardTextCacheToggleLabel" = "Cache Clipboard Text";
-"clipboardTextCacheToggleHint" = "Store copied text in history for quick reuse";
-"clipboardTextHistoryLimitLabel" = "Text History Limit";
+"clipboardTextCacheToggleLabel" = "Record Clipboard Text and Files";
+"clipboardTextCacheToggleHint" = "Keep text and source file references without copying files";
+"clipboardTextHistoryLimitLabel" = "Text / File History Limit";
 "historyCacheLabel" = "Image and Media History Limit";
 "historyPanelDisplayModeLabel" = "History Panel Display";
 "historyPanelDisplayModeHint" = "Choose Dialog or Notch for history";
@@ -158,7 +158,7 @@
 "historyPanelFilterGIF" = "GIF";
 "historyPanelFilterColors" = "Colors";
 "historyPanelFilterText" = "Text";
-"historyPanelSearchColorsAndText" = "Search colors and text";
+"historyPanelSearchColorsAndText" = "Search colors, text, and files";
 "historyPanelSearchColors" = "Search colors";
 "historyPanelSearchText" = "Search text";
 "historyPanelClearSearch" = "Clear search";
@@ -654,3 +654,16 @@
 "screenshotGuideVerifyHint" = "Click Set Up System Screenshots and follow the images, then return and click Verify Screenshot to capture an area, continue after clipcap opens it";
 
 "screenshotGuideVerified" = "Test screenshot received, you can get started";
+
+// File history
+"historyPanelShortcutSwitchItem" = "Switch to the previous or next item";
+"historyPanelFilterFiles" = "Files";
+"historyPanelFolder" = "Folder";
+"historyPanelSearchFiles" = "Search file names and paths";
+"historyPanelSourceUnavailable" = "Source unavailable";
+"historyPanelSourceUnavailableHint" = "Some source files are deleted, offline, or not downloaded";
+"historyFilePreviewPrevious" = "Previous file";
+"historyFilePreviewNext" = "Next file";
+"historyFilePreviewLoading" = "Loading preview";
+"historyFilePreviewRetry" = "Check again";
+"historyFilePreviewUnavailable" = "Preview unavailable for this file";
