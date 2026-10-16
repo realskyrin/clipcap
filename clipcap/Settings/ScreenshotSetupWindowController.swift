@@ -18,10 +18,11 @@ final class ScreenshotSetupWindowController: NSWindowController, NSWindowDelegat
 
     private enum Step: Int { case welcome, folder, ready }
     private var step: Step = .welcome
-    private var showsManualInstructions = false
     private var hasConfigurationError = false
     private var locationTimer: Timer?
     private var lastLocationActive = false
+    private var verificationStartedAt: Date?
+    private var hasReceivedTestScreenshot = false
     private let root = NSView()
     private let progress = NSStackView()
     private let content = NSStackView()
@@ -47,26 +48,26 @@ final class ScreenshotSetupWindowController: NSWindowController, NSWindowDelegat
                                                name: NSApplication.didBecomeActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(languageChanged),
                                                name: .languageDidChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(testScreenshotImported(_:)),
+                                               name: .systemScreenshotImageImported, object: nil)
     }
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
     func showIfNeeded() {
-        guard !Defaults.screenshotSetupGuidePresented else { return }
-        // Existing users with a working handoff do not need an interruption.
-        if Defaults.systemScreenshotAutoOpenEnabled,
-           SystemScreenshotLocationManager.shared.isTargetLocationActive {
-            Defaults.screenshotSetupGuidePresented = true
-            return
-        }
+        if Defaults.screenshotSetupGuidePresented,
+           Defaults.systemScreenshotAutoOpenEnabled,
+           Defaults.systemScreenshotVerifiedDirectory == SystemScreenshotAutoOpen.directoryURL.path,
+           SystemScreenshotLocationManager.shared.isTargetLocationActive { return }
         showGuide()
     }
 
     func showGuide() {
         if window?.isVisible != true {
             step = .welcome
-            showsManualInstructions = false
             hasConfigurationError = false
+            verificationStartedAt = nil
+            hasReceivedTestScreenshot = false
         }
         Defaults.screenshotSetupGuidePresented = true
         render()
@@ -155,9 +156,14 @@ final class ScreenshotSetupWindowController: NSWindowController, NSWindowDelegat
             progress.addArrangedSubview(stepCard(index: index, title: title))
         }
 
-        let symbols = ["sparkles", "folder.badge.gearshape", "checkmark.circle.fill"]
+        let active = SystemScreenshotLocationManager.shared.isTargetLocationActive
+        lastLocationActive = active
+        let verified = active && hasReceivedTestScreenshot
+        primary.isEnabled = step != .ready || verified
+        primary.keyEquivalent = primary.isEnabled ? "\r" : ""
+        let symbols = ["sparkles", "folder.badge.gearshape", verified ? "checkmark.circle.fill" : "exclamationmark.circle.fill"]
         let icon = NSImageView(image: NSImage(systemSymbolName: symbols[step.rawValue], accessibilityDescription: nil) ?? NSImage())
-        icon.contentTintColor = step == .ready ? .systemGreen : .controlAccentColor
+        icon.contentTintColor = step == .ready ? (verified ? .systemGreen : .systemOrange) : .controlAccentColor
         icon.symbolConfiguration = .init(pointSize: 34, weight: .medium)
         icon.heightAnchor.constraint(equalToConstant: 42).isActive = true
         content.addArrangedSubview(icon)
@@ -173,47 +179,39 @@ final class ScreenshotSetupWindowController: NSWindowController, NSWindowDelegat
             add(text(L10n.screenshotGuideFilePolicy, size: 12, secondary: true))
             primary.title = L10n.screenshotGuideBegin
         case .folder:
-            let active = SystemScreenshotLocationManager.shared.isTargetLocationActive
-            lastLocationActive = active
             add(text(L10n.screenshotGuideFolderTitle, size: 26, weight: .bold))
             add(text(L10n.screenshotGuideFolderBody, size: 14, secondary: true))
             let path = text(SaveDestination.displayPath(SystemScreenshotAutoOpen.directoryURL), size: 13, weight: .medium)
             path.isSelectable = true
-            let status = text(active ? L10n.systemScreenshotFolderConfigured : L10n.screenshotGuideFolderPending, size: 12)
-            status.textColor = active ? .systemGreen : .systemOrange
+            let status = text(L10n.screenshotGuideFolderSelected, size: 12)
+            status.textColor = .secondaryLabelColor
             add(card([text(L10n.systemScreenshotFolderLabel, size: 14, weight: .semibold), path, status]))
-            let setupHint = active ? L10n.screenshotGuideAlreadyConfigured
-                : (showsManualInstructions ? L10n.screenshotGuideManualIntro : L10n.screenshotGuideSystemChange)
-            add(text(setupHint, size: 12, secondary: true))
+            add(text(L10n.screenshotGuideFolderNext, size: 12, secondary: true))
             if hasConfigurationError {
                 let error = text(L10n.systemScreenshotSetupFailedMessage, size: 13)
                 error.textColor = .systemOrange
                 add(error)
             }
-            if showsManualInstructions {
-                add(card([
-                    text(L10n.screenshotGuideManualSteps, size: 13),
-                    button(L10n.screenshotGuideCopyPath, #selector(copyPath)),
-                    button(L10n.systemScreenshotSetupManual, #selector(openScreenshotOptions)),
-                    button(L10n.screenshotGuideAutomatic, #selector(showAutomatic))
-                ]))
-            } else {
-                add(button(L10n.screenshotGuideManual, #selector(showManual)))
-            }
-            primary.title = active ? L10n.screenshotGuideContinue
-                : (showsManualInstructions ? L10n.screenshotGuideCheck : L10n.screenshotGuideConfigure)
+            content.addArrangedSubview(button(L10n.screenshotGuideChangeDirectory, #selector(changeDirectory)))
+            primary.title = L10n.screenshotGuideContinue
         case .ready:
-            add(text(L10n.screenshotGuideReadyTitle, size: 26, weight: .bold))
-            add(text(L10n.screenshotGuideReadyBody, size: 14, secondary: true))
+            add(text(verified ? L10n.screenshotGuideReadyTitle : L10n.screenshotGuideRequiredTitle, size: 26, weight: .bold))
+            add(text(verified ? L10n.screenshotGuideReadyBody : L10n.screenshotGuideRequiredBody, size: 14, secondary: true))
+            let setup = button(L10n.screenshotGuideSetSystem, #selector(showSystemScreenshotGuide))
+            setup.controlSize = .large
+            setup.bezelColor = .controlAccentColor
+            setup.contentTintColor = .white
+            if !verified { setup.keyEquivalent = "\r" }
+            let verify = button(L10n.screenshotGuideVerify, #selector(verifyScreenshot))
+            verify.isEnabled = active
+            let status = text(verified ? L10n.screenshotGuideVerified
+                              : (active ? L10n.screenshotGuideLocationMatched : L10n.screenshotGuideFolderPending), size: 13, weight: .medium)
+            status.textColor = active ? .systemGreen : .systemOrange
+            add(card([setup, status, text(L10n.screenshotGuideVerifyHint, size: 13, secondary: true), verify]))
             add(card([
                 text("⇧⌘4", size: 30, weight: .medium),
                 text(L10n.screenshotGuideShortcutHint, size: 13, secondary: true),
                 text(L10n.screenshotGuideRecordingHint, size: 13, secondary: true)
-            ]))
-            add(card([
-                text(L10n.screenshotGuideThumbnailTitle, size: 14, weight: .semibold),
-                text(L10n.screenshotGuideThumbnailBody, size: 13, secondary: true),
-                button(L10n.screenshotGuideTry, #selector(tryScreenshot))
             ]))
             add(text(L10n.screenshotGuideReopen, size: 12, secondary: true))
             primary.title = L10n.screenshotGuideFinish
@@ -229,27 +227,15 @@ final class ScreenshotSetupWindowController: NSWindowController, NSWindowDelegat
         case .welcome:
             step = .folder
         case .folder:
-            let manager = SystemScreenshotLocationManager.shared
-            let wasActive = manager.isTargetLocationActive
-            if showsManualInstructions, !wasActive {
-                ToastWindow.show(message: L10n.screenshotGuideFolderPending)
-                render()
-                return
-            }
-            guard manager.configureAutomatically() else {
-                hasConfigurationError = true
-                showsManualInstructions = true
-                render()
-                return
-            }
-            if !wasActive { SystemScreenshotAutoOpen.refreshSystemScreenshotServices() }
-            Defaults.systemScreenshotAutoOpenEnabled = true
-            guard manager.isTargetLocationActive, Defaults.systemScreenshotAutoOpenEnabled else {
+            guard SystemScreenshotAutoOpen.ensureDirectoryExists() else {
                 hasConfigurationError = true
                 render()
                 return
             }
             hasConfigurationError = false
+            hasReceivedTestScreenshot = false
+            verificationStartedAt = nil
+            Defaults.systemScreenshotAutoOpenEnabled = true
             step = .ready
         case .ready:
             finish(openScreenshotTool: false)
@@ -265,14 +251,110 @@ final class ScreenshotSetupWindowController: NSWindowController, NSWindowDelegat
 
     @objc private func dismissGuide() { close() }
 
-    @objc private func showManual() {
-        showsManualInstructions = true
-        render()
+    @objc private func changeDirectory() {
+        guard let window else { return }
+        let panel = NSOpenPanel()
+        panel.title = L10n.screenshotGuideChangeDirectory
+        panel.prompt = L10n.savePathChoose
+        panel.canChooseFiles = false
+        panel.canChooseDirectories = true
+        panel.canCreateDirectories = true
+        panel.allowsMultipleSelection = false
+        panel.directoryURL = SystemScreenshotAutoOpen.directoryURL
+        panel.beginSheetModal(for: window) { [weak self] response in
+            guard response == .OK, let url = panel.url, let self else { return }
+            Defaults.systemScreenshotDirectory = url
+            self.hasConfigurationError = false
+            self.hasReceivedTestScreenshot = false
+            self.verificationStartedAt = nil
+            self.render()
+        }
     }
 
-    @objc private func showAutomatic() {
-        showsManualInstructions = false
+    @objc private func showSystemScreenshotGuide() {
+        guard let window, window.attachedSheet == nil else { return }
+        let sheet = ScreenshotSetupWindow(
+            contentRect: NSRect(x: 0, y: 0, width: 760, height: 700),
+            styleMask: [.titled, .closable, .resizable], backing: .buffered, defer: false
+        )
+        sheet.appearance = NSAppearance(named: .darkAqua)
+        sheet.backgroundColor = window.backgroundColor
+        sheet.title = L10n.screenshotGuideSetSystem
+        sheet.minSize = NSSize(width: 600, height: 480)
+        sheet.isReleasedWhenClosed = false
+        let root = NSView()
+        sheet.contentView = root
+        let scroll = NSScrollView()
+        scroll.drawsBackground = false
+        scroll.hasVerticalScroller = true
+        let document = ScreenshotSetupDocumentView()
+        scroll.documentView = document
+        let stack = NSStackView()
+        stack.orientation = .vertical
+        stack.alignment = .leading
+        stack.spacing = 16
+        document.addSubview(stack)
+        let path = text(SaveDestination.displayPath(SystemScreenshotAutoOpen.directoryURL), size: 13)
+        path.isSelectable = true
+        for view in [text(L10n.screenshotGuideSystemDirectory, size: 14, weight: .semibold), path] {
+            stack.addArrangedSubview(view)
+            view.widthAnchor.constraint(equalTo: stack.widthAnchor).isActive = true
+        }
+        stack.addArrangedSubview(button(L10n.screenshotGuideCopyPath, #selector(copyPath)))
+        for (name, caption) in [("screenshot-options", L10n.screenshotGuideOptionsStep),
+                                ("screenshot-preferences", L10n.screenshotGuidePreferencesStep)] {
+            let label = text(caption, size: 14, weight: .semibold)
+            stack.addArrangedSubview(label)
+            label.widthAnchor.constraint(equalTo: stack.widthAnchor).isActive = true
+            if let url = Bundle.main.url(forResource: name, withExtension: "png", subdirectory: "ScreenshotGuide"),
+               let image = NSImage(contentsOf: url) {
+                let view = ScreenshotSetupImageView(image: image)
+                view.imageScaling = .scaleProportionallyUpOrDown
+                stack.addArrangedSubview(view)
+                NSLayoutConstraint.activate([
+                    view.widthAnchor.constraint(equalTo: stack.widthAnchor),
+                    view.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: image.size.height / image.size.width)
+                ])
+            }
+        }
+        let open = button(L10n.systemScreenshotSetupManual, #selector(openScreenshotOptions))
+        let close = button(L10n.imageMergeClose, #selector(closeSystemScreenshotGuide))
+        close.keyEquivalent = "\u{1b}"
+        for view in [scroll, open, close] {
+            view.translatesAutoresizingMaskIntoConstraints = false
+            root.addSubview(view)
+        }
+        document.translatesAutoresizingMaskIntoConstraints = false
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            scroll.topAnchor.constraint(equalTo: root.topAnchor, constant: 20),
+            scroll.leadingAnchor.constraint(equalTo: root.leadingAnchor, constant: 20),
+            scroll.trailingAnchor.constraint(equalTo: root.trailingAnchor, constant: -20),
+            scroll.bottomAnchor.constraint(equalTo: open.topAnchor, constant: -16),
+            open.trailingAnchor.constraint(equalTo: close.leadingAnchor, constant: -12),
+            close.trailingAnchor.constraint(equalTo: root.trailingAnchor, constant: -20),
+            close.centerYAnchor.constraint(equalTo: open.centerYAnchor),
+            open.bottomAnchor.constraint(equalTo: root.bottomAnchor, constant: -20),
+            document.widthAnchor.constraint(equalTo: scroll.contentView.widthAnchor),
+            stack.topAnchor.constraint(equalTo: document.topAnchor),
+            stack.leadingAnchor.constraint(equalTo: document.leadingAnchor),
+            stack.trailingAnchor.constraint(equalTo: document.trailingAnchor, constant: -12),
+            stack.bottomAnchor.constraint(equalTo: document.bottomAnchor, constant: -20)
+        ])
+        window.beginSheet(sheet)
+    }
+
+    @objc private func closeSystemScreenshotGuide() {
+        if let sheet = window?.attachedSheet { window?.endSheet(sheet) }
+    }
+
+    @objc private func openScreenshotOptions() {
+        closeSystemScreenshotGuide()
+        SystemScreenshotLocationManager.shared.relinquishAutomaticallyManagedLocation()
+        verificationStartedAt = Date()
+        hasReceivedTestScreenshot = false
         render()
+        SystemScreenshotAutoOpen.openScreenshotTool()
     }
 
     @objc private func copyPath() {
@@ -281,22 +363,34 @@ final class ScreenshotSetupWindowController: NSWindowController, NSWindowDelegat
         ToastWindow.show(message: L10n.screenshotGuidePathCopied)
     }
 
-    @objc private func openScreenshotOptions() {
-        guard SystemScreenshotAutoOpen.ensureDirectoryExists() else {
-            hasConfigurationError = true
+    @objc private func verifyScreenshot() {
+        guard SystemScreenshotLocationManager.shared.isTargetLocationActive else {
             render()
             return
         }
+        verificationStartedAt = Date()
         SystemScreenshotAutoOpen.openScreenshotTool()
     }
 
-    @objc private func tryScreenshot() { finish(openScreenshotTool: true) }
+    @objc private func testScreenshotImported(_ notification: Notification) {
+        guard window?.isVisible == true, step == .ready,
+              let startedAt = verificationStartedAt,
+              let createdAt = notification.userInfo?["createdAt"] as? Date, createdAt >= startedAt,
+              let url = notification.object as? URL,
+              url.deletingLastPathComponent().resolvingSymlinksInPath()
+                == SystemScreenshotAutoOpen.directoryURL.resolvingSymlinksInPath(),
+              SystemScreenshotLocationManager.shared.isTargetLocationActive else { return }
+        hasReceivedTestScreenshot = true
+        Defaults.systemScreenshotVerifiedDirectory = SystemScreenshotAutoOpen.directoryURL.path
+        NotificationCenter.default.post(name: .systemScreenshotVerificationDidChange, object: nil)
+        render()
+    }
 
     private func finish(openScreenshotTool: Bool) {
         // Recheck because the user can change the system location while the guide is open.
         guard SystemScreenshotLocationManager.shared.isTargetLocationActive,
-              Defaults.systemScreenshotAutoOpenEnabled else {
-            step = .folder
+              hasReceivedTestScreenshot, Defaults.systemScreenshotAutoOpenEnabled else {
+            step = .ready
             render()
             return
         }
@@ -314,10 +408,11 @@ final class ScreenshotSetupWindowController: NSWindowController, NSWindowDelegat
     @objc private func locationMayHaveChanged() {
         guard window?.isVisible == true, step != .welcome else { return }
         let active = SystemScreenshotLocationManager.shared.isTargetLocationActive
-        if step == .ready, !active || !Defaults.systemScreenshotAutoOpenEnabled {
-            step = .folder
-            render()
-        } else if step == .folder, active != lastLocationActive {
+        if active != lastLocationActive {
+            if !active {
+                hasReceivedTestScreenshot = false
+                Defaults.systemScreenshotVerifiedDirectory = nil
+            }
             render()
         }
     }
@@ -327,6 +422,7 @@ final class ScreenshotSetupWindowController: NSWindowController, NSWindowDelegat
     }
 
     func windowWillClose(_ notification: Notification) {
+        closeSystemScreenshotGuide()
         locationTimer?.invalidate()
         locationTimer = nil
     }
@@ -435,4 +531,11 @@ final class ScreenshotSetupWindowController: NSWindowController, NSWindowDelegat
 
 private final class ScreenshotSetupDocumentView: NSView {
     override var isFlipped: Bool { true }
+}
+
+/// Let the scroll viewport determine illustration size instead of the source pixels.
+private final class ScreenshotSetupImageView: NSImageView {
+    override var intrinsicContentSize: NSSize {
+        NSSize(width: NSView.noIntrinsicMetric, height: NSView.noIntrinsicMetric)
+    }
 }

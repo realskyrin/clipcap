@@ -117,6 +117,9 @@ jobs:
           fi
           cp "design/menuBarIcon.svg" "$RESOURCES/MenuBarIcon.svg"
 
+          # Copy the screenshot setup illustrations.
+          cp -R "Resources/ScreenshotGuide" "$RESOURCES/"
+
           # Copy localization bundles (.lproj). The app loads these directly
           # for its in-app language picker — see Localizer.swift. Without them
           # every UI string falls back to its raw key.

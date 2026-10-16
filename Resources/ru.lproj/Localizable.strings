@@ -610,7 +610,7 @@
 "screenshotGuideTitle" = "Настройка снимков";
 "screenshotGuideStepWelcome" = "Как это работает";
 "screenshotGuideStepFolder" = "Папка сохранения";
-"screenshotGuideStepReady" = "Начало работы";
+"screenshotGuideStepReady" = "Настроить систему";
 "screenshotGuideWelcomeTitle" = "Снимки сразу в редакторе";
 "screenshotGuideWelcomeBody" = "Настройте один раз и используйте обычные сочетания клавиш macOS — clipcap автоматически получит новые снимки и записи";
 "screenshotGuideFlow" = "Снимок macOS  →  Отдельная папка  →  clipcap";
@@ -628,7 +628,7 @@
 "screenshotGuideConfigure" = "Настроить и продолжить";
 "screenshotGuideContinue" = "Далее";
 "screenshotGuideReadyTitle" = "Всё готово к снимкам";
-"screenshotGuideReadyBody" = "Папка подтверждена и автоматический приём включён — можно делать снимки";
+"screenshotGuideReadyBody" = "Тестовый снимок открылся в редакторе, автоматический приём включён";
 "screenshotGuideShortcutHint" = "Нажмите ⇧⌘4 для выбора области или нажмите пробел и выберите окно — снимок откроется в редакторе";
 "screenshotGuideRecordingHint" = "Используйте ⇧⌘5 для записи экрана — готовое видео появится в истории";
 "screenshotGuideThumbnailTitle" = "Отключите плавающую миниатюру для ускорения";
@@ -642,3 +642,25 @@
 "screenshotGuideCheck" = "Проверить";
 "screenshotGuideAlreadyConfigured" = "Система уже использует эту папку — нажмите «Далее», чтобы включить автоматический приём";
 "screenshotGuideManualIntro" = "Выполните шаги ниже и вернитесь сюда для автоматической проверки папки";
+
+"screenshotGuideChangeDirectory" = "Изменить папку";
+"screenshotGuideSetSystem" = "Настроить системные снимки";
+"screenshotGuideSystemDirectory" = "Сохраняйте системные снимки в эту папку";
+"screenshotGuideOptionsStep" = "1  Нажмите ⇧⌘5, чтобы открыть Снимок экрана, затем нажмите Параметры";
+"screenshotGuidePreferencesStep" = "2  Отключите Плавающую миниатюру и выберите папку из шага 2 через Другое размещение";
+
+"screenshotGuideFolderSelected" = "Папка приёма выбрана, настройте систему на следующем шаге";
+
+"screenshotGuideFolderNext" = "Здесь выбирается только папка clipcap, далее настройте сохранение снимков и записей экрана в эту же папку";
+
+"screenshotGuideRequiredTitle" = "Сначала настройте системные снимки";
+
+"screenshotGuideRequiredBody" = "Это обязательный шаг, выберите системную папку и проверьте приём одним снимком";
+
+"screenshotGuideLocationMatched" = "Системные папки совпадают, проверьте приём снимка";
+
+"screenshotGuideVerify" = "Проверить снимок";
+
+"screenshotGuideVerifyHint" = "Нажмите Настроить системные снимки и следуйте изображениям, затем вернитесь и нажмите Проверить снимок, выделите область и дождитесь открытия в clipcap";
+
+"screenshotGuideVerified" = "Тестовый снимок получен, можно начинать";

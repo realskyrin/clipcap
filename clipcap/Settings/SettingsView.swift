@@ -77,6 +77,7 @@ final class SettingsView: NSView {
     private var pinAcrossSpacesSwitch: NSSwitch?
     private var systemScreenshotAutoOpenSwitch: NSSwitch?
     private var systemScreenshotStatusLabel: NSTextField?
+    private var systemScreenshotFolderPathLabel: NSTextField?
     private var systemScreenshotSetupButton: NSButton?
     private var historyCacheSwitch: NSSwitch?
     private var clipboardTextCacheSwitch: NSSwitch?
@@ -134,6 +135,12 @@ final class SettingsView: NSView {
             self,
             selector: #selector(refreshSystemScreenshotAutoOpenControls),
             name: .systemScreenshotAutoOpenDidChange,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(refreshSystemScreenshotAutoOpenControls),
+            name: .systemScreenshotVerificationDidChange,
             object: nil
         )
         NotificationCenter.default.addObserver(
@@ -1392,6 +1399,7 @@ final class SettingsView: NSView {
         )
         pathLabel.lineBreakMode = .byTruncatingMiddle
         pathLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        systemScreenshotFolderPathLabel = pathLabel
         folderText.addArrangedSubview(pathLabel)
 
         let setup = makeButton(
@@ -1667,7 +1675,8 @@ final class SettingsView: NSView {
 
     @objc private func systemScreenshotAutoOpenToggled(_ sender: NSSwitch) {
         if sender.state == .on {
-            if SystemScreenshotLocationManager.shared.isTargetLocationActive {
+            if SystemScreenshotLocationManager.shared.isTargetLocationActive,
+               Defaults.systemScreenshotVerifiedDirectory == SystemScreenshotAutoOpen.directoryURL.path {
                 Defaults.systemScreenshotAutoOpenEnabled = true
                 refreshSystemScreenshotAutoOpenControls()
             } else {
@@ -1749,11 +1758,12 @@ final class SettingsView: NSView {
     }
 
     @objc private func refreshSystemScreenshotAutoOpenControls() {
+        systemScreenshotFolderPathLabel?.stringValue = SaveDestination.displayPath(SystemScreenshotAutoOpen.directoryURL)
         systemScreenshotAutoOpenSwitch?.state = Defaults.systemScreenshotAutoOpenEnabled ? .on : .off
         let isConfigured = SystemScreenshotLocationManager.shared.isTargetLocationActive
-        systemScreenshotStatusLabel?.stringValue = isConfigured
-            ? L10n.systemScreenshotFolderConfigured
-            : L10n.systemScreenshotFolderNeedsSetup
+        let verified = isConfigured && Defaults.systemScreenshotVerifiedDirectory == SystemScreenshotAutoOpen.directoryURL.path
+        systemScreenshotStatusLabel?.stringValue = verified ? L10n.systemScreenshotFolderConfigured
+            : (isConfigured ? L10n.screenshotGuideLocationMatched : L10n.systemScreenshotFolderNeedsSetup)
         systemScreenshotStatusLabel?.textColor = isConfigured
             ? NSColor.systemGreen.withAlphaComponent(0.86)
             : NSColor.systemOrange.withAlphaComponent(0.86)

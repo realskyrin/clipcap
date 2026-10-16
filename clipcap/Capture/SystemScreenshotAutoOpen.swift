@@ -7,6 +7,7 @@ import UniformTypeIdentifiers
 
 enum SystemScreenshotAutoOpen {
     static var directoryURL: URL {
+        if let selected = Defaults.systemScreenshotDirectory { return selected }
         let pictures = FileManager.default.urls(for: .picturesDirectory, in: .userDomainMask).first
             ?? FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Pictures", isDirectory: true)
         return pictures.appendingPathComponent("ClipCap Screenshots", isDirectory: true)
@@ -100,62 +101,96 @@ enum SystemScreenshotAutoOpen {
 
 protocol SystemScreenshotLocationPreferenceStoring: AnyObject {
     func readLocation() -> String?
+    func readRecordingLocation() -> String?
+    func snapshot() -> [String: String]?
+    func restoreSnapshot(_ values: [String: String]) -> Bool
     @discardableResult func writeLocation(_ location: String?) -> Bool
+}
+
+extension SystemScreenshotLocationPreferenceStoring {
+    func readRecordingLocation() -> String? { readLocation() }
+    func snapshot() -> [String: String]? { nil }
+    func restoreSnapshot(_ values: [String: String]) -> Bool { false }
 }
 
 protocol SystemScreenshotLocationBackupStoring: AnyObject {
     var isManaged: Bool { get set }
+    var managedLocation: String? { get set }
+    var originalPreferences: [String: String]? { get set }
     var originalLocationWasSet: Bool { get set }
     var originalLocation: String? { get set }
     func clear()
 }
 
 final class CFPreferencesSystemScreenshotLocationStore: SystemScreenshotLocationPreferenceStoring {
-    private let key = "location" as CFString
     private let applicationID = "com.apple.screencapture" as CFString
+    private let keys = ["location", "location-screenshot", "location-screenrecording",
+                        "target", "target-screenshot", "target-screenrecording"]
 
-    func readLocation() -> String? {
-        CFPreferencesSynchronize(
-            applicationID,
-            kCFPreferencesCurrentUser,
-            kCFPreferencesAnyHost
-        )
-        return CFPreferencesCopyValue(
-            key,
-            applicationID,
-            kCFPreferencesCurrentUser,
-            kCFPreferencesAnyHost
-        ) as? String
+    private func synchronize() -> Bool {
+        CFPreferencesSynchronize(applicationID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost)
+    }
+
+    private func value(_ key: String) -> String? {
+        CFPreferencesCopyValue(key as CFString, applicationID,
+                               kCFPreferencesCurrentUser, kCFPreferencesAnyHost) as? String
+    }
+
+    private func effectiveLocation(for mode: String) -> String? {
+        _ = synchronize()
+        // macOS 27 keeps separate screenshot and recording destinations. A
+        // legacy location alone does not select that folder in Screenshot UI.
+        let usesSeparateDestinations = ProcessInfo.processInfo.operatingSystemVersion.majorVersion >= 27
+        let target = value("target-" + mode) ?? (usesSeparateDestinations ? "file" : value("target")) ?? "file"
+        guard target == "file" else { return nil }
+        if let location = value("location-" + mode) { return location }
+        if !usesSeparateDestinations, let location = value("location") { return location }
+        return FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask).first?.path
+    }
+
+    func readLocation() -> String? { effectiveLocation(for: "screenshot") }
+    func readRecordingLocation() -> String? { effectiveLocation(for: "screenrecording") }
+
+    func snapshot() -> [String: String]? {
+        _ = synchronize()
+        return Dictionary(uniqueKeysWithValues: keys.compactMap { key in value(key).map { (key, $0) } })
     }
 
     @discardableResult
     func writeLocation(_ location: String?) -> Bool {
-        if let location {
-            CFPreferencesSetValue(
-                key,
-                location as CFString,
-                applicationID,
-                kCFPreferencesCurrentUser,
-                kCFPreferencesAnyHost
-            )
-        } else {
-            CFPreferencesSetValue(
-                key,
-                nil,
-                applicationID,
-                kCFPreferencesCurrentUser,
-                kCFPreferencesAnyHost
-            )
+        for key in ["location", "location-screenshot", "location-screenrecording"] {
+            CFPreferencesSetValue(key as CFString, location as CFString?, applicationID,
+                                  kCFPreferencesCurrentUser, kCFPreferencesAnyHost)
         }
-        return CFPreferencesSynchronize(
-            applicationID,
-            kCFPreferencesCurrentUser,
-            kCFPreferencesAnyHost
-        )
+        if location != nil {
+            for key in ["target", "target-screenshot", "target-screenrecording"] {
+                CFPreferencesSetValue(key as CFString, "file" as CFString, applicationID,
+                                      kCFPreferencesCurrentUser, kCFPreferencesAnyHost)
+            }
+        }
+        return synchronize()
+    }
+
+    func restoreSnapshot(_ values: [String: String]) -> Bool {
+        for key in keys {
+            CFPreferencesSetValue(key as CFString, values[key] as CFString?, applicationID,
+                                  kCFPreferencesCurrentUser, kCFPreferencesAnyHost)
+        }
+        return synchronize() && snapshot() == values
     }
 }
 
 final class DefaultsSystemScreenshotLocationBackupStore: SystemScreenshotLocationBackupStoring {
+    var originalPreferences: [String: String]? {
+        get { Defaults.systemScreenshotOriginalPreferences }
+        set { Defaults.systemScreenshotOriginalPreferences = newValue }
+    }
+
+    var managedLocation: String? {
+        get { Defaults.systemScreenshotManagedLocation }
+        set { Defaults.systemScreenshotManagedLocation = newValue }
+    }
+
     var isManaged: Bool {
         get { Defaults.systemScreenshotLocationManaged }
         set { Defaults.systemScreenshotLocationManaged = newValue }
@@ -186,22 +221,24 @@ final class SystemScreenshotLocationManager {
 
     static let shared = SystemScreenshotLocationManager()
 
-    let targetDirectory: URL
+    private let fixedTargetDirectory: URL?
+    var targetDirectory: URL { fixedTargetDirectory ?? SystemScreenshotAutoOpen.directoryURL }
     private let preferenceStore: SystemScreenshotLocationPreferenceStoring
     private let backupStore: SystemScreenshotLocationBackupStoring
 
     init(
-        targetDirectory: URL = SystemScreenshotAutoOpen.directoryURL,
+        targetDirectory: URL? = nil,
         preferenceStore: SystemScreenshotLocationPreferenceStoring = CFPreferencesSystemScreenshotLocationStore(),
         backupStore: SystemScreenshotLocationBackupStoring = DefaultsSystemScreenshotLocationBackupStore()
     ) {
-        self.targetDirectory = targetDirectory.standardizedFileURL
+        self.fixedTargetDirectory = targetDirectory?.standardizedFileURL
         self.preferenceStore = preferenceStore
         self.backupStore = backupStore
     }
 
     var isTargetLocationActive: Bool {
         pathsMatch(preferenceStore.readLocation(), targetDirectory.path)
+            && pathsMatch(preferenceStore.readRecordingLocation(), targetDirectory.path)
     }
 
     var isAutomaticallyManaged: Bool {
@@ -223,32 +260,35 @@ final class SystemScreenshotLocationManager {
             return true
         }
 
-        if backupStore.isManaged {
-            // The user changed the screenshot location after ClipCap configured
-            // it. Treat that newer choice as the value to restore next time.
+        let previousLocation = preferenceStore.readLocation()
+        let previousPreferences = preferenceStore.snapshot()
+        let retainsBackup = backupStore.isManaged
+            && pathsMatch(previousLocation, backupStore.managedLocation ?? targetDirectory.path)
+        if !retainsBackup {
             backupStore.clear()
+            backupStore.originalLocationWasSet = previousLocation != nil
+            backupStore.originalLocation = previousLocation
+            backupStore.originalPreferences = previousPreferences
         }
 
-        let originalLocation = preferenceStore.readLocation()
-        backupStore.originalLocationWasSet = originalLocation != nil
-        backupStore.originalLocation = originalLocation
-        backupStore.isManaged = false
-
-        guard preferenceStore.writeLocation(targetDirectory.path),
-              isTargetLocationActive
-        else {
-            _ = preferenceStore.writeLocation(originalLocation)
-            backupStore.clear()
+        guard preferenceStore.writeLocation(targetDirectory.path), isTargetLocationActive else {
+            if let previousPreferences {
+                _ = preferenceStore.restoreSnapshot(previousPreferences)
+            } else {
+                _ = preferenceStore.writeLocation(previousLocation)
+            }
+            if !retainsBackup { backupStore.clear() }
             return false
         }
-
+        backupStore.managedLocation = targetDirectory.path
         backupStore.isManaged = true
         return true
     }
 
     func restoreAutomaticallyConfiguredLocation() -> RestoreResult {
         guard backupStore.isManaged else { return .notManaged }
-        guard isTargetLocationActive else {
+        guard pathsMatch(preferenceStore.readLocation(), backupStore.managedLocation ?? targetDirectory.path),
+              pathsMatch(preferenceStore.readRecordingLocation(), backupStore.managedLocation ?? targetDirectory.path) else {
             backupStore.clear()
             return .changedExternally
         }
@@ -256,9 +296,14 @@ final class SystemScreenshotLocationManager {
         let originalLocation = backupStore.originalLocationWasSet
             ? backupStore.originalLocation
             : nil
-        guard preferenceStore.writeLocation(originalLocation),
-              locationsMatchAfterRestore(originalLocation)
-        else {
+        let restored: Bool
+        if let snapshot = backupStore.originalPreferences {
+            restored = preferenceStore.restoreSnapshot(snapshot)
+        } else {
+            restored = preferenceStore.writeLocation(originalLocation)
+                && locationsMatchAfterRestore(originalLocation)
+        }
+        guard restored else {
             return .failed
         }
 
@@ -272,7 +317,10 @@ final class SystemScreenshotLocationManager {
 
     private func locationsMatchAfterRestore(_ originalLocation: String?) -> Bool {
         let current = preferenceStore.readLocation()
-        guard let originalLocation else { return current == nil }
+        guard let originalLocation else {
+            let desktop = FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask).first?.path
+            return current == nil || pathsMatch(current, desktop)
+        }
         return pathsMatch(current, originalLocation)
     }
 
@@ -283,10 +331,10 @@ final class SystemScreenshotLocationManager {
     private func normalizedPath(_ value: String?) -> String? {
         guard let value, !value.isEmpty else { return nil }
         if let url = URL(string: value), url.isFileURL {
-            return url.standardizedFileURL.path
+            return url.standardizedFileURL.resolvingSymlinksInPath().path
         }
         let expanded = NSString(string: value).expandingTildeInPath
-        return URL(fileURLWithPath: expanded).standardizedFileURL.path
+        return URL(fileURLWithPath: expanded).standardizedFileURL.resolvingSymlinksInPath().path
     }
 }
 

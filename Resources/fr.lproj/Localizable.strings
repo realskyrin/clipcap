@@ -610,7 +610,7 @@
 "screenshotGuideTitle" = "Configurer les captures";
 "screenshotGuideStepWelcome" = "Fonctionnement";
 "screenshotGuideStepFolder" = "Enregistrement";
-"screenshotGuideStepReady" = "Premiers pas";
+"screenshotGuideStepReady" = "Configurer le système";
 "screenshotGuideWelcomeTitle" = "Vos captures directement dans l’éditeur";
 "screenshotGuideWelcomeBody" = "Configurez une fois, puis utilisez les raccourcis macOS habituels pour recevoir les captures et enregistrements dans clipcap";
 "screenshotGuideFlow" = "Capture macOS  →  Dossier dédié  →  clipcap";
@@ -628,7 +628,7 @@
 "screenshotGuideConfigure" = "Configurer et continuer";
 "screenshotGuideContinue" = "Continuer";
 "screenshotGuideReadyTitle" = "Tout est prêt pour les captures";
-"screenshotGuideReadyBody" = "L’emplacement est confirmé et la réception automatique est activée, vous pouvez prendre une capture";
+"screenshotGuideReadyBody" = "La capture de test s’est ouverte dans l’éditeur et la réception automatique est activée";
 "screenshotGuideShortcutHint" = "Appuyez sur ⇧⌘4 pour sélectionner une zone, ou sur Espace puis une fenêtre, et la capture s’ouvrira dans l’éditeur";
 "screenshotGuideRecordingHint" = "Utilisez ⇧⌘5 pour filmer l’écran et retrouvez les vidéos terminées dans l’historique";
 "screenshotGuideThumbnailTitle" = "Désactiver la vignette flottante pour aller plus vite";
@@ -642,3 +642,25 @@
 "screenshotGuideCheck" = "Vérifier";
 "screenshotGuideAlreadyConfigured" = "Le système utilise déjà ce dossier, cliquez sur Continuer pour activer la réception automatique";
 "screenshotGuideManualIntro" = "Suivez les étapes ci-dessous puis revenez ici pour vérifier automatiquement l’emplacement";
+
+"screenshotGuideChangeDirectory" = "Changer de dossier";
+"screenshotGuideSetSystem" = "Configurer les captures système";
+"screenshotGuideSystemDirectory" = "Enregistrer les captures système dans ce dossier";
+"screenshotGuideOptionsStep" = "1  Appuyez sur ⇧⌘5 pour ouvrir Capture d’écran, puis cliquez sur Options";
+"screenshotGuidePreferencesStep" = "2  Désactivez Afficher la vignette flottante et choisissez le dossier de l’étape 2 via Autre emplacement";
+
+"screenshotGuideFolderSelected" = "Dossier de réception choisi, configurez le système à l’étape suivante";
+
+"screenshotGuideFolderNext" = "Ce choix concerne uniquement clipcap, configurez ensuite Capture d’écran pour enregistrer les captures et vidéos dans ce même dossier";
+
+"screenshotGuideRequiredTitle" = "Configurez d’abord les captures système";
+
+"screenshotGuideRequiredBody" = "Cette étape est obligatoire, définissez le dossier système puis vérifiez la réception avec une capture";
+
+"screenshotGuideLocationMatched" = "Les dossiers système correspondent, vérifiez la réception";
+
+"screenshotGuideVerify" = "Vérifier la capture";
+
+"screenshotGuideVerifyHint" = "Cliquez sur Configurer les captures système et suivez les images, puis revenez et cliquez sur Vérifier la capture pour capturer une zone, continuez après son ouverture dans clipcap";
+
+"screenshotGuideVerified" = "Capture de test reçue, vous pouvez commencer";

@@ -103,6 +103,9 @@ cp "Resources/AppIcon.icns" "$RESOURCES/AppIcon.icns"
 # app bundle on the next rebuild without touching Swift code.
 cp "design/menuBarIcon.svg" "$RESOURCES/MenuBarIcon.svg"
 
+# Copy the screenshot setup illustrations.
+cp -R "Resources/ScreenshotGuide" "$RESOURCES/"
+
 # Copy localization bundles (.lproj). The app loads these directly for its
 # in-app language picker — see Localizer.swift.
 for lproj in Resources/*.lproj; do

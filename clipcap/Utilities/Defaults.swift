@@ -70,6 +70,8 @@ extension Notification.Name {
     static let editorShortcutsDidChange = Notification.Name("clipcap.editorShortcutsDidChange")
     static let hotkeyDidChange = Notification.Name("clipcap.hotkeyDidChange")
     static let caffeinationStateDidChange = Notification.Name("clipcap.caffeinationStateDidChange")
+    static let systemScreenshotVerificationDidChange = Notification.Name("clipcap.systemScreenshotVerificationDidChange")
+    static let systemScreenshotImageImported = Notification.Name("clipcap.systemScreenshotImageImported")
     static let systemScreenshotAutoOpenDidChange = Notification.Name("clipcap.systemScreenshotAutoOpenDidChange")
 }
 
@@ -134,6 +136,19 @@ enum L10n {
     static var screenshotQualityCompressingSave: String { s("screenshotQualityCompressingSave") }
     static var screenshotQualityCompressingClipboard: String { s("screenshotQualityCompressingClipboard") }
     static var screenshotCompressionFailed: String { s("screenshotCompressionFailed") }
+    static var screenshotGuideFolderSelected: String { s("screenshotGuideFolderSelected") }
+    static var screenshotGuideFolderNext: String { s("screenshotGuideFolderNext") }
+    static var screenshotGuideRequiredTitle: String { s("screenshotGuideRequiredTitle") }
+    static var screenshotGuideRequiredBody: String { s("screenshotGuideRequiredBody") }
+    static var screenshotGuideLocationMatched: String { s("screenshotGuideLocationMatched") }
+    static var screenshotGuideVerify: String { s("screenshotGuideVerify") }
+    static var screenshotGuideVerifyHint: String { s("screenshotGuideVerifyHint") }
+    static var screenshotGuideVerified: String { s("screenshotGuideVerified") }
+    static var screenshotGuideChangeDirectory: String { s("screenshotGuideChangeDirectory") }
+    static var screenshotGuideSetSystem: String { s("screenshotGuideSetSystem") }
+    static var screenshotGuideSystemDirectory: String { s("screenshotGuideSystemDirectory") }
+    static var screenshotGuideOptionsStep: String { s("screenshotGuideOptionsStep") }
+    static var screenshotGuidePreferencesStep: String { s("screenshotGuidePreferencesStep") }
     static var screenshotGuideAutomatic: String { s("screenshotGuideAutomatic") }
     static var screenshotGuideCheck: String { s("screenshotGuideCheck") }
     static var screenshotGuideAlreadyConfigured: String { s("screenshotGuideAlreadyConfigured") }
@@ -1080,6 +1095,39 @@ struct Defaults {
         }
     }
 
+    static var systemScreenshotVerifiedDirectory: String? {
+        get { defaults.string(forKey: "systemScreenshotVerifiedDirectory") }
+        set { defaults.set(newValue, forKey: "systemScreenshotVerifiedDirectory") }
+    }
+
+    static var systemScreenshotOriginalPreferences: [String: String]? {
+        get { defaults.dictionary(forKey: "systemScreenshotOriginalPreferences") as? [String: String] }
+        set { defaults.set(newValue, forKey: "systemScreenshotOriginalPreferences") }
+    }
+
+    static var systemScreenshotDirectory: URL? {
+        get {
+            guard let path = defaults.string(forKey: "systemScreenshotDirectory"), !path.isEmpty else { return nil }
+            return URL(fileURLWithPath: path, isDirectory: true).standardizedFileURL
+        }
+        set {
+            let oldDirectory = SystemScreenshotAutoOpen.directoryURL
+            if systemScreenshotLocationManaged, systemScreenshotManagedLocation == nil {
+                systemScreenshotManagedLocation = oldDirectory.path
+            }
+            defaults.set(newValue?.standardizedFileURL.path, forKey: "systemScreenshotDirectory")
+            if oldDirectory != SystemScreenshotAutoOpen.directoryURL {
+                systemScreenshotVerifiedDirectory = nil
+                NotificationCenter.default.post(name: .systemScreenshotAutoOpenDidChange, object: nil)
+            }
+        }
+    }
+
+    static var systemScreenshotManagedLocation: String? {
+        get { defaults.string(forKey: "systemScreenshotManagedLocation") }
+        set { defaults.set(newValue, forKey: "systemScreenshotManagedLocation") }
+    }
+
     static var systemScreenshotAutoOpenEnabled: Bool {
         get { defaults.bool(forKey: "systemScreenshotAutoOpenEnabled") }
         set {
@@ -1118,6 +1166,8 @@ struct Defaults {
     }
 
     static func clearSystemScreenshotLocationBackup() {
+        defaults.removeObject(forKey: "systemScreenshotOriginalPreferences")
+        defaults.removeObject(forKey: "systemScreenshotManagedLocation")
         defaults.removeObject(forKey: "systemScreenshotLocationManaged")
         defaults.removeObject(forKey: "systemScreenshotOriginalLocationWasSet")
         defaults.removeObject(forKey: "systemScreenshotOriginalLocation")

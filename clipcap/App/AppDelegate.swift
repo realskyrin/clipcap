@@ -168,10 +168,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private func openNextQueuedSystemScreenshotIfPossible() {
         guard overlayController == nil else { return }
         while let url = systemScreenshotOpenQueue.popFirst() {
+            let createdAt = (try? url.resourceValues(forKeys: [.creationDateKey]))?.creationDate
             if SystemScreenshotEditorHandoff.launch(
                 sourceURL: url,
                 editorLauncher: launchImageFile
             ) {
+                NotificationCenter.default.post(name: .systemScreenshotImageImported, object: url,
+                                                userInfo: createdAt.map { ["createdAt": $0] })
                 return
             }
         }

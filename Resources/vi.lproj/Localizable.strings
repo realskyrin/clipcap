@@ -610,7 +610,7 @@
 "screenshotGuideTitle" = "Hướng dẫn ảnh chụp";
 "screenshotGuideStepWelcome" = "Cách hoạt động";
 "screenshotGuideStepFolder" = "Thư mục lưu";
-"screenshotGuideStepReady" = "Bắt đầu";
+"screenshotGuideStepReady" = "Thiết lập hệ thống";
 "screenshotGuideWelcomeTitle" = "Mở ảnh chụp ngay trong trình sửa";
 "screenshotGuideWelcomeBody" = "Thiết lập một lần rồi dùng phím tắt macOS như thường lệ để clipcap tự nhận ảnh chụp và bản ghi mới";
 "screenshotGuideFlow" = "Ảnh chụp macOS  →  Thư mục riêng  →  clipcap";
@@ -628,7 +628,7 @@
 "screenshotGuideConfigure" = "Thiết lập và tiếp tục";
 "screenshotGuideContinue" = "Tiếp tục";
 "screenshotGuideReadyTitle" = "Sẵn sàng nhận ảnh chụp";
-"screenshotGuideReadyBody" = "Đã xác nhận thư mục và bật nhận tự động, bạn có thể chụp như thường lệ";
+"screenshotGuideReadyBody" = "Ảnh chụp thử đã mở trong trình sửa và tính năng nhận tự động đã bật";
 "screenshotGuideShortcutHint" = "Nhấn ⇧⌘4 để chọn vùng, hoặc nhấn phím cách rồi bấm vào cửa sổ để mở ảnh chụp trong trình sửa";
 "screenshotGuideRecordingHint" = "Dùng ⇧⌘5 để ghi màn hình và xem bản ghi hoàn tất trong lịch sử";
 "screenshotGuideThumbnailTitle" = "Tắt hình thu nhỏ nổi để sửa nhanh hơn";
@@ -642,3 +642,25 @@
 "screenshotGuideCheck" = "Kiểm tra thiết lập";
 "screenshotGuideAlreadyConfigured" = "Hệ thống đã dùng thư mục này, bấm Tiếp tục để bật nhận tự động";
 "screenshotGuideManualIntro" = "Làm theo các bước bên dưới rồi quay lại để tự động kiểm tra vị trí lưu";
+
+"screenshotGuideChangeDirectory" = "Đổi thư mục";
+"screenshotGuideSetSystem" = "Thiết lập ảnh chụp hệ thống";
+"screenshotGuideSystemDirectory" = "Lưu ảnh chụp hệ thống vào thư mục này";
+"screenshotGuideOptionsStep" = "1  Nhấn ⇧⌘5 để mở Ảnh chụp màn hình, rồi bấm Tùy chọn";
+"screenshotGuidePreferencesStep" = "2  Tắt Hiển thị hình thu nhỏ nổi và dùng Vị trí khác để chọn thư mục ở bước 2";
+
+"screenshotGuideFolderSelected" = "Đã chọn thư mục nhận, thiết lập hệ thống ở bước tiếp theo";
+
+"screenshotGuideFolderNext" = "Bước này chỉ chọn thư mục nhận của clipcap, tiếp theo hãy đặt ảnh chụp và bản ghi hệ thống lưu vào cùng thư mục";
+
+"screenshotGuideRequiredTitle" = "Hãy thiết lập ảnh chụp hệ thống trước";
+
+"screenshotGuideRequiredBody" = "Đây là bước bắt buộc, hãy đặt thư mục lưu của hệ thống rồi xác minh nhận bằng một ảnh chụp";
+
+"screenshotGuideLocationMatched" = "Thư mục hệ thống đã khớp, hãy xác minh nhận ảnh";
+
+"screenshotGuideVerify" = "Xác minh ảnh chụp";
+
+"screenshotGuideVerifyHint" = "Bấm Thiết lập ảnh chụp hệ thống và làm theo hình, rồi quay lại bấm Xác minh ảnh chụp để chụp một vùng, tiếp tục sau khi clipcap mở ảnh";
+
+"screenshotGuideVerified" = "Đã nhận ảnh chụp thử, bạn có thể bắt đầu";

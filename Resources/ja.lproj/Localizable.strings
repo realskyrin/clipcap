@@ -610,7 +610,7 @@
 "screenshotGuideTitle" = "スクリーンショット設定";
 "screenshotGuideStepWelcome" = "使い方";
 "screenshotGuideStepFolder" = "保存先";
-"screenshotGuideStepReady" = "利用開始";
+"screenshotGuideStepReady" = "システムを設定";
 "screenshotGuideWelcomeTitle" = "撮影した画像をすぐに編集";
 "screenshotGuideWelcomeBody" = "一度設定すれば、いつもの macOS のショートカットで撮影した画像や録画を clipcap が自動で受け取ります";
 "screenshotGuideFlow" = "macOS の撮影  →  専用フォルダ  →  clipcap";
@@ -628,7 +628,7 @@
 "screenshotGuideConfigure" = "設定して続ける";
 "screenshotGuideContinue" = "次へ";
 "screenshotGuideReadyTitle" = "撮影の準備ができました";
-"screenshotGuideReadyBody" = "保存先を確認し、自動受信をオンにしました／いつもどおり撮影できます";
+"screenshotGuideReadyBody" = "テスト画像をエディタで開き、自動受信を有効にしました";
 "screenshotGuideShortcutHint" = "⇧⌘4 で範囲を選択するか、スペースキーを押してウインドウをクリックすると、画像が編集画面に開きます";
 "screenshotGuideRecordingHint" = "録画は ⇧⌘5 で開始し、終了後は履歴で確認できます";
 "screenshotGuideThumbnailTitle" = "フローティングサムネールの非表示を推奨";
@@ -642,3 +642,25 @@
 "screenshotGuideCheck" = "設定を確認";
 "screenshotGuideAlreadyConfigured" = "このフォルダは設定済みです／「次へ」で自動受信を有効にします";
 "screenshotGuideManualIntro" = "下の手順で設定し、このガイドに戻ると保存先を自動で確認します";
+
+"screenshotGuideChangeDirectory" = "フォルダを変更";
+"screenshotGuideSetSystem" = "システムスクリーンショットを設定";
+"screenshotGuideSystemDirectory" = "システムスクリーンショットの保存先";
+"screenshotGuideOptionsStep" = "1  ⇧⌘5 でスクリーンショットを開き、オプションをクリック";
+"screenshotGuidePreferencesStep" = "2  フローティングサムネールを表示をオフにし、その他の場所から手順 2 のフォルダを選択";
+
+"screenshotGuideFolderSelected" = "受信フォルダを選択済み、次の手順でシステムを設定";
+
+"screenshotGuideFolderNext" = "ここでは clipcap の受信先のみ選択します、次にスクリーンショットと録画を同じフォルダに保存する設定が必要です";
+
+"screenshotGuideRequiredTitle" = "先にシステムスクリーンショットを設定";
+
+"screenshotGuideRequiredBody" = "開始前に必要な手順です、システムの保存先を設定し、スクリーンショットの受信を確認してください";
+
+"screenshotGuideLocationMatched" = "システムの保存先が一致しています、受信を確認してください";
+
+"screenshotGuideVerify" = "スクリーンショットを確認";
+
+"screenshotGuideVerifyHint" = "システムスクリーンショットを設定をクリックして画像の手順に従い、戻って確認ボタンで範囲を撮影し、clipcap で開くと開始できます";
+
+"screenshotGuideVerified" = "テスト画像を受信しました、開始できます";

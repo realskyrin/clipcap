@@ -610,7 +610,7 @@
 "screenshotGuideTitle" = "Screenshot setup";
 "screenshotGuideStepWelcome" = "How it works";
 "screenshotGuideStepFolder" = "Save location";
-"screenshotGuideStepReady" = "Get started";
+"screenshotGuideStepReady" = "Set Up Screenshot";
 "screenshotGuideWelcomeTitle" = "Bring screenshots straight into the editor";
 "screenshotGuideWelcomeBody" = "Set up once, then use the usual macOS screenshot shortcuts and clipcap will receive new screenshots and recordings";
 "screenshotGuideFlow" = "macOS Screenshot  →  Dedicated folder  →  clipcap";
@@ -628,7 +628,7 @@
 "screenshotGuideConfigure" = "Set up and continue";
 "screenshotGuideContinue" = "Continue";
 "screenshotGuideReadyTitle" = "Ready for screenshots";
-"screenshotGuideReadyBody" = "The save location is confirmed and automatic receiving is on, so you can take a screenshot now";
+"screenshotGuideReadyBody" = "The test screenshot opened in the editor and automatic receiving is on";
 "screenshotGuideShortcutHint" = "Press ⇧⌘4 to select an area, or press Space and click a window, and the screenshot will open in the editor";
 "screenshotGuideRecordingHint" = "Use ⇧⌘5 to record your screen and find completed recordings in History";
 "screenshotGuideThumbnailTitle" = "Turn off the floating thumbnail for faster editing";
@@ -642,3 +642,25 @@
 "screenshotGuideCheck" = "Check settings";
 "screenshotGuideAlreadyConfigured" = "The system already uses this folder, click Continue to enable automatic receiving";
 "screenshotGuideManualIntro" = "Follow the steps below, then return here to automatically check the save location";
+
+"screenshotGuideChangeDirectory" = "Change Folder";
+"screenshotGuideSetSystem" = "Set Up System Screenshots";
+"screenshotGuideSystemDirectory" = "Save system screenshots to this folder";
+"screenshotGuideOptionsStep" = "1  Press ⇧⌘5 to open Screenshot, then click Options";
+"screenshotGuidePreferencesStep" = "2  Turn off Show Floating Thumbnail and use Other Location to select the folder from step 2";
+
+"screenshotGuideFolderSelected" = "Receiving folder selected, system setup follows in the next step";
+
+"screenshotGuideFolderNext" = "This selects only the clipcap receiving folder, next set Screenshot to save screenshots and recordings to the same folder";
+
+"screenshotGuideRequiredTitle" = "Complete system screenshot setup first";
+
+"screenshotGuideRequiredBody" = "This step is required before getting started, set the system save folder and verify receiving with one screenshot";
+
+"screenshotGuideLocationMatched" = "System save folders match, verify screenshot receiving";
+
+"screenshotGuideVerify" = "Verify Screenshot";
+
+"screenshotGuideVerifyHint" = "Click Set Up System Screenshots and follow the images, then return and click Verify Screenshot to capture an area, continue after clipcap opens it";
+
+"screenshotGuideVerified" = "Test screenshot received, you can get started";

@@ -610,7 +610,7 @@
 "screenshotGuideTitle" = "截圖設定引導";
 "screenshotGuideStepWelcome" = "了解使用方式";
 "screenshotGuideStepFolder" = "設定儲存目錄";
-"screenshotGuideStepReady" = "開始使用";
+"screenshotGuideStepReady" = "設定系統截圖";
 "screenshotGuideWelcomeTitle" = "讓截圖直接進入編輯器";
 "screenshotGuideWelcomeBody" = "只需設定一次，之後照常使用 macOS 截圖快捷鍵，clipcap 會自動接收新的截圖與螢幕錄影";
 "screenshotGuideFlow" = "系統截圖  →  專用資料夾  →  clipcap";
@@ -628,7 +628,7 @@
 "screenshotGuideConfigure" = "設定並繼續";
 "screenshotGuideContinue" = "下一步";
 "screenshotGuideReadyTitle" = "已準備好接收截圖";
-"screenshotGuideReadyBody" = "儲存目錄已確認，自動接收已開啟，現在可以照常截圖";
+"screenshotGuideReadyBody" = "測試截圖已成功進入編輯器，自動接收已開啟";
 "screenshotGuideShortcutHint" = "按 ⇧⌘4 拖選範圍，或按空白鍵後點擊視窗，截圖會自動進入編輯器";
 "screenshotGuideRecordingHint" = "螢幕錄影使用 ⇧⌘5，結束後會出現在歷史記錄中";
 "screenshotGuideThumbnailTitle" = "建議關閉浮動縮圖";
@@ -642,3 +642,25 @@
 "screenshotGuideCheck" = "檢查設定";
 "screenshotGuideAlreadyConfigured" = "系統已使用此資料夾，點擊「下一步」即可開啟自動接收";
 "screenshotGuideManualIntro" = "依照下方步驟設定，返回此引導後會自動檢查儲存目錄";
+
+"screenshotGuideChangeDirectory" = "更換目錄";
+"screenshotGuideSetSystem" = "設定系統截圖";
+"screenshotGuideSystemDirectory" = "將系統截圖儲存到此目錄";
+"screenshotGuideOptionsStep" = "1  按 ⇧⌘5 開啟系統截圖工具，點擊「選項」";
+"screenshotGuidePreferencesStep" = "2  取消「顯示浮動縮圖」，透過「其他位置」選擇第 2 步的目錄";
+
+"screenshotGuideFolderSelected" = "接收目錄已選定，系統截圖仍需在下一步設定";
+
+"screenshotGuideFolderNext" = "此處只選擇 clipcap 的接收目錄，下一步必須將系統截圖與錄影儲存到同一目錄";
+
+"screenshotGuideRequiredTitle" = "請先完成系統截圖設定";
+
+"screenshotGuideRequiredBody" = "這是開始使用前的必要步驟，請先設定系統儲存目錄，再完成一次截圖接收驗證";
+
+"screenshotGuideLocationMatched" = "系統儲存目錄相符，請完成截圖接收驗證";
+
+"screenshotGuideVerify" = "截圖驗證";
+
+"screenshotGuideVerifyHint" = "點擊「設定系統截圖」依圖設定，返回後點擊「截圖驗證」並截取一個區域，clipcap 成功開啟後才能開始使用";
+
+"screenshotGuideVerified" = "已成功接收測試截圖，可以開始使用";
