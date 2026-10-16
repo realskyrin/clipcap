@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+## [1.8.42] - 2026-10-16
+
+### Added
+
+- Added a localized first-launch setup guide for macOS Screenshot (57b0678, 785087a)
+
+### Fixed
+
+- Improved Live Text fallback across OCR entry points (b8b1287)
+
+### Changed
+
+- Simplified screenshot folder monitoring and settings (3dde77e)
+
 ## [1.8.41] - 2026-10-15
 
 ### Changed
