@@ -445,8 +445,6 @@
 "openImage" = "Open Image";
 "openImageNoImage" = "Copy an image to the clipboard or choose an image file";
 
-"systemScreenshotAutoOpenLabel" = "Import system screenshots and recordings";
-"systemScreenshotAutoOpenHint" = "Imports new screenshots and recordings; screenshot sources are removed from the dedicated folder after loading while recording originals are preserved, without Screen Recording or Accessibility access";
 "systemScreenshotFolderLabel" = "System screenshot folder";
 "systemScreenshotFolderConfigured" = "The system screenshot location is ready";
 "systemScreenshotFolderNeedsSetup" = "Set the system screenshot save location to this folder before taking a screenshot";
@@ -460,12 +458,6 @@
 "systemScreenshotSetupCancel" = "Cancel";
 "systemScreenshotSetupFailedTitle" = "Could not configure screenshots";
 "systemScreenshotSetupFailedMessage" = "ClipCap could not change the system screenshot location. Use manual setup instead";
-"systemScreenshotDisableTitle" = "Turn off automatic screenshot opening";
-"systemScreenshotDisableMessage" = "You can restore the screenshot location used before ClipCap configured it or keep the current system location";
-"systemScreenshotDisableRestore" = "Turn Off and Restore";
-"systemScreenshotDisableKeep" = "Turn Off Only";
-"systemScreenshotRestoreFailedTitle" = "Could not restore screenshot location";
-"systemScreenshotRestoreFailedMessage" = "ClipCap left automatic opening enabled so you can try again without losing the saved location";
 
 "historyPanelLock" = "Lock History Panel";
 "historyPanelUnlock" = "Unlock History Panel";
@@ -590,8 +582,6 @@
 
 "mosaicBlur" = "Blur";
 "mosaicBlurAmount" = "Blur strength";
-"textFontDefaultHint" = "Font used by newly created text annotations";
-"textFontDefaultLabel" = "Default text font";
 "textFontLabel" = "Font";
 "textFontSystemDefault" = "System default";
 "tipRotate" = "Rotate";

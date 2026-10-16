@@ -116,37 +116,28 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(systemScreenshotAutoOpenSettingChanged),
-            name: .systemScreenshotAutoOpenDidChange,
+            selector: #selector(systemScreenshotDirectoryChanged),
+            name: .systemScreenshotDirectoryDidChange,
             object: nil
         )
-        applySystemScreenshotAutoOpenState()
+        restartSystemScreenshotMonitor()
     }
 
-    @objc private func systemScreenshotAutoOpenSettingChanged() {
-        applySystemScreenshotAutoOpenState()
+    @objc private func systemScreenshotDirectoryChanged() {
+        restartSystemScreenshotMonitor()
     }
 
-    private func applySystemScreenshotAutoOpenState() {
+    private func restartSystemScreenshotMonitor() {
         systemScreenshotMonitorGeneration += 1
         let generation = systemScreenshotMonitorGeneration
         systemScreenshotDirectoryMonitor?.stop()
         systemScreenshotDirectoryMonitor = nil
 
-        guard Defaults.systemScreenshotAutoOpenEnabled else {
-            systemScreenshotOpenQueue.removeAll()
-            return
-        }
-
-        guard SystemScreenshotAutoOpen.ensureDirectoryExists() else {
-            Defaults.systemScreenshotAutoOpenEnabled = false
-            return
-        }
-
+        // Always monitor the folder; the monitor retries directory preparation
+        // if it is temporarily unavailable.
         let monitor = SystemScreenshotDirectoryMonitor { [weak self] url in
             guard let self,
-                  self.systemScreenshotMonitorGeneration == generation,
-                  Defaults.systemScreenshotAutoOpenEnabled
+                  self.systemScreenshotMonitorGeneration == generation
             else { return }
             if RecordingImport.isVideo(url) {
                 RecordingImport.shared.enqueue(url)

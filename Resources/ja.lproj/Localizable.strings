@@ -445,8 +445,6 @@
 "openImage" = "画像を開く";
 "openImageNoImage" = "画像をクリップボードにコピーするか画像ファイルを選択してください";
 
-"systemScreenshotAutoOpenLabel" = "システムのスクリーンショットと録画を取り込む";
-"systemScreenshotAutoOpenHint" = "新しいスクリーンショットと録画を取り込み、読み込み後にスクリーンショットの元ファイルを削除し、録画の元ファイルは保持します。画面収録やアクセシビリティ権限は不要です";
 "systemScreenshotFolderLabel" = "システムスクリーンショットフォルダ";
 "systemScreenshotFolderConfigured" = "システムスクリーンショットの保存先は設定済み";
 "systemScreenshotFolderNeedsSetup" = "撮影前にシステムスクリーンショットの保存先をこのフォルダに設定してください";
@@ -460,12 +458,6 @@
 "systemScreenshotSetupCancel" = "キャンセル";
 "systemScreenshotSetupFailedTitle" = "システムスクリーンショットを設定できません";
 "systemScreenshotSetupFailedMessage" = "ClipCap はシステムの保存先を変更できませんでした。手動設定を使用してください";
-"systemScreenshotDisableTitle" = "スクリーンショットの自動起動をオフにする";
-"systemScreenshotDisableMessage" = "ClipCap が設定する前の保存先に戻すか現在のシステム保存先を維持できます";
-"systemScreenshotDisableRestore" = "オフにして復元";
-"systemScreenshotDisableKeep" = "自動起動のみオフ";
-"systemScreenshotRestoreFailedTitle" = "スクリーンショットの保存先を復元できません";
-"systemScreenshotRestoreFailedMessage" = "元の保存先情報を失わないよう自動起動を有効のままにしました。後でもう一度お試しください";
 
 "historyPanelLock" = "履歴パネルをロック";
 "historyPanelUnlock" = "履歴パネルのロックを解除";
@@ -590,8 +582,6 @@
 
 "mosaicBlur" = "ぼかし";
 "mosaicBlurAmount" = "ぼかしの強さ";
-"textFontDefaultHint" = "新しく作成するテキスト注釈に使うフォント";
-"textFontDefaultLabel" = "デフォルトのテキストフォント";
 "textFontLabel" = "フォント";
 "textFontSystemDefault" = "システム標準";
 "tipRotate" = "回転";

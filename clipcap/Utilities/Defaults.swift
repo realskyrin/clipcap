@@ -72,7 +72,7 @@ extension Notification.Name {
     static let caffeinationStateDidChange = Notification.Name("clipcap.caffeinationStateDidChange")
     static let systemScreenshotVerificationDidChange = Notification.Name("clipcap.systemScreenshotVerificationDidChange")
     static let systemScreenshotImageImported = Notification.Name("clipcap.systemScreenshotImageImported")
-    static let systemScreenshotAutoOpenDidChange = Notification.Name("clipcap.systemScreenshotAutoOpenDidChange")
+    static let systemScreenshotDirectoryDidChange = Notification.Name("clipcap.systemScreenshotDirectoryDidChange")
 }
 
 /// Centralized accessor for every user-facing string. Each property resolves a
@@ -185,8 +185,6 @@ enum L10n {
     static var screenshotGuideBack: String { s("screenshotGuideBack") }
     static var screenshotGuideLater: String { s("screenshotGuideLater") }
 
-    static var systemScreenshotAutoOpenLabel: String { s("systemScreenshotAutoOpenLabel") }
-    static var systemScreenshotAutoOpenHint: String { s("systemScreenshotAutoOpenHint") }
     static var systemScreenshotFolderLabel: String { s("systemScreenshotFolderLabel") }
     static var systemScreenshotFolderConfigured: String { s("systemScreenshotFolderConfigured") }
     static var systemScreenshotFolderNeedsSetup: String { s("systemScreenshotFolderNeedsSetup") }
@@ -200,12 +198,6 @@ enum L10n {
     static var systemScreenshotSetupCancel: String { s("systemScreenshotSetupCancel") }
     static var systemScreenshotSetupFailedTitle: String { s("systemScreenshotSetupFailedTitle") }
     static var systemScreenshotSetupFailedMessage: String { s("systemScreenshotSetupFailedMessage") }
-    static var systemScreenshotDisableTitle: String { s("systemScreenshotDisableTitle") }
-    static var systemScreenshotDisableMessage: String { s("systemScreenshotDisableMessage") }
-    static var systemScreenshotDisableRestore: String { s("systemScreenshotDisableRestore") }
-    static var systemScreenshotDisableKeep: String { s("systemScreenshotDisableKeep") }
-    static var systemScreenshotRestoreFailedTitle: String { s("systemScreenshotRestoreFailedTitle") }
-    static var systemScreenshotRestoreFailedMessage: String { s("systemScreenshotRestoreFailedMessage") }
 
     // Screenshot shortcut
     static var shortcutHeader: String { s("shortcutHeader") }
@@ -504,8 +496,6 @@ enum L10n {
     static var textCalloutEffect: String { s("textCalloutEffect") }
     static var textFontLabel: String { s("textFontLabel") }
     static var textFontSystemDefault: String { s("textFontSystemDefault") }
-    static var textFontDefaultLabel: String { s("textFontDefaultLabel") }
-    static var textFontDefaultHint: String { s("textFontDefaultHint") }
 
     // Shape tool
     static var shapeFillEffect: String { s("shapeFillEffect") }
@@ -1118,7 +1108,7 @@ struct Defaults {
             defaults.set(newValue?.standardizedFileURL.path, forKey: "systemScreenshotDirectory")
             if oldDirectory != SystemScreenshotAutoOpen.directoryURL {
                 systemScreenshotVerifiedDirectory = nil
-                NotificationCenter.default.post(name: .systemScreenshotAutoOpenDidChange, object: nil)
+                NotificationCenter.default.post(name: .systemScreenshotDirectoryDidChange, object: nil)
             }
         }
     }
@@ -1126,17 +1116,6 @@ struct Defaults {
     static var systemScreenshotManagedLocation: String? {
         get { defaults.string(forKey: "systemScreenshotManagedLocation") }
         set { defaults.set(newValue, forKey: "systemScreenshotManagedLocation") }
-    }
-
-    static var systemScreenshotAutoOpenEnabled: Bool {
-        get { defaults.bool(forKey: "systemScreenshotAutoOpenEnabled") }
-        set {
-            let oldValue = systemScreenshotAutoOpenEnabled
-            defaults.set(newValue, forKey: "systemScreenshotAutoOpenEnabled")
-            if oldValue != newValue {
-                NotificationCenter.default.post(name: .systemScreenshotAutoOpenDidChange, object: nil)
-            }
-        }
     }
 
     static var screenshotSetupGuidePresented: Bool {
@@ -1544,9 +1523,7 @@ struct Defaults {
         }
     }
 
-    /// Default font family for text annotations. Shared by the settings pane
-    /// and the editor's font picker (which also writes it, matching the
-    /// "remember last used" model of the other text-tool properties).
+    /// Last font family chosen in the editor, restored for new text annotations.
     /// Normalized at the persistence boundary: a family that is no longer
     /// installed reads back as nil, i.e. the system bold default.
     static var textFontName: String? {

@@ -54,7 +54,6 @@ final class SettingsView: NSView {
     var onMenuBarToggle: ((Bool) -> Void)?
     var onLaunch: (() -> Void)?
 
-    private var beautifyShadowSizeValueLabel: NSTextField?
     private let sidebarPanel = SidebarPanel()
     private let detailPanel = DetailPanel()
     private let sidebarStack = NSStackView()
@@ -68,14 +67,10 @@ final class SettingsView: NSView {
     private var selectedTab: SettingsTab = .general
     private var currentPane: NSView?
 
-    private var textFontTitleLabel: NSTextField?
-    private var textFontHintLabel: NSTextField?
-    private var textFontPopup: NSPopUpButton?
     private var languagePicker: NSPopUpButton?
     private var menuBarSwitch: NSSwitch?
     private var launchAtLoginSwitch: NSSwitch?
     private var pinAcrossSpacesSwitch: NSSwitch?
-    private var systemScreenshotAutoOpenSwitch: NSSwitch?
     private var systemScreenshotStatusLabel: NSTextField?
     private var systemScreenshotFolderPathLabel: NSTextField?
     private var systemScreenshotSetupButton: NSButton?
@@ -133,19 +128,19 @@ final class SettingsView: NSView {
         )
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(refreshSystemScreenshotAutoOpenControls),
-            name: .systemScreenshotAutoOpenDidChange,
+            selector: #selector(refreshSystemScreenshotFolderControls),
+            name: .systemScreenshotDirectoryDidChange,
             object: nil
         )
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(refreshSystemScreenshotAutoOpenControls),
+            selector: #selector(refreshSystemScreenshotFolderControls),
             name: .systemScreenshotVerificationDidChange,
             object: nil
         )
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(refreshSystemScreenshotAutoOpenControls),
+            selector: #selector(refreshSystemScreenshotFolderControls),
             name: NSApplication.didBecomeActiveNotification,
             object: nil
         )
@@ -447,138 +442,9 @@ final class SettingsView: NSView {
         )
         addCard(togglesCard, to: stack)
 
-        buildBeautifyShadowCard(into: stack)
-        buildTextFontCard(into: stack)
-        addCard(makeSystemScreenshotAutoOpenCard(), to: stack)
+        addCard(makeSystemScreenshotFolderCard(), to: stack)
 
         return wrapPane(stack)
-    }
-
-    private func buildBeautifyShadowCard(into stack: NSStackView) {
-        let card = CardView()
-        let inner = cardStack(spacing: 10)
-        card.addSubview(inner)
-        pin(inner, to: card, insets: NSEdgeInsets(top: 14, left: 14, bottom: 14, right: 14))
-
-        let header = NSStackView()
-        header.orientation = .horizontal
-        header.alignment = .firstBaseline
-        header.spacing = 8
-        header.addArrangedSubview(primaryLabel(L10n.beautify))
-        header.addArrangedSubview(flexSpacer())
-        let valueLabel = primaryLabel("\(Int(Defaults.lastBeautifyShadowSize.rounded()))")
-        valueLabel.font = NSFont.monospacedDigitSystemFont(ofSize: 13, weight: .semibold)
-        header.addArrangedSubview(valueLabel)
-        addFullWidth(header, to: inner)
-        addFullWidth(primaryLabel(L10n.shadowSizeLabel), to: inner)
-
-        let slider = NSSlider(
-            value: Defaults.lastBeautifyShadowSize,
-            minValue: Double(BeautifyRenderer.shadowSizeMin),
-            maxValue: Double(BeautifyRenderer.shadowSizeMax),
-            target: self,
-            action: #selector(beautifyShadowSizeChanged(_:))
-        )
-        slider.controlSize = .small
-        slider.isContinuous = true
-        slider.toolTip = L10n.beautifyShadowSizeHint
-        slider.setAccessibilityLabel(L10n.shadowSizeLabel)
-        beautifyShadowSizeValueLabel = valueLabel
-        addFullWidth(slider, to: inner)
-        addFullWidth(secondaryLabel(L10n.beautifyShadowSizeHint, wrapping: true), to: inner)
-        addCard(card, to: stack)
-    }
-
-    @objc private func beautifyShadowSizeChanged(_ sender: NSSlider) {
-        Defaults.lastBeautifyShadowSize = sender.doubleValue
-        beautifyShadowSizeValueLabel?.stringValue = "\(Int(Defaults.lastBeautifyShadowSize.rounded()))"
-    }
-
-    private func buildTextFontCard(into stack: NSStackView) {
-        let card = CardView()
-        let inner = verticalInnerStack()
-        card.addSubview(inner)
-        pin(inner, to: card, insets: NSEdgeInsets(top: 6, left: 14, bottom: 6, right: 14))
-
-        let row = NSView()
-        row.translatesAutoresizingMaskIntoConstraints = false
-
-        let textStack = NSStackView()
-        textStack.orientation = .vertical
-        textStack.alignment = .leading
-        textStack.spacing = 2
-        textStack.translatesAutoresizingMaskIntoConstraints = false
-
-        let titleLabel = primaryLabel(L10n.textFontDefaultLabel)
-        textFontTitleLabel = titleLabel
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        let hintLabel = secondaryLabel(L10n.textFontDefaultHint, wrapping: true)
-        textFontHintLabel = hintLabel
-        textStack.addArrangedSubview(titleLabel)
-        textStack.addArrangedSubview(hintLabel)
-
-        let popup = NSPopUpButton(frame: .zero, pullsDown: false)
-        popup.controlSize = .small
-        popup.font = NSFont.systemFont(ofSize: 12)
-        popup.target = self
-        popup.action = #selector(textFontChanged(_:))
-        popup.translatesAutoresizingMaskIntoConstraints = false
-        popup.widthAnchor.constraint(greaterThanOrEqualToConstant: 160).isActive = true
-        popup.setAccessibilityLabel(L10n.textFontDefaultLabel)
-        textFontPopup = popup
-        rebuildTextFontPopupItems()
-
-        row.addSubview(textStack)
-        row.addSubview(popup)
-        NSLayoutConstraint.activate([
-            textStack.leadingAnchor.constraint(equalTo: row.leadingAnchor),
-            textStack.topAnchor.constraint(equalTo: row.topAnchor, constant: 10),
-            textStack.bottomAnchor.constraint(equalTo: row.bottomAnchor, constant: -10),
-            textStack.trailingAnchor.constraint(lessThanOrEqualTo: popup.leadingAnchor, constant: -12),
-
-            popup.trailingAnchor.constraint(equalTo: row.trailingAnchor),
-            popup.centerYAnchor.constraint(equalTo: textStack.centerYAnchor),
-        ])
-
-        inner.addArrangedSubview(row)
-        row.widthAnchor.constraint(equalTo: inner.widthAnchor).isActive = true
-
-        stack.addArrangedSubview(card)
-        card.widthAnchor.constraint(equalTo: stack.widthAnchor).isActive = true
-    }
-
-    private func rebuildTextFontPopupItems() {
-        guard let popup = textFontPopup, let menu = popup.menu else { return }
-        popup.removeAllItems()
-        // Built as menu items rather than `addItem(withTitle:)`, which drops an
-        // existing item when two families share a localized display name.
-        menu.addItem(NSMenuItem(title: L10n.textFontSystemDefault, action: nil, keyEquivalent: ""))
-        menu.addItem(.separator())
-        for family in FontCatalog.families {
-            let item = NSMenuItem(
-                title: FontCatalog.displayName(for: family),
-                action: nil,
-                keyEquivalent: ""
-            )
-            item.representedObject = family
-            menu.addItem(item)
-        }
-        selectStoredTextFont()
-    }
-
-    private func selectStoredTextFont() {
-        guard let popup = textFontPopup else { return }
-        guard let family = Defaults.textFontName,
-              let index = FontCatalog.families.firstIndex(of: family) else {
-            popup.selectItem(at: 0)
-            return
-        }
-        // +2 skips the system-default item and the separator.
-        popup.selectItem(at: index + 2)
-    }
-
-    @objc private func textFontChanged(_ sender: NSPopUpButton) {
-        Defaults.textFontName = sender.selectedItem?.representedObject as? String
     }
 
     private func makeHistoryPane() -> NSView {
@@ -1360,25 +1226,13 @@ final class SettingsView: NSView {
         return card
     }
 
-    private func makeSystemScreenshotAutoOpenCard() -> NSView {
+    private func makeSystemScreenshotFolderCard() -> NSView {
         let card = CardView()
         let stack = NSStackView()
         stack.orientation = .vertical
         stack.alignment = .leading
         stack.spacing = 10
         stack.translatesAutoresizingMaskIntoConstraints = false
-
-        addFullWidth(
-            switchRow(
-                title: L10n.systemScreenshotAutoOpenLabel,
-                subtitle: L10n.systemScreenshotAutoOpenHint,
-                isOn: Defaults.systemScreenshotAutoOpenEnabled,
-                action: #selector(systemScreenshotAutoOpenToggled(_:))
-            ) { self.systemScreenshotAutoOpenSwitch = $0 },
-            to: stack
-        )
-
-        addFullWidth(rowDivider(), to: stack)
 
         let folderRow = NSStackView()
         folderRow.orientation = .horizontal
@@ -1404,7 +1258,7 @@ final class SettingsView: NSView {
 
         let setup = makeButton(
             title: L10n.screenshotGuideTitle,
-            action: #selector(configureSystemScreenshotAutoOpen)
+            action: #selector(configureSystemScreenshotFolder)
         )
         systemScreenshotSetupButton = setup
         let reveal = makeButton(
@@ -1431,7 +1285,7 @@ final class SettingsView: NSView {
         addFullWidth(thumbnailHint, to: stack)
 
         card.embed(stack)
-        refreshSystemScreenshotAutoOpenControls()
+        refreshSystemScreenshotFolderControls()
         return card
     }
 
@@ -1673,30 +1527,7 @@ final class SettingsView: NSView {
         Defaults.pinAcrossSpaces = sender.state == .on
     }
 
-    @objc private func systemScreenshotAutoOpenToggled(_ sender: NSSwitch) {
-        if sender.state == .on {
-            if SystemScreenshotLocationManager.shared.isTargetLocationActive,
-               Defaults.systemScreenshotVerifiedDirectory == SystemScreenshotAutoOpen.directoryURL.path {
-                Defaults.systemScreenshotAutoOpenEnabled = true
-                refreshSystemScreenshotAutoOpenControls()
-            } else {
-                sender.state = .off
-                presentSystemScreenshotSetup()
-            }
-            return
-        }
-
-        guard SystemScreenshotLocationManager.shared.isAutomaticallyManaged else {
-            Defaults.systemScreenshotAutoOpenEnabled = false
-            refreshSystemScreenshotAutoOpenControls()
-            return
-        }
-
-        sender.state = .on
-        presentSystemScreenshotDisableConfirmation()
-    }
-
-    @objc private func configureSystemScreenshotAutoOpen() {
+    @objc private func configureSystemScreenshotFolder() {
         presentSystemScreenshotSetup()
     }
 
@@ -1708,58 +1539,8 @@ final class SettingsView: NSView {
         ScreenshotSetupWindowController.shared.showGuide()
     }
 
-    private func presentSystemScreenshotDisableConfirmation() {
-        let alert = NSAlert()
-        alert.alertStyle = .informational
-        alert.messageText = L10n.systemScreenshotDisableTitle
-        alert.informativeText = L10n.systemScreenshotDisableMessage
-        alert.addButton(withTitle: L10n.systemScreenshotDisableRestore)
-        alert.addButton(withTitle: L10n.systemScreenshotDisableKeep)
-        alert.addButton(withTitle: L10n.systemScreenshotSetupCancel)
-        beginAlert(alert) { [weak self] response in
-            guard let self else { return }
-            switch response {
-            case .alertFirstButtonReturn:
-                let result = SystemScreenshotLocationManager.shared.restoreAutomaticallyConfiguredLocation()
-                switch result {
-                case .restored:
-                    SystemScreenshotAutoOpen.refreshSystemScreenshotServices()
-                    Defaults.systemScreenshotAutoOpenEnabled = false
-                case .notManaged, .changedExternally:
-                    Defaults.systemScreenshotAutoOpenEnabled = false
-                case .failed:
-                    self.presentSystemScreenshotRestoreFailure()
-                }
-            case .alertSecondButtonReturn:
-                SystemScreenshotLocationManager.shared.relinquishAutomaticallyManagedLocation()
-                Defaults.systemScreenshotAutoOpenEnabled = false
-            default:
-                break
-            }
-            self.refreshSystemScreenshotAutoOpenControls()
-        }
-    }
-
-    private func presentSystemScreenshotRestoreFailure() {
-        let alert = NSAlert()
-        alert.alertStyle = .warning
-        alert.messageText = L10n.systemScreenshotRestoreFailedTitle
-        alert.informativeText = L10n.systemScreenshotRestoreFailedMessage
-        alert.addButton(withTitle: L10n.systemScreenshotSetupCancel)
-        beginAlert(alert) { _ in }
-    }
-
-    private func beginAlert(_ alert: NSAlert, completion: @escaping (NSApplication.ModalResponse) -> Void) {
-        if let window {
-            alert.beginSheetModal(for: window, completionHandler: completion)
-        } else {
-            completion(alert.runModal())
-        }
-    }
-
-    @objc private func refreshSystemScreenshotAutoOpenControls() {
+    @objc private func refreshSystemScreenshotFolderControls() {
         systemScreenshotFolderPathLabel?.stringValue = SaveDestination.displayPath(SystemScreenshotAutoOpen.directoryURL)
-        systemScreenshotAutoOpenSwitch?.state = Defaults.systemScreenshotAutoOpenEnabled ? .on : .off
         let isConfigured = SystemScreenshotLocationManager.shared.isTargetLocationActive
         let verified = isConfigured && Defaults.systemScreenshotVerifiedDirectory == SystemScreenshotAutoOpen.directoryURL.path
         systemScreenshotStatusLabel?.stringValue = verified ? L10n.systemScreenshotFolderConfigured

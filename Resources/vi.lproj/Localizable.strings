@@ -445,8 +445,6 @@
 "openImage" = "Mở ảnh";
 "openImageNoImage" = "Sao chép ảnh vào bảng nhớ tạm hoặc chọn một tệp ảnh";
 
-"systemScreenshotAutoOpenLabel" = "Nhập ảnh chụp và bản ghi hệ thống";
-"systemScreenshotAutoOpenHint" = "Nhập ảnh chụp và bản ghi mới, xóa nguồn ảnh chụp sau khi tải nhưng giữ bản ghi gốc mà không cần quyền Ghi màn hình hoặc Trợ năng";
 "systemScreenshotFolderLabel" = "Thư mục ảnh chụp màn hình hệ thống";
 "systemScreenshotFolderConfigured" = "Vị trí ảnh chụp màn hình hệ thống đã sẵn sàng";
 "systemScreenshotFolderNeedsSetup" = "Đặt vị trí lưu ảnh chụp màn hình hệ thống thành thư mục này trước khi chụp";
@@ -460,12 +458,6 @@
 "systemScreenshotSetupCancel" = "Hủy";
 "systemScreenshotSetupFailedTitle" = "Không thể thiết lập ảnh chụp màn hình";
 "systemScreenshotSetupFailedMessage" = "ClipCap không thể thay đổi vị trí ảnh chụp màn hình hệ thống. Hãy dùng thiết lập thủ công";
-"systemScreenshotDisableTitle" = "Tắt tự động mở ảnh chụp màn hình";
-"systemScreenshotDisableMessage" = "Bạn có thể khôi phục vị trí trước khi ClipCap thiết lập hoặc giữ vị trí hệ thống hiện tại";
-"systemScreenshotDisableRestore" = "Tắt và khôi phục";
-"systemScreenshotDisableKeep" = "Chỉ tắt tự động mở";
-"systemScreenshotRestoreFailedTitle" = "Không thể khôi phục vị trí ảnh chụp";
-"systemScreenshotRestoreFailedMessage" = "ClipCap vẫn bật tính năng tự động mở để bạn thử lại mà không mất vị trí đã lưu";
 
 "historyPanelLock" = "Khóa bảng lịch sử";
 "historyPanelUnlock" = "Mở khóa bảng lịch sử";
@@ -590,8 +582,6 @@
 
 "mosaicBlur" = "Làm mờ";
 "mosaicBlurAmount" = "Mức độ làm mờ";
-"textFontDefaultHint" = "Phông chữ dùng cho chú thích văn bản mới tạo";
-"textFontDefaultLabel" = "Phông chữ văn bản mặc định";
 "textFontLabel" = "Phông chữ";
 "textFontSystemDefault" = "Mặc định hệ thống";
 "tipRotate" = "Xoay";

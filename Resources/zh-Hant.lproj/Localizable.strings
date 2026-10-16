@@ -445,8 +445,6 @@
 "openImage" = "開啟圖片";
 "openImageNoImage" = "複製圖片到剪貼簿，或選擇一個圖片檔案";
 
-"systemScreenshotAutoOpenLabel" = "接收系統截圖與錄影";
-"systemScreenshotAutoOpenHint" = "自動接收新的系統截圖與錄影；截圖載入後刪除專用資料夾中的來源檔案，錄影原始檔保留，無需螢幕錄製或輔助使用權限";
 "systemScreenshotFolderLabel" = "系統截圖資料夾";
 "systemScreenshotFolderConfigured" = "系統截圖儲存位置已設定";
 "systemScreenshotFolderNeedsSetup" = "截圖前請將系統截圖儲存位置設為此資料夾";
@@ -460,12 +458,6 @@
 "systemScreenshotSetupCancel" = "取消";
 "systemScreenshotSetupFailedTitle" = "無法設定系統截圖";
 "systemScreenshotSetupFailedMessage" = "ClipCap 無法更改系統截圖儲存位置，請改用手動設定";
-"systemScreenshotDisableTitle" = "關閉自動開啟系統截圖";
-"systemScreenshotDisableMessage" = "你可以恢復 ClipCap 設定前的截圖儲存位置，也可以保留目前的系統位置";
-"systemScreenshotDisableRestore" = "關閉並恢復";
-"systemScreenshotDisableKeep" = "僅關閉自動開啟";
-"systemScreenshotRestoreFailedTitle" = "無法恢復截圖儲存位置";
-"systemScreenshotRestoreFailedMessage" = "ClipCap 已保留自動開啟功能，請稍後重試以免遺失原位置記錄";
 
 "historyPanelLock" = "鎖定歷史面板";
 "historyPanelUnlock" = "解鎖歷史面板";
@@ -590,8 +582,6 @@
 
 "mosaicBlur" = "模糊";
 "mosaicBlurAmount" = "模糊程度";
-"textFontDefaultHint" = "新建文字標註使用的字體";
-"textFontDefaultLabel" = "預設文字字體";
 "textFontLabel" = "字體";
 "textFontSystemDefault" = "系統預設";
 "tipRotate" = "旋轉";

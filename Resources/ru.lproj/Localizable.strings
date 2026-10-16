@@ -445,8 +445,6 @@
 "openImage" = "Открыть изображение";
 "openImageNoImage" = "Скопируйте изображение в буфер обмена или выберите файл изображения";
 
-"systemScreenshotAutoOpenLabel" = "Импортировать системные снимки и записи";
-"systemScreenshotAutoOpenHint" = "Импортирует новые снимки и записи, удаляет исходники снимков после загрузки и сохраняет оригиналы записей без разрешений на запись экрана и универсальный доступ";
 "systemScreenshotFolderLabel" = "Папка системных снимков";
 "systemScreenshotFolderConfigured" = "Расположение системных снимков настроено";
 "systemScreenshotFolderNeedsSetup" = "Перед созданием снимка выберите эту папку как системное место сохранения";
@@ -460,12 +458,6 @@
 "systemScreenshotSetupCancel" = "Отмена";
 "systemScreenshotSetupFailedTitle" = "Не удалось настроить системные снимки";
 "systemScreenshotSetupFailedMessage" = "ClipCap не удалось изменить место сохранения системных снимков. Используйте ручную настройку";
-"systemScreenshotDisableTitle" = "Отключить автоматическое открытие снимков";
-"systemScreenshotDisableMessage" = "Можно восстановить место сохранения до настройки ClipCap или оставить текущее системное расположение";
-"systemScreenshotDisableRestore" = "Отключить и восстановить";
-"systemScreenshotDisableKeep" = "Только отключить";
-"systemScreenshotRestoreFailedTitle" = "Не удалось восстановить место сохранения снимков";
-"systemScreenshotRestoreFailedMessage" = "ClipCap оставил автоматическое открытие включённым, чтобы можно было повторить попытку без потери сохранённого расположения";
 
 "historyPanelLock" = "Заблокировать панель истории";
 "historyPanelUnlock" = "Разблокировать панель истории";
@@ -590,8 +582,6 @@
 
 "mosaicBlur" = "Размытие";
 "mosaicBlurAmount" = "Степень размытия";
-"textFontDefaultHint" = "Шрифт для новых текстовых аннотаций";
-"textFontDefaultLabel" = "Шрифт текста по умолчанию";
 "textFontLabel" = "Шрифт";
 "textFontSystemDefault" = "Системный по умолчанию";
 "tipRotate" = "Поворот";

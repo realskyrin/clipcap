@@ -56,7 +56,6 @@ final class ScreenshotSetupWindowController: NSWindowController, NSWindowDelegat
 
     func showIfNeeded() {
         if Defaults.screenshotSetupGuidePresented,
-           Defaults.systemScreenshotAutoOpenEnabled,
            Defaults.systemScreenshotVerifiedDirectory == SystemScreenshotAutoOpen.directoryURL.path,
            SystemScreenshotLocationManager.shared.isTargetLocationActive { return }
         showGuide()
@@ -235,7 +234,7 @@ final class ScreenshotSetupWindowController: NSWindowController, NSWindowDelegat
             hasConfigurationError = false
             hasReceivedTestScreenshot = false
             verificationStartedAt = nil
-            Defaults.systemScreenshotAutoOpenEnabled = true
+            NotificationCenter.default.post(name: .systemScreenshotDirectoryDidChange, object: nil)
             step = .ready
         case .ready:
             finish(openScreenshotTool: false)
@@ -389,7 +388,7 @@ final class ScreenshotSetupWindowController: NSWindowController, NSWindowDelegat
     private func finish(openScreenshotTool: Bool) {
         // Recheck because the user can change the system location while the guide is open.
         guard SystemScreenshotLocationManager.shared.isTargetLocationActive,
-              hasReceivedTestScreenshot, Defaults.systemScreenshotAutoOpenEnabled else {
+              hasReceivedTestScreenshot else {
             step = .ready
             render()
             return
