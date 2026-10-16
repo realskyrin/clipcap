@@ -25,6 +25,16 @@ struct RecognizedTextLine: Equatable {
 /// Apple OCR helpers. Vision supplies geometric reading order; VisionKit adds
 /// native Live Text interactions and a fallback when Vision finds no lines.
 enum OCRService {
+    struct Result {
+        let lines: [RecognizedTextLine]
+        let analysis: ImageAnalysis?
+
+        var text: String {
+            (lines.isEmpty ? analysis?.transcript ?? "" : lines.map(\.text).joined(separator: "\n"))
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+    }
+
     private static let preferredRecognitionLanguages = [
         "zh-Hans", "zh-Hant", "en-US", "ja-JP", "ko-KR"
     ]
@@ -33,15 +43,43 @@ enum OCRService {
     /// ordered top-to-bottom then left-to-right. Returns an empty string when
     /// nothing is found or the image cannot be decoded.
     static func recognize(image: NSImage, diagnosticID: String? = nil, source: String = "recognize") async -> String {
-        let lines = await recognizeLines(image: image)
-        guard !Task.isCancelled else { return "" }
-        if !lines.isEmpty {
-            return lines.map(\.text).joined(separator: "\n")
+        await recognizeContent(image: image, diagnosticID: diagnosticID, source: source).text
+    }
+
+    /// Prefer geometric selection, but do not wait for a stalled Vision model
+    /// to compile before starting the independent system Live Text fallback.
+    /// Give Vision two seconds before using a successful Live Text result. If
+    /// Live Text finds nothing, retain Vision's full budget for difficult images.
+    static func recognizeContent(
+        image: NSImage, diagnosticID: String? = nil, source: String = "recognizeContent"
+    ) async -> Result {
+        guard !Task.isCancelled else { return Result(lines: [], analysis: nil) }
+        let session = diagnosticID ?? makeDiagnosticID()
+        let vision = Task { await recognizeLines(image: image, diagnosticID: session, source: source) }
+        let liveText = Task { await analyzeText(image: image, diagnosticID: session, source: source) }
+        defer {
+            vision.cancel()
+            liveText.cancel()
         }
-        if let analysis = await analyzeText(image: image) {
-            return analysis.transcript.trimmingCharacters(in: .whitespacesAndNewlines)
+        return await withTaskCancellationHandler {
+            let earlyLines = try? await AsyncDeadline.run(seconds: 2) { await vision.value }
+            guard !Task.isCancelled else { return Result(lines: [], analysis: nil) }
+            if let earlyLines, !earlyLines.isEmpty {
+                return Result(lines: earlyLines, analysis: nil)
+            }
+            let analysis = await liveText.value
+            guard !Task.isCancelled else { return Result(lines: [], analysis: nil) }
+            if let analysis, !analysis.transcript.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                log("liveText-fallback", session: session, source: source)
+                return Result(lines: [], analysis: analysis)
+            }
+            let lines = await vision.value
+            guard !Task.isCancelled else { return Result(lines: [], analysis: nil) }
+            return Result(lines: lines, analysis: nil)
+        } onCancel: {
+            vision.cancel()
+            liveText.cancel()
         }
-        return ""
     }
 
     /// Runs the same system Live Text analyzer used by Preview. The returned
@@ -82,6 +120,7 @@ enum OCRService {
     /// Recognizes text in `image` and returns ordered text lines with their
     /// source rectangles so result panels can draw per-line copy targets.
     static func recognizeLines(image: NSImage, diagnosticID: String? = nil, source: String = "recognizeLines") async -> [RecognizedTextLine] {
+        guard !Task.isCancelled else { return [] }
         let session = diagnosticID ?? makeDiagnosticID()
         let started = CFAbsoluteTimeGetCurrent()
         log("recognizeLines-begin", session: session, source: source, metadata: imageMetadata(image))
@@ -90,18 +129,26 @@ enum OCRService {
         // Read results after synchronous perform returns. Its completion handler
         // can run before perform throws; resuming from both paths was unsafe.
         // Include image decoding and token assembly in the deadline as well.
-        return (try? await AsyncDeadline.run(seconds: 15) {
-            await withTaskCancellationHandler {
-                await withCheckedContinuation { continuation in
-                    DispatchQueue.global(qos: .userInitiated).async {
-                        let lines = autoreleasepool { work.recognize(image: image) }
-                        continuation.resume(returning: lines)
+        do {
+            let lines = try await AsyncDeadline.run(seconds: 15) {
+                await withTaskCancellationHandler {
+                    await withCheckedContinuation { continuation in
+                        DispatchQueue.global(qos: .userInitiated).async {
+                            let lines = autoreleasepool { work.recognize(image: image) }
+                            continuation.resume(returning: lines)
+                        }
                     }
+                } onCancel: {
+                    work.cancel()
                 }
-            } onCancel: {
-                work.cancel()
             }
-        }) ?? []
+            log("recognizeLines-result", session: session, source: source, metadata: lineMetadata(lines))
+            return lines
+        } catch {
+            log(error is AsyncDeadline.TimedOut ? "recognizeLines-timeout" : "recognizeLines-cancelled",
+                session: session, source: source)
+            return []
+        }
     }
 
     private final class RecognitionWork: @unchecked Sendable {

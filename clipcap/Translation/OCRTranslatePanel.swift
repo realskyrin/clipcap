@@ -1101,19 +1101,17 @@ final class OCRTranslatePanel: NSPanel, NSTextViewDelegate {
         let screenshot = screenshot
         let diagnosticID = diagnosticID
         ocrTask = Task { @MainActor [weak self] in
-            let lines = await OCRService.recognizeLines(image: screenshot, diagnosticID: diagnosticID)
-            guard !Task.isCancelled else { return }
-            let analysis = lines.isEmpty ? await OCRService.analyzeText(image: screenshot, diagnosticID: diagnosticID) : nil
+            let result = await OCRService.recognizeContent(image: screenshot, diagnosticID: diagnosticID)
             guard !Task.isCancelled, let self, !self.isDismissed else { return }
             self.ocrTask = nil
-            let text = lines.isEmpty ? analysis?.transcript.trimmingCharacters(in: .whitespacesAndNewlines) ?? "" : Self.text(from: lines)
-            self.applyOCRResult(text: text, lines: lines, liveTextAnalysis: analysis)
+            let text = result.text
+            self.applyOCRResult(text: text, lines: result.lines, liveTextAnalysis: result.analysis)
             self.ocrReady = true
             self.translateButton?.isEnabled = !text.isEmpty
             self.finishTextRecognition()
             if self.translateAfterOCR { self.translateTapped() }
             self.refreshHeight()
-            if !lines.isEmpty { self.startLiveTextAnalysis() }
+            if !result.lines.isEmpty { self.startLiveTextAnalysis() }
         }
     }
 

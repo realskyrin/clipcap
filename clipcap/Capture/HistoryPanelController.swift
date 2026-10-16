@@ -5212,14 +5212,10 @@ private final class HistoryPreviewWindowController: NSWindowController, NSWindow
         imageView.animates = false
         updateOCRButton(isRecognizing: true)
         ocrTask = Task { @MainActor [weak self] in
-            let lines = await OCRService.recognizeLines(image: image)
-            guard !Task.isCancelled else { return }
-            // Match the existing OCR panel: use geometric text selection first,
-            // with native Live Text as the fallback when no lines are found.
-            let analysis = lines.isEmpty ? await OCRService.analyzeText(image: image) : nil
+            let result = await OCRService.recognizeContent(image: image)
             guard !Task.isCancelled, let self, self.loadGeneration == generation else { return }
             self.ocrTask = nil
-            guard !lines.isEmpty || analysis != nil,
+            guard !result.text.isEmpty,
                   let content = self.window?.contentView else {
                 self.imageView.animates = self.currentEntry.fileURL.pathExtension.lowercased() == "gif"
                 self.updateOCRButton(isRecognizing: false)
@@ -5231,8 +5227,8 @@ private final class HistoryPreviewWindowController: NSWindowController, NSWindow
             preview.frame = content.bounds
             preview.autoresizingMask = [.width, .height]
             preview.showsLineBoxes = true
-            preview.lines = lines
-            preview.applyLiveTextAnalysis(analysis)
+            preview.lines = result.lines
+            preview.applyLiveTextAnalysis(result.analysis)
             preview.onSelectText = { [weak self] _, lineIndices, isFinal in
                 guard isFinal else { return }
                 self?.copyRecognizedSelection(lineCount: lineIndices.count)

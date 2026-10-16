@@ -1589,6 +1589,7 @@ final class PinContentView: NSView, NSDraggingSource {
     private let baseImageSize: NSSize
     private let toolbar = PinToolbarView()
     private let ocrOverlay: OCRLineSelectionOverlayView
+    private var liveTextPreview: OCRPreviewView?
     private var zoomScale: CGFloat = 1.0 {
         didSet {
             toolbar.zoomScale = zoomScale
@@ -1965,6 +1966,7 @@ final class PinContentView: NSView, NSDraggingSource {
         guard !usesLowResolutionPreview else { return }
         ocrOverlay.frame = imageRect()
         ocrOverlay.needsDisplay = true
+        liveTextPreview?.frame = imageRect()
     }
 
     override func keyDown(with event: NSEvent) {
@@ -2187,7 +2189,7 @@ final class PinContentView: NSView, NSDraggingSource {
             return
         }
 
-        if hasOCRResult, ocrOverlay.lines.isEmpty {
+        if hasOCRResult, ocrOverlay.lines.isEmpty, liveTextPreview == nil {
             ToastWindow.show(message: L10n.ocrNoText, duration: 0.9)
             return
         }
@@ -2206,12 +2208,20 @@ final class PinContentView: NSView, NSDraggingSource {
         let imageForOCR = image.copy() as? NSImage ?? image
 
         ocrRecognitionTask = Task { @MainActor [weak self] in
-            let lines = await OCRService.recognizeLines(image: imageForOCR)
-            guard let self, self.ocrRunID == runID else { return }
+            let result = await OCRService.recognizeContent(image: imageForOCR)
+            guard !Task.isCancelled, let self, self.ocrRunID == runID else { return }
             self.ocrRecognitionTask = nil
             self.hasOCRResult = true
-            self.ocrOverlay.lines = lines
-            if lines.isEmpty {
+            self.ocrOverlay.lines = result.lines
+            if result.lines.isEmpty, let analysis = result.analysis, !result.text.isEmpty {
+                let preview = OCRPreviewView(image: imageForOCR, showsChrome: false)
+                preview.translatesAutoresizingMaskIntoConstraints = true
+                preview.frame = self.imageRect()
+                preview.applyLiveTextAnalysis(analysis)
+                self.addSubview(preview, positioned: .below, relativeTo: self.toolbar)
+                self.liveTextPreview = preview
+            }
+            if result.text.isEmpty {
                 if self.isOCRSelectionEnabled {
                     self.isOCRSelectionEnabled = false
                     ToastWindow.show(message: L10n.ocrNoText, duration: 0.9)
@@ -2229,12 +2239,15 @@ final class PinContentView: NSView, NSDraggingSource {
         hasOCRResult = false
         isOCRSelectionEnabled = false
         ocrOverlay.lines = []
+        liveTextPreview?.removeFromSuperview()
+        liveTextPreview = nil
         refreshOCROverlayVisibility()
     }
 
     private func refreshOCROverlayVisibility() {
         if usesLowResolutionPreview {
             ocrOverlay.isHidden = true
+            liveTextPreview?.isHidden = true
             return
         }
 
@@ -2242,6 +2255,7 @@ final class PinContentView: NSView, NSDraggingSource {
         let showOverlay = isOCRSelectionEnabled && !ocrOverlay.lines.isEmpty
         ocrOverlay.showsLineBoxes = showOverlay
         ocrOverlay.isHidden = !showOverlay
+        liveTextPreview?.isHidden = !isOCRSelectionEnabled
     }
 
     private func handleOCRKeyEquivalent(_ event: NSEvent) -> Bool {
@@ -2252,9 +2266,11 @@ final class PinContentView: NSView, NSDraggingSource {
 
         switch event.charactersIgnoringModifiers {
         case "a":
-            return ocrOverlay.selectAllText()
+            return liveTextPreview?.selectAllLiveText() ?? ocrOverlay.selectAllText()
         case "c":
-            guard ocrOverlay.copySelectedTextToClipboard() else { return false }
+            let copied = liveTextPreview?.copySelectedLiveTextToClipboard()
+                ?? ocrOverlay.copySelectedTextToClipboard()
+            guard copied else { return false }
             ToastWindow.show(message: L10n.ocrCopied, duration: 0.9)
             return true
         default:
