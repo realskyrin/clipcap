@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [1.8.44] - 2026-10-20
+
+### Changed
+
+- Improved history filter navigation, reminder scheduling, and notification launch handling (8eec96b)
+
 ## [1.8.43] - 2026-10-16
 
 ### Added
