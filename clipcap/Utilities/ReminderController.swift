@@ -97,6 +97,7 @@ final class ReminderOperationQueue {
 final class ReminderController: NSObject, UNUserNotificationCenterDelegate {
     static let shared = ReminderController()
     static let completedNotification = Notification.Name("clipcap.remindersCompleted")
+    @MainActor var onNotificationResponse: (() -> Void)?
     private let center = UNUserNotificationCenter.current()
     private let prefix = "clipcap.reminder."
     @MainActor private let operations = ReminderOperationQueue()
@@ -239,6 +240,10 @@ final class ReminderController: NSObject, UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         Task { @MainActor in
             let identifier = response.notification.request.identifier
+            if response.actionIdentifier == UNNotificationDefaultActionIdentifier,
+               identifier.hasPrefix(prefix) {
+                onNotificationResponse?()
+            }
             let owners = Set(entries.filter { $0.owns(identifier) }.map(\.id))
                 .union(ringing.keys.filter { ReminderEntry(id: $0).owns(identifier) })
             for id in owners {

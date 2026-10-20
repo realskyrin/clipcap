@@ -433,8 +433,7 @@ final class ReminderWindowController: NSWindowController, NSTableViewDataSource,
         guard !loading, let index = entries.firstIndex(where: { $0.id == selectedID }),
               (0..<4).contains(frequency.selectedSegment) else { return }
         if frequency.selectedSegment == 3 {
-            let value = entries[index].settings
-            let date = Calendar.current.nextDate(after: Date(), matching: DateComponents(hour: value.hour, minute: value.minute), matchingPolicy: .nextTime) ?? Date()
+            let date = time.dateValue
             entries[index].settings.oneTimeDate = date
             time.dateValue = date
             time.datePickerElements = [.yearMonthDay, .hourMinute]
@@ -455,7 +454,11 @@ final class ReminderWindowController: NSWindowController, NSTableViewDataSource,
         fieldsChanged()
     }
     private func addReminder() {
-        let entry = ReminderEntry()
+        let now = Date()
+        let components = Calendar.current.dateComponents([.hour, .minute], from: now)
+        var entry = ReminderEntry()
+        entry.settings.hour = components.hour ?? 0
+        entry.settings.minute = components.minute ?? 0
         entries.append(entry)
         selectedID = entry.id
         enqueue(entry)

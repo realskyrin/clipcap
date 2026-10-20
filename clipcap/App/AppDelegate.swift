@@ -9,6 +9,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var historyPanelController: HistoryPanelController?
     private var suspendedEditDraft: OverlayWindowController.SuspendedEditDraft?
     private var pendingReopenSettingsWorkItem: DispatchWorkItem?
+    private var suppressReopenSettingsUntil: TimeInterval = 0
     private var didInitializeApp = false
     private var pendingOpenImageURLs: [URL] = []
     private let clipboardTextHistoryMonitor = ClipboardTextHistoryMonitor()
@@ -21,9 +22,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         false
     }
 
+    func applicationWillFinishLaunching(_ notification: Notification) {
+        // Install the notification delegate before a notification-driven launch completes
+        ReminderController.shared.onNotificationResponse = { [weak self] in
+            guard let self else { return }
+            self.cancelPendingReopenSettings()
+            // macOS may deliver the reopen event before or after the response callback
+            self.suppressReopenSettingsUntil = ProcessInfo.processInfo.systemUptime + 1
+        }
+        ReminderController.shared.start()
+    }
+
     func applicationDidFinishLaunching(_ notification: Notification) {
         DebugLog.sessionStarted()
-        ReminderController.shared.start()
         clipboardTextHistoryMonitor.start()
         initializeApp()
         didInitializeApp = true
@@ -478,9 +489,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func scheduleSettingsOpenFromReopen() {
         cancelPendingReopenSettings()
+        guard ProcessInfo.processInfo.systemUptime >= suppressReopenSettingsUntil else { return }
 
         let workItem = DispatchWorkItem { [weak self] in
-            guard let self, self.overlayController == nil else { return }
+            guard let self, self.overlayController == nil,
+                  ProcessInfo.processInfo.systemUptime >= self.suppressReopenSettingsUntil else { return }
             if ScreenshotSetupWindowController.shared.window?.isVisible == true {
                 ScreenshotSetupWindowController.shared.showGuide()
                 return
