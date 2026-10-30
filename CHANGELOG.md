@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [1.8.45] - 2026-10-30
+
+### Fixed
+
+- Preserved favorites when editing history text (7b63e14)
+
 ## [1.8.44] - 2026-10-20
 
 ### Changed
